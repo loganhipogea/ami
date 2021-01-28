@@ -408,6 +408,19 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    
+    echo \frontend\modules\sigi\models\SigiFacturacion::findOne(91)->generaRecibos();
+    die();
+    
+    
+    
+    
+    
+    $arr=['23.5','11.34',6,'7','11.2'];
+    ECHO array_sum($arr);
+    die();
+    
+    
    var_dump( \frontend\modules\sigi\models\SigiUnidades::findOne(3877)
            ->oldValueField('parent_id')
     );

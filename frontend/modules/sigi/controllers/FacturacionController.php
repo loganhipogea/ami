@@ -9,7 +9,10 @@ use frontend\modules\sigi\models\SigiCuentasporSearch;
 use frontend\modules\sigi\models\VwSigiFacturecibo;
 use frontend\modules\sigi\models\VwSigiFactureciboSearch;
 use frontend\modules\sigi\models\VwSigiLecturasSearch;
+use frontend\modules\sigi\models\SigiDetfacturacion;
+use frontend\modules\sigi\models\SigiDetfacturacionSearch;
 use frontend\controllers\base\baseController;
+use frontend\modules\report\Module as ModuleReporte;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\helpers\h;
@@ -435,7 +438,23 @@ public function actionSendMassiveRecibo($id){
   }
   
  
+  public function actionRecibo($kardexid){
+       $this->layout='blank';
+       $disk=(is_null(h::request()->get('disk')))?false:true;
+       
+      $query=SigiDetfacturacion::find()->andWhere(['kardex_id'=>$kardexid]);
+        if(!$query->exists()){
+         throw new NotFoundHttpException(Yii::t('sigi.labels', 'The requested identiti bill does not exist.'));
+        }else{
+          $query->one()->facturacion->recibo($kardexid,$disk); 
+        }
+  }
   
+  public function actionGeneraRecibos($id){
+     $model= $this->findModel($id);
+     YII::ERROR('ENTRNADO EN EL ACTION');
+     $model->generaRecibos();
+  }
 
  
 }

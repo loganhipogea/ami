@@ -45,7 +45,7 @@ use frontend\modules\report\components\NumeroAletras;
 class VwSigiFacturecibo extends \common\models\base\modelBase
 {
     public $extraMethodsToReport=['reportDeslarga','reportMontoLetras','reportGrafico','reportAreas','reportLecturaAnt','reportPropietarios'];
-    public $booleanFields=['nuevoprop'];
+    public $booleanFields=['nuevoprop','resumido'];
     
     /**
      * {@inheritdoc}
@@ -127,20 +127,32 @@ class VwSigiFacturecibo extends \common\models\base\modelBase
         return new VwSigiFactureciboQuery(get_called_class());
     }
     
-    public function getReportAreas(){        
+    public function getReportAreas(){  
+         $controller=Yii::$app->controller;
+         $nameView= \common\helpers\FileHelper::getShortName($this::className());
         
-      $controller=Yii::$app->controller;
-        $nameView= \common\helpers\FileHelper::getShortName($this::className());
+        if(!$this->resumido){
+     
          if($controller->id=='make'){
-            $pathView='/'.$controller->id.'/reports/'.$nameView.'/detalleAreas';
-      
+            $pathView='/'.$controller->id.'/reports/'.$nameView.'/detalleAreas';      
          }else{
              $pathView='@frontend/modules/report/views/make/reports/'.$nameView.'/propietarios';
+        }        
+        return  $controller->getView()->render($pathView,['areas'=>$this->unidad->arrayParticipaciones()]);
+        }else{
+            if($controller->id=='make'){
+            $pathView='/'.$controller->id.'/reports/'.$nameView.'/detalleAreasResumen';      
+         }else{
+             $pathView='@frontend/modules/report/views/make/reports/'.$nameView.'/propietarios';
+           }  
+            $Aareas=$this->find()->select(['areadepa','participaciondepa'])->distinct()->andWhere(['facturacion_id'=>$this->facturacion_id,'resumido'=>'1'])->asArray()->all();
+            $areas=array_sum(array_column($Aareas, 'areadepa'));
+            $participaciones=array_sum( array_column($Aareas, 'participaciondepa'));
+            return  $controller->getView()->render($pathView,['areas'=>$areas,'participaciones'=>$participaciones]);
+        }
         
          }
-        
-        return  $controller->getView()->render($pathView,['areas'=>$this->unidad->arrayParticipaciones()]);
-    }
+    
    public function getReportPropietarios(){        
         
       $controller=Yii::$app->controller;

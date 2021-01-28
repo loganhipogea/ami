@@ -80,7 +80,7 @@ class h {
     }
     
     public static function currentController(){
-        return Yii::$app->controller->id;
+        return Yii::$app->controller;
     }
     public static function currentAction(){
         return Yii::$app->controller->action->id;

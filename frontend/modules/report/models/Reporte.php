@@ -288,7 +288,10 @@ class Reporte extends baseReporte
      */
     public function numeroregistros($idfiltro){
         $model= $this->modelo;
-        return $model::find()->where([$this->campofiltro => $idfiltro])->count();
+        $unidades= $model::find()->select(['unidad_id'])->distinct()->where([$this->campofiltro => $idfiltro])->column();
+        if(count($unidades)>0)
+        return $model::find()->where([$this->campofiltro => $idfiltro])->count()/count($unidades);
+        return 0;
     }
     
     /*DEVUELVE EL NUMERO DE PAGIONAS */

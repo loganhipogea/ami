@@ -37,6 +37,7 @@ class SigiDetfacturacion extends \common\models\base\modelBase
         return '{{%sigi_detfacturacion}}';
     }
 
+    
     /**
      * {@inheritdoc}
      */
@@ -46,8 +47,8 @@ class SigiDetfacturacion extends \common\models\base\modelBase
             [['cuentaspor_id', 'edificio_id', 'unidad_id', 'colector_id', 'grupo_id', 'monto', 'igv', 'grupounidad', 'grupofacturacion', 'facturacion_id', 'mes', 'anio'], 'required'],
             [['cuentaspor_id', 'edificio_id', 'unidad_id', 'colector_id', 'grupo_id', 'facturacion_id', 'mes'], 'integer'],
             [['monto', 'igv'], 'number'],
-             [['unidades','codmon','grupounidad_id','grupocobranza','kardex_id','numerorecibo'], 'safe'],
-             [['aacc','participacion','codsuministro','lectura','delta','consumototal','montototal','dias','nuevoprop'], 'safe'],
+             [['unidades','codmon','grupounidad_id','grupocobranza','kardex_id','numerorecibo','resumido'], 'safe'],
+             [['aacc','participacion','codsuministro','lectura','delta','consumototal','montototal','dias','nuevoprop','resumido'], 'safe'],
             [['grupounidad', 'grupofacturacion'], 'string', 'max' => 12],
             [['anio'], 'string', 'max' => 4],
             [['unidad_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiUnidades::className(), 'targetAttribute' => ['unidad_id' => 'id']],
@@ -102,6 +103,11 @@ class SigiDetfacturacion extends \common\models\base\modelBase
     public function getColector()
     {
         return $this->hasOne(SigiCargosedificio::className(), ['id' => 'colector_id']);
+    }
+    
+    public function getFacturacion()
+    {
+        return $this->hasOne(SigiFacturacion::className(), ['id' => 'facturacion_id']);
     }
 
     /**

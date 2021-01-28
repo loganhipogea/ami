@@ -288,65 +288,108 @@ class MakeController extends baseController
   } 
   
   public function actionMultiReport($id,$idsToReport){
-       // Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
-       // Yii::$app->response->headers->add('Content-Type', 'application/pdf');
-        set_time_limit(0); // 5 minutes 
+      YII::ERROR('INICIANDO',__FUNCTION__);
+     // print_r($idsToReport);DIE();
+       set_time_limit(0); // 5 minutes 
         ini_set('max_execution_time', 0); //0=NOLIMIT
        if(h::request()->isAjax){
            h::response()->format = \yii\web\Response::FORMAT_JSON;
            
-       }
-        
-               
-        //echo "maolde";die();
-       $model=$this->findModel($id); 
-      
-       //echo $model->dirFile();die(); 
-       $this->layout='blank';
+       } 
+       
+       $model=$this->findModel($id);       
+        $this->layout='blank';
        $idsToReport= \yii\helpers\Json::decode($idsToReport);
+       
+       /* 
+        * Obteniendo la cantidad
+        * de reportes por archivo PDF. Por default es 10
+        */
         $size=h::gsetting('report','sizePage');
-       //var_dump($size,$idsToReport);die();
-       /*vRIFICANDO PRIMERO SI YA EXISTEN UNOS PFDS ANTERIORES */
-       // $directorio=$this->dirFile();
+        
+        
+       /* La cantidad de archivos pdfs generados en el directorio 
+        * dirFile() es un directorio temporal hecho para 
+        * almacenar los reportes que se van generando
+        */ 
        $files= \yii\helpers\FileHelper::findFiles($model->dirFile());
-      // var_dump($files);die();
-         $avance=count($files)*$size;  
-            $idsToReport=array_slice($idsToReport,($avance==0)?0:$avance+1);    
+       
+       /*
+        * El avance vendrá determinado por $files x $size
+        * Cantidad de PDFS por el número de reportes por PDF
+        */
+       
+        $avance=count($files)*$size;  
+        
+        /* Truncamos el array, sólo a partir de donde se quedó 
+         * la última vez, ya no empieza de cero, reanuda donde se
+         * quedó la última vez, todo depende de $avance
+         */
+        $idsToReport=array_slice($idsToReport,($avance==0)?0:$avance+1);    
                 
-      // var_dump($idsToReport);die();
-      
-      // yii::error('Numero maximo de paginas '.$size);
+      /*
+       * Establece paquetes de arrays de los ids que faltan para generar
+       * los PDFS, cada array con el tamaño $size
+       * así:  $arreglos=[  [23,24,25,...], [34,35,36,37,...], [44,45,36,47,...] ...]
+       */
        $arreglos=  array_chunk($idsToReport, $size);
-       //var_dump($arreglos);die();
+      
+       //echo "<br><br><br><br>";
+       //print_r($arreglos);die();
+       
+        /* Recorriendo estos aarreglos  
+        */
        foreach($arreglos as $key=>$arreglo){
-          $ruta=$model->pathToStoreFile();
-           yii::error('la ruta');
-          yii::error($ruta);
-          //echo $ruta."<br>";
+           YII::ERROR('RECORRIENDO EL ARREGLO');
+            YII::ERROR($arreglo);
+           /*
+            * Esta ruta no es mas que DirFile() + nombrearchivo
+            * dirFile(), es una funcion del behavior FileBehavior
+            * Y arroja una ruta temporal con uniquid
+            */
+          $ruta=$model->pathToStoreFile(); 
+
+          /*
+           * Genera el contenido HTML del arreglo recorrido
+           * $contenido=[['<dsdsds><dsxs>dsd'],['<sdsds><dsd>']];
+           * Donde cada sub array es una pagina, 
+           */
+          //echo "sasa";die();
           $contenido=$this->contentReportMultiple($id, $arreglo,$model);    
-         //print_r($contenido); die();
+       
         $pdf=ModuleReporte::getPdf(); 
          $paginas=count($contenido);
+         /*
+          * Recorriendo el contenido pagina por pagina 
+          * y escribe el PDF
+          */
         foreach($contenido as $index=>$pagina){ 
-           // yii::error('pagination '.count($contenido));           
-                        $pdf->WriteHTML($pagina);
-                         // yii::error('index '.$index);
-                          // yii::error('paginas '.($paginas-1));
-                        if($index < $paginas-1){
-                             yii::error('agregando pagina');     
-                             yii::error($pagina);
-                                 $pdf->AddPage();
+                       $pdf->WriteHTML($pagina);
+                          if($index < $paginas-1){
+                                $pdf->AddPage();
                                         }
-                        }
-         yii::error('Escribiendo archivos ...');
-        $pdf->output($ruta, \Mpdf\Output\Destination::FILE);
+              }
+           /*Escribe en disco el contenido en un solo archivo
+            * Esto quiere decir que el PDF tendrá $size*$paginas
+            */
+          $pdf->output($ruta, \Mpdf\Output\Destination::FILE);
          $model->routesSplit[]=$ruta;
          unset($pdf);
-       }       
+       } 
+       
+       /*
+        * Hasa aquí se generan todos los archivos 
+        * de los recibos, si se llama por Ajax, 
+        * todo quedá aquí.
+        */
        if(h::request()->isAjax){
            return ['success'=>yii::t('sigi.labels','Se ha completado de generar los recibos')];
        }
        
+       /*
+        * Si no se llama por Ajax, entonces unir todos
+        * los archivos regados 
+        */
        $mpdf = new \Mpdf\Mpdf();
            $files= \yii\helpers\FileHelper::findFiles($model->dirFile());
        foreach($files as $route) {
@@ -425,8 +468,8 @@ class MakeController extends baseController
      
       foreach($idsToReport as $key=>$idkey){
        
-          //var_dump($this->contentReport($id, $idkey, $model))
-          $contenidos=$this->contentReport($id, $idkey, $model);
+         $contenidos=$this->contentReport($id, $idkey, $model);
+          
           foreach( $contenidos as $clave=>$valor){
               $content[]=$valor;
           }
@@ -437,12 +480,19 @@ class MakeController extends baseController
       return $content;
   }
   
+  
+ 
+  
+  
+  
   private function contentReport($id, $idfiltro,$model){
        //$model=$this->findModel($id);
       //echo "fallo"; die();
+      yii::error('La identidad es  : '.$idfiltro,__FUNCTION__);
        $logo=($model->tienelogo)?$this->putLogo($id, $idfiltro):''; 
-       
+      
       $npaginas=$model->numeroPaginas($idfiltro);
+       yii::error('Tiene   : '.$npaginas.'  Páginas ',__FUNCTION__); 
       $contenido="";
       $dataProvider=$model->dataProvider($idfiltro);
       //echo $dataProvider->query->createCommand()->rawSql; die();
@@ -456,7 +506,7 @@ class MakeController extends baseController
          $dataProvider->pagination->page = $i-1; //Set page 1
           $dataProvider->refresh(); //Refresh models
           //$valorAcumulado=$valorAcumulado+$model->sumDataProvider($dataProvider);
-         yii::error('renderizando la vista',__FUNCTION__);
+         //yii::error('renderizando la vista',__FUNCTION__);
           $pageContents[]=trim($this->render('reporte',[
              'modelo'=>$model,             
              'dataProvider'=>$dataProvider,
@@ -467,7 +517,7 @@ class MakeController extends baseController
               'currentPage'=>$i,
                  ]).$this->pageBreak());
               }
-         yii::error($pageContents);
+         //yii::error($pageContents);
      return $pageContents;   
   }
   
@@ -568,6 +618,7 @@ class MakeController extends baseController
           foreach($contenido as $index=>$pagina){
               $cadenaHtml.=$pagina;
           }
+         
           return $cadenaHtml;
       }elseif($model->type=='file'){
                 $pdf=ModuleReporte::getPdf();

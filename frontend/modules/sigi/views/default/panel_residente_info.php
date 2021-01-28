@@ -43,7 +43,7 @@ $edificio=$unidad->edificio;
         ],
     ]); ?>
     <?php Pjax::end(); ?>
-<h4>Consumo de agua</h4>
+
 
 
 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">

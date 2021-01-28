@@ -438,19 +438,19 @@ public function existsDetalleFacturacion($unidad,$colector,$prorateo=false,$dias
 /*
  * Funcion corta 
  */
-public function insertaRegistro($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias){
+public function insertaRegistro($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$esResumido){
     $maxDias=date('t', strtotime($this->facturacion->swichtDate('fecha',false)));
     
     if($dias==$maxDias){
-      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,1,'1');  
+      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,1,'1',$esResumido);  
     }else{
         $factor=$dias/$maxDias;
-      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$factor,'0'); 
-      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$maxDias-$dias,1-$factor,'1'); 
+      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$factor,'0',$esResumido); 
+      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$maxDias-$dias,1-$factor,'1',$esResumido); 
     }
 }
 
-private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$factor,$nuevoProp){
+private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$factor,$nuevoProp,$esResumido){
     if($factor==1){
         $grupocobranza=(!$unidad->miApoderado()->cobranzaindividual)?$unidad->codpro:$unidad->numero;
     }else{
@@ -491,6 +491,7 @@ private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$pa
              'codmon'=>$this->codmon,
              'dias'=>$dias,
              'nuevoprop'=>$nuevoProp,
+             'resumido'=>($esResumido)?'1':'0',
              ];
         // yii::error( $attributes);
          $model->setAttributes($attributes);

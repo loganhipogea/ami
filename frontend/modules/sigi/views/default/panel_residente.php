@@ -57,8 +57,7 @@ use dosamigos\chartjs\ChartJs;
                  'format'=>'raw',
                   'value' => function ($model) {
                     $url=Url::to(['/report/make/creareporte/','id'=>2,'idfiltro'=>$model->identidad]);
-                            return Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels',''),$url,['data-pjax'=>'0','target'=>'_blank','class'=>"btn btn-success"]).
-                                   Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels',''),$url,['data-pjax'=>'0','target'=>'_blank','class'=>"btn btn-success"]) ;
+                            return Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels',''),$url,['data-pjax'=>'0','target'=>'_blank','class'=>"btn btn-success"]) ;
                                 },
                 ],
              

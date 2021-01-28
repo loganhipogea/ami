@@ -478,7 +478,20 @@ class SigiUnidades extends \common\models\base\modelBase
    
    public function firstMedidor($type){
        return $this->getSigiSuministros()->andWhere(['tipo'=>$type])->one();
-   }   
+   }  
+   
+   public function propietarioRecibo(){
+       $modelo= SigiPropietarios::find()->where(
+               ['unidad_id'=>$this->id]
+               )->andWhere(
+               ['activo'=>'1','recibo'=>'1']
+               )->one();
+       if(!is_null($modelo)){
+           return $modelo;
+       }else{
+          return $this->currentPropietario(); 
+       }
+   }
    
    public function currentPropietario(){
       return SigiPropietarios::find()->where(
@@ -559,14 +572,12 @@ class SigiUnidades extends \common\models\base\modelBase
  
  
  public function arrayParticipaciones(){
-     $areatotal=$this->edificio->area();
-     
+     $areatotal=$this->edificio->area();     
      $areasHijos=$this->find()->select(['nombre','numero','area','participacion'])->where(['parent_id'=>$this->id])->asArray()->all();
      if(count($areasHijos)>0){
          $datosAreas=$areasHijos;
          $datosAreas[]=['nombre'=>$this->nombre,'numero'=>$this->numero,'area'=>$this->area+0,'participacion'=>$this->participacion+0];
-         
-         
+          
      }else{
          $datosAreas=[['nombre'=>$this->nombre,'numero'=>$this->numero,'area'=>$this->area+0,'participacion'=>$this->participacion+0]];
      }

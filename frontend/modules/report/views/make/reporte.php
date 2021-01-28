@@ -7,13 +7,38 @@
                     if(!empty($modelo->vistaalterna)) { ?>
                         
                          <?php
-                                $grupos=$dataProvider->query->select(['codgrupo','desgrupo'])
-                                    ->distinct()->asArray()->all();
-                                $detalles=$dataProvider->query->select(['codgrupo',
+                         /*
+                          * Averiguando que identidades son parte de un recibo
+                          * de cobranza masiva
+                          * $resumido=true: Quiere decir que debe de ersumirse 
+                          * ya agrupase en un solo recibo
+                          */
+                         $array_depas=$dataProvider->query->select(['unidad_id'])->distinct()->column();
+                         //yii::error('el toipo',__FUNCTION__);
+                         //yii::error($array_depas,__FUNCTION__);
+                         $array_depas=array_unique($array_depas);
+                            $resumido=(count($array_depas)>1)?true:false;      
+                        // var_dump( $resumido);die();
+                                $grupos=$dataProvider->query->select(['codgrupo','desgrupo'])->andWhere(['>','montototal',0])->
+                                   distinct()->asArray()->all();
+                                if(!$resumido){
+                                   $detalles=$dataProvider->query->select(['codgrupo',
                                     'desgrupo',
                                     'descargo','codsuministro','unidades','lanterior','lectura','delta',
                                     'monto','montototal','simbolo'])
-                                    ->asArray()->all();
+                                    ->asArray()->all(); 
+                                }else{
+                                 
+                                   $detalles=$dataProvider->query->select(['codgrupo',
+                                    'desgrupo',
+                                    'descargo','codsuministro','unidades','lanterior','lectura','delta',
+                                    'sum(monto) as monto','montototal','simbolo'])
+                                    ->groupBy(['codgrupo','desgrupo','descargo','montototal','simbolo'])->asArray()->all();  
+                                
+                                   // yii::error('Es resumido',__FUNCTION__);
+                                   // yii::error($detalles[0]['monto'],__FUNCTION__);
+                                }
+                                
                                 echo $this->render($modelo->vistaalterna,[
                                     'modelo'=>$modelo,
                                     'grupos'=>$grupos,

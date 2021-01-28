@@ -1,6 +1,8 @@
 <?php
 
 namespace frontend\modules\sigi\models;
+use common\helpers\h;
+use frontend\modules\report\Module as ModuleReporte;
 use frontend\modules\sigi\models\SigiCuentaspor;
 use frontend\modules\sigi\models\SigiDetfacturacion;
 use frontend\modules\sigi\models\SigiKardexdepa;
@@ -100,7 +102,7 @@ class SigiFacturacion extends \common\models\base\modelBase
     }
     
      public function getKardexDepa(){
-       return $this->hasOne(SigiKardexdepa::className(), ['id' =>'facturacion_id']);
+       return $this->hasMany(SigiKardexdepa::className(), ['facturacion_id' =>'id']);
    
     }
    
@@ -225,7 +227,7 @@ class SigiFacturacion extends \common\models\base\modelBase
             }
           }*/
            $this->shortFactu();           
-           $this->asignaIdentidad();//Importante  
+           //$this->asignaIdentidad();//Importante  
            $this->asignaNumero();
           $this->resolveTransferencias();
            
@@ -286,12 +288,10 @@ class SigiFacturacion extends \common\models\base\modelBase
         
     }
     
-    public function idsToFacturacion(){
-       
+    public function idsToFacturacion(){       
        return  array_column($this->getSigiDetfacturacion()->
                 select('identidad')->distinct()
-                ->all(),'identidad');
-        
+                ->all(),'identidad');        
     }
     
     public function idsColectores(){
@@ -597,7 +597,9 @@ class SigiFacturacion extends \common\models\base\modelBase
         
         /************************************************
          * Obteniendo la identidad del recibo ($identidad) 
+         * y el flag si es resumido o no 
          ************************************************/
+        $esResumido=false;
         if($hasCobranzaMasiva){
                   if($unidad->miApoderado()->cobranzaindividual){
                       $modeltemp=$this->kardexDepa($unidad->id);
@@ -606,6 +608,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                      }else{
                          if($dias==$diasEnEsteMes){
                              $identidad=$kardexGrupal->id; 
+                             $esResumido=true;
                          }else{                              
                          }                        
                   } 
@@ -642,7 +645,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                      /***insertar un registrio en el detalle de factuaración SigiDetFacturacion  ****/
                     if(!$cuenta->existsDetalleFacturacion($unidad,$colector,false,$dias)){
                         //yii::error(' Inserta registroco aacc=0');
-                        $cuenta->insertaRegistro($identidad,$unidad,$medidor,$monto,'0',$participacion,$dias);
+                        $cuenta->insertaRegistro($identidad,$unidad,$medidor,$monto,'0',$participacion,$dias,$esResumido);
                         
                     }
                        /*****************************/
@@ -667,7 +670,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                   if(!$cuenta->existsDetalleFacturacion($unidad,$colector,true,$dias) && $monto > 0){
                      //yii::error('insertando un registro con aac=1');
                       $cuenta->insertaRegistro($identidad,$unidad,null,$monto,'1',$participacionAACC //el porc d ecomsumo
-                                     *$unidad->porcWithChilds(),$dias); 
+                                     *$unidad->porcWithChilds(),$dias,$esResumido); 
                   }
                  
                  /*****************************/
@@ -686,7 +689,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                 /***insertar un registro****/
                 if(!$cuenta->existsDetalleFacturacion($unidad,$colector,false,$dias))
                    //yii::error(' Insertando registrio');  
-                        $cuenta->insertaRegistro($identidad,$unidad,null,$monto,'0',$unidad->porcWithChilds(),$dias);
+                        $cuenta->insertaRegistro($identidad,$unidad,null,$monto,'0',$unidad->porcWithChilds(),$dias,$esResumido);
                  /*****************************/
                  
                    }
@@ -698,7 +701,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                    if($cuenta->unidad_id>0 && $cuenta->unidad_id==$unidad->id) {
                        /***insertar un registrio****/
                        if(!$cuenta->existsDetalleFacturacion($unidad,$colector,false,$dias))
-                    $cuenta->insertaRegistro($identidad,$unidad,null,$cuenta->monto,'1',1,$dias);
+                    $cuenta->insertaRegistro($identidad,$unidad,null,$cuenta->monto,'1',1,$dias,$esResumido);
                       /*****************************/
                  
                  
@@ -854,5 +857,66 @@ class SigiFacturacion extends \common\models\base\modelBase
                 ])->andWhere(['parent_id'=>null])->andWhere(['not in','id',$idsFacturados])->all();
   }
   
+  
+  public function recibo($idKardex,$disk=false){   
+        YII::ERROR('EL ID KARDEX '.$idKardex,__FUNCTION__);
+           $dataProvider=(New SigiDetfacturacionSearch())->searchByIdentidad($idKardex);
+            $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>($this->reporte_id==2)?true:false]);
+            $pdf=ModuleReporte::getPdf();        
+             $pdf->WriteHTML($contenido);
+             yii::error('paso Write html');
+            if(!$disk){
+                $pdf->output(/*$ruta, \Mpdf\Output\Destination::FILE*/);
+            }else{
+                 yii::error('escribiendo en disco',__FUNCTION__);
+                $ruta=$this->pathTempToStore();
+                 yii::error('ruta '.$ruta,__FUNCTION__);
+                  yii::error('haciendo el  output al file  '.$ruta,__FUNCTION__);
+                $pdf->output($ruta, \Mpdf\Output\Destination::FILE);  
+                yii::error('YA BHIZO EK OUTPUR '.$ruta,__FUNCTION__);
+                $kardex=SigiKardexdepa::findOne($idKardex);
+                $kardex->deleteAllAttachments();
+                $kardex->attachFromPath($ruta);
+            }
+  }
+  
+  public function purgeRecibos(){
+      $contador=0;
+      foreach($this->kardexDepa() as $kardex ){
+            $kardex->deleteAllAttachments();
+                $contador++;
+          }
+      return $contador;
+  }
+  
+  public function generaRecibos(){
+      YII::ERROR('ENTRNADO EN GENERA RECIBOS');
+      $contador=0;
+      foreach($this->kardexDepa as $kardex ){
+          YII::ERROR('EN EL BUCLE   KARDEX_ID '.$kardex->id);
+          if(!$kardex->hasAttachments()){
+              yii::error('kardex id no tiene arttach  '.$kardex->id,__FUNCTION__);
+             yii::error('entrando a la funcion recibo',__FUNCTION__);
+            
+              $this->recibo($kardex->id,true);
+                $contador++; 
+            }else{
+              YII::ERROR(' KARDEX_ID tiene attach '.$kardex->id);  
+            }
+          }
+      return $contador;
+  }
+  
+  
+  public function pathTempToStore(){
+       // $rutaTemp=\yii::getAlias('@frontend/web/img_repo/temp/'. uniqid().'.zip');
+      
+      $dir=\yii::getAlias('@frontend/web/sigi/temp/');
+     
+      if(!is_dir($dir)){
+          mkdir($dir);
+      }
+      return $dir.uniqid().'.pdf';
+  }
   
 }

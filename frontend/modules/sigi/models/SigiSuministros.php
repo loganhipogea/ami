@@ -152,12 +152,12 @@ public function getEdificio()
         $valorFacturable=($facturable)?'1':['0','1'];        
              if(is_null($fecha)){
                         $query=$this->queryReads()->andWhere(['facturable'=>$valorFacturable ,'id'=>$this->queryReads()->max('id')]);
-                yii::error($this->queryReads()->createCommand()->rawSql);
+                //yii::error($this->queryReads()->createCommand()->rawSql);
                         
              }else{
                     //yii::error('ya pe');
-                    yii::error($this->queryReads()->andWhere(['facturable'=>$valorFacturable])->andWhere(['<=','flectura',$fecha])/*->andWhere(['<=','id',$this->queryReads()->max('id')])*/
-                   ->orderBy('id desc')->limit(1)->createCommand()->rawSql);
+                    /*yii::error($this->queryReads()->andWhere(['facturable'=>$valorFacturable])->andWhere(['<=','flectura',$fecha])/*->andWhere(['<=','id',$this->queryReads()->max('id')])
+                   ->orderBy('id desc')->limit(1)->createCommand()->rawSql);*/
                         $query=$this->queryReads()->andWhere(['facturable'=>$valorFacturable])->andWhere(['<=','flectura',$fecha])/*->andWhere(['<=','id',$this->queryReads()->max('id')])*/
                    ->orderBy('id desc')->limit(1); 
                     }        
@@ -180,7 +180,7 @@ public function getEdificio()
         $query=$this->queryReads()->
       andWhere(['facturable'=>$valorFacturable])->andWhere(['>=','flectura',$fecha])->
       orderBy('id ASC')->limit(1);
-        yii::error($query->createCommand()->getRawSql());
+        //yii::error($query->createCommand()->getRawSql());
       return $query->one();  
     }
     
@@ -190,7 +190,7 @@ public function getEdificio()
         $query=$this->queryReads()->
       andWhere(['facturable'=>$valorFacturable ,'<=','flectura',$fecha])->
       orderBy('id ASC')->limit(1);
-        yii::error($query->createCommand()->getRawSql());
+       // yii::error($query->createCommand()->getRawSql());
       return $query->one();  
     }
     
@@ -222,10 +222,10 @@ public function getEdificio()
     
     private function queryReadsForThisMonth($mes,$anio,$facturable=false){
         $valor=($facturable)?'1':['0','1'];
-        yii::error('----queryreas for this mont--');
-        yii::error(SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
+        //yii::error('----queryreas for this mont--');
+        /*yii::error(SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
                 andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio])->
-                createCommand()->getRawSql());
+                createCommand()->getRawSql());*/
         return SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
                 andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio]);
         
@@ -374,9 +374,12 @@ public function lastReads($forGraphical=false){
     }
     if($forGraphical){
         $meses= array_values(\common\helpers\timeHelper::mapMonths(array_keys($lecturas)));
-        return array_combine($meses,array_values($lecturas));
-    }else{
+        $lecturas=array_combine($meses,array_values($lecturas));
+        array_shift($lecturas);
         return $lecturas;
+    }else{
+         array_shift($lecturas);
+          return $lecturas;
     }
     
 }
