@@ -252,4 +252,8 @@ public static function dataComboStatus(){
       $this->status=($this->status=='1')?'10':'20';
   }
    */
+ public static function find()
+    {
+        return new UserQuery(get_called_class());
+    }
 }

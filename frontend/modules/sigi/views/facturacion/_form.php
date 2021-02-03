@@ -29,10 +29,8 @@ use common\widgets\selectwidget\selectWidget;
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Grabar'), ['class' => 'btn btn-success']) ?>
            <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Facturar'), ['id'=>'boton_facturacion','class' => 'btn btn-warning'])?>    
         <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Resetear'), ['id'=>'boton_resetear','class' => 'btn btn-warning'])?>    
-            <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Generar Recibos'), ['id'=>'boton_recibos','class' => 'btn btn-warning'])?>    
-         <?=Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Ver Recibos'),Url::to(['/report/make/multi-report','id'=>$model->reporte_id,'idsToReport'=> \yii\helpers\Json::encode($model->idsToFacturacion())]),['target'=>'_blank','class'=>"btn btn-success"])?>
-            <?=Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Ver detalle'),Url::to(['detalle-facturacion','id'=>$model->id]),['target'=>'_blank','data-pjax'=>'0','class'=>"btn btn-success"])?>
-        <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Enviar recibos'), ['id'=>'boton_recibos_mail','class' => 'btn btn-warning'])?>    
+             <?=Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Ver detalle'),Url::to(['detalle-facturacion','id'=>$model->id]),['target'=>'_blank','data-pjax'=>'0','class'=>"btn btn-success"])?>
+       
        
         
             </div>
@@ -352,43 +350,7 @@ use common\widgets\selectwidget\selectWidget;
   
   $this->registerJs($string, \yii\web\View::POS_END);
 ?>
-<?php 
-  $string="$('#boton_recibos').on( 'click', function(){      
-       $.ajax({
-              url: '".Url::to(['/report/make/multi-report','id'=>2,'idsToReport'=>\yii\helpers\Json::encode($model->idsToFacturacion())])."', 
-              type: 'get',
-              data:{},
-              dataType: 'json', 
-              error:  function(xhr, textStatus, error){               
-                            var n = Noty('id');                      
-                              $.noty.setText(n.options.id, error);
-                              $.noty.setType(n.options.id, 'error');       
-                                }, 
-              success: function(json) {
-              var n = Noty('id');
-                      
-                       if ( !(typeof json['error']==='undefined') ) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
-                              $.noty.setType(n.options.id, 'error');  
-                          }    
 
-                             if ( !(typeof json['warning']==='undefined' )) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['warning']);
-                              $.noty.setType(n.options.id, 'warning');  
-                             } 
-                          if ( !(typeof json['success']==='undefined' )) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['success']);
-                              $.noty.setType(n.options.id, 'success');  
-                             }      
-                   
-                        }
-                        });
-
-
-             })";
-  
-  $this->registerJs($string, \yii\web\View::POS_END);
-?>
  <?php 
   $string="$('#boton_resetear').on( 'click', function(){      
        $.ajax({
@@ -427,43 +389,7 @@ use common\widgets\selectwidget\selectWidget;
   $this->registerJs($string, \yii\web\View::POS_END);
 ?> 
       
-  <?php 
-  $string="$('#boton_recibos_mail').on( 'click', function(){      
-       $.ajax({
-              url: '".Url::to(['/sigi/facturacion/send-massive-recibo','id'=>$model->id])."', 
-              type: 'get',
-              data:{},
-              dataType: 'json', 
-              error:  function(xhr, textStatus, error){               
-                            var n = Noty('id');                      
-                              $.noty.setText(n.options.id, error);
-                              $.noty.setType(n.options.id, 'error');       
-                                }, 
-              success: function(json) {
-              var n = Noty('id');
-                      
-                       if ( !(typeof json['error']==='undefined') ) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
-                              $.noty.setType(n.options.id, 'error');  
-                          }    
-
-                             if ( !(typeof json['warning']==='undefined' )) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['warning']);
-                              $.noty.setType(n.options.id, 'warning');  
-                             } 
-                          if ( !(typeof json['success']==='undefined' )) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['success']);
-                              $.noty.setType(n.options.id, 'success');  
-                             }      
-                   
-                        }
-                        });
-
-
-             })";
-  
-  $this->registerJs($string, \yii\web\View::POS_END);
-?>     
+    
    
       
 </div>   

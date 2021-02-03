@@ -239,4 +239,38 @@ public static function randomNameFile($ext){
     return uniqid().'_'.h::userId().'_'.str_replace('.','_',h::request()->getUserIP()).$ext;
 }
 
+public static function deleteDirectory($dir,$preserve=false) {
+    if(!$dh = @opendir($dir)) return;
+    while (false !== ($current = readdir($dh))) {
+        if($current != '.' && $current != '..') {
+           // echo 'Se ha borrado el archivo '.$dir.'/'.$current.'<br/>';
+            if (!@unlink($dir.'/'.$current)) 
+                static::deleteDirectory($dir.'/'.$current);
+        }       
+    }
+    closedir($dh);
+    //echo 'Se ha borrado el directorio '.$dir.'<br/>';
+    if(!$preserve)
+    @rmdir($dir);
+}
+
+
+public function fileName($ruta,$extension=false){
+$partes_ruta = pathinfo($ruta);
+$ext=($extension)?$partes_ruta['extension']:'';
+
+/*echo $partes_ruta['dirname'], "\n";
+echo $partes_ruta['basename'], "\n";
+echo $partes_ruta['extension'], "\n";*/
+return  $partes_ruta['filename'].$ext; 
+
+}
+
+public function fileExt($ruta,$conpunto=true){
+$partes_ruta = pathinfo($ruta);
+$punto=($conpunto)?'.':'';
+return  $punto.$partes_ruta['extension']; 
+
+}
+
 }

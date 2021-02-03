@@ -501,6 +501,7 @@ class Edificios extends \common\models\base\modelBase
        $usuario->password=$unidad->generatePwd();
       try {
          $user= $usuario->signup();
+      if(is_object($user)){
        $user->refresh();
        $profile=$user->profile;
        $profile->tipo='40';
@@ -518,6 +519,7 @@ class Edificios extends \common\models\base\modelBase
                 }else{
                     //yii::error('Rol nulo');
                 }
+        }
       } catch (\yii\db\IntegrityException $ex) {           
        
       }

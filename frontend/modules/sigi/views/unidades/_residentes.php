@@ -28,7 +28,7 @@ use frontend\modules\sigi\models\SigiPropietariosSearch;
                  [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{edit}{delete}',
+            'template' => '{edit}{main}{delete}',
                'buttons' => [
                     'edit' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/sigi/unidades/edita-residente','id'=>$model->id,'isImage'=>false,'idModal'=>'buscarvalor','gridName'=>'grilla-residentes','nombreclase'=> str_replace('\\','_',get_class($model))]);
@@ -44,6 +44,10 @@ use frontend\modules\sigi\models\SigiPropietariosSearch;
                      
                         
                         },
+                        'main' => function ($url,$model) {
+			   $url = \yii\helpers\Url::toRoute([$this->context->id.'/ajax-main-recibo','id'=>$model->id]);
+                              return \yii\helpers\Html::a('<span class="btn btn-warning glyphicon glyphicon-tags"></span>', '#', ['title'=>$url,'family'=>'holas','id'=>$model->id]);
+                            },
                         'delete' => function ($url,$model) {
 			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
                               return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
@@ -68,6 +72,16 @@ use frontend\modules\sigi\models\SigiPropietariosSearch;
              },
 
           ],
+                     
+         [
+    'attribute' => 'recibo',
+    'format' => 'raw',
+    'value' => function ($model) {
+        return \yii\helpers\Html::checkbox('recibo[]', $model->recibo, [ 'disabled' => true]);
+
+             },
+
+          ],
         ],
     ]); ?>
          <?php 
@@ -77,6 +91,7 @@ use frontend\modules\sigi\models\SigiPropietariosSearch;
             'family'=>'holas',
           'type'=>'POST',
            'evento'=>'click',
+       'posicion'=>\yii\web\View::POS_END,
             //'foreignskeys'=>[1,2,3],
         ]); 
    ?>

@@ -1,4 +1,6 @@
 <?php
+use frontend\modules\report\components\NumeroAletras;
+use common\models\masters\Monedas;
 //print_r($detalles);
  foreach($grupos as $index=>$grupo){
     // var_dump($grupo);
@@ -62,7 +64,11 @@
 <?php    
  }
 ?>
+
 <div style="padding:5px; border: 1px solid #000;margin-bottom: 35px;  "  >
-    Total Recibo : <?=$totalMes  ?>
+    Total Recibo : <?=$totalMes.'   '.NumeroAletras::convert(              
+              round($totalMes,2),
+               Monedas::findOne($codmon)->desmon,
+              true)  ?>
 </div>
 

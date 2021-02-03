@@ -464,19 +464,13 @@ class MakeController extends baseController
   
   private function contentReportMultiple($id,$idsToReport,$model){
       // $model=$this->findModel($id); 
-       $content=[];
-     
-      foreach($idsToReport as $key=>$idkey){
-       
-         $contenidos=$this->contentReport($id, $idkey, $model);
-          
+       $content=[];     
+      foreach($idsToReport as $key=>$idkey){       
+         $contenidos=$this->contentReport($id, $idkey, $model);          
           foreach( $contenidos as $clave=>$valor){
               $content[]=$valor;
           }
-          //$i++;
-          
       }
-      //var_dump($content);die();
       return $content;
   }
   

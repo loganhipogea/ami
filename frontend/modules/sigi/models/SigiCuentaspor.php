@@ -445,8 +445,11 @@ public function insertaRegistro($identidad,$unidad,$medidor,$monto,$aacc,$partic
       $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,1,'1',$esResumido);  
     }else{
         $factor=$dias/$maxDias;
-      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$factor,'0',$esResumido); 
-      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$maxDias-$dias,1-$factor,'1',$esResumido); 
+        
+      $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$factor,'0','0'); 
+     // $nuevaIdentidad=$this->facturacion->kardexDepa($unidad->id,true);
+      //Le ponemos NULL
+      $this->insertaRegistroRaw(null,$unidad,$medidor,$monto,$aacc,$participacion,$maxDias-$dias,1-$factor,'1','0'); 
     }
 }
 

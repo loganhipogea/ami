@@ -408,6 +408,21 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    \frontend\modules\sigi\models\SigiFacturacion::findOne(94)->asignaIdentidad();
+  die(); 
+    
+    
+    
+    
+  \frontend\modules\sigi\models\SigiFacturacion::findOne(94)->recibo(2035);
+  die();
+    
+    
+    
+   echo \frontend\modules\sigi\models\SigiFacturacion::findOne(94)->pathRecibos();
+    die();  
+    
+    
     
     echo \frontend\modules\sigi\models\SigiFacturacion::findOne(91)->generaRecibos();
     die();

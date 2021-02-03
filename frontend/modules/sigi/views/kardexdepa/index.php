@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\modules\sigi\models\SigiKardexdepaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -35,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
          
          [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
+                'template' => '{update}{recibo}',
                 'buttons' => [
                     'update' => function($url, $model) { 
                         $url=Url::to(['update','id'=>$model->id]);
@@ -44,7 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                         return Html::a('<span class="btn btn-info btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);
                          },
-                          
+                        'recibo' => function ($url,$model) {
+			   $url = \yii\helpers\Url::toRoute(['facturacion/recibo-by-kardex','id'=>$model->id]);
+                              return \yii\helpers\Html::a('<span class="btn btn-warning glyphicon glyphicon-tags"></span>', '#', ['title'=>$url,'family'=>'holas','id'=>$model->id]);
+                            }, 
                     ]
                 ],
          
@@ -95,6 +99,18 @@ $this->params['breadcrumbs'][] = $this->title;
           
         ],
     ]); ?>
+ <?php 
+   echo linkAjaxGridWidget::widget([
+           'id'=>'searchKardexdsd',
+            'idGrilla'=>'searchKardex',
+            'family'=>'holas',
+          'type'=>'POST',
+           'evento'=>'click',
+       'posicion'=>\yii\web\View::POS_END,
+            //'foreignskeys'=>[1,2,3],
+        ]); 
+   ?>
+ 
     <?php Pjax::end(); ?>
 </div>
     </div>

@@ -323,7 +323,7 @@ return [
            'enableAutoLogin'=>false,
            // authTimeout
             'enableSession' => true,
-            'authTimeout'=>60*40,
+            'authTimeout'=>60*40*5,
     ]
         
         

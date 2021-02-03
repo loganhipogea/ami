@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\modules\sigi\models\VwSigiFacturecibo;
+use common\models\masters\Clipro;
 $detalle=$dataProvider->getModels()[0];
 $model=$detalle->facturacion;
 ?>
@@ -22,7 +23,7 @@ $model=$detalle->facturacion;
 
         <div style="position:absolute; padding:1px;border-style:none;top:5px; left:5px; ">
             <div style="float:right">
-                <?=Html::img('@web/sigi/logo_diar.jpg',['width'=>120,'height'=>150])?>
+                <?=Html::img('@web/sigi/logo_diar.jpg',['width'=>120,'height'=>120])?>
       </div>
 
         </div>
@@ -34,17 +35,31 @@ $model=$detalle->facturacion;
  <div style=" position:absolute;  left:681px;  top:41px;  font-size:12;  font-family:cour;  font-weight:bold;  color:#000; ">
        <?=$model->fecha?>
 </div>
-  <div style=" position:absolute;  left:381px;  top:941px;  font-size:12;  font-family:cour;  font-weight:none;  color:#000; ">Deposite Ud. en nuestra cuenta soles
+  <div style=" position:absolute; width:380px;
+       left:381px;  top:941px; 
+       font-size:12;  font-family:cour;
+       font-weight:none;  color:#000; text-align:justify ">
    <?=$model->detalles?>
  </div>
- <div style=" position:absolute;  left:301px;  top:61px;  font-size:16;  font-family:cour;  font-weight:bold;  color:#000; ">
+ <div style=" left:301px;  top:71px;  font-size:16;  font-family:cour;  font-weight:bold;  color:#000; ">
     <?=$model->edificio->nombre?>
  </div>
- <div style=" position:absolute;  left:301px;  top:81px;  font-size:8;  font-family:arial;  font-weight:none;  color:#000; ">
+ <div style="  left:301px;  top:91px;  font-size:8;  font-family:arial;  font-weight:none;  color:#000; ">
       <?=$model->edificio->direccion?>
  </div>
- <div style=" position:absolute;  left:51px;  top:101px;  font-size:14;  font-family:arial;  font-weight:bold;  color:#F72; ">
-     <?=$detalle->unidad->nombre?>
+ <div style=" position:absolute;  left:51px;  top:108px;  font-size:14;  font-family:arial;  font-weight:bold;  color:#F72; ">
+     <?php  
+     if(!$detalle->resumido){
+        echo $detalle->unidad->nombre;  
+     }else{
+        /*Si es un recibo compacto */
+         $nombre=Clipro::findOne($detalle->grupocobranza)->despro; 
+        echo    $nombre;
+     }
+    
+        
+             
+      ?>
  </div>
  <div style=" position:absolute;  left:51px;  top:941px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
    <?php
@@ -54,6 +69,14 @@ $model=$detalle->facturacion;
         }else{
            
             $Aareas= VwSigiFacturecibo::find()->select(['nombre','numero','area','participacion'])->distinct()->andWhere(['kardex_id'=>$detalle->kardex_id,'resumido'=>'1'])->asArray()->all();
+           // $areasOriginales=$Aareas;
+            if(count($Aareas)>10){
+                $areas= array_sum(array_column($Aareas,'area'));
+                 $participacion= array_sum(array_column($Aareas,'participacion' ));
+               $Aareas=[['nombre'=>$nombre,'numero'=>'','area'=>$areas,'participacion'=>$participacion]]; 
+            }else{
+                
+            }
             $AreaTotal=$model->edificio->area();
            $areas= ['aareas'=>$Aareas,'atotal'=>$AreaTotal];
         }
@@ -69,7 +92,7 @@ $model=$detalle->facturacion;
                     <th>Nombre</th>
                     <th>Area(m2)</th>
                    
-                    <th>Participación</th>
+                    <th>Participación (%)</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -113,16 +136,26 @@ $model=$detalle->facturacion;
    </div>
  
  </div>
-       <div style=" position:absolute;  left:501px;  top:16px;  font-size:15;  font-family:cour;  color:#000; ">Recibo N° :</div><?=$detalle->numerorecibo?>
-       <div style=" position:absolute;  left:601px;  top:16px;  font-size:15;  font-family:cour;  font-weight:bold;  color:#000; "><?=$model->fecha?></div>
+       <div style=" position:absolute;  left:501px;  top:16px;  font-size:15;  font-family:cour;  color:#000; ">Recibo N° :<?=$detalle->numerorecibo?></div>
+
        <div style=" position:absolute;  left:551px;  top:56px;  font-size:12;  font-family:cour;  color:#000; ">F Vencimiento :</div>
        <div style=" position:absolute;  left:681px;  top:56px;  font-size:12;  font-family:cour;  font-weight:bold;  color:#000; "><?=$model->fvencimiento?></div>
        
        
        <div style=" position:absolute;  left:51px;  top:151px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
             <div>
-                <?PHP $propietario=$detalle->unidad->propietarioRecibo(); ?>
+               
                 <div style="width: 600px;">
+                     <?PHP
+                if(!$detalle->resumido){
+                 if(!$detalle->nuevoprop){//si es un recibo partido por una trnasferencia de un pepoeario viejo
+                   $propietario=$detalle->unidad->propietarioRecibo();   
+                 }else{//si no es transferencia normal
+                    $propietario=$detalle->unidad->oldPropietario(\frontend\modules\sigi\models\SigiUnidades::TYP_PROPIETARIO); 
+                 }
+                     
+                  
+                ?>
               <div>
                         <table>
                             <thead>
@@ -141,16 +174,32 @@ $model=$detalle->facturacion;
                            </tbody>
                        </table>
               </div>
+                <?PHP } ELSE { 
+                   
+                    ?>
+                  <table>
+                            <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                       
+                                    </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                            <td><?PHP echo 'El presente recibo incluye todas las unidades dentro de su propiedad' ?></td>
+                                            
+                                     </tr>
+                           </tbody>
+                       </table>
+                    
+                <?PHP }    ?>
               <!-- /.table-responsive -->
             </div>
     
                 </div>
        </div>
-       
-       <div style=" position:absolute;  left:51px;  top:1051px;  font-size:15;  font-family:cour;  color:#000; ">Total a Pagar :</div>
-       <div style=" position:absolute;  left:201px;  top:1051px;  font-size:13;  font-family:cour;  font-weight:bold;  color:#000; ">SEISCIENTOS NOVENTA Y CUATRO CON 84/100 NUEVOS SOLES</div>
        <div style=" position:absolute;  left:551px;  top:71px;  font-size:12;  font-family:cour;  color:#000; ">Dias facturados :</div>
-       <div style=" position:absolute;  left:681px;  top:71px;  font-size:12;  font-family:cour;  font-weight:none;  color:#000; ">31</div>
+       <div style=" position:absolute;  left:681px;  top:71px;  font-size:12;  font-family:cour;  font-weight:none;  color:#000; "><?=$detalle->dias?></div>
        
        
        
@@ -196,6 +245,7 @@ $model=$detalle->facturacion;
                                     'modelo'=>$model,
                                     'grupos'=>$grupos,
                                     'detalles'=>$detalles,
+                                    'codmon'=>$detalle->codmon,
                                     ]);
                          
                          ?>

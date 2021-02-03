@@ -29,6 +29,8 @@ use Yii;
  */
 class SigiDetfacturacion extends \common\models\base\modelBase
 {
+    
+     public $booleanFields=['resumido','nuevoprop'];
     /**
      * {@inheritdoc}
      */

@@ -481,16 +481,26 @@ class SigiUnidades extends \common\models\base\modelBase
    }  
    
    public function propietarioRecibo(){
-       $modelo= SigiPropietarios::find()->where(
+     if($this->imputable){
+             $modelo= SigiPropietarios::find()->where(
                ['unidad_id'=>$this->id]
                )->andWhere(
                ['activo'=>'1','recibo'=>'1']
                )->one();
-       if(!is_null($modelo)){
-           return $modelo;
-       }else{
-          return $this->currentPropietario(); 
-       }
+                if(!is_null($modelo)){
+                    return $modelo;
+                }else{
+                    return $this->currentPropietario(); 
+                } 
+     }else{
+        return  self::find()->andWhere([
+             'edificio_id'=>$this->edificio_id,
+             'imputable'=>'1',
+             'codpro'=>$this->codpro,
+             
+             ])->one()->currentPropietario(); 
+     }
+       
    }
    
    public function currentPropietario(){

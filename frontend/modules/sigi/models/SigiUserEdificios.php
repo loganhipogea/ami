@@ -37,6 +37,7 @@ class SigiUserEdificios extends \common\models\base\modelBase
         return [
             [['user_id'], 'integer'],
             [['edificio_id'], 'integer'],
+              [['edificio_id','user_id' ], 'unique','targetAttribute'=>['edificio_id','user_id']],
            // [['activa'], 'string', 'max' => 1],
             //[['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
         ];
@@ -72,9 +73,9 @@ class SigiUserEdificios extends \common\models\base\modelBase
         
     }
     
-   public function getEdificio(){
+   /*public function getEdificio(){
        return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
-   }
+   }*/
    
    public function getUsuario(){
        return $this->hasOne(\common\models\User::className(), ['id' => 'user_id']);

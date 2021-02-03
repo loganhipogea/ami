@@ -164,24 +164,18 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                   [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{attach}{mail}',
+            'template' => '{recibo}{mail}',
                'buttons' => [
-                  'attach' => function($url, $model) {  
-                         $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,
-                             'idModal'=>'imagemodal',
-                             'modelid'=>$model->id,
-                             'extension'=> \yii\helpers\Json::encode(['jpg','png','pdf','jpeg']),
-                             'nombreclase'=> str_replace('\\','_',get_class($model))]);
-                        $options = [
-                            'title' => Yii::t('sta.labels', 'Subir Archivo'),
-                            'data-method' => 'get',
-                            //'data-pjax' => '0',
-                        ];
-                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Adjuntar Voucher de pago', 'class' => 'botonAbre btn btn-success']);
-                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
-                     
-                        
-                        },
+                  'recibo' => function($url, $model) {
+                            $kardex=$model->kardexDepa;
+                           if($kardex->hasAttachments()){
+                               $url=$kardex->files[0]->url;
+                            return Html::a('<span class="glyphicon glyphicon-download-alt" ></span>'.'  '.yii::t('sta.labels',''),$url,['data-pjax'=>'0','class'=>"btn btn-success"]);
+                       
+                           }else{
+                               return '';
+                           }
+                           },
                     'mail' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/sigi/facturacion/send-recibo',
                              
@@ -202,14 +196,6 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                     ]
                 ],
             
-             [
-                'attribute'=>'recibo',
-                 'format'=>'raw',
-                  'value' => function ($model) {
-                    $url=Url::to(['/report/make/creareporte/','id'=>2,'idfiltro'=>$model->identidad]);
-                            return Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels',''),$url,['data-pjax'=>'0','target'=>'_blank','class'=>"btn btn-success"]);
-                                },
-                ],
              
             
             

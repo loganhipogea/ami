@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use frontend\modules\sigi\models\SigiApoderadosSearch;
+use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 ?>
 <div class="edificios-indexhghg">
 
@@ -28,24 +29,12 @@ use frontend\modules\sigi\models\SigiApoderadosSearch;
                   [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{update}',
+            'template' => '{delete}',
                'buttons' => [
-                    'update' => function($url, $model) {  
-                       $url= Url::to(['agrega-user','id'=>$model->id,'gridName'=>'grilla-usuarios-edificio','idModal'=>'buscarvalor']);
-                         $options = [
-                           'class'=>'botonAbre',
-                            //'title' => Yii::t('sta.labels', 'Editar'),
-                            //'aria-label' => Yii::t('rbac-admin', 'Activate'),
-                            //'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            //'data-method' => 'get',
-                            'data-pjax' => '0',
-                             //'target'=>'_blank'
-                        ];
-                        //return Html::button('<span class="glyphicon glyphicon-pencil"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => ' btn btn-sm btn-success']);
-                        return Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>',$url,$options);
-                     
-                        
-                        },
+                    'delete' => function ($url,$model) {
+			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
+                              return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
+                            }
                       
                         
                     ]
@@ -54,6 +43,19 @@ use frontend\modules\sigi\models\SigiApoderadosSearch;
             'usuario.username',
         ],
     ]); ?>
+         
+         
+    <?php 
+   echo linkAjaxGridWidget::widget([
+           'id'=>'widgetgruidBafncos',
+            'idGrilla'=>'grilla-usuarios-edificio',
+            'family'=>'holas',
+          'type'=>'POST',
+           'evento'=>'click',
+       'posicion'=>\yii\web\View::POS_END,
+            //'foreignskeys'=>[1,2,3],
+        ]); 
+   ?>     
     <?php Pjax::end(); ?>
 
     </div>

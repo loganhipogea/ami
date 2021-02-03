@@ -461,6 +461,19 @@ class UnidadesController extends baseController
     }
 }
 
-
+public function actionAjaxMainRecibo($id){
+   if(h::request()->isAjax){
+           // $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+    $propietario= \frontend\modules\sigi\models\SigiPropietarios::findOne($id);
+    if(!is_null($propietario)){
+        $propietario->updateAll(['recibo'=>'0'],['unidad_id'=>$propietario->unidad->id]);
+        $propietario->updateAll(['recibo'=>'1'],['unidad_id'=>$propietario->unidad->id,'id'=>$id]);
+        return ['success'=>Yii::t('sigi.labels',$propietario->nombre.'  Se estableció como titular del recibo')]; 
+       }else{
+       return ['error'=>Yii::t('sigi.labels', 'No se encontró el registro')]; 
+    }
+   }
+}
  
 }

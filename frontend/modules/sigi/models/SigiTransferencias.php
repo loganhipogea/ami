@@ -342,4 +342,26 @@ class SigiTransferencias extends \common\models\base\modelBase
       $this->addError('edificio_id',yii::t('base.labels','No puedes transferir esta unidad tiene adjuntos'));
   }
   
+  public function hasFacturacion(){
+      $carbon=$this->toCarbon('fecha');
+       RETURN $this->unidad->hasFacturacion(
+                            $carbon->format('m'),
+                            $carbon->format('y')
+             );
+  }
+  
+  
+  
+  public function particionaRecibo(){
+      IF($this->hasFacturacion()){
+          
+          
+          
+      }else{
+          return false;
+      }
+      
+  }
+  
+  
 }

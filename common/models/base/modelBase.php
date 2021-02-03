@@ -285,7 +285,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
          
      // if(count($this->_linkFields)==0 || $force ){  
       $matriz=$this->fillRelations();//refresca la propiedad _obRelations
-        //print_r(array_values($this->_obRelations));die();
+       // print_r(array_values($this->_obRelations));die();
       foreach($matriz as $classmodelo=>$info){ //recoore la porpiedad _obRelations
           yii::error($classmodelo);
           yii::error($info);
@@ -436,11 +436,11 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
           $relaciones=[];
        $calse=new \ReflectionClass(static::class); //LA CLASE HIJA ACTUAL NO LA PADRE 
        $metods=$calse->getMethods();
-       //print_r($metods);die();
+      // print_r($metods);die();
        //yii::error($metods);
        UNSET($calse);
        foreach($metods as $key=>$object){
-           /*echo trim(static::class)."<br>";
+          /* echo trim(static::class)."<br>";
                 echo trim($object->class)."<br>";
                echo trim(strtolower($object->name))."<br><br><br>";*/
            if (($object->class===static::class)){
@@ -456,7 +456,8 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
            } 
            }
            
-               //die();
+             
+           
            if (($object->class===static::class) //es un metodo de la clase actual y no de los parents
                && (substr(trim(strtolower($object->name)),0,3)==='get' ) //comieniza con get
                && (method_exists(static::class,$object->name)) //si es una fucion no una propiedad
@@ -476,6 +477,8 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                    }
                        // unset($this->{$object->name}());//libera espacio 
                    } 
+                   
+                 
                    $this->_obRelations=$relaciones;
             }
       
@@ -506,9 +509,9 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
       yii::error($this->fieldsLink(true),__FUNCTION__);
     yii::error('----nomrecampo ----'.$nombrecampo,__FUNCTION__);*/
      $nombrecalseforanea= $this->fieldsLink(false)[$nombrecampo];
-      //yii::error('----nomnreclase foranea ----'.$nombrecampo,__FUNCTION__);
-     //var_dump($this->fieldsLink(true),get_class($this),$this->fieldsLink(true),$nombrecalseforanea);
-     //echo "nombre clase ".$nombrecalseforanea;die();
+     /* yii::error('----nomnreclase foranea ----'.$nombrecampo,__FUNCTION__);
+     var_dump($this->fieldsLink(true),get_class($this),$this->fieldsLink(true),$nombrecalseforanea);
+     echo "nombre clase ".$nombrecalseforanea;die();*/
      if(strpos($nombrecalseforanea,'_xxx_')) 
       return substr($nombrecalseforanea,0,strpos($nombrecalseforanea,'_xxx_'));
      

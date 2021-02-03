@@ -387,17 +387,25 @@ public function actionTomaLecturas(){
           $model->facturable=true;
           $model->codtipo=$session['lecturas']['tipomedidor'];
           $model->flectura=$session['lecturas']['flectura'];
+          $model->codedificio=$model->edificio->codigo;
           if (h::request()->isAjax && $model->load(h::request()->post())) {
                 h::response()->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
         }
+       
         /*$model->load(Yii::$app->request->post());
+         * 
        print_r($model->attributes);print_r(Yii::$app->request->post());die();*/
+      
+       
+       
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-             //print_r($model->attributes);print_r(Yii::$app->request->post());die();
+            
+            
             $session->setFlash('success', yii::t('sigi.labels','Se grabó lectura'));
             return $this->redirect(['toma-lecturas','tipomedidor'=>$session['lecturas']['tipomedidor']]);
         }else{
+            
             if($model->hasErrors())
             $session->setFlash('error', yii::t('sigi.labels',$model->getFirstError()));
             //return $this->redirect(['toma-lecturas','tipomedidor'=>$session['lecturas']['tipomedidor']]);
@@ -451,10 +459,61 @@ public function actionSendMassiveRecibo($id){
   }
   
   public function actionGeneraRecibos($id){
+       $this->layout='blank';
+      if (h::request()->isAjax ) {
+        h::response()->format = Response::FORMAT_JSON;
      $model= $this->findModel($id);
-     YII::ERROR('ENTRNADO EN EL ACTION');
      $model->generaRecibos();
+      return ['success'=>yii::t('base.labels','Se han generado los recibos')];
+              
+      }
   }
-
+  
+public function actionClearRecibos($id){
+    if (h::request()->isAjax ) {
+        h::response()->format = Response::FORMAT_JSON;
+            $model= $this->findModel($id);
+           if(!is_null($model)){
+               $model->purgeRecibos();
+               return ['success'=>yii::t('base.labels','Se resetearon todos los recibos')];
+                 }            
+          }   
+}
  
+public function actionCompileRecibos($id){
+    if (h::request()->isAjax ) {
+        h::response()->format = Response::FORMAT_JSON;
+            $model= $this->findModel($id);
+           if(!is_null($model)){
+               $model->compileRecibos();
+               return ['success'=>yii::t('base.labels','Se compilaron los recibos')];
+                 }            
+          }   
+}
+
+
+public function actionDownloadPart($id){
+   $parte=h::request()->get('part');
+    $model=$this->findModel($id); 
+    $ruta=$model->pathRecibos().'BLOQUE_'.$parte.'.pdf';
+    if(!is_file($ruta))
+     throw new NotFoundHttpException(Yii::t('sigi.labels', 'The requested file does not exist.')); 
+   $nameFile=$model->edificio->codigo.'_'.$model->mes.$model->ejercicio.'_'.$parte.'.pdf';
+  return Yii::$app->response->sendFile($ruta,$nameFile);
+    
+}
+
+
+public function actionReciboByKardex($id){
+    $this->layout='blank';
+    if (h::request()->isAjax ) {
+        h::response()->format = Response::FORMAT_JSON; 
+            $kardex= \frontend\modules\sigi\models\SigiKardexdepa::findOne($id);
+            $kardex->facturacion->recibo($kardex->id,true);
+          return ['success'=>yii::t('base.labels','Se generó el recibo para '.$kardex->unidad->nombre)];   
+    }
+}
+
+
+
 }

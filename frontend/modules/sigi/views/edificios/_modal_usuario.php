@@ -24,7 +24,7 @@ use common\widgets\selectwidget\selectWidget;
           <?= \common\widgets\buttonsubmitwidget\buttonSubmitWidget::widget(
                   ['idModal'=>$idModal,
                     'idForm'=>'myformulario',
-                      'url'=> \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/'.(($model->isNewRecord)?'agrega':'edita').'-concepto','id'=>$id]),
+                      'url'=> \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/'.(($model->isNewRecord)?'agrega':'edita').'-user','id'=>$id]),
                      'idGrilla'=>$gridName, 
                       ]
                   )?>
@@ -46,7 +46,7 @@ use common\widgets\selectwidget\selectWidget;
             'model'=>$model,
             'form'=>$form,
             'campo'=>'user_id',
-         'ordenCampo'=>2,
+         'ordenCampo'=>1,
          //'addCampos'=>[2,3],
         ]);  ?>
  </div>

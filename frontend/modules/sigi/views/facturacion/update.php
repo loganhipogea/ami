@@ -52,6 +52,13 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Editar');
             'active' => false,
              'options' => ['id' => 'myownI78979hD4'],
         ],
+        
+        [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Recibos'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_recibos',[ 'model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'myownIdgdg78979hD4'],
+        ],
        
     ],
 ]);  

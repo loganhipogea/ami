@@ -10,7 +10,7 @@ class FileBehavior_residente extends Fibe
         //var_dump($this->mail());die();
         //$this->mail();
         yii::error('estableciendo ');
-        $valor=SigiMovimientosPre::createBasic([ 
+       /* $valor=SigiMovimientosPre::createBasic([ 
             'kardex_id'=>$this->owner->id,
             'edificio_id'=>$this->owner->edificio_id,
             'cuenta_id'=>$this->owner->edificio->cuentas[0]->id,
@@ -18,7 +18,7 @@ class FileBehavior_residente extends Fibe
             'glosa'=>yii::t('sigi.labels','PAGO DE CUOTA').'-'.$this->owner->unidad->numero, 
             'monto'=>$this->owner->facturacion->montoFacturado(), 
             'activo'=>'1'            
-        ]);
+        ]);*/
         
         
        // \yii::error('Si salió mal');

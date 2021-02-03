@@ -2,9 +2,11 @@
 
 namespace frontend\modules\sigi\models;
 use common\helpers\h;
+use common\helpers\FileHelper;
 use frontend\modules\report\Module as ModuleReporte;
 use frontend\modules\sigi\models\SigiCuentaspor;
 use frontend\modules\sigi\models\SigiDetfacturacion;
+use frontend\modules\sigi\models\SigiDetFacturacionSearch;
 use frontend\modules\sigi\models\SigiKardexdepa;
 use Yii;
 use  yii\web\ServerErrorHttpException;
@@ -48,6 +50,7 @@ class SigiFacturacion extends \common\models\base\modelBase
               [['fvencimiento','detalleinterno','unidad_id','reporte_id'], 'safe'],
             ['fvencimiento', 'validateFechas'],
             [['detalles'], 'string'],
+            [['mes','ejercicio','edificio_id'], 'unique', 'targetAttribute' => ['mes','ejercicio','edificio_id']],
             [['mes'], 'string', 'max' => 2],
             [['ejercicio'], 'string', 'max' => 4],
             [['fecha'], 'string', 'max' => 10],
@@ -76,6 +79,12 @@ class SigiFacturacion extends \common\models\base\modelBase
     public function getSigiCuentaspor()
     {
         return $this->hasMany(SigiCuentaspor::className(), ['facturacion_id' => 'id']);
+    }
+    
+    
+     public function getUnidad()
+    {
+        return $this->hasOne(SigiUnidades::className(), ['id' => 'unidad_id']);
     }
     
     public function getSigiDetfacturacion()
@@ -227,9 +236,9 @@ class SigiFacturacion extends \common\models\base\modelBase
             }
           }*/
            $this->shortFactu();           
-           //$this->asignaIdentidad();//Importante  
+          // $this->asignaIdentidad();//Importante  
            $this->asignaNumero();
-          $this->resolveTransferencias();
+          //$this->resolveTransferencias();
            
         }else{
             
@@ -260,24 +269,48 @@ class SigiFacturacion extends \common\models\base\modelBase
         }
     }
     /*
-     * Esta funcion revisa la columna identidad de
+     * Esta funcion revisa la columna kardex_id de
      * la tabla facturaciondetalle y la catualiza
      * segune lgrupo de facturacion , de este modo ya se puede separar
      * lso recibos mediante un id 
      */
-    private function asignaIdentidad(){
-        foreach($this->grupos() as $filaGrupo){
-          $criterio= SigiDetfacturacion::criteriaDepa(
-                  $filaGrupo->grupofacturacion,
+    public function asignaIdentidad(){
+        $unidades_id=SigiDetfacturacion::find()->select(['unidad_id'])->
+        distinct()->
+                andWhere(['facturacion_id'=>$this->id,'kardex_id'=>null])->asArray()->all(); 
+          foreach($unidades_id as $unidad){
+             $identidad= $this->kardexDepa($unidad['unidad_id'],true);
+            // var_dump($identidad->id);
+              SigiDetfacturacion::updateAll([
+                  'kardex_id'=>$identidad->id],
+                      [
+                        'facturacion_id'=>$this->id,
+                         'kardex_id'=>null,
+                          'unidad_id'=>$unidad['unidad_id']
+                          
+                      ]
+                      
+                      );
+          }  
+        
+        //$criteria=['facturacion_id'=>$this->id,'kardex_id'=>null];
+        //foreach($this->grupos() as $filaGrupo){
+         // $criterio= SigiDetfacturacion::criteriaDepa(
+                  /*$filaGrupo->grupofacturacion,
                   $filaGrupo->mes,
                   $filaGrupo->anio,
                   $filaGrupo->facturacion_id,
                   $filaGrupo->dias
-                  );
-          $identidad= SigiDetfacturacion::maxIdentidad();
-            SigiDetfacturacion::updateAll(['identidad'=>$identidad], $criterio);
-       }
-       return true;
+                  );*/
+            /* $detalle=  SigiDetfacturacion::find()->andWhere($criteria)->one();
+           if(!is_null($detalle)){
+              $identidad= $this->kardexDepa($detalle->unidad_id);
+              //$criteria['identidad']=$identidad->id;
+              SigiDetfacturacion::updateAll(['kardex_id'=>$identidad->id], $criteria);//    teAll($criteria);
+           }*/
+          
+       //}
+       //return true;
     }
     
     
@@ -523,9 +556,9 @@ class SigiFacturacion extends \common\models\base\modelBase
     
   }
   
-    private function kardexDepa($unidad_id){  
+    public function kardexDepa($unidad_id,$force=false){  
          $registro=$this->hasKardexDepa($unidad_id);
-    if(is_null($registro)){
+    if(is_null($registro) or $force){
         $attributes=[
         'edificio_id'=>$this->edificio_id,
         'unidad_id'=>$unidad_id,
@@ -547,6 +580,9 @@ class SigiFacturacion extends \common\models\base\modelBase
       return $registro;  
     }
   }
+  
+  
+  
   
   public function hasCobranzaMasiva(){
       $valor=false;
@@ -585,6 +621,7 @@ class SigiFacturacion extends \common\models\base\modelBase
          yii::error(' Recorriendo unidad  '.$unidad->numero);
          ///verficando primero si la unidad ha sido transferida 
         $diasEnEsteMes=date('t',strtotime($this->swichtDate('fecha',false)));
+        $dias=$diasEnEsteMes;
          //yii::error(' Dias en este mes '.$diasEnEsteMes);
         if(in_array($unidad->id,array_keys($unidadesTransferidas))){
             $dias=date('j',strtotime($unidadesTransferidas[$unidad->id])); 
@@ -764,17 +801,43 @@ class SigiFacturacion extends \common\models\base\modelBase
    * la facturacion, proporcionalmente a los 
    * días nenter uno y otor propietario
    */
-  public function particionarRecibo($identidad,$day,$grupocobranza,$grupofacturacion){
+  public function particionarRecibo($unidad_id,$day,$grupocobranza,$grupofacturacion){
      //var_dump($identidad);die();
-      $rows=$this->getSigiDetfacturacion()->where(['identidad'=>$identidad])->all();
-     $nuevaIdentidad= SigiDetfacturacion::maxIdentidad();
-     foreach($rows as $row ){
-        
+      $rows=$this->getSigiDetfacturacion()->where(['unidad_id'=>$unidad_id])->all();
+     /*
+      * Primero nos aseguramos que haya registros 
+      */
+      if(count($rows)>0) {
+          
+          //Primero vamos a determinar los 2 id_kardex en los mcuales
+          //se distribuiran las particiones 
+          // $primerKardex  y $segundoKardex
+          
+          /*
+           * Si se trata de un id_kardex que esta resumido (Osea 
+           * es de un recibo totalizado),  entonces se debe 
+           * de crear uno nuevo (note que force=true). Esto 
+           * porque el id kardex de resumido puede estar com`partido
+           * por otros recibos
+           */
+         if($rows[0]->resumido){
+             $primerKardex=$this->kardexDepa($unidad_id,true);
+         }else{
+             /*
+              * En cambio si no es resumido, ya no se debe de crear
+              * uno nuevo no es necesario 
+              */
+             $primerKardex=$this->kardexDepa($unidad_id); 
+         }
+         
+         $segundoKardex= $this->kardexDepa($unidad_id, true);
+         
+     foreach($rows as $row ){        
          $model=New SigidetFacturacion();
          $model->attributes=$row->attributes;
          $model->setAttributes([
              'id'=>null,
-             'identidad'=>$nuevaIdentidad,
+             'kardex_id'=>$segundoKardex->id,
              'grupocobranza'=>$grupocobranza,
               'grupofacturacion'=>$grupofacturacion,             
              'monto'=>round($row->monto*$day/30,3),
@@ -784,8 +847,11 @@ class SigiFacturacion extends \common\models\base\modelBase
      }
      $factor=1-$day/30;
      $expresion='monto*(1-'.$factor.')';
-     SigiDetfacturacion::updateAll(['monto'=>NEW \yii\db\Expression($expresion)],['identidad'=>$identidad]);
-      
+       SigiDetfacturacion::updateAll(['monto'=>NEW \yii\db\Expression($expresion)],
+               ['kardex_id'=>$primerKardex->id]);
+    
+     }
+       
   }
   
   
@@ -860,9 +926,14 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   public function recibo($idKardex,$disk=false){   
         YII::ERROR('EL ID KARDEX '.$idKardex,__FUNCTION__);
-           $dataProvider=(New SigiDetfacturacionSearch())->searchByIdentidad($idKardex);
+           $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
             $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>($this->reporte_id==2)?true:false]);
-            $pdf=ModuleReporte::getPdf();        
+            //echo $contenido; die();
+            $pdf=ModuleReporte::getPdf(); 
+              $stylesheet = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
+                //$stylesheet2 = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
+               $pdf->WriteHTML($stylesheet, 1);
+        //$pdf->WriteHTML($stylesheet2,1);
              $pdf->WriteHTML($contenido);
              yii::error('paso Write html');
             if(!$disk){
@@ -877,12 +948,15 @@ class SigiFacturacion extends \common\models\base\modelBase
                 $kardex=SigiKardexdepa::findOne($idKardex);
                 $kardex->deleteAllAttachments();
                 $kardex->attachFromPath($ruta);
+                @unlink($ruta);
             }
   }
   
   public function purgeRecibos(){
+       $ruta=$this->pathRecibos();
+      FileHelper::deleteDirectory($ruta,true);//TRUE PRESERVAR LA CARPETA
       $contador=0;
-      foreach($this->kardexDepa() as $kardex ){
+      foreach($this->kardexDepa as $kardex ){
             $kardex->deleteAllAttachments();
                 $contador++;
           }
@@ -890,25 +964,32 @@ class SigiFacturacion extends \common\models\base\modelBase
   }
   
   public function generaRecibos(){
+      //$this->purgeRecibos();
       YII::ERROR('ENTRNADO EN GENERA RECIBOS');
       $contador=0;
-      foreach($this->kardexDepa as $kardex ){
-          YII::ERROR('EN EL BUCLE   KARDEX_ID '.$kardex->id);
-          if(!$kardex->hasAttachments()){
-              yii::error('kardex id no tiene arttach  '.$kardex->id,__FUNCTION__);
+      $kardexes= SigiDetfacturacion::find()-> 
+       select(['kardex_id'])->distinct()->andWhere(['facturacion_id'=>$this->id])->
+          asArray()->all();
+      foreach($kardexes as $kardex ){
+          YII::ERROR('EN EL BUCLE   KARDEX_ID '.$kardex['kardex_id']);
+          $kardexModel=SigiKardexdepa::findOne($kardex['kardex_id']);
+          if(!$kardexModel->hasAttachments()){
+              yii::error('kardex id no tiene arttach  '.$kardex['kardex_id'],__FUNCTION__);
              yii::error('entrando a la funcion recibo',__FUNCTION__);
             
-              $this->recibo($kardex->id,true);
+              $this->recibo($kardex['kardex_id'],true);
                 $contador++; 
             }else{
-              YII::ERROR(' KARDEX_ID tiene attach '.$kardex->id);  
+              YII::ERROR(' KARDEX_ID tiene attach '.$kardex['kardex_id']);  
             }
+            unset($kardexModel);
           }
+         // $this->compileRecibos();
       return $contador;
   }
   
   
-  public function pathTempToStore(){
+  public function pathTempToStore($name=null){
        // $rutaTemp=\yii::getAlias('@frontend/web/img_repo/temp/'. uniqid().'.zip');
       
       $dir=\yii::getAlias('@frontend/web/sigi/temp/');
@@ -916,7 +997,72 @@ class SigiFacturacion extends \common\models\base\modelBase
       if(!is_dir($dir)){
           mkdir($dir);
       }
+      if(is_null($name))
       return $dir.uniqid().'.pdf';
+      return $dir.$name.'.pdf';
   }
+  
+  
+  public function compileRecibos(){
+      /*Limpiamos primero los recibos*/
+      $ruta=$this->pathRecibos();
+      FileHelper::deleteDirectory($ruta,true);//TRUE PRESERVAR LA CARPETA
+     $tamano=h::gsetting('sigi','nRecibosBloque');    
+     $arch=[];
+     $i=1;
+     foreach($this->getKardexDepa()->batch($tamano) as $kardexes ){
+         
+          $mpdf = new \Mpdf\Mpdf();
+        
+         foreach($kardexes as $kardex){
+                $mpdf->AddPage();
+                $pagecount = $mpdf->SetSourceFile($kardex->files[0]->path);
+                    if ($pagecount > 0) {
+                        for ($k = 1; $k <= $pagecount; $k++) {                  
+                                $tplId = $mpdf->ImportPage($k);
+                                $mpdf->UseTemplate($tplId);
+                                    if ($k < $pagecount) {
+                                        $mpdf->AddPage();
+                                            }
+                                                    }
+                                    }
+                            }
+        $mpdf->Output($ruta.'BLOQUE_'.$i.'.pdf', \Mpdf\Output\Destination::FILE);
+        $i++;
+     } 
+  }
+  
+  public function pathRecibos(){
+      $dir=\yii::getAlias('@frontend/web/sigi/facturacion/');
+      if(!is_dir($dir)){
+        mkdir($dir);   
+      }
+         
+      $dir.=$this->edificio->codigo.'/';
+      
+      if(!is_dir($dir)){
+          //yii::error('segunda ',__FUNCTION__);
+        mkdir($dir); 
+      }
+        
+      $dir.=$this->mes.$this->ejercicio.'/';
+      
+      if(!is_dir($dir)){
+         //yii::error('segunda ',__FUNCTION__);
+         mkdir($dir); 
+      }
+           
+     
+     return $dir;
+  }
+  
+  public function array_blocks_files(){
+    $files=FileHelper::findFiles($this->pathRecibos(),['only'=>['*.pdf'],'recursive'=>false]);
+    return $files;
+  }
+  
+  
+ 
+  
   
 }
