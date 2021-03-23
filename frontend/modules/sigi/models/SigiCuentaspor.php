@@ -465,6 +465,21 @@ private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$pa
           $grupocobranza=(!$unidad->miApoderado()->facturindividual)?$unidad->codpro:$unidad->numero;    
        }
     }
+    
+    /*
+     * Resolviendo el factor del monto total de los recibos de agua
+     */
+        if(is_null($medidor)){//Si es AACC o cualquier otro
+            if($aacc=='1'){
+                $factorMonto=$participacion; //Si se trata de un medidor de AACC aplicar le factor
+            }else{
+                $factorMonto=1;
+            }
+            
+        }else{ //Si s etrata de un medidor de una uNIdad tambien aplicar el factor 
+            $factorMonto=$participacion;
+        }
+    
    
         $model=New SigiDetfacturacion();
          $attributes=[ 'cuentaspor_id'=>$this->id,
@@ -479,7 +494,7 @@ private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$pa
                 'mes'=>$this->mes,
                 'anio'=>$this->anio,
                  'aacc'=>$aacc,
-                   'montototal'=>$this->monto,
+                   'montototal'=>$this->monto*$factorMonto,
              'kardex_id'=>$identidad, //Importante 
          'grupounidad'=>$unidad->numero,
            'grupounidad_id'=>$unidad->id,
@@ -573,5 +588,8 @@ public function creaRegistroLecturasTemp(){
      
      
  }
+ 
+ 
+
  
  }

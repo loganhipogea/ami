@@ -122,7 +122,7 @@ echo $this->render('_searchSuministros',['model'=>$searchModel]);
             'family'=>'holas',
           'type'=>'POST',
            'evento'=>'click',
-            //'foreignskeys'=>[1,2,3],
+            'posicion'=> \yii\web\View::POS_END,
         ]); 
    ?>
          

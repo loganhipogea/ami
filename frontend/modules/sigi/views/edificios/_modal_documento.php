@@ -18,10 +18,17 @@ use frontend\modules\sigi\helpers\comboHelper;
           
         <div class="col-md-12">
             <div class="form-group no-margin">
+             <?php
+              if(!$model->isNewRecord){
+                 $url=['/sigi/'.$this->context->id.'/edita-docu','id'=>$id];   
+              }else{
+                 $url=['/sigi/'.$this->context->id.'/agrega-docu','id'=>$id]; 
+              }
+             ?>
           <?= \common\widgets\buttonsubmitwidget\buttonSubmitWidget::widget(
                   ['idModal'=>$idModal,
                     'idForm'=>'myformulario',
-                      'url'=> \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/agrega-docu','id'=>$id]),
+                      'url'=> \yii\helpers\Url::to($url),
                      'idGrilla'=>$gridName, 
                       ]
                   )?>
@@ -47,7 +54,12 @@ use frontend\modules\sigi\helpers\comboHelper;
  </div>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
  <?= $form->field($model, 'nombre')->textInput()?>
- </div>         
+ </div>   
+   <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'importante')->checkbox([]) ?>
+
+ </div>
+   
  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
  <?= $form->field($model, 'detalle')->
  textarea([]) ?>

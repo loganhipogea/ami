@@ -30,7 +30,7 @@ class SigiSuministros extends \common\models\base\modelBase
     CONST COD_TYPE_SUMINISTRO_DEFAULT='101'; //medidor tipo agua 
     const SCENARIO_IMPORTACION='importacion_simple';
      const SCENARIO_CODSUMINISTRO='cod_suministro';
-     public $booleanFields=['activo'];
+     public $booleanFields=['activo','plano'];
     public static function tableName()
     {
         return '{{%sigi_suministros}}';
@@ -43,7 +43,7 @@ class SigiSuministros extends \common\models\base\modelBase
     {
         return [
             [['tipo', 'codpro', 'codum', 'unidad_id'], 'required'],
-              [['liminf', 'limsup','activo'], 'safe'],
+              [['liminf', 'limsup','activo','plano'], 'safe'],
             [['unidad_id', 'frecuencia'], 'integer'],
             [['detalles'], 'string'],
             [['tipo'], 'string', 'max' => 3],
@@ -385,7 +385,13 @@ public function lastReads($forGraphical=false){
 }
   
 public function participacionRead($mes,$anio){
-    $consumoT=$this->consumoTotal($mes, $anio);
+    if($this->isAACC()){
+       $consumoT=$this->consumoAreasComunes($mes, $anio);  
+    
+    }else{
+      $consumoT=$this->consumoTotal($mes, $anio)-$this->consumoAreasComunes($mes, $anio);  
+    }
+    
     $consumo=$this->LastReadFacturable($mes,$anio)->delta;
     if($consumoT > 0){
         return round($consumo/$consumoT,10);
@@ -399,10 +405,34 @@ public function sigiSumiDepaQuery(){
 public function depasReparto(){
    return  $this->sigiSumiDepaQuery()->all();
 }
-public function ndepasReparto(){
-   return  $this->sigiSumiDepaQuery()->count();
+public function ndepasReparto($total=false){
+    if($total){
+       return  $this->sigiSumiDepaQuery()->count();  
+     
+    }else{/*Solo las afiliadas*/
+      return  $this->sigiSumiDepaQuery()->andWhere(['afiliado'=>'1'])->count();  
+    }
 }
 
+/*
+ * Numero de unidades afiliadas que son 
+ * imputables y no son hijas 
+ * Esto es, unidades que se han afiliado 
+ * y no estan dentro de otra unidad 
+ */
+public function ndepasRepartoPadres(){
+    
+  return $this->sigiSumiDepaQuery()
+            ->andWhere(['afiliado'=>'1'])
+            ->andWhere(['unidad_id'=>$this->edificio->idsUnidadesPadresImputables()])->count();  
+    
+}
+   
+
+
+public function isAACC(){
+    return !$this->unidad->imputable;
+}
 
 public function afterSave($insert, $changedAttributes) {
     if(!$this->unidad->imputable){
@@ -466,7 +496,34 @@ public function averageReads($idLectura=null){
   
 }
 
+public function consumoAreasComunes($mes,$anio,$facturable=true){
+   $valor=($facturable)?'1':'0';
+        
+  return SigiLecturas::find()->select(['sum(delta)'])->andWhere([
+       'edificio_id' => $this->edificio_id,
+       'facturable'=>$valor,
+       'mes' => $mes,
+       'anio'=>$anio,
+       'unidad_id'=>$this->edificio->idsUnidadesNoImputables()
+           ])->scalar();
+    
+}
+
+public function porcConsumoAaCc($mes,$anio,$porcentaje=false){
+    $consumototal=$this->consumoTotal($mes, $anio);
+    if($consumototal>0)
+         return  $this->consumoAreasComunes($mes, $anio)/$consumototal;
+    return 0;
+}
 
 
+public function hasUnitAfiliado($unidad_id){
+    if($this->isAACC()){
+       return  $this->sigiSumiDepaQuery()->select(['id'])->andWhere(['unidad_id'=>$unidad_id,'afiliado'=>'1'])->exists();
+       // return (in_array($unidad_id,$this->sigiSumiDepaQuery()->select(['unidad_id'])->column()));
+    }else{
+        return false;
+    }
+}
 
 }

@@ -25,10 +25,14 @@ use common\widgets\selectwidget\selectWidget;
       <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
-             <?php /*var_dump($model->idsToFacturacion());die();*/ ?>   
+             <?php
+             $aprobado=$model->isAprobado();
+             /*var_dump($model->idsToFacturacion());die();*/ ?>   
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Grabar'), ['class' => 'btn btn-success']) ?>
-           <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Facturar'), ['id'=>'boton_facturacion','class' => 'btn btn-warning'])?>    
-        <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Resetear'), ['id'=>'boton_resetear','class' => 'btn btn-warning'])?>    
+          <?=(!$aprobado)?Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Aprobar'),Url::to(['aprobe','id'=>$model->id]),['data-pjax'=>'0','class'=>"btn btn-success"]):
+               Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Desaprobar'),Url::to(['un-aprobe','id'=>$model->id]),['data-pjax'=>'0','class'=>"btn btn-success"])?>   
+        <?=(!$aprobado)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Facturar'), ['id'=>'boton_facturacion','class' => 'btn btn-warning']):''?>    
+        <?=(!$aprobado)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Resetear'), ['id'=>'boton_resetear','class' => 'btn btn-warning']):''?>      
              <?=Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Ver detalle'),Url::to(['detalle-facturacion','id'=>$model->id]),['target'=>'_blank','data-pjax'=>'0','class'=>"btn btn-success"])?>
        
        
@@ -305,11 +309,13 @@ use common\widgets\selectwidget\selectWidget;
      
 <?php
  $url= Url::to(['/sigi/cuentaspor/create-as-child','id'=>$model->id,'gridName'=>'grilla_cargospor','idModal'=>'buscarvalor']);
-   echo  Html::button(yii::t('base.verbs','Cobranza masiva'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
+ if(!$aprobado)  
+ echo  Html::button(yii::t('base.verbs','Cobranza masiva'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
 ?> 
 <?php
  $url= Url::to(['/sigi/cuentaspor/create-as-child-interno','id'=>$model->id,'gridName'=>'grilla_cargospor','idModal'=>'buscarvalor']);
-   echo  Html::button(yii::t('base.verbs','Cobranza Individual'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
+   if(!$aprobado) 
+ echo  Html::button(yii::t('base.verbs','Cobranza Individual'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
 ?> 
 
 

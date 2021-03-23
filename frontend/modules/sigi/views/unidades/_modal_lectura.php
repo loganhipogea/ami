@@ -14,7 +14,7 @@ use frontend\modules\sigi\helpers\comboHelper;
 ?>
 
 <div class="sigi-unidades-form">
-
+  <?php $esFacturado=$model->isInFacturacion(); ?>
     <?php $form = ActiveForm::begin([
         'id'=>'myformulario'/*,'enableAjaxValidation'=>true*/
     ]); ?>
@@ -49,12 +49,14 @@ use frontend\modules\sigi\helpers\comboHelper;
                                ],
                           
                             //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control']
+                            'options'=>['class'=>'form-control',
+                                'disabled'=>$esFacturado,
+                                ]
                             ]) ?>
  </div> 
 
   <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'lectura')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'lectura')->textInput(['maxlength' => true,'disabled'=>$esFacturado,]) ?>
 
  </div>
  
@@ -64,6 +66,7 @@ use frontend\modules\sigi\helpers\comboHelper;
             dropDownList( common\helpers\timeHelper::cboMeses(),
                     ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
+                    'disabled'=>$esFacturado,
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
                         ]
                     )  ?>
@@ -74,12 +77,13 @@ use frontend\modules\sigi\helpers\comboHelper;
             dropDownList( common\helpers\timeHelper::cboAnnos(),
                     ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
+                    'disabled'=>$esFacturado,
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
                         ]
                     )  ?>
 </div>
 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'facturable')->checkbox([]) ?>
+     <?= $form->field($model, 'facturable')->checkbox(['disabled'=>$esFacturado,]) ?>
 
  </div>
 

@@ -21,10 +21,12 @@ use yii\widgets\Pjax;
       <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
-             <?php /*var_dump($model->idsToFacturacion());die();*/ ?>   
-          <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Resetear recibos'), ['id'=>'boton_reset_recibos','class' => 'btn btn-warning'])?>    
-             <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Generar Recibos'), ['id'=>'boton_recibos','class' => 'btn btn-warning'])?>    
-              <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Compilar Recibos'), ['id'=>'boton_compile_recibos','class' => 'btn btn-warning'])?>    
+             <?php 
+             $aprobado=$model->isAprobado();
+             /*var_dump($model->idsToFacturacion());die();*/ ?>   
+          <?=(!$aprobado)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Resetear recibos'), ['id'=>'boton_reset_recibos','class' => 'btn btn-warning']):''?>    
+             <?=(!$aprobado)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Generar Recibos'), ['id'=>'boton_recibos','class' => 'btn btn-warning']):''?>      
+              <?=(!$aprobado)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Compilar Recibos'), ['id'=>'boton_compile_recibos','class' => 'btn btn-warning']):''?>       
            
                      <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Enviar recibos'), ['id'=>'boton_recibos_mail','class' => 'btn btn-warning'])?>    
        

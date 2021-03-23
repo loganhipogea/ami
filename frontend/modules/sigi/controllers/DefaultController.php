@@ -200,4 +200,15 @@ class DefaultController extends Controller
       } 
    } 
     
+  public function actionAjaxShowPagos(){
+     if(h::request()->isAjax){
+        $id=h::request()->post('expandRowKey');
+       // var_dump($id);die();
+         //h::response()->format = \yii\web\Response::FORMAT_JSON;
+        return $this->renderAjax("_expand_row_pagos",['id'=>$id]);
+       
+            }
+   }
+ 
+   
 }

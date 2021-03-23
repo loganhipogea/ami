@@ -39,7 +39,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
     CONST  STATUS_CANCELADO_CONF='2';
     public $montoNominal=0;  
     
-     public $booleanFields = ['cancelado'];
+     public $booleanFields = ['cancelado','aprobado'];
        const SCE_STATUS='status';
     public $dateorTimeFields = [
         'fecha' => self::_FDATE,
@@ -87,7 +87,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
            // [['facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
             [['monto', 'igv'], 'number'],
             [['detalles'], 'string'],
-             [['cancelado','monto','enviado'], 'safe'],
+             [['cancelado','monto','enviado','aprobado'], 'safe'],
             
             [['fecha'], 'string', 'max' => 10],
             [['anio'], 'string', 'max' => 4],
@@ -142,6 +142,9 @@ class SigiKardexdepa extends \common\models\base\modelBase
     {
         return $this->hasOne(SigiFacturacion::className(), ['id' => 'facturacion_id']);
     }
+    
+    
+    
 
     /**
      * @return \yii\db\ActiveQuery
@@ -151,7 +154,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
         return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
     }
     
-     public function getDetallesFactu()
+     public function getDetalleFactu()
     {
         return $this->hasMany(SigiDetfacturacion::className(), ['kardex_id' => 'id']);
     }
@@ -212,7 +215,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
   }
   
   public function montoCalculado(){
-     return  round($this->getDetallesFactu()->select(['sum(monto)'])->scalar(),4);
+     return  round($this->getDetalleFactu()->select(['sum(monto)'])->scalar(),4);
       
   }
   
@@ -238,8 +241,19 @@ class SigiKardexdepa extends \common\models\base\modelBase
       } return false;
   }
   
-  public function createMovimiento(){
-      
+  
+  
+  
+  
+  public function updateMonto(){
+     $this->monto=$this->montoCalculado();
+     $this->save();
   }
+  
+  
+  public function deuda(){
+     return VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar();
+   }
+  
   
 }

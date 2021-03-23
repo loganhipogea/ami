@@ -579,6 +579,20 @@ class Edificios extends \common\models\base\modelBase
  }
  
  
+ public function idsUnidadesNoImputables(){
+   return  $this->getUnidades()->select(['id'])->andWhere(['imputable'=>'0'])->column();
+ }
+ 
+ public function firstMedidorAACC(){
+   return   $this->getSuministros()->andWhere(['unidad_id'=>$this->idsUnidadesNoImputables()])->one();
+ }
+ 
+ public function idsUnidadesPadresImputables(){
+   return  $this->getUnidades()->select(['id'])
+           ->andWhere(['imputable'=>'1',])
+           ->andWhere(['parent_id'=>null])
+           ->column();
+ }
  
 }
  

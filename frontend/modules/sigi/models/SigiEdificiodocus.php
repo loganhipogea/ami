@@ -19,6 +19,8 @@ use Yii;
  */
 class SigiEdificiodocus extends \common\models\base\modelBase
 {
+   public $booleanFields=['importante']; 
+    
     /**
      * {@inheritdoc}
      */
@@ -44,6 +46,7 @@ class SigiEdificiodocus extends \common\models\base\modelBase
         return [
             [['edificio_id', 'codocu','nombre', 'detalle'], 'required'],
             [['edificio_id'], 'integer'],
+            [['importante'], 'safe'],
             [['detalle'], 'string'],
             [['codocu'], 'string', 'max' => 3],
             [['nombre'], 'string', 'max' => 60],

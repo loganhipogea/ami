@@ -1,6 +1,7 @@
 <?php
 namespace frontend\modules\sigi\components;
 use frontend\modules\sigi\models\SigiUserEdificios;
+use \frontend\modules\sigi\models\Edificios;
 use frontend\modules\sta\staModule;
 use common\helpers\h;
 /* 
@@ -27,9 +28,11 @@ class ActiveQueryEdificio extends \yii\db\ActiveQuery
    
     
    public function complete(){
-       return  $this->orWhere(['in',
+       /*return  $this->orWhere(['in',
               'edificio_id',Edificios::find()->select('id')->asArray()->all()
-               ]);
+               ]);*/
+       return $this;
+        parent::init();
    }
     
     

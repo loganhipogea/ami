@@ -137,6 +137,7 @@ class VwSigiKardexdepa extends \common\models\base\modelBase
     /*public function  triggerUpload(){
       yii::error('trigger');
     }*/
-   
+  
+  
     
 }

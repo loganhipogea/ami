@@ -24,6 +24,8 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
     ]); ?>
    <div class="form-group">
         <?= Html::submitButton("<span class='fa fa-search'></span>     ".Yii::t('sta.labels', 'buscar'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('app', 'Create Sigi Kardexdepa'), ['create'], ['class' => 'btn btn-success']) ?>
+        
         
     </div>
 

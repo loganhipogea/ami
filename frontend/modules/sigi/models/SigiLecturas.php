@@ -512,4 +512,18 @@ class SigiLecturas extends \common\models\base\modelBase
       return parent::beforeValidate();
   }    
    
+  /*
+   * Si esta lectura ha sido usada en un proceso 
+   * de facturacion 
+   */
+ public function isInFacturacion(){
+     if($this->facturable)
+    return  SigiDetfacturacion::find()->andWhere([
+        'unidad_id'=>$this->unidad_id,
+        'mes'=>$this->mes,
+        'anio'=>$this->anio
+    ])->exists();
+     return false;
+ } 
+  
 }

@@ -39,10 +39,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), '
                         ];
                         echo Html::a('<span class="btn btn-success fa fa-cut"></span>',$url,$options);
                      
-             ?>   
-                
-            
-
+             ?> 
             </div>
         </div>
     </div>
@@ -96,8 +93,9 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), '
                 ]),
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
-        'filterModel' => $searchModel,
-        'columns' => [            
+       // 'filterModel' => $searchModel,
+        'columns' => [  
+            'id',
             'fopera',
             'tipomov',
            [

@@ -28,6 +28,10 @@ use frontend\modules\report\models\Reporte;
  */
 class SigiFacturacion extends \common\models\base\modelBase
 {
+    const EST_CREADO='C';
+    const EST_APROBADO='A';
+    //const EST_ANULADO='A';
+    
    //public static $varsToReplace=['$cuenta'=>'','$dias'=>'','$banco'=>'','$correo_cobranza'=>''];
     public $hardFields=['edificio_id','mes','ejercicio'];
      public $dateorTimeFields=['fvencimiento'=>self::_FDATE,'fecha'=>self::_FDATE];
@@ -47,7 +51,7 @@ class SigiFacturacion extends \common\models\base\modelBase
         return [
             [['edificio_id', 'mes', 'descripcion','fecha','fvencimiento','reporte_id'], 'required'],
             [['edificio_id'], 'integer'],
-              [['fvencimiento','detalleinterno','unidad_id','reporte_id'], 'safe'],
+              [['fvencimiento','detalleinterno','unidad_id','reporte_id','estado'], 'safe'],
             ['fvencimiento', 'validateFechas'],
             [['detalles'], 'string'],
             [['mes','ejercicio','edificio_id'], 'unique', 'targetAttribute' => ['mes','ejercicio','edificio_id']],
@@ -236,8 +240,9 @@ class SigiFacturacion extends \common\models\base\modelBase
             }
           }*/
            $this->shortFactu();           
-          // $this->asignaIdentidad();//Importante  
+          $this->asignaIdentidad();//Importante  
            $this->asignaNumero();
+           $this->updateAllMontoKardex();
           //$this->resolveTransferencias();
            
         }else{
@@ -256,17 +261,17 @@ class SigiFacturacion extends \common\models\base\modelBase
     }
     
     private function resolveTransferencias(){
-        yii::error('--resolve transferencias---');
+        /*yii::error('--resolve transferencias---');
           yii::error(count($this->transfEsteMesModels()));
         foreach($this->transfEsteMesModels() as $model){
             $model->resolveParent();
-        }
+        }*/
     }
     
     private function unResolveTransferencias(){
-        foreach($this->transfEsteMesModels() as $model){
+       /* foreach($this->transfEsteMesModels() as $model){
             $model->unResolveParent();
-        }
+        }*/
     }
     /*
      * Esta funcion revisa la columna kardex_id de
@@ -379,7 +384,7 @@ class SigiFacturacion extends \common\models\base\modelBase
           }
            }
    }else{
-       return false;
+       return true;
    }
    
     return $iscomplete;      
@@ -456,6 +461,10 @@ class SigiFacturacion extends \common\models\base\modelBase
    public function montoFacturado(){
       return  $this->detfacturacionQuery()->select('sum(monto)')->scalar();
    }
+   
+   public function numeroRecibos(){
+      return  $this->detfacturacionQuery()->select('kardex_id')->distinct()->count();
+   }
    public function detfacturacionQuery(){
       return SigiDetfacturacion::find()->where(['facturacion_id'=>$this->id]); 
    }
@@ -502,7 +511,7 @@ class SigiFacturacion extends \common\models\base\modelBase
     
   public function beforeSave($insert){
       if($insert){
-          
+          $this->estado=self::EST_CREADO;
       }
       return parent::beforeSave($insert);
   }
@@ -602,6 +611,9 @@ class SigiFacturacion extends \common\models\base\modelBase
      $unidades= $this->unidadesFacturables();
      $unidadesTransferidas=array_combine(array_column($this->transfEsteMes(),'unidad_id'),array_column($this->transfEsteMes(),'fecha'));
      
+     //$medidorAACC=$this->edificio->firstMedidorAACC();
+     
+     
      /*Si debe de cobrar masivamente, verifica que el apoderado
       * exiga facturacion masiva, por ejemplo la inmobiliaria 
       * quiere pagar de todos los recibos de un solo cocacho */
@@ -670,44 +682,81 @@ class SigiFacturacion extends \common\models\base\modelBase
                 //yii::error(' Es masivo');           
              /*Verificando luego si es un medidor*/
              if($colector->isMedidor()){
-                  //yii::error(' Es medidor');
+                 
                  /*Se obtiene el suministro medidor*/
                  $medidor=$unidad->firstMedidor($colector->tipomedidor);
+                 
                  if(!is_null($medidor)){
-                     //yii::error(' Es medidor y tiene objeto');
-                     /*En este calculo se obtiene = (consumo actual) /(Consumo total) */
+                     /*Se obtiene el factor de AACC si no tiene medidores en AACC =0 
+                    * esto es el factor del consumo de todos las areas comunes
+                        */
+                        $participacionAACC=$medidor->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
+                        $participacionImputados=1-$participacionAACC;
+                     
                      $participacion=$medidor->participacionRead($cuenta->mes,$cuenta->anio);
-                    /* Monto= participacion*Monto total  */
-                     $monto=round($participacion*$cuenta->monto,6);
+                   
+                     $monto=round($participacion*($cuenta->monto*$participacionImputados),6);
                      /***insertar un registrio en el detalle de factuaración SigiDetFacturacion  ****/
                     if(!$cuenta->existsDetalleFacturacion($unidad,$colector,false,$dias)){
                         //yii::error(' Inserta registroco aacc=0');
-                        $cuenta->insertaRegistro($identidad,$unidad,$medidor,$monto,'0',$participacion,$dias,$esResumido);
+                        //participacion= $participacionimputados  para que $cuenta->insertaregistro()calcule el monto total solo de los imputados
+                        $cuenta->insertaRegistro($identidad,$unidad,$medidor,$monto,'0',$participacionImputados,$dias,$esResumido);
                         
                     }
                        /*****************************/
+                 }else{
+                    
                  }
                      $monto=0;
+                     
+                 
+                     
+                     
+                     
+                     
+                     
+                     
+                     
                      /******Recorreidno los medidores de aareas comunes
                       * Recordar que estos medidores se anclan o se registran
                       * dentro de una unidad que es imputable=0
                       */
                      //yii::error(' recorriendo los medidores aacc');
                          foreach($this->edificio->medidoresAaCc() as $medidorAACC){
+                            if($medidorAACC->hasUnitAfiliado($unidad->id)){
+                                /*Siempre que esta unidad este afiliada al medidor AACC
+                                
                              /*En este calculo se obtiene = (consumo actual) /(Consumo total) */
-                             $participacionAACC=$medidorAACC->participacionRead($cuenta->mes,$cuenta->anio);
+                            // $participacionAACC=$medidorAACC->participacionRead($cuenta->mes,$cuenta->anio);
                             /********************************
                              * Se agrega el monto ya calculado
                              * ****************************** */
-                              //$monto=$monto(cero)  +  $participacionAACC*( Area de esta unidad+ Sum(areas hijas))/(Area total del edificio))*$monto
-                             $monto=$monto+round($participacionAACC*$unidad->porcWithChilds()*$cuenta->monto,10); 
+                             $participacionAACC=$medidorAACC->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
+                             if($medidorAACC->plano){
+                                 
+                                $ndepasafiliados=$medidorAACC->ndepasRepartoPadres();
+                              
+                                if($ndepasafiliados>0){
+                                    /*Aqui ya no es incrementable el monto,(osea monto=monto+ ...  es un solo calculo total*/
+                                    $monto=$participacionAACC*$cuenta->monto/$ndepasafiliados; 
+                                  }
+                                
+                                
+                             }else{
+                                $monto+=$participacionAACC*$medidorAACC->participacionRead($this->mes,$this->anio)*$cuenta->monto;
+                             }
+                             
+                            }  
                          }
+                         
+                         
+                         
                  
                  /***insertar un registro  por todas las sumas de estos montos****/
                   if(!$cuenta->existsDetalleFacturacion($unidad,$colector,true,$dias) && $monto > 0){
                      //yii::error('insertando un registro con aac=1');
-                      $cuenta->insertaRegistro($identidad,$unidad,null,$monto,'1',$participacionAACC //el porc d ecomsumo
-                                     *$unidad->porcWithChilds(),$dias,$esResumido); 
+                                             /*$identidad,$unidad,$medidor,$monto,  $aacc, $participacion     ,$dias,$esResumido ) */
+                      $cuenta->insertaRegistro($identidad,$unidad,null     ,$monto, '1'   , $participacionAACC,$dias,$esResumido); 
                   }
                  
                  /*****************************/
@@ -880,13 +929,13 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   /*Suma los nmotos cobrados */
   
-  public function montocobrado(){
+ /* public function montocobrado(){
       return $this->getKardexDepa()->select('sum(monto)')->andWhere(['cancelado'=>'1'])->scalar();
-  }
+  }*/
   
   public function porcentajeCobranza(){
       if($this->montoTotal()<=0) return 0;
-      return 100*round($this->montocobrado()/$this->montoTotal(),3);
+      return 100*round(1-$this->deuda()/$this->montoTotal(),4);
   }
   
   /*Envia un correo nmasivo a los departamentos para 
@@ -970,6 +1019,8 @@ class SigiFacturacion extends \common\models\base\modelBase
       $kardexes= SigiDetfacturacion::find()-> 
        select(['kardex_id'])->distinct()->andWhere(['facturacion_id'=>$this->id])->
           asArray()->all();
+       //yii::error('KARDEXES');
+     // yii::error($kardexes);
       foreach($kardexes as $kardex ){
           YII::ERROR('EN EL BUCLE   KARDEX_ID '.$kardex['kardex_id']);
           $kardexModel=SigiKardexdepa::findOne($kardex['kardex_id']);
@@ -1062,7 +1113,33 @@ class SigiFacturacion extends \common\models\base\modelBase
   }
   
   
+ public function isAprobado(){
+     return ($this->estado==self::EST_APROBADO);
+ }
+  
+ public function aprove($unAprove=false){
+     $flag=($unAprove)?'0':'1';
+     $this->estado=($unAprove)?self::EST_CREADO:self::EST_APROBADO;
+     SigiKardexdepa::updateAll(['aprobado'=>$flag], ['facturacion_id'=>$this->id]);
+     
+     return $this->save();
+ }
  
+ 
+ 
+ public  function updateAllMontoKardex(){
+     $registros=$this->getKardexDepa()->all();
+     foreach($registros as $registro){
+         $registro->updateMonto();
+     }
+     return true;
+  }
+  
+  public function deuda(){
+     return round(VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar(),4);
+   }
+  
+   
   
   
 }

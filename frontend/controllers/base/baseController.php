@@ -187,6 +187,7 @@ private static function findKeyArrayInPost(){
         if(h::request()->isAjax){
            $id= h::request()->post('id');
            $clase=str_replace('@','\\',h::request()->post('modelito'));
+         
           // var_dump(h::request()->post(),$id,$clase);die();
            $datos=$this->deleteModel($id, $clase);
            h::response()->format = \yii\web\Response::FORMAT_JSON;
@@ -200,7 +201,10 @@ private static function findKeyArrayInPost(){
      $datos=[];
 	//$modelClass=unserialize(h::request()->get(static::NOMBRE_CLASE_PARAMETER));
        // $id=h::request()->get(static::ID_CLASE_PARAMETER);
+       // var_dump($modelClass,$id);
         $model=$modelClass::findOne($id);
+        //$model=$modelClass::find
+        //var_dump($model,$model instanceof modeloBase);die();
         //var_dump($modelClass,$model);die();
         if($model instanceof modeloBase){           
                 if($model->hasChilds()){

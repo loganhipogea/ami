@@ -7,7 +7,7 @@ namespace frontend\modules\sigi\models;
  *
  * @see SigiMovimientos
  */
-class SigiMovimientosPreQuery extends \frontend\modules\sigi\components\ActiveQueryScopePreMov
+class SigiMovimientosPreQuery extends \yii\db\ActiveQuery //\frontend\modules\sigi\components\ActiveQueryScopePreMov
 {
     /*public function active()
     {

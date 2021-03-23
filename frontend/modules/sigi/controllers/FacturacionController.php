@@ -515,5 +515,55 @@ public function actionReciboByKardex($id){
 }
 
 
+public function actionAprobe($id){
+       $model= $this->findModel($id);
+      if($model->aprove()){
+        /* return ['success'=>yii::t('base.labels','Se aprobó la facturación ')];   
+         }else{
+         return ['error'=>yii::t('base.labels','Hubo un problema '.$model->getFirstError())];   
+         */ 
+          h::session()->setFlash('success',yii::t('base.labels','Se aprobó la facturación '));
+        }else{
+           h::session()->setFlash('error',yii::t('base.labels','Hubo un problema '.$model->getFirstError()));
+        }
+      $this->redirect(['update','id'=>$model->id]);       
+   }
+
+public function actionUnAprobe($id){
+   $model= $this->findModel($id);
+      if($model->aprove(true)){
+        /* return ['success'=>yii::t('base.labels','Se aprobó la facturación ')];   
+         }else{
+         return ['error'=>yii::t('base.labels','Hubo un problema '.$model->getFirstError())];   
+         */ 
+          h::session()->setFlash('success',yii::t('base.labels','Se desaprobó la facturación '));
+        }else{
+           h::session()->setFlash('error',yii::t('base.labels','Hubo un problema '.$model->getFirstError()));
+        }
+      $this->redirect(['update','id'=>$model->id]);  
+}
+
+public function actionResumen($id){
+    $model=$this->findModel($id);    
+     $searchModel = new \frontend\modules\sigi\models\SigiKardexdepaSearch();
+     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+   return $this->render('resumen',[
+       'model'=>$model,
+       'dataProvider'=>$dataProvider,
+           'searchModel'=>$searchModel
+           ]);   
+}
+
+
+ public function actionRefreshMontoKardex($id){
+     if(h::request()->isAjax){
+         h::response()->format = \yii\web\Response::FORMAT_JSON;
+        $model=$this->findModel($id);
+        $model->updateAllMontoKardex();
+       return ['success'=>yii::t('base.labels','Se actualizaron los montos')];
+            }
+   } 
+
+
 
 }

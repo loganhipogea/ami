@@ -81,6 +81,10 @@ class SigiUserEdificios extends \common\models\base\modelBase
        return $this->hasOne(\common\models\User::className(), ['id' => 'user_id']);
    }
     
+    public function getEdificio(){
+       return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
+   }
+    
     /*Refresca los valores de la tabla 
      * segun se hayan agregado faultades 
      * o falte algun registro 
@@ -89,6 +93,7 @@ class SigiUserEdificios extends \common\models\base\modelBase
         if(is_null($iduser))
         $iduser=h::userId();
        $edificios=static::idEdificios();
+       //$edificios=\frontend\modules\sigi\models\Edificios::find()->select(['id'])->column();
        //var_dump($edificios);die();
      foreach($edificios as $key=>$id){
           static::firstOrCreateStatic([
@@ -154,7 +159,7 @@ class SigiUserEdificios extends \common\models\base\modelBase
             return new ActiveDataProvider([
                 'query' =>static::find()->where(['user_id'=>is_null($iduser)?h::userId():$iduser]),
                 'pagination' => [
-                    'pageSize' => 20,
+                    'pageSize' => 60,
                             ],
                                     ]);
         } 
@@ -165,7 +170,7 @@ class SigiUserEdificios extends \common\models\base\modelBase
             return new ActiveDataProvider([
                 'query' =>static::find(false)->where(['user_id'=>is_null($iduser)?h::userId():$iduser]),
                 'pagination' => [
-                    'pageSize' => 20,
+                    'pageSize' => 60,
                             ],
                                     ]);
         } 

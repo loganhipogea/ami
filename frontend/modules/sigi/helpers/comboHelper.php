@@ -236,6 +236,56 @@ class comboHelper extends Combito
        
     }
     
+     public static function getCboUnitsFacturadas($id_facturacion){     
+        $idsFacturados= \frontend\modules\sigi\models\SigiKardexdepa::find()->
+                select(['unidad_id'])->distinct()-> 
+                andWhere(['facturacion_id'=>$id_facturacion])->column();
+          return ArrayHelper::map(
+                          \frontend\modules\sigi\models\SigiUnidades::find()
+                  ->where(['id'=>$idsFacturados])->all(),
+                'id','numero'); 
+    }
+    
+    
+   public static function getCboCuentasByEdificio($edificio_id){     
+       /* $idsFacturados= \frontend\modules\sigi\models\SigiKardexdepa::find()->
+                select(['id','nombre'])->distinct()-> 
+                andWhere(['edificio_id'=>$edificio_id])->column();
+         */ return ArrayHelper::map(
+                          \frontend\modules\sigi\models\SigiCuentas::find()
+                  ->where(['edificio_id'=>$edificio_id])->all(),
+                'id','nombre'); 
+    } 
+    
+     public static function getCboKardexByEdificio($edificio_id){     
+       /* $idsFacturados= \frontend\modules\sigi\models\SigiKardexdepa::find()->
+                select(['id','nombre'])->distinct()-> 
+                andWhere(['edificio_id'=>$edificio_id])->column();
+         */ return ArrayHelper::map(
+                          \frontend\modules\sigi\models\SigiCuentas::find()
+                  ->where(['edificio_id'=>$edificio_id])->all(),
+                'id','nombre'); 
+    } 
+    
+    
+     public static function getCboKardexPagados($edificio_id){
+        $datos= \frontend\modules\sigi\models\VwSigiKardexPagos::find()
+                 ->andWhere(['edificio_id'=>$edificio_id])->
+                 orderBy(['anio'=>SORT_ASC,'mes'=>SORT_ASC,'numero'=>SORT_ASC, 'monto'=>SORT_ASC])->
+                asArray()->all();
+         $combo=[];
+         foreach($datos as $fila){
+             $combo[$fila['id']]=round($fila['monto']+0,2).'  -  '.round($fila['pagado']+0,2).' -   ['.$fila['numero'].']   -'.$fila['anio'].'-'.$fila['mes'];
+         }
+         //array_combine(array_column($combo,'id'),array_column($combo,'id'));
+       /* $idsFacturados= \frontend\modules\sigi\models\SigiKardexdepa::find()->
+                select(['id','nombre'])->distinct()-> 
+                andWhere(['edificio_id'=>$edificio_id])->column();
+         */ return $combo; 
+    }
+    
+    
+    
 }
 
 

@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
-//use kartik\grid\GridView;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+//use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use common\helpers\timeHelper;
@@ -16,49 +16,43 @@ use dosamigos\chartjs\ChartJs;
     
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
     <?= GridView::widget([
+        'id'=>'migrilla',
         'dataProvider' =>new \yii\data\ActiveDataProvider([
-            'query'=> frontend\modules\sigi\models\VwSigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id])
+            'query'=> frontend\modules\sigi\models\SigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id,'cancelado'=>'0'])
         ]),
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'columns' => [
-                  [
+                 /* [
                 'class' => 'yii\grid\ActionColumn',
-                //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{attach}{pdf}',
+                 'template' => '{attach}{pdf}',
                'buttons' => [
-                  'attach' => function($url, $model) {  
-                         $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,
-                             'idModal'=>'imagemodal',
-                             'modelid'=>$model->id,
-                             'extension'=> \yii\helpers\Json::encode(['jpg','png','pdf','jpeg']),
-                             'nombreclase'=> str_replace('\\','_',get_class($model->kardexDepa))]);
-                        $options = [
-                            'title' => Yii::t('sta.labels', 'Subir Archivo'),
-                            'data-method' => 'get',
-                            //'data-pjax' => '0',
-                        ];
-                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Adjuntar Voucher de pago', 'class' => 'botonAbre btn btn-success']);
-                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
-                        },
-                        
-                        
-                       /* 'pdf' => function ($url,$model) {
-			   $url = \yii\helpers\Url::toRoute(['/sta/citas/report-inf-psicologico','id'=>$model->id,'gridName'=>'grid_docu','idModal'=>'buscarvalor']);
-                              if($model->cita_id > 0 or $model->codocu=='104')
-                              return \yii\helpers\Html::a('<span class="btn btn-warning fa fa-file-pdf"></span>', $url, ['data-pjax'=>'0','target'=>'_blank']);
-                              return '';
-                             } */
                     ]
-                ],
+                ],*/
+                                
+                [
+                'class' => 'kartik\grid\ExpandRowColumn',
+                'width' => '50px',
+                'value' => function ($model, $key, $index, $column) {
+                            return GridView::ROW_COLLAPSED;
+                                },
+                     'detailUrl' =>Url::toRoute(['/sigi/default/ajax-show-pagos']),
+                    //'headerOptions' => ['class' => 'kartik-sheet-style'], 
+                    'expandOneOnly' => true
+                ],                  
             
              [
                 'attribute'=>'recibo',
                  'format'=>'raw',
                   'value' => function ($model) {
-                    $url=Url::to(['/report/make/creareporte/','id'=>2,'idfiltro'=>$model->identidad]);
-                            return Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels',''),$url,['data-pjax'=>'0','target'=>'_blank','class'=>"btn btn-success"]) ;
-                                },
+                        if($model->hasAttachments()){
+                          // $url=Url::to([]);
+                            return Html::a('<span class="fa fa-download" ></span>'.'  '.yii::t('sta.labels',''),$model->files[0]->url,['data-pjax'=>'0','class'=>"btn btn-success"]) ;
+                                 
+                        }else{
+                            return '';
+                        }
+                    },
                 ],
              
             
@@ -82,12 +76,23 @@ use dosamigos\chartjs\ChartJs;
                 } 
              ],   
               // 'nombre',   
-           'numero',
-            ['attribute'=>'montodepa',
+           'unidad.numero',
+            /*['attribute'=>'montodepa',
                 'header'=>'Monto',
                 'format' => ['decimal', 3],
                 'contentOptions'=>['align'=>'right'],  
-             ]
+             ],*/
+              [
+                'attribute'=>'montodepa',
+                 'format'=>'raw',
+                  'header'=>'Monto',
+                'format' => ['decimal', 3],
+                'contentOptions'=>['align'=>'right'], 
+                  'value' => function ($model) {
+                       return $model->montoCalculado();
+                    },
+                ],       
+                     
              /* 'descripcion', [
     'attribute' => 'activo',
     'format' => 'raw',
@@ -98,6 +103,48 @@ use dosamigos\chartjs\ChartJs;
           ],*/
         ],
     ]); ?>
+    
+    <?php 
+    $string1="var v_grid = $('#migrilla');
+     v_grid.on('kvexprow:beforeLoad', function (event, ind, key, extra) {
+          // alert(key);
+               Vurl='".Url::to(['/sigi/kardexdepa/ajax-crea-mov','id'=>'parex456'])."';
+                Vurl=Vurl.replace('parex456',key);    
+       $.ajax({
+              url:Vurl, 
+              type: 'get',
+              data:{},
+              //dataType: 'json', 
+              error:  function(xhr, textStatus, error){               
+                            var n = Noty('id');                      
+                              $.noty.setText(n.options.id, error);
+                              $.noty.setType(n.options.id, 'error');       
+                                }, 
+              success: function(data) {
+              //alert(data);
+                 
+                           
+                   
+                        }
+                        });
+        
+
+
+});";
+  $this->registerJs($string1, \yii\web\View::POS_END);
+       ?>  
+    
+    
+    <?php 
+    $string2="var v_grid = $('#migrilla');
+     v_grid.on('kvexprow:kvexprow:loaded', function (event, ind, key, extra) {
+        onsole.log('After ajax load completed.'+key);
+$.pjax.reload({container: '#grilla-deudas-pagos-'+key});
+
+            });";
+  $this->registerJs($string2, \yii\web\View::POS_END);
+       ?>  
+    
     <?php Pjax::end(); ?>
 <h4>Consumo de agua</h4>
 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">

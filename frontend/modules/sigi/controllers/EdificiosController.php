@@ -337,6 +337,38 @@ class EdificiosController extends baseController
        
        
     }
+     public function actionEditaDocu($id){        
+         $this->layout = "install";
+         
+        //$modeledificio = $this->findModel($id);        
+       $model=\frontend\modules\sigi\models\SigiEdificiodocus::findOne($id);
+       //$model->edificio_id=$id;
+       
+       $datos=[];
+        if(h::request()->isPost){
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_documento', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }
+       
+       
+    }
     
      public function actionEditaCuenta($id){        
          $this->layout = "install";
@@ -708,6 +740,7 @@ public function actionGenerateUsuarios($id){
 public function actionAjaxShowUnidad(){
      if(h::request()->isAjax){
         $id=h::request()->post('expandRowKey');
+       // var_dump($id);die();
          //h::response()->format = \yii\web\Response::FORMAT_JSON;
         return $this->renderAjax("/unidades/_detail_unit",['id'=>$id]);
        

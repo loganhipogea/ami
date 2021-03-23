@@ -26,6 +26,15 @@ class SigiMovbanco extends \common\models\base\modelBase
     const SCE_CORTE='corte';
       const TIPO_NORMAL='N';
       const TIPO_CORTE='C'; //MOVIMIENTO PARA HACER UN CORTE
+    public $fopera1=null;
+        public $fval1=null;
+     public $dateorTimeFields = [
+        'fopera' => self::_FDATE,
+        'fopera1' => self::_FDATE,
+          'fval' => self::_FDATE,
+           'fval1' => self::_FDATE,
+       // 'ftermino' => self::_FDATETIME
+    ];
     /**
      * {@inheritdoc}
      */
@@ -40,11 +49,11 @@ class SigiMovbanco extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['cuenta_id', 'edificio_id', 'fopera', 'fval', 'monto'], 'required'],
+            [['cuenta_id', 'edificio_id', 'fopera', 'monto'], 'required'],
             [['cuenta_id', 'edificio_id', 'noper'], 'integer'],
             [['monto'], 'number'],
-             [['tipomov','cuenta_id','monto'], 'safe'],
-            [['fopera', 'fval'], 'string', 'max' => 10],
+             [['tipomov','cuenta_id','monto','descripcion','monto_conciliado','diferencia'], 'safe'],
+            //[['fopera', 'fval'], 'string', 'max' => 10],
             [['descripcion'], 'string', 'max' => 30],
             [['cuenta_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCuentas::className(), 'targetAttribute' => ['cuenta_id' => 'id']],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
@@ -70,8 +79,8 @@ class SigiMovbanco extends \common\models\base\modelBase
 
     public function scenarios() {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCE_IMPORTACION] = [ 'cuenta_id', 'edificio_id', 'fopera', 'monto', 'noper', 'descripion'];
-         $scenarios[self::SCE_CORTE] = [ 'cuenta_id', 'edificio_id', 'fopera','monto',  'descripion'];
+        $scenarios[self::SCE_IMPORTACION] = [ 'cuenta_id', 'edificio_id', 'fopera', 'monto', 'noper', 'descripcion'];
+         $scenarios[self::SCE_CORTE] = [ 'cuenta_id', 'edificio_id', 'fopera','monto',  'descripcion'];
         
         return $scenarios;
     }
@@ -100,4 +109,28 @@ class SigiMovbanco extends \common\models\base\modelBase
     {
         return new SigiMovbancoQuery(get_called_class());
     }
+    
+    
+    
+    
+     public function getMovimientosDetalle()
+    {
+        return $this->hasMany(SigiMovimientosPre::className(), ['idop' => 'id']);
+    }
+    /*
+     * Suma los montos conciliados con 
+     * elrecibo del kardex, mediante la tabla SigiMovimientosPre
+     */
+    public function montoConciliado(){
+      // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
+        return $this->getMovimientosDetalle()->select(['sum(monto)'])->scalar();
+    }
+    
+    public function refreshMonto(){
+        $this->monto_conciliado=$this->montoConciliado();
+        $this->diferencia=$this->monto-$this->monto_conciliado;
+       return $this->save();
+    }
+    
+    
 }

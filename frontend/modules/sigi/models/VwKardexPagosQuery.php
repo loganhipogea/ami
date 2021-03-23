@@ -3,11 +3,11 @@
 namespace frontend\modules\sigi\models;
 
 /**
- * This is the ActiveQuery class for [[Edificios]].
+ * This is the ActiveQuery class for [[VwKardexPagos]].
  *
- * @see Edificios
+ * @see VwKardexPagos
  */
-class EdificiosQuery extends \yii\db\ActiveQuery
+class VwKardexPagosQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class EdificiosQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Edificios[]|array
+     * @return VwKardexPagos[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class EdificiosQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Edificios|array|null
+     * @return VwKardexPagos|array|null
      */
     public function one($db = null)
     {

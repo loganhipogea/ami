@@ -5,6 +5,7 @@ namespace frontend\modules\sigi\controllers;
 use Yii;
 use frontend\modules\sigi\models\SigiKardexdepa;
 use frontend\modules\sigi\models\SigiKardexdepaSearch;
+use frontend\modules\sigi\models\SigiMovimientosPre;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -162,4 +163,49 @@ class KardexdepaController extends baseController
        
         
     }
+    
+    public function actionAjaxCreaMov($id){
+       
+        if(h::request()->isAjax){
+            $model=$this->findModel($id);
+            $valor=SigiMovimientosPre::createBasic([ 
+            'kardex_id'=>$model->id,
+            'edificio_id'=>$model->edificio_id,
+            'cuenta_id'=>$model->edificio->cuentas[0]->id,
+            'tipomov'=> \frontend\modules\sigi\models\SigiTipomov::TIPOMOV_DEFAULT,
+            'glosa'=>yii::t('sigi.labels','PAGO DE CUOTA').'-'.$model->unidad->numero, 
+            'monto'=>$model->montoCalculado(), 
+            'activo'=>'1'            
+        ]);
+        }
+    }
+    
+    
+  public function actionAjaxShowPagos(){
+     if(h::request()->isAjax){
+        $id=h::request()->post('expandRowKey');
+        //var_dump(h::request()->post(),$id);die();
+         //h::response()->format = \yii\web\Response::FORMAT_JSON;
+        return $this->renderAjax("_expand_row_pagos",['id'=>$id]);
+       
+            }
+   }  
+   
+   public function actionPagos()
+    {
+      // echo "<i style='color: blue'><span class='fa fa-user'></span>thomas ramirez espinoza</i>"; die();
+       
+       
+       
+        
+        $searchModel = new \frontend\modules\sigi\models\VwKardexPagosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//var_dump($dataProvider );die();
+        return $this->render('index_pagos', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            
+        ]);
+    }
+
 }

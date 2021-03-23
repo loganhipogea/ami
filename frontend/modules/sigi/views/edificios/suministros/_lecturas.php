@@ -1,7 +1,8 @@
 <?php  
 use yii\helpers\Html;
 use yii\helpers\Url;
-
+use yii\widgets\Pjax;
+use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 use kartik\grid\GridView;
 ?>
 <div style='overflow:auto;'>
@@ -12,7 +13,7 @@ use kartik\grid\GridView;
    $gridColumns = [
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
+                'template' => '{update}{delete}',
                 'buttons' => [
                    
                         'update' => function($url, $model) {  
@@ -32,6 +33,12 @@ use kartik\grid\GridView;
                      
                         
                         },
+                                 'delete' => function ($url,$model) {
+			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
+                           if(!$model->isInFacturacion())
+                              return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
+                           return '';
+                            },
                     ]
                 ],
         [
@@ -73,6 +80,8 @@ return \yii\helpers\Html::checkbox('facturable[]', $model->facturable, [ 'disabl
    
    
    ?>
+    <?php Pjax::begin(['id'=>'grilla-lecturas','timeout'=>false]); ?>
+    
         <?php  
        
         echo GridView::widget([
@@ -92,6 +101,15 @@ return \yii\helpers\Html::checkbox('facturable[]', $model->facturable, [ 'disabl
     ]);
         //Pjax::end();
         ?>
-        
-    
+        <?php 
+   echo linkAjaxGridWidget::widget([
+           'id'=>'widgetgruidBancos',
+            'idGrilla'=>'grilla-lecturas',
+            'family'=>'holas',
+          'type'=>'POST',
+           'evento'=>'click',
+           'posicion'=> \yii\web\View::POS_END,
+            //'foreignskeys'=>[1,2,3],
+        ]); ?>
+    <?php Pjax::end(); ?>
     </div>

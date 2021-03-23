@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\modules\sigi\models;
-
+use common\behaviors\FileBehavior;
 use Yii;
 
 /**
@@ -29,12 +29,17 @@ class SigiMovimientosPre extends \common\models\base\modelBase
 {
    const SCE_CREACION_BASICA='basico';
     const SCE_STATUS='status';
+    const SCE_CONCILIACION_PAGO='fraccion';
     public $booleanFields=['activo'];
     public $dateorTimeFields = [
         'fechaop' => self::_FDATE,
        'fechaprog' => self::_FDATE,
         //'ftermino' => self::_FDATETIME
     ];
+    
+   public $monto_fraccionado=0;
+    
+    
     /**
      * {@inheritdoc}
      */
@@ -43,6 +48,16 @@ class SigiMovimientosPre extends \common\models\base\modelBase
         return '{{%sigi_movimientos}}';
     }
 
+     public function behaviors()
+         { 
+          return [		
+		        'fileBehavior' => [
+			     'class' => FileBehavior::className()
+		           ],
+                    ];
+         }
+    
+    
      public function scenarios() {
         $scenarios = parent::scenarios();
         $scenarios[self::SCE_CREACION_BASICA] = [
@@ -51,6 +66,15 @@ class SigiMovimientosPre extends \common\models\base\modelBase
              'activo','kardex_id'
             ];
          $scenarios[self::SCE_STATUS] = ['activo'];
+         
+         
+          $scenarios[self::SCE_CONCILIACION_PAGO] = [
+              'monto_fraccionado',
+              'edificio_id', 'cuenta_id',
+            'tipomov', 'glosa', 'monto',
+             'activo','kardex_id',
+              
+              ];
        /* $scenarios[self::SCENARIO_ASISTIO] = ['asistio'];
         $scenarios[self::SCENARIO_PSICO] = ['codtra'];
         $scenarios[self::SCENARIO_ACTIVO] = ['activo'];
@@ -65,10 +89,18 @@ class SigiMovimientosPre extends \common\models\base\modelBase
     {
         return [
             [['idop', 'edificio_id', 'cuenta_id', 'user_id'], 'integer'],
-            [['edificio_id', 'cuenta_id', /*'fechaop',*/  'tipomov', 'glosa', 'monto', /*'igv', 'monto_usd',*/ 'activo'], 'required'],
+            [['edificio_id', 'cuenta_id', /*'fechaop',*/  'tipomov', 'glosa',  /*'igv',*/  'activo'], 'required'],
+           // [['monto'],'required', 'except'=>self::SCE_CONCILIACION_PAGO],
             [['monto', 'igv', 'monto_usd'], 'number'],
            // [['fechaop'], 'string', 'max' => 10],
-            [['kardex_id'], 'safe'],
+            [['kardex_id','monto'], 'safe'],
+         
+            
+            [['monto'], 'validate_monto_fraccionado','on'=>self::SCE_CONCILIACION_PAGO],
+            [['kardex_id'], 'required','on'=>self::SCE_CONCILIACION_PAGO],
+            
+            
+            
             [['fechacre'], 'string', 'max' => 19],
             [['tipomov'], 'string', 'max' => 3],
             [['glosa'], 'string', 'max' => 40],
@@ -129,6 +161,14 @@ class SigiMovimientosPre extends \common\models\base\modelBase
     {
         return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
     }
+    
+    
+    
+    
+     public function getMovBanco()
+    {
+        return $this->hasOne(SigiMovbanco::className(), ['id' => 'idop']);
+    }
 
     /**
      * {@inheritdoc}
@@ -181,7 +221,33 @@ class SigiMovimientosPre extends \common\models\base\modelBase
       IF(empty($this->fechaop))$this->fechaop=
       self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
       $this->sincronizeStatus($insert);
+        //$this->movBanco->refreshMonto();
+           // $this->movBanco->monto_conciliado= $this->movBanco->montoConciliado();
+            
+        
+      
       return parent::beforeSave($insert);
   }  
+  
+  public function afterSave($insert, $changedAttributes) {
+      $this->movBanco->refreshMonto();
+      return parent::afterSave($insert, $changedAttributes);
+  }
+  
+  public function afterDelete() {
+       $this->movBanco->refreshMonto();
+      return parent::afterDelete();
+  }
+  
+  
+  
+  public function validate_monto_fraccionado($attribute,$params){
+      if($this->monto == 0 or $this->monto > ($this->movBanco->monto-$this->movBanco->montoConciliado()) )
+          $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento}',['monto_movimiento'=>$this->movBanco->monto,'monto'=>$this->monto]));
+      
+  }
+  
+  
+  
     
 }

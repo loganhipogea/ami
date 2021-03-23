@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
        
         
     <?php Pjax::begin(['id'=>'searchKardex','timeout'=>false]); ?>
-    <?=$this->render('_searchKardex', ['model' => $searchModel]) ?>
+    <?=$this->render('_searchKardexPagos', ['model' => $searchModel]) ?>
  <hr/>
     
     
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
          //'summary' => '',
         'showPageSummary' => true,
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
-        'filterModel' => $searchModel,
+       // 'filterModel' => $searchModel,
         'columns' => [
             
          
@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ],
          
-               [
+               /*[
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'width' => '50px',
                 'value' => function ($model, $key, $index, $column) {
@@ -63,44 +63,46 @@ $this->params['breadcrumbs'][] = $this->title;
                      'detailUrl' =>Url::toRoute(['/sigi/kardexdepa/ajax-show-pagos']),
                     //'headerOptions' => ['class' => 'kartik-sheet-style'], 
                     'expandOneOnly' => true
-                ], 
-             ['attribute'=>'edificio_id',
+                ], */
+            /* ['attribute'=>'edificio_id',
                'filter'=> \frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                'value'=>function($model){
                        return $model->codigo; 
                }
                  
-                 ],
-            'numero',
-            'nombre',
+                 ],*/
+            'anio',
+            'mes',
            // 'facturacion_id',
             //'operacion_id',
             //'edificio_id',
            // 'unidad_id',
            // 'mes',
-            'fecha',
+            //'monto',
             //'anio',
             //'codmon',
-            'numrecibo',
-                         'cancelado',
+            'numerorecibo',
+             'nombre',
             ['attribute'=>'monto',
                 'format' => ['decimal', 3],
                  'pageSummary' => true,
                 'contentOptions'=>['align'=>'right'],
               'value'=>function($model){
-                 return $model->getMonto();    
+                 return $model->monto;    
               }  
                 ],
-             ['attribute'=>'Adjunto',
-               'format'=>'raw',
-              'value'=>function($model){
-                    $modelKardex=$model->kardexDepa;
-                    $cuantos=$modelKardex->countFiles();
-                    if($cuantos >0)
-                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>    '.$cuantos, ['href' => "#", 'title' => 'Adjunto', 'class' => 'btn btn-danger']);
                         
+                ['attribute'=>'deuda',
+                'format' => ['decimal', 3],
+                 'pageSummary' => true,
+                'contentOptions'=>['align'=>'right'],
+              'value'=>function($model){
+                 return $model->deuda;    
               }  
-             ]
+                ],        
+                        
+                        
+            
            // 'igv',
             //'detalles:ntext',
 

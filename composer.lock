@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "841c4f4fe69173a7f1f398dd31d348a0",
+    "content-hash": "64cd7013ddd5d8abfef1d9d40b31dca3",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -166,23 +166,24 @@
         },
         {
             "name": "behat/gherkin",
-            "version": "v4.7.1",
+            "version": "v4.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Gherkin.git",
-                "reference": "987bcdc3d29ba433e6bd4b1db4ae59737ba3dacd"
+                "reference": "d1ff9aa23bb280e8aee9118d42eec386d6f851f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Gherkin/zipball/987bcdc3d29ba433e6bd4b1db4ae59737ba3dacd",
-                "reference": "987bcdc3d29ba433e6bd4b1db4ae59737ba3dacd",
+                "url": "https://api.github.com/repos/Behat/Gherkin/zipball/d1ff9aa23bb280e8aee9118d42eec386d6f851f7",
+                "reference": "d1ff9aa23bb280e8aee9118d42eec386d6f851f7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.6"
             },
             "require-dev": {
-                "phpunit/phpunit": "~5.7|~6|~7",
+                "cucumber/cucumber": "dev-gherkin-16.0.0",
+                "phpunit/phpunit": "^5.7.1|~6|~7",
                 "symfony/phpunit-bridge": "~2.7|~3|~4",
                 "symfony/yaml": "~2.3|~3|~4"
             },
@@ -221,7 +222,7 @@
                 "gherkin",
                 "parser"
             ],
-            "time": "2021-01-26T16:24:32+00:00"
+            "time": "2021-02-03T16:10:01+00:00"
         },
         {
             "name": "bower-asset/animate.css",
@@ -243,7 +244,7 @@
             "version": "v3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
+                "url": "git@github.com:twbs/bootstrap.git",
                 "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "dist": {
@@ -304,7 +305,7 @@
             "version": "v4.4.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fullcalendar/fullcalendar.git",
+                "url": "git@github.com:fullcalendar/fullcalendar.git",
                 "reference": "71cdba73dadca1d5b6a536142473620051dd640c"
             },
             "dist": {
@@ -4714,16 +4715,16 @@
         },
         {
             "name": "nemmo/yii2-attachments",
-            "version": "1.0.0-beta.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Nemmo/yii2-attachments.git",
-                "reference": "2636e214b87b1cfdcd2396741be76145ad092092"
+                "url": "https://github.com/CTOlet/yii2-attachments.git",
+                "reference": "ae041ad9b4b0e9fbc3a499d51d99f45b0b42eb37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nemmo/yii2-attachments/zipball/2636e214b87b1cfdcd2396741be76145ad092092",
-                "reference": "2636e214b87b1cfdcd2396741be76145ad092092",
+                "url": "https://api.github.com/repos/CTOlet/yii2-attachments/zipball/ae041ad9b4b0e9fbc3a499d51d99f45b0b42eb37",
+                "reference": "ae041ad9b4b0e9fbc3a499d51d99f45b0b42eb37",
                 "shasum": ""
             },
             "require": {
@@ -4769,7 +4770,7 @@
                 "upload",
                 "yii2"
             ],
-            "time": "2016-12-07T12:54:01+00:00"
+            "time": "2020-09-26T20:35:48+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -8353,7 +8354,7 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
@@ -9904,7 +9905,7 @@
     "stability-flags": {
         "reportico/yii2-reportico": 20,
         "kartik-v/yii2-widget-typeahead": 20,
-        "nemmo/yii2-attachments": 10,
+        "nemmo/yii2-attachments": 20,
         "kartik-v/yii2-widget-activeform": 20,
         "kartik-v/yii2-tabs-x": 20,
         "kartik-v/yii2-dialog": 20,

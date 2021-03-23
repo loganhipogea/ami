@@ -408,6 +408,20 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    var_dump(\frontend\modules\sigi\models\SigiMovimientosPre::findOne(1)); die();
+    
+    \frontend\modules\sigi\models\SigiUserEdificios::refreshTableByUser(1871);  
+     \frontend\modules\sigi\models\SigiUserEdificios::refreshTableByUser(2092); 
+      \frontend\modules\sigi\models\SigiUserEdificios::refreshTableByUser(2094); 
+       \frontend\modules\sigi\models\SigiUserEdificios::refreshTableByUser(2095); 
+        \frontend\modules\sigi\models\SigiUserEdificios::refreshTableByUser(2107); 
+         \frontend\modules\sigi\models\SigiUserEdificios::refreshTableByUser(2104); 
+         // \frontend\modules\sigi\models\SigiUserEdificios::refreshTableByUser(1871); 
+          DIE();
+        
+    
+    print_r(\frontend\modules\sigi\helpers\comboHelper::getCboKardexPagados(94));
+    die();
     \frontend\modules\sigi\models\SigiFacturacion::findOne(94)->asignaIdentidad();
   die(); 
     
@@ -597,4 +611,37 @@ public function actionCookies(){
   }  
    
    
+   /*
+     * Visualiza otros perfiles 
+     */
+     public function actionChangePwd($iduser){
+         $model=h::user()->identity;
+         $newIdentity=h::user()->identity->findOne($iduser);
+      if(is_null($newIdentity))
+          throw new BadRequestHttpException(yii::t('base.errors','User not found with id '.$iduser));  
+       
+      
+         if ($model->load(Yii::$app->getRequest()->post()) && $model->validate()) {
+            try{
+                set_time_limit(300); // 5 minutes   
+                $model->sendEmail();
+                Yii::$app->getSession()->setFlash('success',yii::t('base.actions','Revisa tu correo para ver las instrucciones.'));
+                return $this->goHome();
+            } catch (\Swift_TransportException $Ste) { 
+                //echo "intenado"; die();
+                Yii::$app->getSession()->setFlash('error',yii::t('base.errors', 'Sorry, we are unable to reset password for email provided.'.$Ste->getMessage()));
+           }
+            
+           
+        }
+
+        return $this->render('requestPasswordResetToken', [
+                'model' => $model,
+        ]);
+      
+      
+      
+    }
+  
+  
 }

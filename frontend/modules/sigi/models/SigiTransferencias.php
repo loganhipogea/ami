@@ -43,6 +43,7 @@ class SigiTransferencias extends \common\models\base\modelBase
             [['edificio_id', 'unidad_id', 'parent_id'], 'integer'],
              [['edificio_id'], 'validate_inquilinos'],
             [['edificio_id'], 'validate_parent'],
+             [['unidad_id'], 'validate_propietario'],
             [['edificio_id'], 'validate_facturacion'],
             [['fecha'], 'string', 'max' => 10],
             [['tipotrans'], 'string', 'max' => 2],
@@ -146,6 +147,7 @@ class SigiTransferencias extends \common\models\base\modelBase
         $model=new SigiPropietarios();
         $model->setAttributes([
             'unidad_id'=>$this->unidad_id,
+            'codepa'=>$this->unidad->numero,
             'edificio_id'=>$this->edificio_id,
               'tipo'=> SigiUnidades::TYP_PROPIETARIO, 
              'correo'=>$this->correo,
@@ -287,9 +289,11 @@ class SigiTransferencias extends \common\models\base\modelBase
        
        if(!$undo){//Si es hacer 
            $actual=$this->unidad->currentPropietario(); 
+           //VAR_dump($this->unidad,$actual);die();
            $actual->activo=false;$actual->save();
         return (new SigiPropietarios([
             'unidad_id'=>$this->unidad_id,
+            'codepa'=>$this->unidad->numero,
             'edificio_id'=>$this->edificio_id,
               'tipo'=> SigiUnidades::TYP_PROPIETARIO, 
              'correo'=>$this->correo,
@@ -314,6 +318,12 @@ class SigiTransferencias extends \common\models\base\modelBase
   public function validate_inquilinos($attribute,$params){
      if($this->unidad->getSigiPropietarios()->andWhere(['<>','tipo',SigiUnidades::TYP_PROPIETARIO])->count()>0)
      $this->addError ('edificio_id',yii::t('base.labels','Esta unidad tiene concesionados, antes de transferir por favor elimine los concesionados'));
+  }
+  
+  public function validate_propietario(){
+      if(is_null($this->unidad->currentPropietario())){
+          $this->addError('unidad_id',yii::t('sigi.labels','Esta unidad no tiene propietario asignado'));
+      }
   }
   
   /*

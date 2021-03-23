@@ -27,8 +27,14 @@ use frontend\modules\sigi\models\SigiEdificiodocusSearch;
                  [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{attach}{delete}',
+            'template' => '{edit}{attach}{delete}',
                'buttons' => [
+                      'edit' => function ($url,$model) {
+			    $url= Url::to(['edita-docu','id'=>$model->id,'gridName'=>'grilla-docus','idModal'=>'buscarvalor']);
+                              return \yii\helpers\Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', $url, ['data-pjax'=>'0','class'=>'botonAbre']);
+                            },
+                   
+                   
                     'attach' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,'idModal'=>'imagemodal','modelid'=>$model->id,'nombreclase'=> str_replace('\\','_',get_class($model))]);
                         $options = [

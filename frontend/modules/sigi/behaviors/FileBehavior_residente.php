@@ -9,7 +9,7 @@ class FileBehavior_residente extends Fibe
         parent::saveUploads($event);
         //var_dump($this->mail());die();
         //$this->mail();
-        yii::error('estableciendo ');
+        //yii::error('estableciendo ');
        /* $valor=SigiMovimientosPre::createBasic([ 
             'kardex_id'=>$this->owner->id,
             'edificio_id'=>$this->owner->edificio_id,
