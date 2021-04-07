@@ -128,7 +128,7 @@ return [
         ],
         */
     ],
-   /* 'as access' => [
+   'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/login/',
@@ -137,11 +137,8 @@ return [
              'site/request-password-reset',
             'site/reset-password', 
            'site/logout',
-            'sta/citas/examen-banco',
-            'sta/citas/arregla-for-ajax',
-            'sta/citas/respuesta-examen',
-            'sta/citas/termina-examen',
+           
         ]
-    ],*/
+    ], 
     'params' => $params,
 ];

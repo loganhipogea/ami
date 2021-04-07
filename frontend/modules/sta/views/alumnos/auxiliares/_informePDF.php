@@ -1,1 +1,0 @@
-<embed src="/report/make/creareporte?id=2&idfiltro=200#toolbar=1" width="500" height="375"> 
