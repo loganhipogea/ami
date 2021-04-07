@@ -7,7 +7,9 @@
      
     <div style="padding:2px; "  >
         <?php
-        $totalMes=Yii::$app->formatter->asDecimal(array_sum(array_column($detalles,'monto')),2);
+       // $totalMes=Yii::$app->formatter->asDecimal(array_sum(array_column($detalles,'monto')),3);
+       $totalMes=array_sum(array_column($detalles,'monto'));
+      // var_dump($totalMes);die();
         $codgrupo=$grupo['codgrupo'];
         $filtrado=array_filter($detalles,function($v,$k)use($codgrupo){
            return  $v['codgrupo']==$codgrupo;
@@ -16,8 +18,8 @@
        
         
         
-                  $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($filtrado,'monto')),2);
-                  $subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($filtrado,'montototal')),2);
+                  $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($filtrado,'monto')),3);
+                  $subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($filtrado,'montototal')),3);
         ?> 
         <table style="">
            <tr>
@@ -42,8 +44,8 @@
             ?>
             <tr>
                 <td width="70%"> <?=$descripcion?></td>
-                 <td width="20%"  align="right" ><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['montototal'],2)?></td>
-                  <td width="20%"   align="right"><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['monto'],2)?></td>
+                 <td width="20%"  align="right" ><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
+                  <td width="20%"   align="right"><?=$fila['simbolo'].'  '.$fila['monto']?></td>
             </tr>
         <?php }
         }

@@ -302,7 +302,7 @@ public function actionCreaConc($id){
          'cuenta_id'=>$modelMovBanco->cuenta_id,
         'idop'=>$modelMovBanco->id,
         'tipomov'=>'100',
-        'activo'=>true,
+        'activo'=>false,
         //'glosa'=>'PAGO DE CUOTA DE MANT'
     ]);
     $model->setScenario($model::SCE_CONCILIACION_PAGO);
@@ -365,16 +365,62 @@ public function actionAprobePago($id){
         if(h::request()->isAjax){
           
              h::response()->format = \yii\web\Response::FORMAT_JSON;
-            $model= \frontend\modules\sigi\models\SigiKardexdepa::findOne($id);
+            $model= \frontend\modules\sigi\models\SigiMovimientosPre::findOne($id);
            if(is_null($model)){
                 return ['error'=>yii::t('sta.labels','No se encontró el registro')];  
            }else{
-               $model->cancelado=true;
+               $model->activo=true;
                $model->save();
                return ['success'=>yii::t('sta.labels','Se aprobó el pago del recibo')];   
            }
         }
    }
+public function actionUnAprobePago($id){
+   
+         
+        if(h::request()->isAjax){
+          
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $model= \frontend\modules\sigi\models\SigiMovimientosPre::findOne($id);
+           if(is_null($model)){
+                return ['error'=>yii::t('sta.labels','No se encontró el registro')];  
+           }else{
+               /*
+                * Verificando primero que no tenga registros facturaciones 
+                * en el siguiente mes. Si los tiene ya no se podría dar marcha atras
+                */
+               if(!$model->kardex->facturacion->hasNextFacturacionWithDetail()){
+                    $model->activo=false;
+                    $model->save();
+                    return ['warning'=>yii::t('sta.labels','Se desaprobó el pago del recibo')]; 
+               }else{
+                   return ['error'=>yii::t('sta.labels','Ya no puede deshacer este registro, existe una facturacion del mes siguiente que depende de este valor')];  
+               }
+                
+           }
+        }
+   }
 
- 
+   
+ public function actionAttachVoucher($id){
+   
+         
+        if(h::request()->isAjax){
+          
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $model= \frontend\modules\sigi\models\SigiMovimientosPre::findOne($id);
+           if(is_null($model)){
+                return ['error'=>yii::t('sta.labels','No se encontró el registro')];  
+           }else{
+               if($model->refreshAttachment()){
+                    return ['success'=>yii::t('sta.labels','Se adjuntó el voucher del usuario')]; 
+           
+               }  else{
+                    return ['error'=>yii::t('sta.labels','No se encontró el voucher del usuario o se presentó un error al intentar adjuntarlo')]; 
+           
+               }             
+                  }
+        }
+   }
+
 }

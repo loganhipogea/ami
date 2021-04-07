@@ -191,15 +191,22 @@ die();*/
        /* $model->obtenerForeignClass('reporte_id');
          var_dump($model->obtenerForeignClass('reporte_id'),$model->fieldsLink(false));die();*/
 
+        
+        /*
+         * La clave para saber si esta facturacion es editable 
+         */
+        $esEditable=$model->isEditable();
+        
+        
           $searchModel = new SigiCuentasporSearch();
          $dataProviderCuentasPor = $searchModel->searchByFactu($model->id); 
          
          
          
          
-         $searchModelPartidas = new \frontend\modules\sigi\models\SigiBasePresupuestoSearch();
+        /* $searchModelPartidas = new \frontend\modules\sigi\models\SigiBasePresupuestoSearch();
          $dataProviderPartidas = $searchModelPartidas->searchByEdificio($model->edificio_id,Yii::$app->request->queryParams); 
-        // $searchModelLecturas = new VwSigiTempLecturasSearch();
+        */// $searchModelLecturas = new VwSigiTempLecturasSearch();
         //$dataProviderLecturas = $searchModelLecturas->searchByCuentasPor($model->idsToCuentasPor(),Yii::$app->request->queryParams);
          
          
@@ -221,8 +228,9 @@ die();*/
             'model' => $model,
             'dataProviderCuentasPor' =>$dataProviderCuentasPor,           
             'dataProviderLecturasFaltan' =>$dataProviderLecturasFaltan,
-            'searchModelPartidas' => $searchModelPartidas,
-         'dataProviderPartidas' => $dataProviderPartidas,
+           // 'searchModelPartidas' => $searchModelPartidas,
+            'esEditable'=>$esEditable,
+         //'dataProviderPartidas' => $dataProviderPartidas,
              'searchModelLecturas' =>  $searchModelLecturas,
          'dataProviderLecturas' => $dataProviderLecturas,
         ]);
@@ -284,9 +292,14 @@ die();*/
             //$errores=[];
                 h::response()->format = Response::FORMAT_JSON;
            $model=$this->findModel($id);
-           $model->resetFacturacion();
-           return ['success'=>yii::t('sigi.labels','Se ha reinicado la facturación')];
-       }
+           if($model->resetFacturacion()){
+               return ['success'=>yii::t('sigi.labels','Se ha reinicado la facturación')];
+       
+              }else{
+                 return ['error'=>yii::t('sigi.labels','No puede reiniciar la facturacion, porque lso datos ya participan el el proceso de cobranzas')];
+        
+              }
+           }
        
     }
     
@@ -509,9 +522,16 @@ public function actionReciboByKardex($id){
     if (h::request()->isAjax ) {
         h::response()->format = Response::FORMAT_JSON; 
             $kardex= \frontend\modules\sigi\models\SigiKardexdepa::findOne($id);
-            $kardex->facturacion->recibo($kardex->id,true);
-          return ['success'=>yii::t('base.labels','Se generó el recibo para '.$kardex->unidad->nombre)];   
-    }
+            $facturacion=$kardex->facturacion;
+            if(!$facturacion->hasNextFacturacionWithDetail()){
+               $facturacion->recibo($kardex->id,true);
+                return ['success'=>yii::t('base.labels','Se generó el recibo para '.$kardex->unidad->nombre)];   
+     
+            }else{
+                return ['error'=>yii::t('base.labels','Ya hay cobranzas con datos de este recibo, ya no puede regenerar')];   
+      
+            }
+         }
 }
 
 
@@ -538,7 +558,10 @@ public function actionUnAprobe($id){
          */ 
           h::session()->setFlash('success',yii::t('base.labels','Se desaprobó la facturación '));
         }else{
+            if($model->hasErrors())
            h::session()->setFlash('error',yii::t('base.labels','Hubo un problema '.$model->getFirstError()));
+        
+            h::session()->setFlash('error',yii::t('base.labels','No se puede deshacer esta opcion, ya hay datos comprometidos'));
         }
       $this->redirect(['update','id'=>$model->id]);  
 }

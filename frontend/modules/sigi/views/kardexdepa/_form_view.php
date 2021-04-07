@@ -16,45 +16,19 @@ use common\widgets\buttonajaxwidget\buttonAjaxWidget;
     <?php $form = ActiveForm::begin([
     'fieldClass'=>'\common\components\MyActiveField'
     ]); ?>
-     
-      <div class="box-header">
-        <div class="col-md-12">
-            <div class="form-group no-margin">
-                
-        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-          
-
-            </div>
-        </div>
-    </div>
-    
-    
-     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-
-        <?php Pjax::begin(['id'=>'pjax-cantidad']); 
-        echo "Monto cobrado total : <i style='font-weight:800;color:purple'>".Yii::$app->formatter->format($model->facturacion->montoCobrado(), 'decimal')."</i>  de   <i style='font-weight:800;color:purple'>".Yii::$app->formatter->format($model->facturacion->montoFacturado(),'decimal').'</i>';
-               ?>
-            <div class="progress">
-                <?php 
-                 $porcentajeCobranza=$model->facturacion->porcentajeCobranza();  ?>
-                <div class="progress-bar bg-warning" role="progressbar" style="width: <?=$porcentajeCobranza?>%" aria-valuenow="<?=$porcentajeCobranza?>" aria-valuemin="0" aria-valuemax="100">AVANCE DE COBRANZA  <?=$porcentajeCobranza?>%</div>
-            </div>
-           <?php Pjax::end();  ?> 
-    </DIV>
  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
      <?= $form->field($model, 'facturacion_id')->label(yii::t('sta.labels','Facturación'))->textInput(['value'=>$model->facturacion->descripcion,'disabled'=>true]) ?>
   </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-    <?= $form->field($model, 'edificio_id')->label(yii::t('sta.labels','Unidad negocio'))->textInput(['value'=>$model->edificio->nombre,'disabled'=>true]) ?>
   
-
- </div>
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'unidad_id')->label(yii::t('sta.labels','Unidad'))->textInput(['value'=>$model->unidad->nombre,'disabled'=>true]) ?>
   
 
  </div>
- 
+  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'edificio_id')->textInput() ?>
+
+ </div>
   
  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">    
  <?= $form->field($model, 'mes')->
@@ -85,7 +59,7 @@ use common\widgets\buttonajaxwidget\buttonAjaxWidget;
          
   
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'detalles')->textarea(['rows' => 6]) ?>
+     <?= $form->field($model, 'detalles')->textarea(['rows' => 6,'disabled'=>true]) ?>
 
  </div>
      

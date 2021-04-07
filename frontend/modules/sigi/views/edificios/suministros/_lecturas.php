@@ -13,9 +13,22 @@ use kartik\grid\GridView;
    $gridColumns = [
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{delete}',
+                'template' => '{update}{delete}{attach}',
                 'buttons' => [
-                   
+                          'attach' => function($url, $model) {  
+                         $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>true,
+                             'idModal'=>'imagemodal',
+                             'modelid'=>$model->id,
+                             'extension'=> \yii\helpers\Json::encode(['jpg','png','jpeg']),
+                             'nombreclase'=> str_replace('\\','_',get_class($model))]);
+                        $options = [
+                            'title' => Yii::t('sta.labels', 'Subir Archivo'),
+                            'data-method' => 'get',
+                            //'data-pjax' => '0',
+                        ];
+                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Adjuntar Voucher de pago', 'class' => 'botonAbre btn btn-success']);
+                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
+                        },
                         'update' => function($url, $model) {  
                        $url= Url::to(['/sigi/unidades/edita-lectura','id'=>$model->id,'gridName'=>'grilla_lecturas','idModal'=>'buscarvalor']);
                          $options = [

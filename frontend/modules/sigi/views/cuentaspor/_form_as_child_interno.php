@@ -57,28 +57,33 @@ use common\widgets\selectwidget\selectWidget;
     
      <?= $form->field($model, 'colector_id')->dropDownList(
            comboHelper::getCboColectorNoMasivo(($model->isNewRecord)?$modelFacturacion->edificio_id:$model->edificio_id),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--'),
+                  'disabled'=>($esEditable)?false:true ]
              ) ?>
  </div>
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'codocu')->dropDownList(
  comboHelper::getCboDocuments(),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--'),
+                  'disabled'=>($esEditable)?false:true ]
              ) ?>
  </div>
   <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true,
+          'disabled'=>($esEditable)?false:true ]) ?>
 
  </div>
   <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'numerodoc')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'numerodoc')->textInput(['maxlength' => true,
+          'disabled'=>($esEditable)?false:true ]) ?>
 
  </div>        
           
           <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <?= $form->field($model, 'codmon')->dropDownList(
  comboHelper::getCboMonedas(),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--'),
+                  'disabled'=>($esEditable)?false:true ]
              ) ?>
 
  </div>
@@ -97,7 +102,8 @@ use common\widgets\selectwidget\selectWidget;
                                ],
                            
                             //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control']
+                            'options'=>['class'=>'form-control',
+                                 'disabled'=>($esEditable)?false:true ]
                             ]) ?>
 </div>
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -120,7 +126,8 @@ use common\widgets\selectwidget\selectWidget;
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'codpro')->dropDownList(
  comboHelper::getCboApoderados(($model->isNewRecord)?$modelFacturacion->edificio_id:$model->edificio_id),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--'),
+                  'disabled'=>($esEditable)?false:true ]
              ) ?>
 
  </div>
@@ -130,16 +137,17 @@ use common\widgets\selectwidget\selectWidget;
       
       <?= $form->field($model, 'unidad_id')->dropDownList(
  comboHelper::getCboUnitsByEdificio(($model->isNewRecord)?$modelFacturacion->edificio_id:$model->edificio_id),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--'),
+                  'disabled'=>($esEditable)?false:true ]
              ) ?>
 
   </div>   
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'monto')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'monto')->textInput(['maxlength' => true, 'disabled'=>($esEditable)?false:true ]) ?>
 
  </div>        
      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'detalle')->textarea(['rows' => 6]) ?>
+     <?= $form->field($model, 'detalle')->textarea(['rows' => 6, 'disabled'=>($esEditable)?false:true ]) ?>
 
  </div>
 

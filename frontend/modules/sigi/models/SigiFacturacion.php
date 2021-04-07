@@ -156,10 +156,11 @@ class SigiFacturacion extends \common\models\base\modelBase
           foreach($cargo->sigiCargosedificios as $colector){
               
               /*Si el registro es un presupeusto y aun no está registrado*/
-               yii::error('es budget');
+              /* yii::error('es budget');
               yii::error($colector->isBudget());
                yii::error('has reciobo auto');
-                  yii::error(!$this->hasReciboAuto($colector->id));
+                  yii::error(!$this->hasReciboAuto($colector->id));*/
+            if($colector->monto > 0){
              if($colector->isBudget() && !$this->hasReciboAuto($colector->id)) {
                        
                  $model=new SigiCuentaspor();
@@ -175,6 +176,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                  yii::error('El colector is es '.$colector->id);
                       }
            }
+          }
         }
     }
     
@@ -332,6 +334,12 @@ class SigiFacturacion extends \common\models\base\modelBase
                 ->all(),'identidad');        
     }
     
+     public function idsKardex(){       
+       return  array_column($this->getSigiDetfacturacion()->
+                select('kardex_id')->distinct()
+                ->all(),'kardex_id');        
+    }
+    
     public function idsColectores(){
        return  array_column($this->getSigiCuentaspor()->
                 select('colector_id')->distinct()
@@ -431,17 +439,23 @@ class SigiFacturacion extends \common\models\base\modelBase
     }
     
     public function resetFacturacion(){
+       if(!$this->isRelated()){//Siempre que no este relacionado
       $borrados= \frontend\modules\sigi\models\SigiDetfacturacion::deleteAll(['facturacion_id'=>$this->id]);
-         yii::error('borrados '.$borrados.'  Registros de detalle facturacion');
+         //yii::error('borrados '.$borrados.'  Registros de detalle facturacion');
       $borrados= \frontend\modules\sigi\models\SigiKardexdepa::deleteAll(['facturacion_id'=>$this->id]);
-       yii::error('borrados '.$borrados.'  kardex depa');
+       //yii::error('borrados '.$borrados.'  kardex depa');
       \frontend\modules\sigi\models\SigiLecturas::updateAll(['cuentaspor_id'=>null],
               [ 
                  'mes'=>$this->mes,
                   'anio'=>$this->ejercicio,
                   'cuentaspor_id'=>$this->idsToCuentasPor()
             ]);
-      $this->unResolveTransferencias();
+         return true;
+       } else {
+          return false; 
+       }
+      
+      //$this->unResolveTransferencias();
       
     }
             
@@ -459,7 +473,9 @@ class SigiFacturacion extends \common\models\base\modelBase
    }
    
    public function montoFacturado(){
-      return  $this->detfacturacionQuery()->select('sum(monto)')->scalar();
+       $valor=$this->detfacturacionQuery()->select('sum(monto)')->scalar();
+       //var_dump($valor);die();
+      return  is_null($valor)?0:$valor;
    }
    
    public function numeroRecibos(){
@@ -709,14 +725,6 @@ class SigiFacturacion extends \common\models\base\modelBase
                  }
                      $monto=0;
                      
-                 
-                     
-                     
-                     
-                     
-                     
-                     
-                     
                      /******Recorreidno los medidores de aareas comunes
                       * Recordar que estos medidores se anclan o se registran
                       * dentro de una unidad que es imputable=0
@@ -731,7 +739,17 @@ class SigiFacturacion extends \common\models\base\modelBase
                             /********************************
                              * Se agrega el monto ya calculado
                              * ****************************** */
+                                
+                                /*Ojo que la participacionAACC no se calcula por medidor 
+                                 * se calcula por recibo. Por ejemplo si el recibo tiene 
+                                 *  1000 soles :  800 unidades y 200 areas comunes 
+                                 * $medidorAACC->porcConsumoAaCc()= 20% independientemente
+                                 * de cuantos medidores haya
+                                 * 
+                                 * $medidorAACC->participacionRead() este si es para cada meiddor
+                                 */
                              $participacionAACC=$medidorAACC->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
+                             
                              if($medidorAACC->plano){
                                  
                                 $ndepasafiliados=$medidorAACC->ndepasRepartoPadres();
@@ -748,10 +766,6 @@ class SigiFacturacion extends \common\models\base\modelBase
                              
                             }  
                          }
-                         
-                         
-                         
-                 
                  /***insertar un registro  por todas las sumas de estos montos****/
                   if(!$cuenta->existsDetalleFacturacion($unidad,$colector,true,$dias) && $monto > 0){
                      //yii::error('insertando un registro con aac=1');
@@ -760,8 +774,6 @@ class SigiFacturacion extends \common\models\base\modelBase
                   }
                  
                  /*****************************/
-                 
-                 
                  
                 }else{
                   //yii::error(' No Es medidor');   
@@ -787,19 +799,28 @@ class SigiFacturacion extends \common\models\base\modelBase
                    if($cuenta->unidad_id>0 && $cuenta->unidad_id==$unidad->id) {
                        /***insertar un registrio****/
                        if(!$cuenta->existsDetalleFacturacion($unidad,$colector,false,$dias))
-                    $cuenta->insertaRegistro($identidad,$unidad,null,$cuenta->monto,'1',1,$dias,$esResumido);
+                    $cuenta->insertaRegistro($identidad,$unidad,null,$cuenta->monto,'0',1,$dias,$esResumido);
                       /*****************************/
-                 
-                 
-                        }
-                 }
-            
-        } 
-   
-     
-     }         
+                     
+                  }                    
+                  /***************************************************
+                 * Si tiene saldos en la facturacion anterior 
+                 *************************************************/ 
+                       if(($saldo=$this->saldoAnterior($unidad))>0){
+                        $cuenta->insertaRegistro($identidad  ,$unidad,null,$saldo,'0',1,$dias,$esResumido);
+                                                /*$identidad,$unidad,$medidor,$monto,  $aacc, $participacion     ,$dias,$esResumido ) */
+                       }                       
+                  /***************************************************
+                 * Si la cuenta esta afecta a mora 
+                 *************************************************/ 
+                       if(abs($colector->tasamora) >0){
+                        //$cuenta->insertaRegistro($identidad,$unidad,null,$saldo,'0',1,$dias,$esResumido);
+                                                /*$identidad,$unidad,$medidor,$monto,  $aacc, $participacion     ,$dias,$esResumido ) */
+                       } 
+            }
+          }         
+       }
   }
-  
   
   /*
    * Devuelve las transferencias de departamentos 
@@ -1119,7 +1140,13 @@ class SigiFacturacion extends \common\models\base\modelBase
   
  public function aprove($unAprove=false){
      $flag=($unAprove)?'0':'1';
+     if($unAprove && $this->isRelated()){
+         return false;
+     }
      $this->estado=($unAprove)?self::EST_CREADO:self::EST_APROBADO;
+     if($unAprove){//so se desap`rueba  ñlimpiare tosdos los recibos 
+        $this->purgeRecibos(); 
+     }
      SigiKardexdepa::updateAll(['aprobado'=>$flag], ['facturacion_id'=>$this->id]);
      
      return $this->save();
@@ -1136,10 +1163,107 @@ class SigiFacturacion extends \common\models\base\modelBase
   }
   
   public function deuda(){
-     return round(VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar(),4);
+     return round(VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->ejercicio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar(),4);
    }
   
-   
+   /*
+    * Esta funcion verifica que la facturacion 
+    * esta comprometida en otros procesos, es decir 
+    * ya no s epuede modificar nada. 
+    * Esto mas por la inclusion de las cobranzas y movimientos 
+    * bancacrios 
+    */
+  public function isRelated(){
+      $isCompromise=false;
+      $isCompromise= SigiMovimientosPre::find()->andWhere([
+          'kardex_id'=>$this->idsKardex()
+      ])->exists();
+      
+      
+      return $isCompromise;
+           
+  } 
   
+   public function montoCobrado(){
+       return 0;
+      //return  $this->detfacturacionQuery()->select('sum(monto)')->scalar();
+   }
+   
+   public function previous(){
+     return self::find()->select(['max(id)'])->andWhere(['<','id',$this->id])->
+             andWhere([
+                 'edificio_id'=>$this->edificio_id,
+             ])->orderBy(['id'=>SORT_DESC])->one(); 
+   }
+           
+  public function next(){
+       return self::find()->select(['min(id)'])->andWhere(['>','id',$this->id])->
+             andWhere([
+                 'edificio_id'=>$this->edificio_id,
+             ])->orderBy(['id'=>SORT_ASC])->one(); 
+   }
+   
+  public function hasDetalle(){
+      return $this->getSigiCuentaspor()->exists();
+  }
+  
+  public function hasDetalleFacturacion(){
+      return $this->getSigiDetfacturacion()->exists();
+  }
+  
+  /*
+   * Solo si tiene la cabecera o el registro de facturacion siguiente
+   */
+  public function hasNextFacturacion(){
+     return (is_null($this->next()))?false:true;
+  }
+  public function hasPreviousFacturacion(){
+     return (is_null($this->previous()))?false:true;
+  }
+  /*
+   * SAi tiene facturacion siguiente pero con 
+   * detalle
+   */
+  public function hasNextFacturacionWithDetail(){
+      $modelNext=$this->next();
+      if(!is_null($modelNext) && $modelNext->hasDetalle()){
+          return true;
+      }else{
+          return false;
+      }
+  }
+  
+  public function hasPreviousFacturacionWithDetail(){
+      $modelNext=$this->previous();
+      if(!is_null($modelNext) && $modelNext->hasDetalle()){
+          return true;
+      }else{
+          return false;
+      }
+  }
+  
+  public function isEditable(){
+      //var_dump(!$this->hasNextFacturacionWithDetail(),!$this->hasDetalle());die();
+     return (!$this->hasNextFacturacionWithDetail() && !$this->hasDetalleFacturacion() );
+  }
+    
+  /*
+   * Funcion que calcula el saldo de ajuste de
+   * pagos por diferencia del mes anterior o la facturacion anterior
+   */
+ public function saldoAnterior($unidad ){
+     $previo=$this->previous();
+     $saldo=VwKardexPagos::find()->select(['deuda'])->andWhere([
+         'unidad_id'=>$unidad->id,
+         'mes'=>$previo->mes,
+         'anio'=>$previo->anio,         
+         ])->andWhere(['<=','deuda',
+             h::gsetting('sigi','montominimo_deudor')
+             ])->scalar(); 
+     return (is_null($saldo))?0:$saldo;
+      
+     } 
+     
+     
   
 }

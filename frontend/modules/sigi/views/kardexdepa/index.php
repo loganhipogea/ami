@@ -5,13 +5,14 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
-/* @var $this yii\web\View */
+use kartik\export\ExportMenu;
 /* @var $searchModel frontend\modules\sigi\models\SigiKardexdepaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Sigi Kardexdepas');
+$this->title = Yii::t('app', 'Recibos emitidos');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="sigi-kardexdepa-index">
 
     <h4><?= Html::encode($this->title) ?></h4>
@@ -24,34 +25,49 @@ $this->params['breadcrumbs'][] = $this->title;
  <hr/>
     
     
-    <?php echo GridView::widget([
-        'dataProvider' => $dataProvider,
-         //'summary' => '',
-        'showPageSummary' => true,
-         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
-        'filterModel' => $searchModel,
-        'columns' => [
+    <?php 
+    
+    $gridColumns=[
             
          
          [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{recibo}',
+                'template' => '{update}{recibo}{clip}',
                 'buttons' => [
                     'update' => function($url, $model) { 
                         $url=Url::to(['update','id'=>$model->id]);
                         $options = [
-                            'title' => Yii::t('base.verbs', 'Update'),                            
+                            'data-pjax'=>'0',
+                            'title' => Yii::t('base.verbs', 'Update'), 
+                            'target'=>'_blank'
                         ];
                         return Html::a('<span class="btn btn-info btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);
                          },
+                                 
+                         'clip' => function($url, $model) { 
+                             $modelKardex=$model->kardexDepa;
+                             if($modelKardex->hasAttachments()){
+                               $url= Url::to(['/finder/renderpdf','idFile'=>\yii\helpers\Json::encode($modelKardex->files[0]->id),'idModal'=>'buscarvalor']);
+                                 $options = [
+                           'class'=>'botonAbre',
+                           
+                         ];
+                          return Html::a('<span class="btn btn-danger glyphicon glyphicon-eye-open"></span>',$url,$options);
+                       
+                             }else{
+                                 return '';
+                             }
+                       
+                         }        
+                                 ,
                         'recibo' => function ($url,$model) {
 			   $url = \yii\helpers\Url::toRoute(['facturacion/recibo-by-kardex','id'=>$model->id]);
-                              return \yii\helpers\Html::a('<span class="btn btn-warning glyphicon glyphicon-tags"></span>', '#', ['title'=>$url,'family'=>'holas','id'=>$model->id]);
+                              return \yii\helpers\Html::a('<span class="btn btn-warning glyphicon glyphicon-cog"></span>', '#', ['title'=>$url,'family'=>'holas','id'=>$model->id]);
                             }, 
                     ]
                 ],
          
-               [
+               /*[
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'width' => '50px',
                 'value' => function ($model, $key, $index, $column) {
@@ -61,13 +77,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             return $model->id;
                                 }],
                      'detailUrl' =>Url::toRoute(['/sigi/kardexdepa/ajax-show-pagos']),
-                    //'headerOptions' => ['class' => 'kartik-sheet-style'], 
-                    'expandOneOnly' => true
-                ], 
+                     'expandOneOnly' => true
+                ], */
              ['attribute'=>'edificio_id',
                'filter'=> \frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                'value'=>function($model){
-                       return $model->codigo; 
+                       return $model->edificio->codigo; 
                }
                  
                  ],
@@ -82,31 +97,47 @@ $this->params['breadcrumbs'][] = $this->title;
             //'anio',
             //'codmon',
             'numrecibo',
-                         'cancelado',
+                       //  'cancelado',
             ['attribute'=>'monto',
                 'format' => ['decimal', 3],
                  'pageSummary' => true,
                 'contentOptions'=>['align'=>'right'],
               'value'=>function($model){
-                 return $model->getMonto();    
+                 return $model->monto;    
               }  
                 ],
-             ['attribute'=>'Adjunto',
-               'format'=>'raw',
+              ['attribute'=>'deuda',
+                'format' => ['decimal', 3],
+                 'pageSummary' => true,
+                'contentOptions'=>['align'=>'right'],
               'value'=>function($model){
-                    $modelKardex=$model->kardexDepa;
-                    $cuantos=$modelKardex->countFiles();
-                    if($cuantos >0)
-                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>    '.$cuantos, ['href' => "#", 'title' => 'Adjunto', 'class' => 'btn btn-danger']);
-                        
+                 return $model->deuda;    
               }  
-             ]
+                ],           
+                        
+             
            // 'igv',
             //'detalles:ntext',
 
           
-        ],
+        ];
+    
+    echo ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $gridColumns,
+    'dropdownOptions' => [
+        'label' => yii::t('sta.labels','Exportar'),
+        'class' => 'btn btn-success'
+    ]
+]) . "<br><hr>\n". GridView::widget([
+        'dataProvider' => $dataProvider,
+         //'summary' => '',
+        'showPageSummary' => true,
+         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
+       // 'filterModel' => $searchModel,
+        'columns' =>$gridColumns, 
     ]); ?>
+ <?php //common\helpers\FileHelper::clearTempWeb();?>
  <?php 
    echo linkAjaxGridWidget::widget([
            'id'=>'searchKardexdsd',

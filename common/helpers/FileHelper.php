@@ -273,4 +273,59 @@ return  $punto.$partes_ruta['extension'];
 
 }
 
+/*
+ * Limpìa todos los archivos rtemporales de
+ * la carpeta temp web 
+ */
+public static function clearTempWeb(){
+     $dir=\Yii::getAlias("@frontend/web/temp");
+     self::deleteDirectory($dir, true);//PRESERVAR LA CARPETA
+}
+
+
+public static function extensionFile($filePath,$conpunto=false){
+    
+  if ((strpos($filePath, '\\')>0) or (strpos($filePath, '/')>0)){
+      $path_parts = pathinfo($filePath);
+       return  (($conpunto)?'.':'').$path_parts['extension'];
+  }else{
+     if(strpos($filePath,'.')>0){
+         return (($conpunto)?'.':'').strrev(substr(strrev($filePath),0,strpos(strrev($filePath),'.'))); 
+     }else{
+         return '';
+     }
+    
+  }
+    
+}
+
+
+public function isImage($filePath){
+   $ext=self::extensionFile($filePath);
+   return in_array($ext,self::extImages());
+}
+
+public function UrlImage($path,$internal=true){
+ if(is_file($path)){
+    /* echo " path  : ".$path; echo "<br>";
+     echo " path  alias root  : ".yii::getAlias('@root')."<br>";
+     echo " URL BASE :   ".\yii\helpers\Url::base(true)."<br>";
+     */
+     if($internal){
+        return str_replace(yii::getAlias('@root'),'',$path);
+      }else{
+       $ruta= str_replace(yii::getAlias('@root'), \yii\helpers\Url::base(true) ,$path);  
+       $ruta=str_replace(\yii\helpers\Url::home(),'/',$ruta);
+       return $ruta;
+      }
+ }else{
+   return '';  
+ }
+  
+}
+
+    
+
+
+
 }

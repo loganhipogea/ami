@@ -42,7 +42,7 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                   [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{attach}{check}{edit}{delete}',
+            'template' => '{attach}{check}{edit}{uncheck}{delete}',
                'buttons' => [
                   'attach' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,
@@ -60,7 +60,7 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                         },
                         'delete' => function ($url,$model) {
 			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
-                              if(!$model->kardex->cancelado)
+                              if(!$model->activo)
                               return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                               return '';
                               
@@ -75,7 +75,7 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                             'data-method' => 'get',
                             'data-pjax' => '0',
                         ];
-                         if(!$model->kardex->cancelado)
+                         if(!$model->activo)
                         return Html::button('<span class="glyphicon glyphicon-pencil"></span>', ['href' => $url, 'title' => 'Editar ', 'class' => 'botonAbre btn btn-success']);
                         //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
                         return '';
@@ -83,11 +83,17 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                         },              
                         
                         'check' => function ($url,$model) {
-			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/aprobe-pago','id'=>$model->kardex->id,'gridName'=>'grilla_m']);
-                              if(!$model->kardex->cancelado)
+			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/aprobe-pago','id'=>$model->id,'gridName'=>'grilla_m']);
+                              if(!$model->activo)
                               return \yii\helpers\Html::a('<span class="btn btn-success fa fa-check"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                                return '<i style="color:#60a917; font-size:18px;"><span class="fa fa-check"></span></i>';
-                             } 
+                             }, 
+                        'uncheck'=>function ($url,$model) {
+			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/un-aprobe-pago','id'=>$model->id,'gridName'=>'grilla_m']);
+                              if($model->activo)
+                              return \yii\helpers\Html::a('<span class="btn btn-danger fa fa-undo"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
+                               return '';
+                             },
                     ]
                 ],
                                 
@@ -118,14 +124,14 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                   
                   ],
               'monto',
-             'kardex.monto',
-              'kardex.mes',
-              ['attribute'=>'diferencia',
+            ['attribute'=>'Monto Reci',
                 'value'=>function($model){
-                     return round($model->monto-$model->kardex->monto,3);   
+                     return round($model->kardex->monto,3);   
                 }  
                   
-                  ]
+                  ],
+              'kardex.mes',
+            
         ],
     ]); ?>
     

@@ -41,7 +41,7 @@ return [
         'class' => 'yii\i18n\Formatter',
         'nullDisplay' => '',
            'decimalSeparator' => '.',
-            'thousandSeparator' => ', ',
+            'thousandSeparator' => ',',
           ], 
         
        'urlManager' => [

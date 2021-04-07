@@ -4,12 +4,15 @@ namespace frontend\modules\sigi\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\modules\sigi\models\SigiKardexdepa;
+//use common\helpers\h;
 
 /**
  * SigiKardexdepaSearch represents the model behind the search form of `\frontend\modules\sigi\models\SigiKardexdepa`.
  */
 class VwSigiKardexdepaSearch extends VwSigiKardexdepa
 {
+
+    
     /**
      * {@inheritdoc}
      */
@@ -17,7 +20,7 @@ class VwSigiKardexdepaSearch extends VwSigiKardexdepa
     {
         return [
             [['id', 'facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
-            [['fecha', 'anio', 'codmon', 'numrecibo', 'detalles','numero','nombre','codtipo','desunidad','fecha1' ,'cancelado'], 'safe'],
+            [['fecha', 'anio', 'codmon', 'numrecibo', 'detalles','numero','nombre','codtipo','desunidad','fecha1' ,'cancelado','deudor'], 'safe'],
             [['monto', 'igv'], 'number'],
         ];
     }
@@ -78,13 +81,14 @@ class VwSigiKardexdepaSearch extends VwSigiKardexdepa
         
         $query->andFilterWhere(['like', 'fecha', $this->fecha])
             ->andFilterWhere(['like', 'anio', $this->anio])
-             //->andFilterWhere(['cancelado'=> ($this->cancelado)?'1':'0'])
+           // ->andFilterWhere(['deudor'=> ($this->cancelado)?'1':'0'])
             ->andFilterWhere(['like', 'codmon', $this->codmon])
             ->andFilterWhere(['like', 'numrecibo', $this->numrecibo])
                  ->andFilterWhere(['like', 'numero', $this->numero])
                  ->andFilterWhere(['like', 'nombre', $this->nombre])   
                  ->andFilterWhere(['like', 'desunidad', $this->desunidad])    
             ->andFilterWhere(['like', 'detalles', $this->detalles]);
+ 
  if(!empty($this->fecha) && !empty($this->fecha1)){
          $query->andFilterWhere([
              'between',
@@ -93,7 +97,7 @@ class VwSigiKardexdepaSearch extends VwSigiKardexdepa
              $this->openBorder('fechaprog1',true)
                         ]);
    }
-   
+  // echo $query->createCommand()->rawSql;die();
         return $dataProvider;
     }
   

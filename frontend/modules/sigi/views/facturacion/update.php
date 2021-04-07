@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Editar');
     'items' => [
         [
           'label'=>'<i class="fa fa-home"></i> '.yii::t('sta.labels','Principal'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_form',['model' => $model,'dataProviderCuentasPor' =>$dataProviderCuentasPor,]),
+            'content'=> $this->render('_form',['esEditable'=>$esEditable,'model' => $model,'dataProviderCuentasPor' =>$dataProviderCuentasPor,]),
             'active' => true,
              'options' => ['id' => 'myvynID3'],
         ],
@@ -40,12 +40,7 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Editar');
             'active' => false,
              'options' => ['id' => 'myownID4'],
         ],
-       [
-          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Partidas'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_presupuesto',[ 'searchModelPartidas' => $searchModelPartidas,'model' => $model,'dataProviderPartidas' =>$dataProviderPartidas]),
-            'active' => false,
-             'options' => ['id' => 'myownIghghD4'],
-        ],
+       
         [
           'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Lecturas tomadas'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_lecturastomadas',[ 'searchModelLecturas' => $searchModelLecturas,'model' => $model,'dataProviderLecturas' =>$dataProviderLecturas]),
@@ -55,7 +50,7 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Editar');
         
         [
           'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Recibos'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_recibos',[ 'model' => $model]),
+            'content'=> $this->render('_recibos',['esEditable'=>$esEditable, 'model' => $model]),
             'active' => false,
              'options' => ['id' => 'myownIdgdg78979hD4'],
         ],

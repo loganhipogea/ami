@@ -7,7 +7,7 @@ use common\helpers\h;
  use kartik\date\DatePicker;
  use common\widgets\selectwidget\selectWidget;
   use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
-  ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
+  //ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiPorpagar */
 /* @var $form yii\widgets\ActiveForm */
@@ -25,7 +25,15 @@ use common\helpers\h;
                 
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Save'), ['class' => 'btn btn-success']) ?>
           <?=(!$model->isNewRecord)?Html::button('<span class="fa fa-money"></span>   '.Yii::t('sta.labels', 'Programar Pago'), ['class' => 'btn btn-warning','href' => '#','id'=>'btn-programa-pago']):''?>   
-
+             <?php  
+                $url= Url::to(['/sigi/porpagar/crea-prog-pago','id'=>$model->id,'gridName'=>'grilla-pagos-programados','idModal'=>'buscarvalor']);
+                         $options = [
+                           'class'=>'botonAbre btn btn-success',
+                            'data-pjax' => '0',
+                        ];
+                        echo Html::a('<span class="fa fa-cut"></span>'.'Agregar movimiento',$url,$options);
+                     
+             ?> 
             </div>
         </div>
     </div>
@@ -45,7 +53,7 @@ use common\helpers\h;
                'form'=>$form,
                'data'=> comboHelper::getCboEdificios(),
                'campo'=>'edificio_id',
-               'idcombodep'=>'sigiporpagar-codpresup',
+               'idcombodep'=>'sigiporpagar-cargoedificio_id',
                /* 'source'=>[ //fuente de donde se sacarn lso datos 
                     /*Si quiere colocar los datos directamente 
                      * para llenar el combo aqui , hagalo coloque la matriz de los datos
@@ -65,10 +73,10 @@ use common\helpers\h;
                                          *
                         
                          ]*/
-                    'source'=>[\frontend\modules\sigi\models\SigiBasePresupuesto::className()=>
+                    'source'=>[\frontend\modules\sigi\models\VwSigiColectores::className()=>
                                 [
-                                  'campoclave'=>'codigo' , //columna clave del modelo ; se almacena en el value del option del select 
-                                     'camporef'=>'descripcion',//columna a mostrar 
+                                  'campoclave'=>'idcolector' , //columna clave del modelo ; se almacena en el value del option del select 
+                                     'camporef'=>'descargo',//columna a mostrar 
                                         'campofiltro'=>'edificio_id'  
                                 ]
                                 ],
@@ -92,20 +100,16 @@ use common\helpers\h;
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'monto')->textInput(['maxlength' => true]) ?>
 
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'igv')->textInput(['maxlength' => true]) ?>
-
- </div>
- <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+  </div>
+ <div class="col-lg-6 col-md-8 col-sm-6 col-xs-12">
      <?php
      if($model->isNewRecord){
          $dati=[];
      }else{
-         $dati= comboHelper::getCboCodPresupuestos($model->edificio_id);
+         $dati= comboHelper::getCboColectores($model->edificio_id);
      }
      ?>
-     <?= $form->field($model, 'codpresup')->dropDownList(
+     <?= $form->field($model, 'cargoedificio_id')->dropDownList(
              $dati,
              ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
              ) ?>

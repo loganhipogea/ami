@@ -182,5 +182,8 @@ class SigiPropietarios extends \common\models\base\modelBase
        return $usuario;      
        
   }
+  
+  
+  
      
 }

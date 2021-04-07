@@ -39,10 +39,10 @@ class KardexdepaController extends baseController
      * @return mixed
      */
     public function actionIndex()
-    {
+    {        
         
-        
-        $searchModel = new \frontend\modules\sigi\models\VwSigiKardexdepaSearch();
+       // $searchModel = new \frontend\modules\sigi\models\VwSigiKardexdepaSearch();
+        $searchModel = new \frontend\modules\sigi\models\VwKardexPagosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 //var_dump($dataProvider );die();
         return $this->render('index', [
@@ -184,7 +184,7 @@ class KardexdepaController extends baseController
   public function actionAjaxShowPagos(){
      if(h::request()->isAjax){
         $id=h::request()->post('expandRowKey');
-        //var_dump(h::request()->post(),$id);die();
+        var_dump(h::request()->post(),$id);die();
          //h::response()->format = \yii\web\Response::FORMAT_JSON;
         return $this->renderAjax("_expand_row_pagos",['id'=>$id]);
        

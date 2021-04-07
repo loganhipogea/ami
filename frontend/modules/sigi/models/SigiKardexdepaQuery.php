@@ -7,7 +7,7 @@ namespace frontend\modules\sigi\models;
  *
  * @see SigiKardexdepa
  */
-class SigiKardexdepaQuery extends \frontend\modules\sigi\components\ActiveQueryScope
+class SigiKardexdepaQuery extends \yii\db\ActiveQuery/*\frontend\modules\sigi\components\ActiveQueryScope*/
 {
     /*public function active()
     {

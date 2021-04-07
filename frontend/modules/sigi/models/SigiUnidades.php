@@ -3,6 +3,7 @@ namespace frontend\modules\sigi\models;
 use frontend\modules\sigi\Module as SigiModule;
 use frontend\modules\sigi\interfaces\colectoresInterface;
 use common\models\masters\Clipro;
+use common\helpers\h;
 use Yii;
 
 /**
@@ -584,6 +585,7 @@ class SigiUnidades extends \common\models\base\modelBase
  public function arrayParticipaciones(){
      $areatotal=$this->edificio->area();     
      $areasHijos=$this->find()->select(['nombre','numero','area','participacion'])->where(['parent_id'=>$this->id])->asArray()->all();
+     
      if(count($areasHijos)>0){
          $datosAreas=$areasHijos;
          $datosAreas[]=['nombre'=>$this->nombre,'numero'=>$this->numero,'area'=>$this->area+0,'participacion'=>$this->participacion+0];
@@ -691,7 +693,35 @@ public function desacopla(){
        return $this->save();
     }
 }
-
-
-
+/*
+ * Observe que las deudas se sacan con 
+ * el criterio de los 5 soles 
+ * este valor se almacena en la tabla sstings
+ * 
+ */
+public function misDeudasProvider(){
+   // $unidad=$this->unidad;
+    return New \yii\data\ActiveDataProvider(
+            [
+         'query'=>VwKardexPagos::find()->andWhere([
+               'unidad_id'=>$this->id,
+                ])->andWhere(['>',
+                       'deuda',
+                        h::gsetting('sigi','montominimo_deudor')
+                ])
+           ]
+          );
+  }
+  
+public function idUser(){
+   $usuario= \common\models\User::find()->andWhere([
+        'username'=>$this->generateUsername()]
+            )->one();
+   if(is_null($usuario)){
+       return null;
+   }else{
+       return $usuario->id;
+   }
+    
+}
 }

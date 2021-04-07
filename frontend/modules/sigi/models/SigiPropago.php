@@ -26,6 +26,7 @@ class SigiPropago extends \common\models\base\modelBase
     const ESTADO_PAGADO='20';
     const SCE_AUTO='auto';
     const SCE_ESTADO='estado';
+     public $booleanFields=['activo'];
     /**
      * {@inheritdoc}
      */
@@ -53,10 +54,11 @@ class SigiPropago extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['porpagar_id', 'edificio_id', 'fechaprog', 'nivel', 'cuenta', 'cci', 'codestado'], 'required'],
+            [['porpagar_id', 'edificio_id', 'fechaprog',], 'required'],
             [['porpagar_id', 'edificio_id'], 'integer'],
             [['cuenta_id'], 'safe'],
-            [['nivel'], 'string', 'max' => 1],
+           [['monto'], 'validate_monto_fraccionado'],
+           [['nivel'], 'string', 'max' => 1],
             [['cuenta'], 'string', 'max' => 30],
             [['cci'], 'string', 'max' => 12],
             [['codestado'], 'string', 'max' => 2],
@@ -87,7 +89,7 @@ class SigiPropago extends \common\models\base\modelBase
      */
     public function getEdificio()
     {
-        return $this->hasOne(SigiEdificios::className(), ['id' => 'edificio_id']);
+        return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
     }
 
     /**
@@ -118,4 +120,19 @@ class SigiPropago extends \common\models\base\modelBase
     public static function estadosValidos(){
         return [self::ESTADO_CREADO,self::ESTADO_PAGADO];
     }
+    
+    public function validate_monto_fraccionado($attribute,$params){
+      if($this->isNewRecord){
+         if($this->monto > ($this->porpagar->monto-$this->porpagar->montoConciliado()))
+         $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento}',['monto_movimiento'=>$this->porpagar->monto,'monto'=>$this->monto]));
+      }else{
+          /*
+           * Si ya hay registro , loque debemos hacer es 
+           * restar al conciliado el valor del monto anterior y comparar recein
+           */
+          if($this->monto > ($this->porpagar->monto-($this->porpagar->montoConciliado()-$this->getOldAttribute('monto'))))
+         $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento} '.$this->getOldAttribute('monto'),['monto_movimiento'=>$this->porpagar->monto,'monto'=>$this->monto]));
+      }
+  }
+    
 }

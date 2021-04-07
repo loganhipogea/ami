@@ -63,7 +63,7 @@ class SigiPropietariosSearch extends SigiPropietarios
             andFilterWhere(['like','correo' , $this->correo])->
              andFilterWhere(['like','dni', $this->dni])->
               andFilterWhere(['like','nombre' , $this->nombre]);
-
+//ECHO $query->createCommand()->rawSql;die();
         return $dataProvider;
     }
     public function searchByUnidad($idunidad)

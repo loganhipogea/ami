@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
-use kartik\grid\GridView;
-//use yii\grid\GridView;
+ //use kartik\grid\GridView;
+use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use common\helpers\timeHelper;
@@ -10,52 +10,56 @@ use miloschuman\highcharts\HighchartsAsset;
 use dosamigos\chartjs\ChartJs;
 ?>
 <div class="box box-body">
-    <h4>Deudas pendientes</h4>
+    <h4>Recibos emitidos</h4>
 <?php
- Pjax::begin(['id'=>'grilla-deudas']); ?>
+ Pjax::begin(['id'=>'grilla-recibos']); ?>
     
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
     <?= GridView::widget([
         'id'=>'migrilla',
-        'dataProvider' =>new \yii\data\ActiveDataProvider([
-            'query'=> frontend\modules\sigi\models\SigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id,'cancelado'=>'0'])
+        'dataProvider' =>NEW 
+        \yii\data\ActiveDataProvider([
+            'query'=> frontend\modules\sigi\models\SigiKardexDepa::find()->andWhere(['unidad_id'=>$unidad->id]),
         ]),
          'summary' => '',
-         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
+         //'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'columns' => [
-                 /* [
+               [
                 'class' => 'yii\grid\ActionColumn',
-                 'template' => '{attach}{pdf}',
-               'buttons' => [
+                'template' => '{view}{recibo}{clip}',
+                'buttons' => [
+                     'view' => function($url, $model) { 
+                           $url=Url::to(['/sigi/kardexdepa/view','id'=>$model->id]);
+                             $options=['data-pjax'=>'0','target'=>'_blank'];
+                          return Html::a('<span class="btn btn-danger glyphicon glyphicon-eye-open"></span>',$url,$options);
+                       
+                         },
+                         'clip' => function($url, $model) { 
+                            
+                             if($model->countFiles()>=1){
+                                  $url=\yii\helpers\Url::toRoute(
+                                          ['/finder/selectimage','isImage'=>true,
+                             'idModal'=>'imagemodal',
+                             'modelid'=>$model->id,
+                             'extension'=> \yii\helpers\Json::encode(['jpg','png','jpeg','pdf']),
+                             'nombreclase'=> str_replace('\\','_',get_class($model))
+                                       ]);
+                                 $options = [
+                           'class'=>'botonAbre btn btn-warning',
+                           
+                         ];
+                          return Html::a('<span class=" fa fa-paperclip" ></span>Adjuntar voucher',$url,$options);
+                       
+                             }else{
+                                 return '';
+                             }
+                       
+                         }        
+                      
                     ]
-                ],*/
-                                
-                [
-                'class' => 'kartik\grid\ExpandRowColumn',
-                'width' => '50px',
-                'value' => function ($model, $key, $index, $column) {
-                            return GridView::ROW_COLLAPSED;
-                                },
-                     'detailUrl' =>Url::toRoute(['/sigi/default/ajax-show-pagos']),
-                    //'headerOptions' => ['class' => 'kartik-sheet-style'], 
-                    'expandOneOnly' => true
-                ],                  
-            
-             [
-                'attribute'=>'recibo',
-                 'format'=>'raw',
-                  'value' => function ($model) {
-                        if($model->hasAttachments()){
-                          // $url=Url::to([]);
-                            return Html::a('<span class="fa fa-download" ></span>'.'  '.yii::t('sta.labels',''),$model->files[0]->url,['data-pjax'=>'0','class'=>"btn btn-success"]) ;
-                                 
-                        }else{
-                            return '';
-                        }
-                    },
                 ],
              
-            
+            'nombre',
             
                 /*[
                 'class' => 'kartik\grid\ExpandRowColumn',
@@ -76,22 +80,68 @@ use dosamigos\chartjs\ChartJs;
                 } 
              ],   
               // 'nombre',   
-           'unidad.numero',
+           
             /*['attribute'=>'montodepa',
                 'header'=>'Monto',
                 'format' => ['decimal', 3],
                 'contentOptions'=>['align'=>'right'],  
              ],*/
-              [
-                'attribute'=>'montodepa',
-                 'format'=>'raw',
-                  'header'=>'Monto',
+              'monto',       
+                     
+             /* 'descripcion', [
+    'attribute' => 'activo',
+    'format' => 'raw',
+    'value' => function ($model) {
+        return \yii\helpers\Html::checkbox('activo[]', $model->activo, [ 'disabled' => true]);
+
+             },
+          ],*/
+        ],
+    ]); 
+             
+    Pjax::end();         ?>
+    <br>
+    <h4>Deudas pendientes</h4>
+<?php
+ Pjax::begin(['id'=>'grilla-deudas']); ?>
+    
+   <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
+    <?= GridView::widget([
+        'id'=>'migrilla',
+        'dataProvider' =>$unidad->misDeudasProvider(),
+         'summary' => '',
+         //'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
+        'columns' => [
+             
+             
+            'nombre',
+            
+                /*[
+                'class' => 'kartik\grid\ExpandRowColumn',
+                'width' => '50px',
+                'value' => function ($model, $key, $index, $column) {
+                            return GridView::ROW_COLLAPSED;
+                                },
+                            'detail' => function ($model, $key, $index, $column) {
+                            return Yii::$app->controller->renderPartial('_detalle_fact_residente', ['kardex_id' => $model->id]);
+                            },
+                    //'headerOptions' => ['class' => 'kartik-sheet-style'], 
+                    'expandOneOnly' => true
+                ],*/
+            'fecha',
+             ['attribute'=>'mes',
+                'value'=>function($model){
+                   return timeHelper::mes($model->mes);            
+                } 
+             ],   
+              // 'nombre',   
+           
+            /*['attribute'=>'montodepa',
+                'header'=>'Monto',
                 'format' => ['decimal', 3],
-                'contentOptions'=>['align'=>'right'], 
-                  'value' => function ($model) {
-                       return $model->montoCalculado();
-                    },
-                ],       
+                'contentOptions'=>['align'=>'right'],  
+             ],*/
+              'deuda',       
                      
              /* 'descripcion', [
     'attribute' => 'activo',
@@ -146,11 +196,45 @@ $.pjax.reload({container: '#grilla-deudas-pagos-'+key});
        ?>  
     
     <?php Pjax::end(); ?>
-<h4>Consumo de agua</h4>
-<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-    <?php
+   <?php $lecturas=$medidor->lastReads(true);?>
+    <h4>Consumo de agua potable</h4>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+
+ <?php echo  ChartJs::widget([
+    'type' => 'bar',
+    'options' => [
+        'height' => 350,
+       // 'width' => 100%
+       
+    ],
+    'data' => [
+        'labels' =>array_keys($lecturas),
+        'datasets' => [
+            [
+                'label' => yii::t('sta.labels',"Consumo (m3)"),
+                'backgroundColor' => "rgba(255,157,64,0.9)",
+                'borderColor' => "rgba(60,117,9,1)",
+                'pointBackgroundColor' => "rgba(179,181,198,1)",
+                'pointBorderColor' => "#fff",
+                'pointHoverBackgroundColor' => "#fff",
+                'pointHoverBorderColor' => "rgba(179,181,198,1)",
+                'data' => array_values($lecturas),
+                'ticks'=> [
+                    'fontColor'=>'#000',
+                    'fontStyle'=> 'normal',
+                    'fontSize'=> 13,
+                   
+                ],
+            ],
+           
+        ]
+    ]
+]);
+?>
+</div>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <?php /*
    $lecturas=$medidor->lastReads(true);
-   //var_dump(end($lecturas));die();
     HighchartsAsset::register($this)->withScripts(['highcharts-more']);
 
     echo Highcharts::widget([
@@ -248,43 +332,78 @@ $.pjax.reload({container: '#grilla-deudas-pagos-'+key});
      
    ]
 ]);
-
-
-?>
-</div>
-
-<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-
-    <?php
-   
-//echo end(array_values($medidor->lastReads(true)))."<br><br>";
-//print_r(array_values($medidor->lastReads(true)));die();
-//var_dump($model->lastReads(true));die();
-?>
- <?= ChartJs::widget([
-    'type' => 'bar',
-    'options' => [
-        'height' => 330,
-        'width' => 400,
-       
-    ],
-    'data' => [
-        'labels' =>array_keys($lecturas),
-        'datasets' => [
-            [
-                'label' => yii::t('sta.labels',"Del mes"),
-                'backgroundColor' => "rgba(255,157,64,0.9)",
-                'borderColor' => "rgba(60,117,9,1)",
-                'pointBackgroundColor' => "rgba(179,181,198,1)",
-                'pointBorderColor' => "#fff",
-                'pointHoverBackgroundColor' => "#fff",
-                'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                'data' => array_values($lecturas),
-            ],
+*/
+Pjax::begin(['id'=>'grilla-deudasvfg']); 
+    
+ echo \kartik\grid\GridView::widget([
+        'id'=>'migrillaxc',
+        'dataProvider' =>NEW 
+        \yii\data\ActiveDataProvider([
+            'query'=>$medidor->getLecturas(),
+        ]),
+    
+         'summary' => '',
+         //'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
+        'columns' => [
+               
+             [
+                'class' => 'kartik\grid\ExpandRowColumn',
+                'width' => '50px',
+                'value' => function ($model, $key, $index, $column) {
+                            return \kartik\grid\GridView::ROW_COLLAPSED;
+                                },
+                'extraData'=>['identidad'=>function ($model) {
+                            return $model->id;
+                                }],
+                     'detailUrl' =>Url::toRoute(['/sigi/default/ajax-show-lectura']),
+                    //'headerOptions' => ['class' => 'kartik-sheet-style'], 
+                    'expandOneOnly' => true
+                ],
+                /*[
+                'class' => 'kartik\grid\ExpandRowColumn',
+                'width' => '50px',
+                'value' => function ($model, $key, $index, $column) {
+                            return GridView::ROW_COLLAPSED;
+                                },
+                            'detail' => function ($model, $key, $index, $column) {
+                            return Yii::$app->controller->renderPartial('_detalle_fact_residente', ['kardex_id' => $model->id]);
+                            },
+                    //'headerOptions' => ['class' => 'kartik-sheet-style'], 
+                    'expandOneOnly' => true
+                ],*/
+            //'fecha',
+             ['attribute'=>'mes',
+                'value'=>function($model){
+                   return timeHelper::mes($model->mes);            
+                } 
+             ],
+                     
+              // 'nombre',   
            
-        ]
-    ]
-]);
-?>
+            /*['attribute'=>'montodepa',
+                'header'=>'Monto',
+                'format' => ['decimal', 3],
+                'contentOptions'=>['align'=>'right'],  
+             ],*/
+              'flectura', 
+              'lectura',
+              'delta'
+                     
+             /* 'descripcion', [
+    'attribute' => 'activo',
+    'format' => 'raw',
+    'value' => function ($model) {
+        return \yii\helpers\Html::checkbox('activo[]', $model->activo, [ 'disabled' => true]);
+
+             },
+          ],*/
+        ],
+    ]);
+     Pjax::end();        
+             ?>
+    
+
 </div>
+
+
 </div>

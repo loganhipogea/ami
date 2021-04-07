@@ -10,8 +10,9 @@ ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiKardexdepa */
 
-$this->title = Yii::t('app', 'Update Sigi Kardexdepa: {name}', [
+$this->title = Yii::t('app', 'Actualizar kardex: {name}', [
     'name' => $model->id,
+    
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Sigi Kardexdepas'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
@@ -35,14 +36,29 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
              'options' => ['id' => 'myveryownID3'],
         ],
         [
-          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Tutores'), //$this->context->countDetail() obtiene el contador del detalle
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Documentos'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_segunda',[ 'model' => $model]),
             'active' => false,
              'options' => ['id' => 'myveryownID4'],
         ],
-       
-        
+        [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Pagos'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_pagos',[ 'model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'myvXDEyownID4'],
+        ],
+        [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Detalle'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_detalle',['model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'yownID4'],
+        ],
        
     ],
 ]);  
 
+?>
+        
+            
+        </DIV>
+</DIV>

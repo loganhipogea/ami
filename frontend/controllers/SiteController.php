@@ -337,12 +337,16 @@ class SiteController extends \frontend\controllers\base\baseController
        $datos=[];
        if(h::request()->isAjax){           
               h::settings()->invalidateCache();
+              \common\helpers\FileHelper::clearTempWeb();
               //\console\components\Command::execute('cache/flush-all', ['interactive' => false]);
               //\console\components\Command::execute('cache/flush-schema', ['interactive' => false]);
            $datos['success']=yii::t('base.actions','
 Datos de caché de configuración se han actualizado');
            
            h::response()->format = \yii\web\Response::FORMAT_JSON;
+           
+           
+           
            return $datos;
         }
     }
@@ -408,6 +412,25 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    var_dump(\frontend\modules\sigi\models\SigiKardexdepa::findOne(6843)->files[1]);die();
+    
+    
+      echo " Url::home()  :   ".Url::home()."<br>";
+   echo " Url::home('https')  :   ".Url::home('https')."<br>";
+   echo " Url::base()  :   ".Url::base()."<br>";
+   echo " Url::to(['controlador/accion','param2'=>'uno','param2'=>'dos'],true)  :   ".Url::to(['controlador/accion','param1'=>'uno','param2'=>'dos'],true)."<br>";
+   echo " Url::base(true)  :   ".Url::base(true)."<br>";
+   echo " Url::base('https')  :   ".Url::base('https')."<br>";
+   echo " Url::canonical()  :   ".Url::canonical()."<br>";
+   echo " Url::current()  :   ".Url::current()."<br>";
+   echo " Url::previous()  :   ".Url::previous()."<br>";
+   echo " UrlManager::getBaseUrl()  :   ".yii::$app->urlManager->getBaseUrl()."<br>";
+   echo " UrlManager::getHostInfo()  :   ".yii::$app->urlManager->getHostInfo()."<br>";
+   echo " UrlManager::getScriptUrl()  :   ".yii::$app->urlManager->getScriptUrl()."<br>";
+  die();
+    
+    
+    
     var_dump(\frontend\modules\sigi\models\SigiMovimientosPre::findOne(1)); die();
     
     \frontend\modules\sigi\models\SigiUserEdificios::refreshTableByUser(1871);  

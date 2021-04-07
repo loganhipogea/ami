@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
+use common\widgets\spinnerWidget\spinnerWidget;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\modules\sigi\models\SigiFacturacionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -15,7 +16,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Movimientos'
 
 ?>
 <div class="sigi-facturacion-index">
-
+<?PHP   ECHO spinnerWidget::widget();    ?>
     <h4><?= Html::encode($this->title) ?></h4>
     <div class="box box-success">
      <div class="box-body">

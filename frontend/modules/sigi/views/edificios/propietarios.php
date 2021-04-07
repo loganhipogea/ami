@@ -45,7 +45,14 @@ $this->title = Yii::t('base.names', 'Propietarios');
                    ]
                 ],
            
-            ['attribute'=>'nombre',
+            ['attribute'=>'unidad_id',
+                'value'=>function($model){
+                         return $model->unidad->nombre;
+                }
+               // 'filter'=> \frontend\modules\sigi\helpers\comboHelper::getCboUnitsByEdificio($id_edificio)
+             //'group'=>true
+             ],
+             ['attribute'=>'nombre',
              //'group'=>true
              ],
             'codepa',

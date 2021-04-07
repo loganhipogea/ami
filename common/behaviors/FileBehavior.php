@@ -3,7 +3,7 @@
 namespace common\behaviors;
 use yii\web\UploadedFile;
 use nemmo\attachments\behaviors\FileBehavior as Fileb;
-use nemmo\attachments\models\File;
+use common\models\File;
 use common\helpers\FileHelper;
 use yii;
 
@@ -34,6 +34,18 @@ CONST FIRE_METHOD='triggerUpload';
         return $fileQuery->all();
     }
 
+     public function getFiles()
+    {
+        $fileQuery = File::find()
+            ->where([
+                'itemId' => $this->owner->id,
+                'model' => $this->getModule()->getShortClass($this->owner)
+            ]);
+        $fileQuery->orderBy(['id' => SORT_ASC]);
+
+        return $fileQuery->all();
+    }
+    
     /* Devuelve un modelo
      * representando a la primera image
      * si no tiene adjuntos imagenes 
@@ -224,5 +236,7 @@ CONST FIRE_METHOD='triggerUpload';
             $this->owner->{self::FIRE_METHOD}();
         }
     }
+ 
+  
     
 }

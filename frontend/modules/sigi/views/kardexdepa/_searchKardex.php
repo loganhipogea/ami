@@ -24,7 +24,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
     ]); ?>
    <div class="form-group">
         <?= Html::submitButton("<span class='fa fa-search'></span>     ".Yii::t('sta.labels', 'buscar'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Create Sigi Kardexdepa'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?php //echo  Html::a(Yii::t('app', 'Create Sigi Kardexdepa'), ['create'], ['class' => 'btn btn-success']) ?>
         
         
     </div>
@@ -64,60 +64,14 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
                 ?>
   </div>  
 
-   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  
+    
   
-    <?= ComboDep::widget([
-               'model'=>$model,               
-               'form'=>$form,
-               'data'=> frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
-               'campo'=>'edificio_id',
-               'idcombodep'=>'vwsigikardexdepasearch-unidad_id',
-               /* 'source'=>[ //fuente de donde se sacarn lso datos 
-                    /*Si quiere colocar los datos directamente 
-                     * para llenar el combo aqui , hagalo coloque la matriz de los datos
-                     * aqui:  'id1'=>'valor1', 
-                     *        'id2'=>'valor2,
-                     *         'id3'=>'valor3,
-                     *        ...
-                     * En otro caso 
-                     * de la BD mediante un modelo  
-                     */
-                        /*Docbotellas::className()=>[ //NOmbre del modelo fuente de datos
-                                        'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
-                                        'camporef'=>'descripcion',//columna a mostrar 
-                                        'campofiltro'=>'codenvio'/* //cpolumna 
-                                         * columna que sirve como criterio para filtrar los datos 
-                                         * si no quiere filtrar nada colocwue : false | '' | null
-                                         *
-                        
-                         ]*/
-                   'source'=>[\frontend\modules\sigi\models\SigiUnidades::className()=>
-                                [
-                                  'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
-                                        'camporef'=>'nombre',//columna a mostrar 
-                                        'campofiltro'=>'edificio_id'  
-                                ]
-                                ],
-                            ]
-               
-               
-        )  ?>
   
-    </div> 
+
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 <?php 
-echo $form->field($model, 'unidad_id')->
-            dropDownList([],
-                  ['prompt'=>'--'.yii::t('base.verbs','Seleccione un Valor')."--",
-                    // 'class'=>'probandoSelect2',
-                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                        ]
-                    ) ?>
- </div>  
-<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-<?php 
-echo $form->field($model, 'codtipo')->
-            dropDownList(\frontend\modules\sigi\helpers\comboHelper::getCboTipoUnidades(),
+echo $form->field($model, 'edificio_id')->
+            dropDownList(\frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un Valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
@@ -125,6 +79,23 @@ echo $form->field($model, 'codtipo')->
                     ) ?>
  </div>  
     
+ <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+      <?php 
+             echo $form->field($model, 'numero') ?>
+ </div> 
+    
+    
+    
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+<?php 
+echo $form->field($model, 'anio')->
+            dropDownList(\common\helpers\timeHelper::cboAnnos(),
+                  ['prompt'=>'--'.yii::t('base.verbs','Seleccione un Valor')."--",
+                    // 'class'=>'probandoSelect2',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]
+                    ) ?>
+ </div>  
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
     <?php echo $form->field($model, 'mes')->
             dropDownList(\common\helpers\timeHelper::cboMeses(),
@@ -135,12 +106,23 @@ echo $form->field($model, 'codtipo')->
                     ) ?>
 </div> 
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
- <?php echo $form->field($model, 'numrecibo');?>
+ <?php echo $form->field($model, 'numerorecibo');?>
 </div>
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
  <?php echo $form->field($model, 'monto');?>
 </div>    
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <?php echo $form->field($model, 'deudor')->
+            dropDownList(['1'=>yii::t('base.labels','Sólo Deudores')],
+                  ['prompt'=>'--'.yii::t('base.verbs','Seleccione un Valor')."--",
+                    // 'class'=>'probandoSelect2',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]
+                    ) ?>
+</div>   
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
     
+</div>   
     <?php ActiveForm::end(); ?>
 <?php echo "."; ?>
 </div>

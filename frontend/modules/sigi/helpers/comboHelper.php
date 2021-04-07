@@ -275,7 +275,7 @@ class comboHelper extends Combito
                 asArray()->all();
          $combo=[];
          foreach($datos as $fila){
-             $combo[$fila['id']]=round($fila['monto']+0,2).'  -  '.round($fila['pagado']+0,2).' -   ['.$fila['numero'].']   -'.$fila['anio'].'-'.$fila['mes'];
+             $combo[$fila['id']]=round($fila['monto']+0,2).'  -  '.round($fila['pagado']+0,2).' -   [['.$fila['numero'].']]   -'.$fila['anio'].'-'.$fila['mes'];
          }
          //array_combine(array_column($combo,'id'),array_column($combo,'id'));
        /* $idsFacturados= \frontend\modules\sigi\models\SigiKardexdepa::find()->

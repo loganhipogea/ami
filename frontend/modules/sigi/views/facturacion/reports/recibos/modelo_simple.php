@@ -9,7 +9,7 @@ use common\models\masters\Monedas;
      
     <div style="padding:2px; "  >
         <?php
-        $totalMes=Yii::$app->formatter->asDecimal(array_sum(array_column($detalles,'monto')),2);
+        $totalMes=Yii::$app->formatter->asDecimal(array_sum(array_column($detalles,'monto')),3);
         $codgrupo=$grupo['codgrupo'];
         $filtrado=array_filter($detalles,function($v,$k)use($codgrupo){
            return  $v['codgrupo']==$codgrupo;
@@ -18,8 +18,8 @@ use common\models\masters\Monedas;
        
         
         
-                  $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($filtrado,'monto')),2);
-                  $subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($filtrado,'montototal')),2);
+                  $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($filtrado,'monto')),3);
+                  $subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($filtrado,'montototal')),3);
         ?> 
         <table style="">
            <tr>
@@ -34,9 +34,9 @@ use common\models\masters\Monedas;
             if($fila['monto']!=0){
              $suministro=(empty(trim($fila['codsuministro'])))?'':'  Cod Suministro : '.(trim($fila['codsuministro']));
      $unidades=(empty(trim($fila['unidades'])))?'':' ( '.(trim($fila['unidades'])).' )  ';
-     $lanterior=(empty(trim($fila['lanterior'])))?'':' L. Ant. : '.trim(round($fila['lanterior'],2));
-    $lactual=(empty(trim($fila['lectura'])))?'':' L. Act. : '.trim(round($fila['lectura'],2));
-     $consumo=(empty(trim($fila['delta'])))?'':'  Consumo: '.trim(round($fila['delta'],2));
+     $lanterior=(empty(trim($fila['lanterior'])))?'':' L. Ant. : '.trim(round($fila['lanterior'],3));
+    $lactual=(empty(trim($fila['lectura'])))?'':' L. Act. : '.trim(round($fila['lectura'],3));
+     $consumo=(empty(trim($fila['delta'])))?'':'  Consumo: '.trim(round($fila['delta'],3));
          $descripcion= $fila['descargo'].$suministro.$lanterior.$lactual.$consumo.$unidades;
         
        
@@ -44,8 +44,8 @@ use common\models\masters\Monedas;
             ?>
             <tr>
                 <td width="70%"> <?=$descripcion?></td>
-                 <td width="20%"  align="right" ><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['montototal'],2)?></td>
-                  <td width="20%"   align="right"><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['monto'],2)?></td>
+                 <td width="20%"  align="right" ><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
+                  <td width="20%"   align="right"><?=$fila['simbolo'].'  '.Yii::$app->formatter->asDecimal($fila['monto'],3)?></td>
             </tr>
         <?php }
         }
@@ -67,7 +67,7 @@ use common\models\masters\Monedas;
 
 <div style="padding:5px; border: 1px solid #000;margin-bottom: 35px;  "  >
     Total Recibo : <?=$totalMes.'   '.NumeroAletras::convert(              
-              round($totalMes,2),
+              round($totalMes,3),
                Monedas::findOne($codmon)->desmon,
               true)  ?>
 </div>

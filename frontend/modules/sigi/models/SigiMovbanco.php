@@ -25,6 +25,7 @@ class SigiMovbanco extends \common\models\base\modelBase
     const SCE_IMPORTACION='importacion';
     const SCE_CORTE='corte';
       const TIPO_NORMAL='N';
+       const TIPO_MOVIMIENTO_COBRANZA='10';
       const TIPO_CORTE='C'; //MOVIMIENTO PARA HACER UN CORTE
     public $fopera1=null;
         public $fval1=null;
@@ -127,10 +128,27 @@ class SigiMovbanco extends \common\models\base\modelBase
     }
     
     public function refreshMonto(){
+         if($this->tipomov==self::TIPO_MOVIMIENTO_COBRANZA){
         $this->monto_conciliado=$this->montoConciliado();
         $this->diferencia=$this->monto-$this->monto_conciliado;
-       return $this->save();
+        $this->updateAll(['diferencia'=>$this->monto-$this->monto_conciliado],
+                ['id'=>$this->id]);
+         }
+      // return $this->save();
+       return true;
     }
     
-    
+   
+  public function beforeSave($insert) {
+      if($this->tipomov==self::TIPO_MOVIMIENTO_COBRANZA){
+          if($insert){
+          /*Al iniciar la diferencia es la misma que el monto puesto que no se ha conciliado nada*/
+          $this->diferencia=$this->monto;
+         }
+      }else{
+         $this->diferencia=0; 
+      }
+      
+      return parent::beforeSave($insert);
+  }
 }

@@ -29,6 +29,7 @@ class selectWidget extends \yii\base\Widget
     PRIVATE $_orden=null; //para renderizar widgets en tabulares
     public $inputOptions=[];//Array de opciones del active Field 
     public $data=[]; //DATOS PARA RENDERIZAR POR DEFAULT 
+    public $filterWhere=[];
     /*
      * Atributos para hacer cumplir le widget
      * en el active field
@@ -51,9 +52,7 @@ class selectWidget extends \yii\base\Widget
         if(!($this->form instanceof \yii\widgets\ActiveForm))
         throw new InvalidConfigException('The "form" property is not subclass from "ActiveForm".'.get_class($this->form));
        if(substr($this->campo,0,1)=='['){
-           $punto=strpos($this->campo,']');
-           
-           
+           $punto=strpos($this->campo,']');  
            $this->_orden=substr($this->campo,1,$punto-1)+0;
            //var_dump($this->campo,$punto,$this->_orden);die();
             $this->campo=substr($this->campo,$punto+1);
@@ -126,6 +125,7 @@ class selectWidget extends \yii\base\Widget
  data: function (params) {
       var query = {      
         searchTerm: params.term,
+        mifilter:".\yii\helpers\Json::encode($this->filterWhere).",
         model: '".str_replace('\\','_',get_class($this->getModelForeign()))."',
             // camposad:".\yii\helpers\Json::encode($this->getAditionalFields()).",
         firstField: '".$this->_foreignField."',

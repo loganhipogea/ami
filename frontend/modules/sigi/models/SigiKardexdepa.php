@@ -222,7 +222,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
   public function numeroReciboConsultado(){
       try{
           
-          $numero=$this->detallesFactu[0]->numerorecibo;
+          $numero=$this->detalleFactu[0]->numerorecibo;
           //var_dump($numero);die();
           return $numero;
       } catch (Exception $ex) {
@@ -250,10 +250,18 @@ class SigiKardexdepa extends \common\models\base\modelBase
      $this->save();
   }
   
-  
+  /*
+   * Deuda del mes 
+   */
   public function deuda(){
      return VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar();
    }
   
-  
+   /*
+    * Deuda del recibo
+    */
+  public function deudaKardex(){
+      $deuda=VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['id'=>$this->id])->scalar(); 
+     return (is_null($deuda))?0:$deuda;
+  }
 }

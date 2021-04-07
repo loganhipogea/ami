@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\modules\sigi\models\SigiFacturacionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -22,15 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('sigi.labels', 'Nueva facturacion'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div style='overflow:auto;'>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-         'summary' => '',
-         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
-        'filterModel' => $searchModel,
-        'columns' => [
-            
-         
-         [
+    <?php
+     $gridColumns=[
+        [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update}',
                 'buttons' => [
@@ -80,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'filter'=>frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                 'value' => function($model) { 
                         //var_dump($model);die();
-                        return $model->montoTotal() ;
+                        return Yii::$app->formatter->asDecimal($model->montoTotal(),3) ;
                          },
                  'group'=>true,   
             ],
@@ -88,7 +83,24 @@ $this->params['breadcrumbs'][] = $this->title;
             //'detalles:ntext',
 
           
-        ],
+        ];
+    
+    echo ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'filename'=>yii::t('sigi.labels','Detalles de facturación'),
+    'columns' => $gridColumns,
+    'dropdownOptions' => [
+        'label' => yii::t('sta.labels','Exportar'),
+        'class' => 'btn btn-success'
+    ]
+]) . "<br><hr>\n".GridView::widget([
+        'dataProvider' =>$dataProvider,
+         'summary' => '',
+    'filterModel' => $searchModel,
+         'showPageSummary' => true,
+         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
+        //'filterModel' => $searchModel,
+        'columns' => $gridColumns,
     ]); ?>
     <?php Pjax::end(); ?>
 </div>

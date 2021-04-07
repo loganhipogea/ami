@@ -2,6 +2,8 @@
 
 namespace frontend\modules\sigi\models;
 use common\behaviors\FileBehavior;
+use frontend\modules\message\models\Message;
+use common\helpers\h;
 use Yii;
 
 /**
@@ -30,6 +32,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
    const SCE_CREACION_BASICA='basico';
     const SCE_STATUS='status';
     const SCE_CONCILIACION_PAGO='fraccion';
+   
     public $booleanFields=['activo'];
     public $dateorTimeFields = [
         'fechaop' => self::_FDATE,
@@ -63,7 +66,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
         $scenarios[self::SCE_CREACION_BASICA] = [
             'edificio_id', 'cuenta_id',
             'tipomov', 'glosa', 'monto',
-             'activo','kardex_id'
+             'activo','kardex_id','diferencia'
             ];
          $scenarios[self::SCE_STATUS] = ['activo'];
          
@@ -72,7 +75,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
               'monto_fraccionado',
               'edificio_id', 'cuenta_id',
             'tipomov', 'glosa', 'monto',
-             'activo','kardex_id',
+             'activo','kardex_id','diferencia'
               
               ];
        /* $scenarios[self::SCENARIO_ASISTIO] = ['asistio'];
@@ -93,7 +96,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
            // [['monto'],'required', 'except'=>self::SCE_CONCILIACION_PAGO],
             [['monto', 'igv', 'monto_usd'], 'number'],
            // [['fechaop'], 'string', 'max' => 10],
-            [['kardex_id','monto'], 'safe'],
+            [['kardex_id','monto','diferencia'], 'safe'],
          
             
             [['monto'], 'validate_monto_fraccionado','on'=>self::SCE_CONCILIACION_PAGO],
@@ -207,7 +210,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
           
         }else{
           if($this->hasChanged('activo')){
-              SigiKardexdepa::updateAll(['cancelado'=>($this->activo)?'1':'0'], ['kardex_id'=>$this->kardex_id]);
+              SigiKardexdepa::updateAll(['cancelado'=>($this->activo)?'1':'0'], ['id'=>$this->kardex_id]);
           
           }
            
@@ -221,16 +224,17 @@ class SigiMovimientosPre extends \common\models\base\modelBase
       IF(empty($this->fechaop))$this->fechaop=
       self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
       $this->sincronizeStatus($insert);
-        //$this->movBanco->refreshMonto();
-           // $this->movBanco->monto_conciliado= $this->movBanco->montoConciliado();
-            
-        
-      
+    //  var_dump($this->kardex_id,$this->kardex->monto);die();
+      //Le sumamos el monto actual, porque aun no graba
+     // $this->diferencia=$this->kardex->monto-($this->cancelado()+$this->monto);       
       return parent::beforeSave($insert);
   }  
   
   public function afterSave($insert, $changedAttributes) {
       $this->movBanco->refreshMonto();
+      if($insert){
+          $this->refreshAttachment();
+      }
       return parent::afterSave($insert, $changedAttributes);
   }
   
@@ -242,12 +246,53 @@ class SigiMovimientosPre extends \common\models\base\modelBase
   
   
   public function validate_monto_fraccionado($attribute,$params){
-      if($this->monto == 0 or $this->monto > ($this->movBanco->monto-$this->movBanco->montoConciliado()) )
-          $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento}',['monto_movimiento'=>$this->movBanco->monto,'monto'=>$this->monto]));
-      
+      if($this->isNewRecord){
+         if($this->monto > ($this->movBanco->monto-$this->movBanco->montoConciliado()))
+         $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento}',['monto_movimiento'=>$this->movBanco->monto,'monto'=>$this->monto]));
+                  
+      }else{
+          /*
+           * Si ya hay registro , loque debemos hacer es 
+           * restar al conciliado el valor del monto anterior y comparar recein
+           */
+          if($this->monto > ($this->movBanco->monto-($this->movBanco->montoConciliado()-$this->getOldAttribute('monto'))))
+         $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento} '.$this->getOldAttribute('monto'),['monto_movimiento'=>$this->movBanco->monto,'monto'=>$this->monto]));
+          
+      }
   }
+  /*
+   * Saca el monto acumulado para el kardex_id
+   */
+ public function cancelado(){
+    return  self::find()->select(['sum(monto)'])->andWhere(['kardex_id'=>$this->kardex_id])->scalar();
+ } 
   
+ /*
+  * Verifica que exista un voucher subido por
+  * el usuario en el modelo VwSigiKardex
+  * file[1],file[2]
+  * SI existe lo borra y lo adjunta al este modelo
+  */
+public function refreshAttachment(){
+  $kardex= $this->kardex; 
+  if($kardex->countFiles()>1){
+       /*yii::error('eL NOMBRE DEL ARCHIVO ES ',__FUNCTION__);
+        yii::error($kardex->files[1]->name,__FUNCTION__);*/
+     $this->attachFromPath($kardex->files[1]->path);
+       // yii::error($kardex->files[1]->path,__FUNCTION__);
+      $kardex->deleteFile($kardex->files[1]->id);
+     
+      Message::compose(h::userId(),
+              $kardex->unidad->idUser(),
+              'Se ha recibido el Voucher de '.\common\helpers\timeHelper::mes($kardex->mes).' ',
+               ' adjuntaste un Archivo que debe corresponder a un voucher de pago.'
+              . ' Este documento ya ha sido abierto por la administración, y está'
+              . ' en proceso de revisión. Muchas Gracias ');
+      return true;
+  }else{
+      return false;
+  }
+}
   
-  
-    
+
 }

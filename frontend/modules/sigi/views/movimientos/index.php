@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use common\widgets\spinnerWidget\spinnerWidget;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\modules\sigi\models\SigiMovimientosPreSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -11,7 +12,7 @@ $this->title = Yii::t('sigi.labels', 'Sigi Movimientos Pres');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sigi-movimientos-pre-index">
-
+<?PHP   ECHO spinnerWidget::widget();    ?>
     <h4><?= Html::encode($this->title) ?></h4>
     <div class="box box-success">
      <div class="box-body">

@@ -157,4 +157,76 @@ class PorpagarController extends baseController
      }
     
     }
+    
+   
+ public function actionCreaProgPago($id){
+    $this->layout = "install";
+    $modelMovBanco= \frontend\modules\sigi\models\SigiPorpagar::findOne($id);
+    if(is_null($modelMovBanco))
+     return ['success'=>2,'msg'=>'nada']; 
+          
+    $model= New \frontend\modules\sigi\models\SigiPropago([
+        'edificio_id'=>$modelMovBanco->edificio_id,
+         //'cuenta_id'=>$modelMovBanco->cuenta_id,
+        'porpagar_id'=>$modelMovBanco->id,
+        //'tipomov'=>'100',
+        'activo'=>true,
+        //'glosa'=>'PAGO DE CUOTA DE MANT'
+    ]);
+    //$model->setScenario($model::SCE_CONCILIACION_PAGO);
+           
+      $datos=[];
+        if(h::request()->isPost){
+          $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_progpago', [
+               'id'=>$id,
+                        'model' => $model,
+                'modelMovBanco'=> $modelMovBanco,
+               'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        ]);  
+        } 
+} 
+
+
+public function actionEditProgPago($id){
+    $this->layout = "install";
+    $model= \frontend\modules\sigi\models\SigiPropago::findOne($id);
+   // var_dump();
+    if(is_null($model))
+     return ['success'=>2,'msg'=>'nada']; 
+    //$model->setScenario($model::SCE_CONCILIACION_PAGO);
+           
+      $datos=[];
+        if(h::request()->isPost){
+          $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_progpago', [
+               'id'=>$id,
+                        'model' => $model,
+                //'modelMovBanco'=> $modelMovBanco,
+               'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        ]);  
+        } 
+}    
+    
+    
 }

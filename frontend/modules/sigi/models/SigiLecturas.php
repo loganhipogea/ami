@@ -464,7 +464,7 @@ class SigiLecturas extends \common\models\base\modelBase
        return $desviacion;
     }
     public function calificacionConsumo(){
-        $desviacion=$this->desviacionConsumo($this->id);
+        $desviacion=$this->desviacionConsumo();
        if( $desviacion > 10 ){
            return \common\helpers\colorHelper::GREEN;
        } elseif($desviacion < 30){

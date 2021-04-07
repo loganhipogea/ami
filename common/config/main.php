@@ -22,12 +22,12 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        /*'formatter' => [
+    'formatter' => [
         'class' => 'yii\i18n\Formatter',
         'nullDisplay' => '',
             'decimalSeparator' => '.',
-            'thousandSeparator' => ', ',
-          ],*/
+            'thousandSeparator' => ',',
+       ],
     ],
     
   /* 'as access' => [

@@ -1,6 +1,7 @@
 <?php
 use kartik\export\ExportMenu;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
@@ -19,7 +20,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Facturacione
      <div class="box-body">
          
          
-    <?php Pjax::begin(); ?>
+    <?php Pjax::begin(['id'=>'grilla_lecturas']); ?>
     <?php  echo $this->render('_searchLecturas', ['model' => $searchModel]); ?>
 
   <?php 
@@ -28,15 +29,41 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Facturacione
          
          [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}',
+                'template' => '{update}{attach}',
+             
                 'buttons' => [
-                    'update' => function($url, $model) {                        
+                     'attach' => function($url, $model) {  
+                         $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>true,
+                             'idModal'=>'imagemodal',
+                             'modelid'=>$model->id,
+                             'extension'=> \yii\helpers\Json::encode(['jpg','png','jpeg']),
+                             'nombreclase'=> str_replace('\\','_',get_class($model->registroLectura))]);
                         $options = [
-                            'title' => Yii::t('base.verbs', 'Update'),                            
+                            'title' => Yii::t('sta.labels', 'Subir Archivo'),
+                            'data-method' => 'get',
+                            //'data-pjax' => '0',
                         ];
-                        return Html::a('<span class="btn btn-info btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);
-                         },
-                          'view' => function($url, $model) {                        
+                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Adjuntar Voucher de pago', 'class' => 'botonAbre btn btn-danger']);
+                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
+                        },
+                   'update' => function($url, $model) {  
+                       $url= Url::to(['/sigi/unidades/edita-lectura','id'=>$model->id,'gridName'=>'grilla_lecturas','idModal'=>'buscarvalor']);
+                         $options = [
+                           'class'=>'botonAbre',
+                            //'title' => Yii::t('sta.labels', 'Editar'),
+                            //'aria-label' => Yii::t('rbac-admin', 'Activate'),
+                            //'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
+                            //'data-method' => 'get',
+                           // 'data-pjax' => '0',
+                             //'target'=>'_blank'
+                        ];
+                        //return Html::button('<span class="glyphicon glyphicon-pencil"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => ' btn btn-sm btn-success']);
+                       
+                         return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>',$url,$options);
+                     
+                        
+                        },
+                    'view' => function($url, $model) {                        
                         $options = [
                             'title' => Yii::t('base.verbs', 'View'),                            
                         ];

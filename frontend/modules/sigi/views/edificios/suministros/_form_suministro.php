@@ -63,25 +63,7 @@ use frontend\modules\sta\helpers\comboHelper;
      <?= $form->field($model, 'codum')->textInput(['maxlength' => true,'disabled' => true]) ?>
  </div>        
           
-   <?php
-echo \scotthuangzl\googlechart\GoogleChart::widget( array('visualization' => 'Gauge', 'packages' => 'gauge',
-                'data' => array(
-                    array('Label', 'Value'),
-                     array('M3',var_dump($model->lastRead())),
-                    
-                ),
-                'options' => array(
-                    'width' => 100,
-                    'height' => 120,
-                    'redFrom' => 90,
-                    'redTo' => 100,
-                    'yellowFrom' => 75,
-                    'yellowTo' => 90,
-                    'minorTicks' => 5
-                )
-            ));
-   ?>
-      
+  
           
      
     <?php ActiveForm::end(); ?>

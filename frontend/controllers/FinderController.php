@@ -61,6 +61,16 @@ class FinderController extends  \common\controllers\base\baseController
                         'class' => 'common\actions\ActionAudit',
                         //'property1' => 'value1',
                         //'property2' => 'value2',
+                            ],
+          'renderpdf'=> [
+                        'class' => 'common\actions\ActionRenderPdf',
+                        //'property1' => 'value1',
+                        //'property2' => 'value2',
+                            ],
+            'renderpdf'=> [
+                        'class' => 'common\actions\ActionPreview',
+                        //'property1' => 'value1',
+                        //'property2' => 'value2',
                             ]
       ];
       

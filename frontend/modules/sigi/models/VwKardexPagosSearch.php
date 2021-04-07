@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\modules\sigi\models;
-
+use common\helpers\h;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\modules\sigi\models\VwKardexPagos;
@@ -11,6 +11,7 @@ use frontend\modules\sigi\models\VwKardexPagos;
  */
 class VwKardexPagosSearch extends VwKardexPagos
 {
+    public $deudor=null;
     /**
      * {@inheritdoc}
      */
@@ -53,7 +54,7 @@ class VwKardexPagosSearch extends VwKardexPagos
             [  
                 // [['fecha', 'anio', 'codmon', 'numrecibo', 'detalles','numero','nombre','codtipo','desunidad','fecha1' ,'cancelado'], 'safe'],
                  [['facturacion_id',  'edificio_id', 'unidad_id'], 'integer'],
-                [['mes','anio','monto','nombre','edificio_id','unidad_id','numero','pagado','deuda' ], 'safe'],
+                [['mes','anio','monto','nombre','edificio_id','unidad_id','numero','pagado','fecha','fecha1','deudor' ,'deuda'], 'safe'],
                
             ];
     }
@@ -88,17 +89,40 @@ class VwKardexPagosSearch extends VwKardexPagos
         $this->load($params);
 
        
-//var_dump($this->edificio_id);die();
+
         // grid filtering conditions
         //$query;
 
         $query->andFilterWhere(['mes'=> $this->mes])     
-             ->andFilterWhere(['anio'=> $this->anio])    
-                ->andFilterWhere(['like', 'deuda', $this->deuda])
+             ->andFilterWhere(['anio'=> $this->anio])  
+                  ->andFilterWhere(['like','numero', $this->numero])  
+               // ->andFilterWhere(['like', 'deuda', $this->deuda])
             ->andFilterWhere(['like', 'pagado', $this->pagado])
                  ->andFilterWhere(['edificio_id'=> $this->edificio_id])
+                  ->andFilterWhere(['unidad_id'=> $this->unidad_id])
             ->andFilterWhere(['like', 'nombre', $this->nombre]);
-//echo $query->createCommand()->rawSql; die();
+        
+     if(!is_null($this->deudor)){
+            if($this->deudor=='1'){
+                $query->andWhere(['>','deuda',h::gsetting('sigi','montominimo_deudor')]); 
+                }else{
+                $query->andWhere(['<=','deuda',h::gsetting('sigi','montominimo_deudor')]); 
+   
+                }
+        }   
+        
+        
+        
+       if(!empty($this->fecha) && !empty($this->fecha1)){
+         $query->andFilterWhere([
+             'between',
+             'fecha',
+             $this->openBorder('fecha',true),
+             $this->openBorder('fecha1',true)
+                        ]);
+   }
+  /*var_dump($this->deudor,$params);
+echo $query->createCommand()->rawSql; die();*/
          // \yii::error($params,__FUNCTION__);
         //\yii::error($query->createCommand()->rawSql,__FUNCTION__);
         return $dataProvider;

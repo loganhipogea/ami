@@ -24,7 +24,7 @@ $model=$detalle->facturacion;
         <div style="position:absolute; padding:1px;border-style:none;top:5px; left:5px; ">
             <div style="float:right">
                 <?=Html::img('@web/sigi/logo_diar.jpg',['width'=>120,'height'=>120])?>
-      </div>
+            </div>
 
         </div>
     </div>
@@ -41,10 +41,10 @@ $model=$detalle->facturacion;
        font-weight:none;  color:#000; text-align:justify ">
    <?=$model->detalles?>
  </div>
- <div style=" left:301px;  top:71px;  font-size:16;  font-family:cour;  font-weight:bold;  color:#000; ">
+ <div style="position:absolute;  left:120x;  top:51px;  font-size:16;  font-family:cour;  font-weight:bold;  color:#000; ">
     <?=$model->edificio->nombre?>
  </div>
- <div style="  left:301px;  top:91px;  font-size:8;  font-family:arial;  font-weight:none;  color:#000; ">
+ <div style="position:absolute;   left:120px;  top:71px;  font-size:8;  font-family:arial;  font-weight:none;  color:#000; ">
       <?=$model->edificio->direccion?>
  </div>
  <div style=" position:absolute;  left:51px;  top:108px;  font-size:14;  font-family:arial;  font-weight:bold;  color:#F72; ">
@@ -65,7 +65,7 @@ $model=$detalle->facturacion;
    <?php
      if(!$detalle->resumido){     
          $areas= $detalle->unidad->arrayParticipaciones();     
-        
+        //yii::error( $areas,__FUNCTION__);
         }else{
            
             $Aareas= VwSigiFacturecibo::find()->select(['nombre','numero','area','participacion'])->distinct()->andWhere(['kardex_id'=>$detalle->kardex_id,'resumido'=>'1'])->asArray()->all();

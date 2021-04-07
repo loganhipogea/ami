@@ -86,6 +86,20 @@ use frontend\modules\sigi\helpers\comboHelper;
      <?= $form->field($model, 'facturable')->checkbox(['disabled'=>$esFacturado,]) ?>
 
  </div>
+ <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <?php 
+        
+            if($model->hasAttachments()){
+             echo \yii\helpers\Html::img($model->files[0]->url,['width'=>300,'height'=>300]);
+            }
+     ?>
+ 
+
+ </div>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    
+
+ </div>
 
      
     <?php ActiveForm::end(); ?>

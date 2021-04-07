@@ -209,6 +209,16 @@ class DefaultController extends Controller
        
             }
    }
- 
+   
+ public function actionAjaxShowLectura(){
+     if(h::request()->isAjax){
+        $id=h::request()->post('expandRowKey');
+       // var_dump(h::request()->post(),$id);die();
+         //h::response()->format = \yii\web\Response::FORMAT_JSON;
+        $model= \frontend\modules\sigi\models\SigiLecturas::findOne($id);
+        return $this->renderAjax("_expand_row_image_lectura",['model'=>$model]);
+       
+            }
+   }  
    
 }

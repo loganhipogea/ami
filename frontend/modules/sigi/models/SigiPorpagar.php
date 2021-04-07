@@ -61,7 +61,7 @@ class SigiPorpagar extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codocu', 'edificio_id',  'monto',  'codpresup',  'glosa', 'fechadoc','codmon'], 'required'],
+            [['codocu', 'edificio_id',  'monto','cargoedificio_id',   'glosa', 'fechadoc','codmon'], 'required'],
             [['edificio_id', 'unidad_id'], 'integer'],
             [['monto', 'igv', 'monto_usd'], 'number'],
             [['detalle'], 'string'],
@@ -236,10 +236,15 @@ public function scenarios() {
      */
     
      
-    public function hasPrograma(){
-        
+    public function hasPrograma(){        
         return $this->getProgramaPagos()
                 ->andWhere(['codestado'=> SigiPropago::estadosValidos()])->
                 exists();
     }
+    
+     public function montoConciliado(){
+      // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
+        return $this->getProgramaPagos()->select(['sum(monto)'])->scalar();
+    }
+    
 }

@@ -1,48 +1,61 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use kartik\tabs\TabsX;
 
+
+/* @var $this yii\web\View */
+/* @var $model frontend\modules\sta\models\Talleres */
+ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiKardexdepa */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Sigi Kardexdepas'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+$this->title = Yii::t('app', 'Visualizar kardex: {name}', [
+    'name' => $model->id,
+    
+]);
 ?>
-<div class="sigi-kardexdepa-view">
-
-    <h4><?= Html::encode($this->title) ?></h4>
-
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'facturacion_id',
-            'operacion_id',
-            'edificio_id',
-            'unidad_id',
-            'mes',
-            'fecha',
-            'anio',
-            'codmon',
-            'numerorecibo',
-            'monto',
-            'igv',
-            'detalles:ntext',
+<div class="sigi-kardexdepa-update">
+<h4><i class="fa fa-edit"></i><?= Html::encode($this->title) ?></h4>
+   
+    <div class="box box-success">
+    
+    <?php echo TabsX::widget([
+    'position' => TabsX::POS_ABOVE,
+     'bordered'=>true,
+    'align' => TabsX::ALIGN_LEFT,
+      'encodeLabels'=>false,
+    'items' => [
+        [
+          'label'=>'<i class="fa fa-home"></i> '.yii::t('sta.labels','Principal'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_form_view',['model' => $model,'visualizar'=>true]),
+            'active' => true,
+             'options' => ['id' => 'myveryownID3'],
         ],
-    ]) ?>
+        [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Documentos'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_segunda',[ 'model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'myveryownID4'],
+        ],
+        [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Pagos'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_pagos',[ 'model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'myvXDEyownID4'],
+        ],
+        [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Detalle'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_detalle',['model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'yownID4'],
+        ],
+       
+    ],
+]);  
 
-</div>
+?>
+        
+            
+        </DIV>
+</DIV>
