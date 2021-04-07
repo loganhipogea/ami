@@ -14,7 +14,7 @@ class m191224_162617_create_permissOIn_models extends baseMigration
      const NAME_TABLE_PERIODOS='{{%sta_periodos}}';*/
     public function safeUp()
     {
-       $table=static::NAME_TABLE;
+       /*$table=static::NAME_TABLE;
 if(!$this->existsTable($table)) {
     $this->createTable($table,  [
          'id'=>$this->primaryKey(),
@@ -24,15 +24,17 @@ if(!$this->existsTable($table)) {
         'activo'=>$this->char(1)->append($this->collateColumn())->notNull(),
         ],$this->collateTable());
   
-            } 
+            } */
+        return true;
  }
 
 public function safeDown()
     {
-     $table=static::NAME_TABLE;
+     /*$table=static::NAME_TABLE;
        if($this->existsTable($table)) {
             $this->dropTable($table);
-        }
+        }*/
+    return true;
 
     }
 

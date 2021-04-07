@@ -56,9 +56,7 @@ return [
             'class' => 'frontend\modules\sigi\Module',
         ],
       
-        'sta' => [
-            'class' => 'frontend\modules\sta\staModule',
-        ],
+        
                 'noty' => [
                 'class' => 'lo\modules\noty\Module',
             ],

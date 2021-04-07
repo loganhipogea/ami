@@ -6,11 +6,11 @@ use yii\db\Migration;
  */
 class M200226142920CreateTableMensajes extends baseMigration
 {   
- const NAME_TABLE='{{%mensajes}}';
+const NAME_TABLE='{{%mensajes}}';
  const NAME_TABLE_DOCUMENTOS='{{%documentos}}';
     public function safeUp()
     {
-       
+    /*   
  $table=static::NAME_TABLE;
 if(!$this->existsTable($table)) {
     $this->createTable($table, [
@@ -25,7 +25,8 @@ if(!$this->existsTable($table)) {
              ],$this->collateTable());
          $this->addForeignKey($this->generateNameFk($table), $table,
               'codocu', static::NAME_TABLE_DOCUMENTOS,'codocu');
-           }
+           }*/
+        return true;
     
     }
 
@@ -35,10 +36,11 @@ if(!$this->existsTable($table)) {
      */
     public function safeDown()
     {
-        $table=static::NAME_TABLE; 
+       /* $table=static::NAME_TABLE; 
        if ($this->existsTable($table)){
             $this->dropTable($table);
-        }
+        }*/
+        return true;
 
     }
 }

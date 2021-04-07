@@ -15,7 +15,7 @@ class M191207193142PruebaMenu extends baseMigration
          /** Agregando una columna a la tabla Direcciones
          * con su respectiva llave foranes
          */
-        $table=static::NAME_TABLE;
+       /* $table=static::NAME_TABLE;
         //var_dump($table);die();
       if($this->existsTable($table)) {
           if(!$this->existsColumn($table,'icon')){         
@@ -27,9 +27,9 @@ class M191207193142PruebaMenu extends baseMigration
         (new \yii\db\Query)
     ->createCommand()->update($table, ['icon' => 'circle'],'id >0')->execute();
    
-      }
+      }*/
         
-            
+        return true;    
     }
 
     /**
@@ -37,10 +37,11 @@ class M191207193142PruebaMenu extends baseMigration
      */
     public function safeDown()
     {
-       $table=static::NAME_TABLE;
+      /* $table=static::NAME_TABLE;
         if($this->existsColumn($table,'icon')){ 
             $this->dropColumn($table,'icon');
-        }
+        }*/
+        return true;
        
        
     }
