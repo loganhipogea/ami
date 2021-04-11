@@ -255,7 +255,7 @@ public static function deleteDirectory($dir,$preserve=false) {
 }
 
 
-public function fileName($ruta,$extension=false){
+public static function fileName($ruta,$extension=false){
 $partes_ruta = pathinfo($ruta);
 $ext=($extension)?$partes_ruta['extension']:'';
 
