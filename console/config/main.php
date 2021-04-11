@@ -108,9 +108,6 @@ return [
           ],
     ],
     'components' => [
-        'request' => [
-   //'enableCookieValidation' => 'eret'
-                ],
         
         
         'cache' => [
