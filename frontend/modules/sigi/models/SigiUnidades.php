@@ -660,9 +660,14 @@ public function lastTransferencia(){
 }
 
 public function hasUser(){
- $hallo=\common\helpers\h::user()->identity->findByUsername($this->generateUsername());
+ $hallo=$this->obtenerUsuario();
+ //yii::error($hallo,__FUNCTION__);
   return is_null($hallo)?false:true;
  
+}
+
+public function obtenerUsuario(){
+    return \common\helpers\h::user()->identity->findByUsername($this->generateUsername());
 }
 
 public function generateUsername(){

@@ -485,14 +485,23 @@ class Edificios extends \common\models\base\modelBase
     YII::ERROR($rol,__FUNCTION__);
      die();*/
      $unidades=$this->unidadesImputablesPadres();
+    //YII::ERROR(COUNT($unidades),__FUNCTION__);
+    
     foreach($unidades as $unidad){ 
+        // YII::ERROR($unidad->nombre,__FUNCTION__);
+        // YII::ERROR($unidad->hasUser(),__FUNCTION__);
+        $currentProp=$unidad->currentPropietario();
+      if(!is_null($currentProp)){
+          $correo=$currentProp->correo;
        if(!$unidad->hasUser()){
-               $currentProp=$unidad->currentPropietario();
-        if(!is_null($currentProp)){
-            $correo=$currentProp->correo;
-            //yii::error($correo);
+           //YII::ERROR('no tiene usuario',__FUNCTION__);
+               
+        
+             YII::ERROR(' tiene propietario',__FUNCTION__);
+            
+            yii::error($correo);
            if(!empty($correo)){
-               //yii::error('paso');
+               yii::error('paso');
            
        $usuario= new \frontend\modules\sigi\models\users\SignupForm();
     
@@ -534,10 +543,19 @@ class Edificios extends \common\models\base\modelBase
        
        
        
-      unset($usuario);
-        } 
+                 unset($usuario);
+                } 
+        }else{//si ya tiene usuario
+          if(!is_null($user=$unidad->obtenerUsuario())){              
+       SigiUserEdificios::insertUserEdificio($user->id, $this->id);
+          } 
         }
-       }      
+        
+        
+        
+       }    else{
+           
+       }  
        //die();
     }    
  }

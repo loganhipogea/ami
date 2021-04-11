@@ -19,7 +19,7 @@ use dosamigos\chartjs\ChartJs;
         'id'=>'migrilla',
         'dataProvider' =>NEW 
         \yii\data\ActiveDataProvider([
-            'query'=> frontend\modules\sigi\models\SigiKardexDepa::find()->andWhere(['unidad_id'=>$unidad->id]),
+            'query'=> frontend\modules\sigi\models\SigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id]),
         ]),
          'summary' => '',
          //'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
@@ -196,7 +196,12 @@ $.pjax.reload({container: '#grilla-deudas-pagos-'+key});
        ?>  
     
     <?php Pjax::end(); ?>
-   <?php $lecturas=$medidor->lastReads(true);?>
+   <?php
+   if(!is_null($medidor)){
+   $lecturas=$medidor->lastReads(true);
+   
+   
+   ?>
     <h4>Consumo de agua potable</h4>
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 
@@ -402,7 +407,7 @@ Pjax::begin(['id'=>'grilla-deudasvfg']);
      Pjax::end();        
              ?>
     
-
+   <?php }   ?>
 </div>
 
 
