@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\modules\sigi\models\SigiPorpagar;
 USE common\models\masters\Clipro;
+use yii\db\Expression;
 
 /**
  * SigiPorpagarSearch represents the model behind the search form of `\frontend\modules\sigi\models\SigiPorpagar`.
@@ -19,7 +20,7 @@ class SigiPorpagarSearch extends SigiPorpagar
     {
         return [
             [['id', 'edificio_id', 'unidad_id'], 'integer'],
-            [['codocu', 'codpresup', 'glosa', 'fechadoc', 'codestado', 'detalle'], 'safe'],
+            [['codocu', 'codpresup', 'glosa', 'fechadoc','fechadoc1','monto','monto1', 'codestado', 'detalle'], 'safe'],
             [['monto', 'igv', 'monto_usd'], 'number'],
         ];
     }
@@ -66,7 +67,7 @@ public function getClipro()
             'id' => $this->id,
             'edificio_id' => $this->edificio_id,
             'unidad_id' => $this->unidad_id,
-            'monto' => $this->monto,
+           // 'monto' => $this->monto,
             'igv' => $this->igv,
             'monto_usd' => $this->monto_usd,
         ]);
@@ -74,10 +75,26 @@ public function getClipro()
         $query->andFilterWhere(['like', 'codocu', $this->codocu])
             ->andFilterWhere(['like', 'codpresup', $this->codpresup])
             ->andFilterWhere(['like', 'glosa', $this->glosa])
-            ->andFilterWhere(['like', 'fechadoc', $this->fechadoc])
+            //->andFilterWhere(['like', 'fechadoc', $this->fechadoc])
             ->andFilterWhere(['like', 'codestado', $this->codestado])
             ->andFilterWhere(['like', 'detalle', $this->detalle]);
 
+         if(!empty($this->fechadoc) && !empty($this->fechadoc1)){
+         $query->andFilterWhere([
+             'between',
+             'fechadoc',
+             $this->openBorder('fechadoc',false),
+             $this->openBorder('fechadoc1',true)
+                        ]);  
+            } 
+         if(!empty($this->monto) && !empty($this->monto1)){
+         $query->andFilterWhere([
+             'between',
+             'monto',
+             $this->monto-0.0001,
+             $this->monto1+0.0001,
+                        ]);  
+            }
         return $dataProvider;
     }
 }

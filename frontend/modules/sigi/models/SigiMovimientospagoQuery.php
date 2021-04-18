@@ -1,13 +1,13 @@
 <?php
 
 namespace frontend\modules\sigi\models;
-use frontend\modules\sigi\components\ActiveQueryMovPagos;
+
 /**
- * This is the ActiveQuery class for [[VwKardexPagos]].
+ * This is the ActiveQuery class for [[SigiMovimientospago]].
  *
- * @see VwKardexPagos
+ * @see SigiMovimientospago
  */
-class VwKardexPagosQuery extends ActiveQueryMovPagos
+class SigiMovimientospagoQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class VwKardexPagosQuery extends ActiveQueryMovPagos
 
     /**
      * {@inheritdoc}
-     * @return VwKardexPagos[]|array
+     * @return SigiMovimientospago[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class VwKardexPagosQuery extends ActiveQueryMovPagos
 
     /**
      * {@inheritdoc}
-     * @return VwKardexPagos|array|null
+     * @return SigiMovimientospago|array|null
      */
     public function one($db = null)
     {

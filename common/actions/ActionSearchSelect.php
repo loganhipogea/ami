@@ -52,7 +52,7 @@ class ActionSearchSelect extends \yii\base\Action
               }
               
               IF(count($filterWhere)>0)
-                  $query->andWhere( \yii\helpers\Json::encode($filterWhere));
+                  $query->andWhere($filterWhere);
               yii::error($query->createCommand()->getRawSql());
              $resultados= $query->asArray()->all();            
          }         

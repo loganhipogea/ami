@@ -284,9 +284,25 @@ public function actionEditMovBanco($id){
 public function actionAjaxShowConc(){
      if(h::request()->isAjax){
         $id=h::request()->post('expandRowKey');
+        $model= \frontend\modules\sigi\models\SigiMovbanco::findOne($id);
+        IF(is_null($model)){
+            echo "No se encontr´ningún movimiento bancario para este id";
+            die();
+        }
+        
+        
+        
+        if($model->tipoMov->isCobranza){
+             return $this->renderAjax("_expand_row_detalle_conc",['id'=>$id]);
+        }elseif($model->tipoMov->isPago){
+             return $this->renderAjax("_expand_row_detalle_conc_pagos",['id'=>$id]);
+      
+        }else{
+            echo "Este movimiento no es conciliable";
+        }
        // var_dump(h::request()->post(),$id);die();
          //h::response()->format = \yii\web\Response::FORMAT_JSON;
-        return $this->renderAjax("_expand_row_detalle_conc",['id'=>$id]);
+       
        
             }
    }  
@@ -423,4 +439,118 @@ public function actionUnAprobePago($id){
         }
    }
 
+   
+ public function actionCreaPago($id){
+    $this->layout = "install";
+    $modelMovBanco= \frontend\modules\sigi\models\SigiMovbanco::findOne($id);
+    if(is_null($modelMovBanco))
+     return ['success'=>2,'msg'=>'nada']; 
+          
+    $model= New \frontend\modules\sigi\models\SigiMovimientospago([
+        'edificio_id'=>$modelMovBanco->edificio_id,
+         'cuenta_id'=>$modelMovBanco->cuenta_id,
+        'idop'=>$modelMovBanco->id,
+        'tipomov'=>'500',
+        'activo'=>false,
+        //'glosa'=>'PAGO DE CUOTA DE MANT'
+    ]);
+    $model->setScenario($model::SCE_CONCILIACION_PAGO);
+           
+      $datos=[];
+        if(h::request()->isPost){
+          $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_conciliacion_pago', [
+               'id'=>$id,
+                        'model' => $model,
+                'modelMovBanco'=> $modelMovBanco,
+               'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        ]);  
+        } 
+} 
+
+
+public function actionEditPago($id){
+    $this->layout = "install";
+    $model= \frontend\modules\sigi\models\SigiMovimientosPago::findOne($id);
+    if(is_null($model))
+     return ['success'=>2,'msg'=>'nada']; 
+    $model->setScenario($model::SCE_CONCILIACION_PAGO);
+           
+      $datos=[];
+        if(h::request()->isPost){
+          $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_conciliacion_pago', [
+               'id'=>$id,
+                        'model' => $model,
+                //'modelMovBanco'=> $modelMovBanco,
+               'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        ]);  
+        } 
+} 
+   
+  
+public function actionAprobePagoSi($id){
+   
+         
+        if(h::request()->isAjax){
+          
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $model= \frontend\modules\sigi\models\SigiMovimientospago::findOne($id);
+           if(is_null($model)){
+                return ['error'=>yii::t('sta.labels','No se encontró el registro')];  
+           }else{
+               $model->activo=true;
+               $model->save();
+               return ['success'=>yii::t('sta.labels','Se aprobó el pago del recibo')];   
+           }
+        }
+   }
+public function actionUnAprobePagoSi($id){
+   
+         
+        if(h::request()->isAjax){
+          
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $model= \frontend\modules\sigi\models\SigiMovimientospago::findOne($id);
+           if(is_null($model)){
+                return ['error'=>yii::t('sta.labels','No se encontró el registro')];  
+           }else{
+               /*
+                * Verificando primero que no tenga registros facturaciones 
+                * en el siguiente mes. Si los tiene ya no se podría dar marcha atras
+                */
+              // if(!$model->kardex->facturacion->hasNextFacturacionWithDetail()){
+                    $model->activo=false;
+                   if(!$model->save())
+                     return ['error'=>yii::t('sta.labels',$model->getFirstError())]; 
+                    return ['warning'=>yii::t('sta.labels','Se desaprobó el pago')]; 
+               //}else{
+                  // return ['error'=>yii::t('sta.labels','Ya no puede deshacer este registro, existe una facturacion del mes siguiente que depende de este valor')];  
+               }
+                
+           }
+        }
+   
+
+   
 }

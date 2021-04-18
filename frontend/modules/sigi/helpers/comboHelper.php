@@ -284,7 +284,12 @@ class comboHelper extends Combito
          */ return $combo; 
     }
     
-    
+  public static function getCboTipoMov(){
+  return ArrayHelper::map(
+                  \frontend\modules\sigi\models\SigiTipomov::find()
+                  ->all(),
+                'codigo','descripcion');
+    }  
     
 }
 

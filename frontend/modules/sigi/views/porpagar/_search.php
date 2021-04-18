@@ -1,5 +1,6 @@
 <?php
 use kartik\datetime\DateTimePicker;
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -29,7 +30,7 @@ use common\helpers\h;
         <?= Html::submitButton("<span class='fa fa-search'></span>     ".Yii::t('sta.labels', 'buscar'), ['class' => 'btn btn-primary']) ?>
          <?php // Html::resetButton("<span class='fa fa-eye'></span>     ".Yii::t('sta.labels', 'Limpiar'), ['class' => 'btn btn-success']) ?>
        <?php // Html::button("<span class='fa fa-eye'></span>     ".Yii::t('sta.labels', 'Ver'), ['onClick'=>"$('#buscador').toggle()",  'class' => 'btn btn-success']) ?>
-         <?= Html::a(Yii::t('sigi.labels', 'Crear documento'), ['create'], ['class' => 'btn btn-success']) ?>
+         <?= Html::a(Yii::t('sigi.labels', 'Crear documento'), ['create'], ['data-pjax'=>'0','class' => 'btn btn-success']) ?>
     
     </div>
      </div>
@@ -53,43 +54,37 @@ use common\helpers\h;
              ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
              ) ?>
  </div>  
- <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+ <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
      <?= $form->field($model, 'edificio_id')->dropDownList(
  comboHelper::getCboEdificios(),
              ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
              ) ?>
  </div> 
     
-     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-      <?= $form->field($model, 'codmon')->dropDownList(
- comboHelper::getCboMonedas(),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
-             ) ?>
-
- </div>
-  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'monto')->textInput(['maxlength' => true]) ?>
-
- </div>
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'monto1')->textInput(['maxlength' => true]) ?>
-
- </div>
- <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
      <?= $form->field($model, 'glosa')->textInput(['maxlength' => true]) ?>
 
  </div>
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'monto')->textInput(['maxlength' => true]) ?>
+
+ </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'monto1')->textInput(['maxlength' => true]) ?>
+
+ </div>
+ 
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
       <?php 
       
         echo $form->field($model, 'fechadoc')->widget(
-        DateTimePicker::classname(), [
+        DatePicker::classname(), [
          'name' => 'fechadoc',
             'language' => h::app()->language,
             'options' => ['placeholder' =>yii::t('sta.labels', '--Seleccione un valor--')],
     //'convertFormat' => true,
                 'pluginOptions' => [
-                'format' => h::getFormatShowDateTime(),
+                'format' => h::getFormatShowDate(),
                 //'startDate' => '01-Mar-2014 12:00 AM',
                 'todayHighlight' => true
                                 ]
@@ -99,19 +94,18 @@ use common\helpers\h;
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
       <?php 
         echo $form->field($model, 'fechadoc1')->widget(
-        DateTimePicker::classname(), [
+        DatePicker::classname(), [
          'name' => 'fechadoc1',
             'options' => ['placeholder' =>yii::t('sta.labels', '--Seleccione un valor--')],
     //'convertFormat' => true,
                 'pluginOptions' => [
-                'format' => h::getFormatShowDateTime(),
+                'format' => h::getFormatShowDate(),
                 //'startDate' => '01-Mar-2014 12:00 AM',
                 'todayHighlight' => true
                                 ]
                     ]);
                 ?>
-  </div>   
-    
+  </div> 
   
  
    

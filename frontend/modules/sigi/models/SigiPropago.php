@@ -26,6 +26,11 @@ class SigiPropago extends \common\models\base\modelBase
     const ESTADO_PAGADO='20';
     const SCE_AUTO='auto';
     const SCE_ESTADO='estado';
+     public $dateorTimeFields=[
+        'fechaprog'=>self::_FDATE,
+        // 'fechadoc'=>self::_FDATE,
+        // 'fechadoc1'=>self::_FDATE
+    ];
      public $booleanFields=['activo'];
     /**
      * {@inheritdoc}
@@ -54,7 +59,7 @@ class SigiPropago extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['porpagar_id', 'edificio_id', 'fechaprog',], 'required'],
+            [['porpagar_id', 'edificio_id', 'fechaprog','monto'], 'required'],
             [['porpagar_id', 'edificio_id'], 'integer'],
             [['cuenta_id'], 'safe'],
            [['monto'], 'validate_monto_fraccionado'],

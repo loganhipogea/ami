@@ -32,8 +32,13 @@ class SigiMovimientosPre extends \common\models\base\modelBase
    const SCE_CREACION_BASICA='basico';
     const SCE_STATUS='status';
     const SCE_CONCILIACION_PAGO='fraccion';
+    const G_GRUPO_INGRESOS='C';//Cobranzas
+    const G_GRUPO_EGRESOS='P';//Pagos
+    const MOV_PAGOS='10';
+     
+     const MOV_COBROS='50';
    
-    public $booleanFields=['activo'];
+    public $booleanFields=['activo','ingreso'];
     public $dateorTimeFields = [
         'fechaop' => self::_FDATE,
        'fechaprog' => self::_FDATE,
@@ -43,6 +48,13 @@ class SigiMovimientosPre extends \common\models\base\modelBase
    public $monto_fraccionado=0;
     
     
+   public static function movimientos(){
+       return [
+           
+       ];
+   }
+   
+   
     /**
      * {@inheritdoc}
      */
@@ -78,6 +90,14 @@ class SigiMovimientosPre extends \common\models\base\modelBase
              'activo','kardex_id','diferencia'
               
               ];
+          
+          $scenarios[self::SCE_CONCILIACION_PAGO] = [
+              'monto_fraccionado',
+              'edificio_id', 'cuenta_id',
+            'tipomov', 'glosa', 'monto',
+             'activo','kardex_id','diferencia'
+              
+              ];
        /* $scenarios[self::SCENARIO_ASISTIO] = ['asistio'];
         $scenarios[self::SCENARIO_PSICO] = ['codtra'];
         $scenarios[self::SCENARIO_ACTIVO] = ['activo'];
@@ -96,8 +116,9 @@ class SigiMovimientosPre extends \common\models\base\modelBase
            // [['monto'],'required', 'except'=>self::SCE_CONCILIACION_PAGO],
             [['monto', 'igv', 'monto_usd'], 'number'],
            // [['fechaop'], 'string', 'max' => 10],
-            [['kardex_id','monto','diferencia'], 'safe'],
+            [['kardex_id','monto','diferencia','ingreso'], 'safe'],
          
+             [['monto'], 'validate_monto'],
             
             [['monto'], 'validate_monto_fraccionado','on'=>self::SCE_CONCILIACION_PAGO],
             [['kardex_id'], 'required','on'=>self::SCE_CONCILIACION_PAGO],
@@ -224,6 +245,13 @@ class SigiMovimientosPre extends \common\models\base\modelBase
       IF(empty($this->fechaop))$this->fechaop=
       self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
       $this->sincronizeStatus($insert);
+      
+      if($insert && $this->movBanco->tipoMov->isCobranza){
+          $this->ingreso=self::G_GRUPO_INGRESOS;
+      }
+      if($insert && $this->movBanco->tipoMov->isPago){
+          $this->ingreso=self::G_GRUPO_EGRESOS;
+      }
     //  var_dump($this->kardex_id,$this->kardex->monto);die();
       //Le sumamos el monto actual, porque aun no graba
      // $this->diferencia=$this->kardex->monto-($this->cancelado()+$this->monto);       
@@ -294,5 +322,13 @@ public function refreshAttachment(){
   }
 }
   
+public function validate_monto($attribute,$params){
+    if(($this->movBanco->tipoMov->signo > 0 && $this->movBanco->monto < 0) or
+     ($this->movBanco->tipoMov->signo < 0 && $this->movBanco->monto > 0) )
+      $this->addError($attribute,yii::t('base.labels','{monto} Este monto no tiene el signo que corresponde al movimiento',['monto'=>$this->monto]));
+    
+  }
+  
+
 
 }

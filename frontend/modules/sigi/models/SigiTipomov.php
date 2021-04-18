@@ -1,44 +1,29 @@
 <?php
-
 namespace frontend\modules\sigi\models;
-
 use Yii;
-
-/**
- * This is the model class for table "{{%sigi_tipomov}}".
- *
- * @property string $codigo
- * @property string $descripcion
- *
- * @property SigiMovimientos[] $sigiMovimientos
- */
 class SigiTipomov extends \common\models\base\modelBase
 {
     const TIPOMOV_DEFAULT='100';
     /**
      * {@inheritdoc}
      */
+    public $booleanFields=['conciliable'];
     public static function tableName()
     {
         return '{{%sigi_tipomov}}';
     }
-
-    /**
-     * {@inheritdoc}
-     */
+    
     public function rules()
     {
         return [
             [['codigo'], 'required'],
+           
             [['codigo'], 'string', 'max' => 3],
             [['descripcion'], 'string', 'max' => 40],
             [['codigo'], 'unique'],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -47,10 +32,7 @@ class SigiTipomov extends \common\models\base\modelBase
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSigiMovimientos()
+     public function getSigiMovimientos()
     {
         return $this->hasMany(SigiMovimientosPre::className(), ['tipomov' => 'codigo']);
     }
@@ -63,6 +45,17 @@ class SigiTipomov extends \common\models\base\modelBase
     {
         return new SigiTipomovQuery(get_called_class());
     }
+    
+    public function getIsCobranza(){
+        return $this->conciliable && $this->signo > 0;
+    }
+    
+    public function getIsPago(){
+        return $this->conciliable && $this->signo < 0;
+    }
+    
+    
+    
     
     
 }

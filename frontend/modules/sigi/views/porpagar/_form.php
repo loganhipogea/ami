@@ -25,15 +25,7 @@ use common\helpers\h;
                 
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Save'), ['class' => 'btn btn-success']) ?>
           <?=(!$model->isNewRecord)?Html::button('<span class="fa fa-money"></span>   '.Yii::t('sta.labels', 'Programar Pago'), ['class' => 'btn btn-warning','href' => '#','id'=>'btn-programa-pago']):''?>   
-             <?php  
-                $url= Url::to(['/sigi/porpagar/crea-prog-pago','id'=>$model->id,'gridName'=>'grilla-pagos-programados','idModal'=>'buscarvalor']);
-                         $options = [
-                           'class'=>'botonAbre btn btn-success',
-                            'data-pjax' => '0',
-                        ];
-                        echo Html::a('<span class="fa fa-cut"></span>'.'Agregar movimiento',$url,$options);
-                     
-             ?> 
+             
             </div>
         </div>
     </div>
@@ -98,7 +90,7 @@ use common\helpers\h;
  </div>
   
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'monto')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'monto')->textInput(['maxlength' => true,'disabled'=>$model->hasChilds()]) ?>
 
   </div>
  <div class="col-lg-6 col-md-8 col-sm-6 col-xs-12">
@@ -147,7 +139,7 @@ use common\helpers\h;
                                ],
                            
                             //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control']
+                            'options'=>['class'=>'form-control','disabled'=>$model->hasChilds()]
                             ]) ?>
 </div>
           

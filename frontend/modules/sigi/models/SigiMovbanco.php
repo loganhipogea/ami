@@ -1,7 +1,5 @@
 <?php
-
 namespace frontend\modules\sigi\models;
-
 use Yii;
 
 /**
@@ -50,14 +48,16 @@ class SigiMovbanco extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['cuenta_id', 'edificio_id', 'fopera', 'monto'], 'required'],
+            [['cuenta_id', 'edificio_id', 'fopera', 'monto','tipomov'], 'required'],
             [['cuenta_id', 'edificio_id', 'noper'], 'integer'],
             [['monto'], 'number'],
+             [['monto'],'validate_monto'],
              [['tipomov','cuenta_id','monto','descripcion','monto_conciliado','diferencia'], 'safe'],
             //[['fopera', 'fval'], 'string', 'max' => 10],
             [['descripcion'], 'string', 'max' => 30],
             [['cuenta_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCuentas::className(), 'targetAttribute' => ['cuenta_id' => 'id']],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
+             [['tipomov'], 'exist', 'skipOnError' => true, 'targetClass' => SigiTipomov::className(), 'targetAttribute' => ['tipomov' => 'codigo']],
         ];
     }
 
@@ -102,6 +102,10 @@ class SigiMovbanco extends \common\models\base\modelBase
         return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
     }
 
+     public function getTipoMov()
+    {
+        return $this->hasOne(SigiTipomov::className(), ['codigo' => 'tipomov']);
+    }
     /**
      * {@inheritdoc}
      * @return SigiMovbancoQuery the active query used by this AR class.
@@ -118,20 +122,39 @@ class SigiMovbanco extends \common\models\base\modelBase
     {
         return $this->hasMany(SigiMovimientosPre::className(), ['idop' => 'id']);
     }
+    
+    
+    public function getMovimientosDetallePago()
+    {
+        return $this->hasMany(SigiMovimientosPago::className(), ['idop' => 'id']);
+    }
     /*
      * Suma los montos conciliados con 
      * elrecibo del kardex, mediante la tabla SigiMovimientosPre
      */
     public function montoConciliado(){
       // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
-        return $this->getMovimientosDetalle()->select(['sum(monto)'])->scalar();
+        if($this->tipoMov->isCobranza){
+            return $this->getMovimientosDetalle()->select(['sum(monto)'])->scalar();
+        }elseif($this->tipoMov->isPago){
+           return $this->getMovimientosDetallePago()->select(['sum(monto)'])->scalar(); 
+        }else{
+            
+        }
+        
     }
     
     public function refreshMonto(){
-         if($this->tipomov==self::TIPO_MOVIMIENTO_COBRANZA){
-        $this->monto_conciliado=$this->montoConciliado();
-        $this->diferencia=$this->monto-$this->monto_conciliado;
-        $this->updateAll(['diferencia'=>$this->monto-$this->monto_conciliado],
+         if($this->tipoMov->conciliable){
+             //echo "salio"; die();
+                $this->monto_conciliado=$this->montoConciliado();
+                //var_dump($this->monto_conciliado);die();
+                $this->diferencia=$this->monto-$this->monto_conciliado;
+                /*Update All para no despertar el disparador*/
+                $this->updateAll([
+                    'diferencia'=>$this->monto-$this->monto_conciliado,
+                    'monto_conciliado'=>$this->monto_conciliado,
+                        ],
                 ['id'=>$this->id]);
          }
       // return $this->save();
@@ -151,4 +174,12 @@ class SigiMovbanco extends \common\models\base\modelBase
       
       return parent::beforeSave($insert);
   }
+  
+  public function validate_monto($attribute,$params){
+    if(($this->tipoMov->signo > 0 && $this->monto < 0) or
+     ($this->tipoMov->signo < 0 && $this->monto > 0) )
+      $this->addError('monto',yii::t('base.labels','{monto} Este monto no tiene el signo que corresponde al movimiento',['monto'=>$this->monto]));
+    
+   
+  } 
 }

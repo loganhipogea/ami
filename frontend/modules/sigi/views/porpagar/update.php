@@ -50,4 +50,5 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');
        
     ],
 ]);  
-
+?>
+</div> </div>

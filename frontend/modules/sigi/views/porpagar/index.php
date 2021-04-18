@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'update' => function($url, $model) {                        
                         $options = [
+                              'data-pjax'=>'0',
                             'title' => Yii::t('base.verbs', 'Update'),                            
                         ];
                         return Html::a('<span class="btn btn-info btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);

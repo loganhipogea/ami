@@ -37,7 +37,7 @@ class SigiPorpagar extends \common\models\base\modelBase
     public $dateorTimeFields=[
         'fechaprog'=>self::_FDATE,
          'fechadoc'=>self::_FDATE,
-        //'ftermino'=>self::_FDATETIME
+         'fechadoc1'=>self::_FDATE
     ];
     public $fechadoc1=null;
     public $monto1=null;
@@ -61,7 +61,7 @@ class SigiPorpagar extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codocu', 'edificio_id',  'monto','cargoedificio_id',   'glosa', 'fechadoc','codmon'], 'required'],
+            [['codocu', 'edificio_id','codpro',  'monto','cargoedificio_id',   'glosa', 'fechadoc','codmon'], 'required'],
             [['edificio_id', 'unidad_id'], 'integer'],
             [['monto', 'igv', 'monto_usd'], 'number'],
             [['detalle'], 'string'],
@@ -119,6 +119,14 @@ public function scenarios() {
     {
         return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
     }
+    
+    
+   public function getCargoEdificio()
+    {
+        return $this->hasOne(SigiCargosedificio::className(), ['id' => 'cargoedificio_id']);
+    }  
+    
+    
  public function getProgramaPagos()
     {
         return $this->hasMany(SigiPropago::className(), ['porpagar_id' => 'id']);
