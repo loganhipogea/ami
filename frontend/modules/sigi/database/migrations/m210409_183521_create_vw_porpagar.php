@@ -29,7 +29,7 @@ class m210409_183521_create_vw_porpagar extends viewMigration
      innerJoin('{{%sigi_propago}} b', 'a.id=b.porpagar_id')->
      innerJoin('{{%sigi_cargosedificio}} c', 'c.id=a.cargoedificio_id')->          
       innerJoin('{{%sigi_cargos}} d', 'd.id=c.cargo_id')->  
-     innerJoin('{{%clipro}} e', 'e.codpro=a.codpro')->andWhere(['activo'=>'1'])->
+     innerJoin('{{%clipro}} e', 'e.codpro=a.codpro')->andWhere(['a.activo'=>'1'])->
     // andWhere(['b.ingreso'=> SigiMovimientosPre::G_GRUPO_EGRESOS])->
      groupBy(['a.edificio_id', 'a.cargoedificio_id','a.glosa','a.fechadoc',
          'e.despro','a.codpro','d.descargo'])
