@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
- //use kartik\grid\GridView;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+//use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use common\helpers\timeHelper;
@@ -59,20 +59,17 @@ use dosamigos\chartjs\ChartJs;
                     ]
                 ],
              
-            'nombre',
             
-                /*[
+             [
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'width' => '50px',
                 'value' => function ($model, $key, $index, $column) {
                             return GridView::ROW_COLLAPSED;
                                 },
-                            'detail' => function ($model, $key, $index, $column) {
-                            return Yii::$app->controller->renderPartial('_detalle_fact_residente', ['kardex_id' => $model->id]);
-                            },
+                 'detailUrl' =>Url::toRoute(['/sigi/default/ajax-show-recibo']),
                     //'headerOptions' => ['class' => 'kartik-sheet-style'], 
                     'expandOneOnly' => true
-                ],*/
+                ],
             'fecha',
              ['attribute'=>'mes',
                 'value'=>function($model){
@@ -104,7 +101,7 @@ use dosamigos\chartjs\ChartJs;
     <h4>Deudas pendientes</h4>
 <?php
  Pjax::begin(['id'=>'grilla-deudas']); ?>
-    
+    <?php //echo $unidad->misDeudasProvider()->query->createCommand()->rawSql; die();  ?>
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
     <?= GridView::widget([
         'id'=>'migrilla',

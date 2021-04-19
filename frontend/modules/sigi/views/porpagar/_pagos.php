@@ -10,14 +10,14 @@ use yii\widgets\Pjax;
       <div class="col-md-12">
             <div class="form-group no-margin">                
               <?php  
-                   if(!$model->isNewRecord) {
+                   /*if(!$model->isNewRecord) {
                        $url= Url::to(['/sigi/porpagar/crea-prog-pago','id'=>$model->id,'gridName'=>'grilla-pagos-programados','idModal'=>'buscarvalor']);
                          $options = [
                            'class'=>'botonAbre btn btn-success',
                             'data-pjax' => '0',
                         ];
                         echo Html::a('<span class="fa fa-cut"></span>'.yii::t('sigi.labels','Agregar movimiento'),$url,$options);
-                   }   
+                   }   */
               ?> 
             </div>
         </div>
@@ -36,7 +36,7 @@ use yii\widgets\Pjax;
     
     <?= GridView::widget([
         'dataProvider' => new \yii\data\ActiveDataProvider([
-            'query'=>$model->getProgramaPagos(),
+            'query'=>$model->getMovimientosPago(),
         ]),
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
@@ -79,9 +79,9 @@ use yii\widgets\Pjax;
          
          
 
-           [    'attribute'=>'Documento',
+           [    'attribute'=>'Oper',
                'value'=>function($model){
-                        return $model->fechaprog;
+                        return $model->movBanco->fopera;
                }
                ],
           [    'attribute'=>'monto',

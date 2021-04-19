@@ -135,9 +135,9 @@ class SigiMovbanco extends \common\models\base\modelBase
     public function montoConciliado(){
       // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
         if($this->tipoMov->isCobranza){
-            return $this->getMovimientosDetalle()->select(['sum(monto)'])->scalar();
+            return $this->getMovimientosDetalle()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar();
         }elseif($this->tipoMov->isPago){
-           return $this->getMovimientosDetallePago()->select(['sum(monto)'])->scalar(); 
+           return abs($this->getMovimientosDetallePago()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar()); 
         }else{
             
         }
@@ -147,9 +147,9 @@ class SigiMovbanco extends \common\models\base\modelBase
     public function refreshMonto(){
          if($this->tipoMov->conciliable){
              //echo "salio"; die();
-                $this->monto_conciliado=$this->montoConciliado();
+                $this->monto_conciliado=$this->tipoMov->signo*abs($this->montoConciliado());
                 //var_dump($this->monto_conciliado);die();
-                $this->diferencia=$this->monto-$this->monto_conciliado;
+                $this->diferencia=$this->tipoMov->signo*(abs($this->monto)-abs($this->monto_conciliado));
                 /*Update All para no despertar el disparador*/
                 $this->updateAll([
                     'diferencia'=>$this->monto-$this->monto_conciliado,

@@ -221,4 +221,25 @@ class DefaultController extends Controller
             }
    }  
    
+ public function actionAjaxShowRecibo(){
+     if(h::request()->isAjax){
+        $id=h::request()->post('expandRowKey');
+      // $idFile=Json::decode(h::request()->get('idFile'));
+         // var_dump($idFile);die();
+          $model= \frontend\modules\sigi\models\SigiKardexdepa::findOne($id);
+          if(!is_null($model)){
+               $width=h::request()->get('width',700);
+        $height=h::request()->get('height',900);
+       return $this->renderPartial('@frontend/views/comunes/view_pdf', [
+                        'urlFile' => $model->files[0]->urlTempWeb,
+                         'width' => $width,
+                            'height' => $height,
+            ]);
+          }else{
+              echo 'no hay id para este archivo';
+          }
+       
+            }
+   }  
+   
 }

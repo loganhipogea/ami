@@ -96,7 +96,7 @@ use common\widgets\selectwidget\selectWidget;
      
     <?php ActiveForm::end(); ?>
         
-<?php echo Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Refrescar'), ['id'=>'boton_refrescar','class' => 'btn btn-warning']); ?>   
+<?php echo Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Borrar adjuntos'), ['id'=>'boton_refrescar','class' => 'btn btn-warning']); ?>   
                
 <?php Pjax::begin(['id'=>'adjuntos_23E'.$model->id,'timeout'=>90000]); ?>
        <?php  
@@ -117,7 +117,7 @@ use common\widgets\selectwidget\selectWidget;
 <?php 
   $string="$('#boton_refrescar').on( 'click', function(){ 
       
-       var Vurl='".Url::to(['/sigi/movimientos/attach-voucher','id'=>$model->id])."';
+       var Vurl='".Url::to(['/sigi/movimientos/delete-voucher','id'=>$model->id])."';
        $.ajax({
               url:Vurl, 
               type: 'get',

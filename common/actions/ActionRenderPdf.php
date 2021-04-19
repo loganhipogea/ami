@@ -11,6 +11,8 @@ class ActionRenderPdf extends \yii\base\Action
 	
 	public function run()
 	{
+            
+            
           $idFile=Json::decode(h::request()->get('idFile'));
          // var_dump($idFile);die();
           $model=File::findOne($idFile);

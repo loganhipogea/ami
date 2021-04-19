@@ -42,9 +42,9 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                   [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{attach}{check}{edit}{uncheck}{delete}',
+            'template' => '{check}{edit}{uncheck}{delete}',
                'buttons' => [
-                  'attach' => function($url, $model) {  
+                  /*'attach' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,
                              'idModal'=>'imagemodal',
                              'modelid'=>$model->id,
@@ -56,8 +56,7 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                             //'data-pjax' => '0',
                         ];
                         return Html::button('<span class="fa fa-upload"></span>', ['href' => $url, 'title' => 'Adjuntar Voucher de pago', 'class' => 'botonAbre btn btn-danger']);
-                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
-                        },
+                          },*/
                         'delete' => function ($url,$model) {
 			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
                               if(!$model->activo)
@@ -123,8 +122,9 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
              ['attribute'=>'nombre',
                'format'=>'raw',
                 'value'=>function($model){
-                        
-                     return $model->porPagar->clipro->despro;   
+                     $url= Url::toRoute(['/sigi/porpagar/update','id'=>$model->pago_id]); 
+                     return Html::a($model->porPagar->clipro->despro,$url,['data-pjax'=>0,'target'=>'_blank']);
+                     //return ;   
                 }  
                   
                   ],

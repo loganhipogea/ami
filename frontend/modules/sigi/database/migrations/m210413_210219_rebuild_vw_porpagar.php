@@ -16,19 +16,19 @@ class m210413_210219_rebuild_vw_porpagar extends viewMigration
         $this->dropView($vista);
         }
         $comando= $this->db->createCommand(); 
-        $subquery=(new Query())->select(['idop'])->from(['{{%sigi_movimientos}}'])->andWhere(['activo'=>'1']) ;
+        $subquery=(new Query())->select(['pago_id'])->from(['{{%sigi_movimientospago}}'])->andWhere(['activo'=>'1']) ;
         $comando->createView($vista,
                 (new \yii\db\Query())
     ->select([
       'a.id','a.edificio_id', 'a.cargoedificio_id','a.glosa','a.fechadoc','e.despro','a.codpro',
-      'sum(b.monto) as pagado','a.monto - sum(b.monto) as deuda',
+      'sum(abs(b.monto)) as pagado','a.monto - sum(abs(b.monto)) as deuda',
       'd.descargo',
          ])
     ->from(['a'=>'{{%sigi_porpagar}}'])->
      innerJoin('{{%sigi_movimientospago}} b', 'a.id=b.pago_id')->
      innerJoin('{{%sigi_cargosedificio}} c', 'c.id=a.cargoedificio_id')->          
       innerJoin('{{%sigi_cargos}} d', 'd.id=c.cargo_id')->
-     innerJoin('{{%clipro}} e', 'e.codpro=a.codpro')->andWhere(['a.activo'=>'1'])->
+     innerJoin('{{%clipro}} e', 'e.codpro=a.codpro')->andWhere(['activo'=>'1'])->
      groupBy(['a.edificio_id', 'a.cargoedificio_id','a.glosa','a.fechadoc',
          'e.despro','a.codpro','d.descargo'])
         ->union(

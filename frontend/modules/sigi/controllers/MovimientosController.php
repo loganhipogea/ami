@@ -551,6 +551,14 @@ public function actionUnAprobePagoSi($id){
            }
         }
    
-
+public function actionDeleteVoucher($id){
+     if(h::request()->isAjax){          
+             h::response()->format = \yii\web\Response::FORMAT_JSON;           
+                $model= $this->findModel($id);
+                $model->deleteAllAttachments();
+             return ['warnig'=>yii::t('sta.labels','Se borraron los adjuntos')];
+                
+        }
+   }
    
 }

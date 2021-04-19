@@ -706,6 +706,12 @@ public function desacopla(){
  */
 public function misDeudasProvider(){
    // $unidad=$this->unidad;
+   /*echo  VwKardexPagos::find()->andWhere([
+               'unidad_id'=>$this->id,
+                ])->andWhere(['>',
+                       'deuda',
+                        h::gsetting('sigi','montominimo_deudor')
+                ])->createCommand()->rawSql;die();*/
     return New \yii\data\ActiveDataProvider(
             [
          'query'=>VwKardexPagos::find()->andWhere([

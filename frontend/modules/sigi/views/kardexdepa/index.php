@@ -47,7 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
                          'clip' => function($url, $model) { 
                              $modelKardex=$model->kardexDepa;
                              if($modelKardex->hasAttachments()){
-                               $url= Url::to(['/finder/renderpdf','idFile'=>\yii\helpers\Json::encode($modelKardex->files[0]->id),'idModal'=>'buscarvalor']);
+                               $url= Url::to([
+                                   '/finder/renderpdf',
+                                   'idFile'=>\yii\helpers\Json::encode($modelKardex->files[0]->id),
+                                 //  'nombreclase'=>str_replace('@','\\',get_class($modelKardex)),
+                                   'idModal'=>'buscarvalor']);
                                  $options = [
                            'class'=>'botonAbre',
                            

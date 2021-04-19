@@ -108,12 +108,15 @@ class SigiMovimientospago extends \common\models\base\modelBase
    } 
    
    public function validate_monto($attribute,$params){
-    if(($this->movBanco->tipoMov->signo > 0 && $this->movBanco->monto < 0) or
-     ($this->movBanco->tipoMov->signo < 0 && $this->movBanco->monto > 0) )
+       /*var_dump($this->movBanco->tipoMov->signo,
+           $this->monto+0    
+               );die();*/
+    if(($this->movBanco->tipoMov->signo > 0 && ($this->monto+0) < 0) or
+     ($this->movBanco->tipoMov->signo < 0 && ($this->monto+0) > 0) )
       $this->addError($attribute,yii::t('base.labels','{monto} Este monto no tiene el signo que corresponde al movimiento',['monto'=>$this->monto]));
     
     if($this->isNewRecord){
-         if($this->monto > ($this->movBanco->monto-$this->movBanco->montoConciliado()))
+         if(abs($this->monto) > (abs($this->movBanco->monto)-abs($this->movBanco->montoConciliado())))
          $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento}',['monto_movimiento'=>$this->movBanco->monto,'monto'=>$this->monto]));
                   
       }else{
@@ -121,11 +124,14 @@ class SigiMovimientospago extends \common\models\base\modelBase
            * Si ya hay registro , loque debemos hacer es 
            * restar al conciliado el valor del monto anterior y comparar recein
            */
-          if($this->monto > ($this->movBanco->monto-($this->movBanco->montoConciliado()-$this->getOldAttribute('monto'))))
+          if(abs($this->monto) > (abs($this->movBanco->monto)-(abs($this->movBanco->montoConciliado())-abs($this->getOldAttribute('monto')))))
          $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento} '.$this->getOldAttribute('monto'),['monto_movimiento'=>$this->movBanco->monto,'monto'=>$this->monto]));
           
       }
   }
-  
+  public function afterDelete() {
+       $this->movBanco->refreshMonto();
+      return parent::afterDelete();
+  } 
     
 }

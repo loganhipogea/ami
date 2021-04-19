@@ -7,7 +7,7 @@ use frontend\modules\sigi\components\ActiveQueryMovPagos;
  *
  * @see VwKardexPagos
  */
-class VwKardexPagosQuery extends ActiveQueryMovPagos
+class VwKardexPagosQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {

@@ -112,13 +112,13 @@ echo $form->field($model, 'anio')->
  <?php echo $form->field($model, 'monto');?>
 </div>    
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-    <?php echo $form->field($model, 'deudor')->
+    <?php /*echo $form->field($model, 'deudor')->
             dropDownList(['1'=>yii::t('base.labels','Sólo Deudores')],
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un Valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
                         ]
-                    ) ?>
+                    ) */?>
 </div>   
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
     

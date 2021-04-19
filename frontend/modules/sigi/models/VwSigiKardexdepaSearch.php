@@ -9,7 +9,7 @@ use frontend\modules\sigi\models\SigiKardexdepa;
 /**
  * SigiKardexdepaSearch represents the model behind the search form of `\frontend\modules\sigi\models\SigiKardexdepa`.
  */
-class VwSigiKardexdepaSearch extends VwSigiKardexdepa
+class VwSigiKardexdepaSearch extends VwSigiKardexDepa
 {
 
     
@@ -20,7 +20,7 @@ class VwSigiKardexdepaSearch extends VwSigiKardexdepa
     {
         return [
             [['id', 'facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
-            [['fecha', 'anio', 'codmon', 'numrecibo', 'detalles','numero','nombre','codtipo','desunidad','fecha1' ,'cancelado','deudor'], 'safe'],
+            [['fecha', 'anio', 'codmon', 'numrecibo', 'detalles','numero','nombre','codtipo','desunidad','fecha1' ,'cancelado','deuda'], 'safe'],
             [['monto', 'igv'], 'number'],
         ];
     }
@@ -97,7 +97,7 @@ class VwSigiKardexdepaSearch extends VwSigiKardexdepa
              $this->openBorder('fechaprog1',true)
                         ]);
    }
-  // echo $query->createCommand()->rawSql;die();
+   //echo $query->createCommand()->rawSql;die();
         return $dataProvider;
     }
   

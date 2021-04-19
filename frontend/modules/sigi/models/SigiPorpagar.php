@@ -131,6 +131,11 @@ public function scenarios() {
     {
         return $this->hasMany(SigiPropago::className(), ['porpagar_id' => 'id']);
     }
+    
+  public function getMovimientosPago()
+    {
+        return $this->hasMany(SigiMovimientospago::className(), ['pago_id' => 'id']);
+    }
     /**
      * {@inheritdoc}
      * @return SigiPorpagarQuery the active query used by this AR class.
