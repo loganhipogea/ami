@@ -17,6 +17,7 @@ class MenuHelper extends MenuHelperOriginal
     {
         $result = [];
         $order = [];
+       // print_r($menus);die();
         foreach ($assigned as $id) {
             $menu = $menus[$id];
             if ($menu['parent'] == $parent) {
@@ -27,6 +28,7 @@ class MenuHelper extends MenuHelperOriginal
                     $item = [
                         'label' => $menu['name'],
                         'url' => static::parseRoute($menu['route']),
+                        'icon'=>$menu['icon'], /*agregado*/
                     ];
                     if ($menu['children'] != []) {
                         $item['items'] = $menu['children'];

@@ -16,7 +16,7 @@
        
     
 
-           <?php $items=mdm\admin\components\MenuHelper::getAssignedMenu(yii::$app->user->id
+           <?php $items=common\components\MenuHelper::getAssignedMenu(yii::$app->user->id
                    ,null/*root*/, 
                     null,false/*refresh*/);?>  
        <?php  print_r($items); die();?>
