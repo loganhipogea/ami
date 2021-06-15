@@ -30,7 +30,7 @@
      
             },
                    false/*refresh*/);?>  
-       <?php  print_r($items); die();?>
+       <?php  //print_r($items); die();?>
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
