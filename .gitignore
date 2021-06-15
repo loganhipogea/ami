@@ -22,7 +22,7 @@ Thumbs.db
 
 # composer vendor dir
 /vendor
-
+/sample-app-web
 # composer itself is not needed
 composer.phar
 
