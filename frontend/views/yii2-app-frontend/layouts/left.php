@@ -16,9 +16,20 @@
        
     
 
-           <?php $items=common\components\MenuHelper::getAssignedMenu(yii::$app->user->id
+           <?php $items=mdm\admin\components\MenuHelper::getAssignedMenu(yii::$app->user->id
                    ,null/*root*/, 
-                    null,false/*refresh*/);?>  
+                    function ($menu) {
+     $data = eval($menu['data']);
+     return [
+         'label' => $menu['name'],
+        'url' => [$menu['route']],
+         'icon'=>$menu['icon'],
+         'options' => $data,
+         'items' => $menu['children']
+         ];
+     
+            },
+                   false/*refresh*/);?>  
        <?php  print_r($items); die();?>
         <?= dmstr\widgets\Menu::widget(
             [
