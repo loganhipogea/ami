@@ -7,7 +7,7 @@ $params = array_merge(
 );
 
 return [
-     'catchAll' => ['site/falta-pagos'],
+     //'catchAll' => ['site/falta-pagos'],
     'name'=>'',
     'sourceLanguage' => 'en',
     'id' => 'frontend',
