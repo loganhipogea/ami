@@ -1,21 +1,15 @@
 <?php
-
-namespace console\migrations;
-
+namespace frontend\modules\inter\database\migrations;
 use console\migrations\baseMigration;
-
-/**
- * Class M190508051603Create_table_clipro
- */
 class M190401_152550Create_table_clipro extends baseMigration
 {
     const NAME_TABLE='{{%clipro}}';
     //const NAME_TABlE_DIRECCIONES='{%direcciones}';
         public function safeUp()
     {
- 
-if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
-        $this->createTable(static::NAME_TABLE, [
+ $table=static::NAME_TABLE;
+if(!$this->existsTable($table)) {
+        $this->createTable($table, [
             'codpro' => $this->char(6)->notNull()->append($this->collateColumn()),
             'despro' => $this->string(60)->notNull()->append($this->collateColumn()), 
             'rucpro'=>$this->string(15)->notNull()->append($this->collateColumn()), 
@@ -39,9 +33,9 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
      */
     public function safeDown()
     {
+        $table=static::NAME_TABLE;
         
-        
-        if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) !== null) {
+        if ($this->existsTable($table)) {
             $this->dropTable(static::NAME_TABLE);
         }
     }

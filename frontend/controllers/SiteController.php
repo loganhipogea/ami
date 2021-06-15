@@ -666,5 +666,8 @@ public function actionCookies(){
       
     }
   
-  
+  public function actionFaltaPagos(){
+      $this->layout="install";
+      return $this->render('faltadepago');
+  }
 }

@@ -7,6 +7,7 @@ $params = array_merge(
 );
 
 return [
+     'catchAll' => ['site/falta-pagos'],
     'name'=>'',
     'sourceLanguage' => 'en',
     'id' => 'frontend',
@@ -133,7 +134,7 @@ return [
         'allowActions' => [
             'site/login/',
             'site/clear-cache/',
-           // 'site/signup',
+            'site/falta-pagos',
              'site/request-password-reset',
             'site/reset-password', 
            'site/logout',
