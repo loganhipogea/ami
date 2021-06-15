@@ -59,7 +59,7 @@ class timeHelper {
        ];
    }
    
-   public function mapMonths($arrayIntegers){
+   public static function mapMonths($arrayIntegers){
        $arr=[];
        foreach($arrayIntegers as $key=>$value){
            $arr[$value]=substr(static::cboMeses()[$value],0,3);
@@ -67,7 +67,7 @@ class timeHelper {
        return $arr;
    }
    
-   public function mes($nmes){
+   public static function mes($nmes){
        $meses=static::cboMeses();
        return $meses[$nmes];
    }
