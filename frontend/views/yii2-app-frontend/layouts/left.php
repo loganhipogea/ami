@@ -19,12 +19,12 @@
            <?php $items=mdm\admin\components\MenuHelper::getAssignedMenu(yii::$app->user->id
                    ,null/*root*/, 
                     function ($menu) {
-     $data = eval($menu['data']);
+    // $data = eval($menu['data']);
      return [
          'label' => $menu['name'],
         'url' => [$menu['route']],
          'icon'=>$menu['icon'],
-         'options' => $data,
+        // 'options' => $data,
          'items' => $menu['children']
          ];
      
