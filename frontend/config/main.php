@@ -8,7 +8,7 @@ $params = array_merge(
 
 return [
      //'catchAll' => ['site/falta-pagos'],
-    'name'=>'',
+    //'name'=>'',
     'sourceLanguage' => 'en',
     'id' => 'frontend',
     'basePath' => dirname(__DIR__),
@@ -92,6 +92,11 @@ return [
             // this is the name of the session cookie used for login on the frontend
             'name' => 'advanced-frontend',
         ],
+        
+        'mailer' =>['class'=>'common\components\Mailer',
+                'viewPath'=>'@frontend/mail',
+            ],
+        
         'log' => [
                 //'traceLevel' => YII_DEBUG ? 3 : 0,            
             'targets' => [

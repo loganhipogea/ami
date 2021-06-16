@@ -112,7 +112,7 @@ class FileHelper extends FileHelperOriginal {
      * 
      * 
      */
-    private function preparePathForFindModels($path){
+    private static function preparePathForFindModels($path){
        $path=trim($path);
         $path=(StringHelper::startsWith($path,'\\'))?substr($path,1):$path;
         $path=(StringHelper::startsWith($path,'/'))?substr($path,1):$path;

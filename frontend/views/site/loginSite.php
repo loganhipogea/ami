@@ -3,7 +3,10 @@
   ?>
 
 <div class="install-image"></div>
-
+    <div class="alert alert-success alert-dismissable">
+         <h4><i class="icon fa fa-check"></i>!</h4>
+         <?= Yii::$app->session->getFlash('success') ?>
+    </div>
         <div class="install-content">
             <div class="install-logo">
                 <img src=" <?= yii\helpers\Url::to("@web/img/atenea.svg") ?> " width="120"  height="120"  alt="Atenea" />

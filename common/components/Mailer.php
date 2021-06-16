@@ -240,7 +240,7 @@ class Mailer extends Correo
                'password' => Yii::$app->params['passworduserservermail'],
                'port' =>Yii::$app->params['portservermail'],
                   'encryption' => 'ssl',
-                  'streamOptions'=>['ssl' =>['allow_self_signed' => true,'verify_peer_name' => false, 'verify_peer' => false]],
+                  //'streamOptions'=>['ssl' =>['allow_self_signed' => true,'verify_peer_name' => false, 'verify_peer' => false]],
               ]; 
         }
         $options=[];

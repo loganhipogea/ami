@@ -133,7 +133,7 @@ class ComboHelper  {
      * 
      */
     
-    private function map_models($paths){
+    private static function map_models($paths){
        /*$paths=(!is_null($moduleName))?\common\helpers\FileHelper::getModelsByModule($moduleName):
          \common\helpers\FileHelper::getModels();
         */

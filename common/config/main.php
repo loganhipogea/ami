@@ -12,7 +12,7 @@ return [
    
     
     
-   //'name'=>'Nautilus',
+   'name'=>'Diar gestión',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
