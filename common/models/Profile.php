@@ -191,14 +191,9 @@ class Profile extends \common\models\base\modelBase implements \common\interface
     * Esi no encuentra deveulve el defaulr 
     */
    private function sourceExternalImage(){
-       $link=\frontend\modules\sta\staModule::getPathImage($this->user->username);
-       if(h::app()->hasModule('sta') && 
-               $this->tipo== \frontend\modules\sta\staModule::USER_ALUMNO && 
-               $link ){
-           return $link; 
-       }else{
+      
           return  FileHelper::getUrlImageUserGuest();  
-       }
+       
    }
    
    public function name(){

@@ -145,7 +145,7 @@ class FileHelper extends FileHelperOriginal {
                     );*/
    }
    
-   public function getUrlImageUserGuest(){
+   public static function getUrlImageUserGuest(){
        $directorio=yii::getAlias('@frontend/web/img').DIRECTORY_SEPARATOR;
        if(!is_dir($directorio))
          throw new \yii\base\Exception(Yii::t('base.errors', 'The  \''.$directorio.'\' Directory doesn\'t exists '));
@@ -266,7 +266,7 @@ return  $partes_ruta['filename'].$ext;
 
 }
 
-public function fileExt($ruta,$conpunto=true){
+public static function fileExt($ruta,$conpunto=true){
 $partes_ruta = pathinfo($ruta);
 $punto=($conpunto)?'.':'';
 return  $punto.$partes_ruta['extension']; 
@@ -300,12 +300,12 @@ public static function extensionFile($filePath,$conpunto=false){
 }
 
 
-public function isImage($filePath){
+public static function isImage($filePath){
    $ext=self::extensionFile($filePath);
    return in_array($ext,self::extImages());
 }
 
-public function UrlImage($path,$internal=true){
+public static function UrlImage($path,$internal=true){
  if(is_file($path)){
     /* echo " path  : ".$path; echo "<br>";
      echo " path  alias root  : ".yii::getAlias('@root')."<br>";

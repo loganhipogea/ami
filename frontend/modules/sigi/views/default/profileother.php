@@ -7,7 +7,7 @@
 use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
 use common\helpers\h;
-use frontend\modules\sta\helpers\comboHelper;
+use common\helpers\ComboHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = 'Profile';
@@ -71,7 +71,7 @@ $this->title = 'Profile';
             
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                <?= $form->field($profile, 'tipo')->
-            dropDownList(comboHelper::getCboValores($profile->RawTableName().'.tipo'),
+            dropDownList(ComboHelper::getCboValores($profile->RawTableName().'.tipo'),
                     ['prompt'=>'--'.yii::t('base.verbs','Seleccione un Valor')."--",
                      //'class'=>'probandoSelect2',
                         ]
