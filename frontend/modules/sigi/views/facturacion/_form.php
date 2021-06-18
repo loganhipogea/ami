@@ -67,7 +67,7 @@ use common\widgets\selectwidget\selectWidget;
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>S/.<?='    '.$model->montoFacturado()?></h3>
+              <h3>S/.<?='    '.round($model->montoFacturado(),1)?></h3>
 
               <p>Monto facturado</p>
             </div>
@@ -84,7 +84,7 @@ use common\widgets\selectwidget\selectWidget;
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                        'disabled'=>($esEditable)?false:true,
+                        'disabled'=>(!$aprobado)?false:true,
                       ]
                     ) ?>
 
@@ -98,7 +98,7 @@ use common\widgets\selectwidget\selectWidget;
             dropDownList(timeHelper::cboMeses(),
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
-                     'disabled'=>($esEditable)?false:true,
+                     'disabled'=>(!$aprobado)?false:true,
                         ]
                     ) ?>
  </div>
@@ -108,7 +108,7 @@ use common\widgets\selectwidget\selectWidget;
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                         'disabled'=>($esEditable)?false:true,
+                         'disabled'=>(!$aprobado)?false:true,
                       ]
                     ) ?>
  </div>
@@ -120,7 +120,7 @@ use common\widgets\selectwidget\selectWidget;
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                         'disabled'=>($esEditable)?false:true,
+                         'disabled'=>(!$aprobado)?false:true,
                       ]
                     ) ?>
         <?PHP  } ?>
@@ -133,7 +133,7 @@ use common\widgets\selectwidget\selectWidget;
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                         'disabled'=>($esEditable)?false:true,
+                         'disabled'=>(!$aprobado)?false:true,
                       ]
                     ) ?>
       
@@ -151,7 +151,7 @@ use common\widgets\selectwidget\selectWidget;
                           
                             //'dateFormat' => h::getFormatShowDate(),
                             'options'=>['class'=>'form-control',
-                                 'disabled'=>($esEditable)?false:true]
+                                 'disabled'=>(!$aprobado)?false:true]
                             ]) ?>
  </div>
   <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -166,7 +166,7 @@ use common\widgets\selectwidget\selectWidget;
                           
                             //'dateFormat' => h::getFormatShowDate(),
                             'options'=>['class'=>'form-control',
-                               'disabled'=>($esEditable)?false:true  
+                               'disabled'=>(!$aprobado)?false:true  
                                 ]
                             ]) ?>
  </div>
@@ -192,7 +192,7 @@ use common\widgets\selectwidget\selectWidget;
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update}{delete}{attach}{generate}',
                 'buttons' => [
-                     'update' => function ($url, $model) use($esEditable) {  
+                     'update' => function ($url, $model) use($aprobado) {  
                        $url= Url::to(['/sigi/cuentaspor/edita-cobranza','id'=>$model->id,'gridName'=>'grilla_cargospor','idModal'=>'buscarvalor']);
                          $options = [
                            'class'=>'botonAbre',
@@ -209,7 +209,7 @@ use common\widgets\selectwidget\selectWidget;
                      
                         
                         },
-            'attach' => function($url, $model) use($esEditable) {  
+            'attach' => function($url, $model) use($aprobado) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage',
                              'isImage'=>false,
                              'idModal'=>'imagemodal',
@@ -223,7 +223,7 @@ use common\widgets\selectwidget\selectWidget;
                             'data-method' => 'get',
                             //'data-pjax' => '0',
                         ];
-                        if(!$model->colector->isBudget() && $esEditable)
+                        if(!$model->colector->isBudget() && !$aprobado)
                         return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Adjunto', 'class' => 'botonAbre btn btn-success']);
                         //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
                      
@@ -231,7 +231,7 @@ use common\widgets\selectwidget\selectWidget;
                                 
                                 
                                 
-                          'view' => function($url, $model) use($esEditable) {                        
+                          'view' => function($url, $model) use($aprobado) {                        
                         $options = [
                             'title' => Yii::t('base.verbs', 'View'),                            
                         ];
@@ -239,13 +239,13 @@ use common\widgets\selectwidget\selectWidget;
                          },
                                               
                         
-                        'delete' => function ($url,$model)use($esEditable) {
+                        'delete' => function ($url,$model)use($aprobado) {
                              $options = [
                             'data-confirm' => Yii::t('sigi.labels', 'Esta seguro de eliminar este ítem?'),
                             'title' => Yii::t('base.verbs', 'Borrar'),                            
                         ];
 			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
-                            if(!$model->colector->isBudget() && $esEditable )  
+                            if(!$model->colector->isBudget() && !$aprobado )  
                            return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                             },
                             
@@ -353,13 +353,13 @@ use common\widgets\selectwidget\selectWidget;
      
 <?php
  $url= Url::to(['/sigi/cuentaspor/create-as-child','id'=>$model->id,'gridName'=>'grilla_cargospor','idModal'=>'buscarvalor']);
- if($esEditable)  
- echo  Html::button(yii::t('base.verbs','Cobranza masiva'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
+ if(!$aprobado)  
+ echo  Html::button(yii::t('base.verbs','Agregar concepto masivo'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
 ?> 
 <?php
  $url= Url::to(['/sigi/cuentaspor/create-as-child-interno','id'=>$model->id,'gridName'=>'grilla_cargospor','idModal'=>'buscarvalor']);
-  if($esEditable)  
- echo  Html::button(yii::t('base.verbs','Cobranza Individual'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
+  if(!$aprobado)  
+ echo  Html::button(yii::t('base.verbs','Agregar concepto individual'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
 ?> 
 
 

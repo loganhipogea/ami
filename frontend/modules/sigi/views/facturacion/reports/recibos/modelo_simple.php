@@ -33,11 +33,12 @@ use common\models\masters\Monedas;
         foreach($filtrado as $clave=>$fila){
             if($fila['monto']!=0){
              $suministro=(empty(trim($fila['codsuministro'])))?'':'  Cod Suministro : '.(trim($fila['codsuministro']));
-     $unidades=(empty(trim($fila['unidades'])))?'':' ( '.(trim($fila['unidades'])).' )  ';
+             $suministroAACC=($fila['aacc']=='1')?' => [AACC] ':' ';
+             $unidades=(empty(trim($fila['unidades'])))?'':' ( '.(trim($fila['unidades'])).' )  ';
      $lanterior=(empty(trim($fila['lanterior'])))?'':' L. Ant. : '.trim(round($fila['lanterior'],3));
     $lactual=(empty(trim($fila['lectura'])))?'':' L. Act. : '.trim(round($fila['lectura'],3));
      $consumo=(empty(trim($fila['delta'])))?'':'  Consumo: '.trim(round($fila['delta'],3));
-         $descripcion= $fila['descargo'].$suministro.$lanterior.$lactual.$consumo.$unidades;
+         $descripcion= $fila['descargo'].$suministro.$suministroAACC.$lanterior.$lactual.$consumo.$unidades;
         
        
             

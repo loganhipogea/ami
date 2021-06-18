@@ -70,6 +70,7 @@ class SigiCuentaspor extends \common\models\base\modelBase
                 'required','except'=>self::SCENARIO_RECIBO_INTERNO],
             [['edificio_id', 'mes'], 'integer'],
             [['detalle'], 'string'],
+            [['consumo'], 'number'],
              [['codpro','codmon'], 'safe'],
             /*ESCENARIO RECIBO INTERNO */
             [['edificio_id','unidad_id','colector_id',
@@ -489,7 +490,7 @@ private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$pa
                 'colector_id'=>$this->colector->id,
                 'grupo_id'=>$this->colector->grupo_id,
                 'monto'=>$monto*$factor,
-                'igv'=>$monto*$factor*h::gsetting('general', 'igv'),
+                'igv'=>round($monto*$factor*h::gsetting('general', 'igv'),4),
                 //'cuentaspor_id'=>$this->id,
                 'mes'=>$this->mes,
                 'anio'=>$this->anio,

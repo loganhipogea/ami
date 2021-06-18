@@ -11,6 +11,7 @@ use yii\helpers\Html;
 	'id' => 'file-input', // Optional
 	'model' => $model,         
 	'options' => [ // Options of the Kartik's FileInput widget
+                //'language'=>'es-PE', 
 		'multiple' => false, // If you want to allow multiple upload, default to false
 	//'overwriteInitial'=>false,
             ],

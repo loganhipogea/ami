@@ -193,10 +193,10 @@ class SigiLecturas extends \common\models\base\modelBase
           $this->addError('codepa',yii::t('sigi.labels','Este suministro está desactivado'.$this->getScenario()));
           
          //$this->valida_depa($attribute, $params);
-         $mes=$this->toCarbon('flectura')->month+0;
+        /* $mes=$this->toCarbon('flectura')->month+0;
         if(!((integer)$this->mes == (integer)$mes)){
             $this->addError('flectura',yii::t('sigi.errors','La fecha no corresponde al mes'));
-        }
+        }*/
          
           //yii::error('validando SI ESMERNMO QUE LA LECTURA ANTERIOR ',__FUNCTION__);
          //yii::error($this->lectura,__FUNCTION__);

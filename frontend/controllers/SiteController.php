@@ -412,6 +412,15 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    
+    \frontend\modules\sigi\models\SigiSuministros::findOne(2059)->fillDepas();
+    \frontend\modules\sigi\models\SigiSuministros::findOne(2060)->fillDepas();
+    \frontend\modules\sigi\models\SigiSuministros::findOne(2061)->fillDepas();
+    \frontend\modules\sigi\models\SigiSuministros::findOne(2062)->fillDepas();
+    die();
+   // \frontend\modules\sigi\models\SigiSuministros::findOne(2059)->fillDepas();
+    
+    
     var_dump(\frontend\modules\sigi\models\SigiKardexdepa::findOne(6843)->files[1]);die();
     
     

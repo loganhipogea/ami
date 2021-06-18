@@ -31,6 +31,10 @@ class SigiSuministros extends \common\models\base\modelBase
     const SCENARIO_IMPORTACION='importacion_simple';
      const SCENARIO_CODSUMINISTRO='cod_suministro';
      public $booleanFields=['activo','plano'];
+     
+    private $_areasAfiliadas=0; 
+     
+     
     public static function tableName()
     {
         return '{{%sigi_suministros}}';
@@ -445,7 +449,7 @@ public function afterSave($insert, $changedAttributes) {
  * en caso de que la unidad padre no sea imputable
  */
 public function fillDepas(){
-    foreach($this->edificio->unidadesImputables() as $unidad){
+    foreach($this->edificio->unidadesImputablesPadres() as $unidad){
         //yii::error('recorriendo '.$unidad->numero);
         $attributes=[
             'edificio_id'=>$this->edificio_id,
@@ -525,5 +529,23 @@ public function hasUnitAfiliado($unidad_id){
         return false;
     }
 }
+
+public function getAreasAfiliadas(){
+    if($this->_areasAfiliadas==0){
+       $idsAfiliadas= $this->sigiSumiDepaQuery()->select(['unidad_id'])->andWhere(['afiliado'=>'1'])->column();
+       $idHijas= SigiUnidades::find()->select(['id'])->andWhere(['parent_id'=>$idsAfiliadas])->column();
+       $this->_areasAfiliadas=SigiUnidades::find()->select('sum(area)')->andWhere(['id'=>array_merge($idsAfiliadas,$idHijas)])->scalar();
+    }
+    return $this->_areasAfiliadas;
+    
+    }
+
+
+public function porcPartUnidadAfiliada($unidad){
+    if($this->areasAfiliadas >0)
+   return round($unidad->areaTotal()/$this->areasAfiliadas,4); 
+    return 0;
+}
+
 
 }

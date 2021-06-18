@@ -9,6 +9,7 @@ $params = array_merge(
 return [
      //'catchAll' => ['site/falta-pagos'],
     //'name'=>'',
+    'language'=>'es',
     'sourceLanguage' => 'en',
     'id' => 'frontend',
     'basePath' => dirname(__DIR__),

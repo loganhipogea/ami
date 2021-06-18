@@ -128,7 +128,7 @@ class comboHelper extends Combito
      * solo los indinviduales
      * POR EJEMPLO MULTAS, LAVANDERIA, RESERVAS 
      */
-    public function getCboColectorNoMasivo($idedificio){
+    public static  function getCboColectorNoMasivo($idedificio){
          $colec= \frontend\modules\sigi\models\VwSigiColectores::find()
                  ->select(['idcolector','descargo'])
                  ->where(['edificio_id'=>$idedificio,'individual'=>'1'])->asArray()->all();
@@ -142,7 +142,7 @@ class comboHelper extends Combito
      * YA NO MULTAS SOLO RECOBOS DE AGUA, CUOTAS EXTRAPORDINARIAS ETC 
      * 
      */
-    public function getCboColectorMasivo($idedificio){
+    public static function getCboColectorMasivo($idedificio){
          $colec= \frontend\modules\sigi\models\VwSigiColectores::find()
                  ->select(['idcolector','descargo'])
                  ->where(['edificio_id'=>$idedificio])
@@ -163,7 +163,7 @@ class comboHelper extends Combito
     
     
     
-     public function getCboColectores($idedificio){
+     public static function getCboColectores($idedificio){
          $colec= \frontend\modules\sigi\models\VwSigiColectores::find()
                  ->select(['idcolector','descargo'])
                  ->where(['edificio_id'=>$idedificio,/*'individual'=>'1'*/])->asArray()->all();
@@ -215,7 +215,7 @@ class comboHelper extends Combito
                 'id','numero');
     }
     
-    public function getCboCodPresupuestos($edificio_id){
+    public static function getCboCodPresupuestos($edificio_id){
          return ArrayHelper::map(
                          \frontend\modules\sigi\models\SigiBasePresupuesto::find()
                   ->andWhere(['edificio_id'=>$edificio_id])->all(),

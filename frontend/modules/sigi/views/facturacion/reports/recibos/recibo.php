@@ -225,15 +225,15 @@ $model=$detalle->facturacion;
                                    andWhere(['kardex_id'=>$detalle->kardex_id])->distinct()->asArray()->all();
                                 if(!$resumido){
                                    $detalles=VwSigiFacturecibo::find()->select(['codgrupo',
-                                    'desgrupo',
+                                    'desgrupo','aacc',
                                     'descargo','codsuministro','unidades','lanterior','lectura','delta',
                                     'monto','montototal','simbolo'])->andWhere(['kardex_id'=>$detalle->kardex_id])
                                     ->asArray()->all(); 
                                 }else{
                                  
                                    $detalles=VwSigiFacturecibo::find()->select(['codgrupo',
-                                    'desgrupo',
-                                    'descargo','codsuministro','unidades','lanterior','lectura','delta',
+                                    'desgrupo','aacc',
+                                    'descargo',/*'codsuministro','unidades','lanterior','lectura','delta',*/
                                     'sum(monto) as monto','montototal','simbolo'])->andWhere(['kardex_id'=>$detalle->kardex_id])
                                     ->groupBy(['codgrupo','desgrupo','descargo','montototal','simbolo'])->asArray()->all();  
                                 
