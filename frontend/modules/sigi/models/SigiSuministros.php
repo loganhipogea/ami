@@ -427,8 +427,8 @@ public function ndepasReparto($total=false){
 public function ndepasRepartoPadres(){
     
   return $this->sigiSumiDepaQuery()
-            ->andWhere(['afiliado'=>'1'])
-            ->andWhere(['unidad_id'=>$this->edificio->idsUnidadesPadresImputables()])->count();  
+            ->andWhere(['afiliado'=>'1'])->count();
+           // ->andWhere(['unidad_id'=>$this->edificio->idsUnidadesPadresImputables()])->count();  
     
 }
    

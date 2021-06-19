@@ -639,16 +639,16 @@ class SigiFacturacion extends \common\models\base\modelBase
        //Obteniendo la unidad Grupal        
       $kardexGrupal=$this->kardexDepaComun();
        $kardexGrupal->refresh();  
-       yii::error('ID kardex grupal',__FUNCTION__);
-        yii::error($kardexGrupal->id,__FUNCTION__);
+       //yii::error('ID kardex grupal',__FUNCTION__);
+        //yii::error($kardexGrupal->id,__FUNCTION__);
      }else{
-        yii::error('NO tiene cobranza masiva',__FUNCTION__);  
+        //yii::error('NO tiene cobranza masiva',__FUNCTION__);  
      }
       
-     $diasEnEsteMes=date('t',strtotime($this->swichtDate('fecha',false)));
+     $diasEnEsteMes=30;//date('t',strtotime($this->swichtDate('fecha',false)));
      
      foreach($unidades as $unidad){
-         yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
+         //yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
          ///verficando primero si la unidad ha sido transferida 
         
         
@@ -659,7 +659,7 @@ class SigiFacturacion extends \common\models\base\modelBase
         }else{
            $dias=$diasEnEsteMes;  
         }
-        yii::error(' Dias en este mes '.$diasEnEsteMes);
+        //yii::error(' Dias en este mes '.$diasEnEsteMes);
          //yii::error(' Dias '.$dias);
        //var_dump($unidadesTransferidas);die();
         
@@ -698,11 +698,11 @@ class SigiFacturacion extends \common\models\base\modelBase
         /*************************************
          *   Recorriendo las cuentas por  (SigiCuentaspor Detalle de facturacion)
          *************************************/ 
-         yii::error('******Recorreindo los conceptos ***********');
+         //yii::error('******Recorreindo los conceptos ***********');
         foreach($this->sigiCuentaspor as $cuenta){
            
             $colector=$cuenta->colector;
-             yii::error(' Recorriendo cuentas -> '.$colector->cargo->descargo);
+             //yii::error(' Recorriendo cuentas -> '.$colector->cargo->descargo);
             //yii::error(' Recorriendo cuentas  '.$colector->cargo->descargo);
            /*Verificando primero si es un cobro individual para un departamento*/
            if($colector->isMassive()){  
@@ -714,20 +714,20 @@ class SigiFacturacion extends \common\models\base\modelBase
                  $medidor=$unidad->firstMedidor($colector->tipomedidor);
                  // yii::error(' verificando si es medidor -> '.$colector->cargo->descargo);
                  if(!is_null($medidor)){
-                     yii::error('Este colector es un medidor');
+                     //yii::error('Este colector es un medidor');
                      /*Se obtiene el factor de AACC si no tiene medidores en AACC =0 
                     * esto es el factor del consumo de todos las areas comunes
                         */
-                      yii::error('Participacion Aacc medidor->porcConsumoAaCc() :'.$medidor->porcConsumoAaCc($cuenta->mes,$cuenta->anio));
+                     // yii::error('Participacion Aacc medidor->porcConsumoAaCc() :'.$medidor->porcConsumoAaCc($cuenta->mes,$cuenta->anio));
                         $participacionAACC=$medidor->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
                         $participacionImputados=1-$participacionAACC;
-                      yii::error('Participacion medidor->participacionRead() :'.$medidor->participacionRead($cuenta->mes,$cuenta->anio));
-                      yii::error('Participacion imputados :'.$participacionImputados);
+                      //yii::error('Participacion medidor->participacionRead() :'.$medidor->participacionRead($cuenta->mes,$cuenta->anio));
+                      //yii::error('Participacion imputados :'.$participacionImputados);
                          
                      $participacion=$medidor->participacionRead($cuenta->mes,$cuenta->anio);
                    
                      $monto=round($participacion*($cuenta->monto*$participacionImputados),6);
-                    yii::error('El monto es '.$monto);
+                    //yii::error('El monto es '.$monto);
                      /***insertar un registrio en el detalle de factuaración SigiDetFacturacion  ****/
                     if(!$cuenta->existsDetalleFacturacion($unidad,$colector,false,$dias)){
                         //yii::error(' Inserta registroco aacc=0');
@@ -745,10 +745,11 @@ class SigiFacturacion extends \common\models\base\modelBase
                       * Recordar que estos medidores se anclan o se registran
                       * dentro de una unidad que es imputable=0
                       */
-                     yii::error(' recorriendo los medidores aacc  ');
+                     //yii::error(' recorriendo los medidores aacc  ');
+                       $nMedidoresAACC=$this->edificio->nMedidoresAaCc();
                          foreach($this->edificio->medidoresAaCc() as $medidorAACC){
                             if($medidorAACC->hasUnitAfiliado($unidad->id)){
-                                yii::error('Esta unida esta afiliada a este medidor '.$medidorAACC->unidad->numero);
+                                //yii::error('Esta unida esta afiliada a este medidor '.$medidorAACC->unidad->numero);
                                 /*Siempre que esta unidad este afiliada al medidor AACC
                                 
                              /*En este calculo se obtiene = (consumo actual) /(Consumo total) */
@@ -766,17 +767,20 @@ class SigiFacturacion extends \common\models\base\modelBase
                                  * $medidorAACC->participacionRead() este si es para cada meiddor
                                  */
                              $participacionAACC=$medidorAACC->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
-                             yii::error('paraticipacion de este medidor :'.$participacionAACC);
+                             //yii::error('paraticipacion de este medidor :'.$participacionAACC);
                              if($medidorAACC->plano){  
-                                 yii::error('Este mdidor es plano');
+                                // yii::error('Este mdidor es plano');
                                   
                                   
                                 $ndepasafiliados=$medidorAACC->ndepasRepartoPadres(); 
-                                yii::error('cantidad de departamentos afiliados :'.$ndepasafiliados);
+                                //yii::error('cantidad de departamentos afiliados :'.$ndepasafiliados);
                                 if($ndepasafiliados>0){
-                                    yii::error('monto= '.$participacionAACC.' * '.$cuenta->monto.'/'.$ndepasafiliados);
+                                    $montoAux=$participacionAACC*
+                                            //$medidorAACC->participacionRead($this->mes,$this->ejercicio)*
+                                            $cuenta->monto/($nMedidoresAACC*$ndepasafiliados);
+                                    //yii::error('monto auxi= '.$participacionAACC.' * '.$cuenta->monto.'/('.$ndepasafiliados.'*'.$nMedidoresAACC.'  ) = '.$montoAux);
                                     /*Aqui ya no es incrementable el monto,(osea monto=monto+ ...  es un solo calculo total*/
-                                    $monto=$participacionAACC*$cuenta->monto/$ndepasafiliados; 
+                                    $monto+= $montoAux;
                                   }
                              }else{
                                  $montoaux=$participacionAACC*
@@ -784,7 +788,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                                              $cuenta->monto*
                                             $medidorAACC->porcPartUnidadAfiliada($unidad);
                                 $monto+=$montoaux;
-                                yii::error('participacionAACC '.$participacionAACC);
+                                /*yii::error('participacionAACC '.$participacionAACC);
                                 yii::error('medidorAACC->participacionRead() '.$medidorAACC->participacionRead($this->mes,$this->ejercicio));
                                 yii::error('areas afiliadas  : '.$medidorAACC->areasAfiliadas);
                                 yii::error('area unidad  : '.$unidad->areaTotal());
@@ -792,15 +796,15 @@ class SigiFacturacion extends \common\models\base\modelBase
                                 
                                 YII::ERROR('monto total del recibo : '.$cuenta->monto);
                                 yii::error('El monto que va sumando participacionAACC*medidorAACC->participacionRead()* $medidorAACC->porcPartUnidadAfiliada * monto total del recibo: '.$montoaux);
-                                
+                                */
                              }
                             } else{
-                                yii::error(' Esta unida no esta afiliada a este medidor '.$medidorAACC->unidad->numero);
+                                //yii::error(' Esta unida no esta afiliada a este medidor '.$medidorAACC->unidad->numero);
                             } 
                          }
                  /***insertar un registro  por todas las sumas de estos montos****/
                   if(!$cuenta->existsDetalleFacturacion($unidad,$colector,true,$dias) && $monto > 0){
-                     yii::error('insertando un registro con aac=1 el monto es  '.$monto);
+                     //yii::error('insertando un registro con aac=1 el monto es  '.$monto);
                      
                                              /*$identidad,$unidad,$medidor,$monto,  $aacc, $participacion     ,$dias,$esResumido ) */
                       $cuenta->insertaRegistro($identidad,$unidad,null     ,$monto, '1'   , $participacionAACC,$dias,$esResumido); 
@@ -809,14 +813,14 @@ class SigiFacturacion extends \common\models\base\modelBase
                  /*****************************/
                  
                 }else{
-                 yii::error(' No Es medidor');   
+                 //yii::error(' No Es medidor');   
                 /***************************************************
                  * En el caso de que el registro detalle Sigicuentaspor no se aun colector 
                  * Puede ser un presupuesto o un prorateo
                  *************************************************/  
                  //( Area de esta unidad+ Sum(areas hijas))/(Area total del edificio))*monto
                 $monto=round($unidad->porcWithChilds()*$cuenta->monto,10);
-                yii::error('Monto es  '.$monto);
+                //yii::error('Monto es  '.$monto);
                 /***insertar un registro****/
                 if(!$cuenta->existsDetalleFacturacion($unidad,$colector,false,$dias))
                    //yii::error(' Insertando registrio');  
@@ -852,7 +856,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                        } 
             }
           }
-           yii::error('********** FIN DE  unidad  '.$unidad->numero.'*******************');
+           //yii::error('********** FIN DE  unidad  '.$unidad->numero.'*******************');
       
        }
   }

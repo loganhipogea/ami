@@ -441,7 +441,13 @@ class Edificios extends \common\models\base\modelBase
       return $this->getSuministros()->where(['unidad_id'=>$ids,'activo'=>'1'])->all();
              
    }
-   
+   /*nUMERO Medidores de areas comunes */
+    public function nMedidoresAaCc(){
+       $ids= $this->getUnidades()->select('id')
+                ->where(['imputable'=>'0'])->column();
+      return $this->getSuministros()->where(['unidad_id'=>$ids,'activo'=>'1'])->count();
+             
+   }
   
    
   public function suministrosByTypeQuery($tipo){
