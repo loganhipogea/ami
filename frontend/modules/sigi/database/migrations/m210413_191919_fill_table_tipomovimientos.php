@@ -11,14 +11,15 @@ class m210413_191919_fill_table_tipomovimientos extends baseMigration
  //const NAME_TABLE_CENTROS='{{%centros}}';
     public function safeUp()
     {
-        self::deleteData();
+       /* self::deleteData();
             \Yii::$app->db->createCommand()->
              batchInsert(static::NAME_TABLE,
-             $this->fields(), $this->getData())->execute();
-    }
+            $this->fields(), $this->getData())->execute();
+    */}
 
     public function safeDown()
-    { static::deleteData();
+    { 
+        /*static::deleteData();*/
     }
 
     
