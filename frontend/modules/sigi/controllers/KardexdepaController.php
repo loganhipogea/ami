@@ -101,7 +101,7 @@ class KardexdepaController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        
         if (h::request()->isAjax && $model->load(h::request()->post())) {
                 h::response()->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
@@ -114,6 +114,7 @@ class KardexdepaController extends baseController
         return $this->render('update', [
             'model' => $model,
         ]);
+       
     }
 
     /**
@@ -166,7 +167,7 @@ class KardexdepaController extends baseController
     
     public function actionAjaxCreaMov($id){
        
-        if(h::request()->isAjax){
+       /* if(h::request()->isAjax){
             $model=$this->findModel($id);
             $valor=SigiMovimientosPre::createBasic([ 
             'kardex_id'=>$model->id,
@@ -175,9 +176,9 @@ class KardexdepaController extends baseController
             'tipomov'=> \frontend\modules\sigi\models\SigiTipomov::TIPOMOV_DEFAULT,
             'glosa'=>yii::t('sigi.labels','PAGO DE CUOTA').'-'.$model->unidad->numero, 
             'monto'=>$model->montoCalculado(), 
-            'activo'=>'1'            
+            //'activo'=>'1'            
         ]);
-        }
+        }*/
     }
     
     

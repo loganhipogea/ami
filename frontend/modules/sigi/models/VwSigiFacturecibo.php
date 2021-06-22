@@ -202,10 +202,9 @@ class VwSigiFacturecibo extends \common\models\base\modelBase
     
     public function getReportMontoLetras(){  
         //var_dump($this->subtotal()+0);die();
-      return NumeroAletras::convert(              
-              round($this->subtotal()+0,2),
-               Monedas::findOne($this->codmon)->desmon,
-              true);
+      return (new NumeroAletras)->toWords(              
+              round($totalMesRaw,2)).'  '.
+               Monedas::findOne($codmon)->desmon ;
     }
    
      public function getReportDeslarga(){  

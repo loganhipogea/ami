@@ -170,12 +170,12 @@ class SigiKardexdepa extends \common\models\base\modelBase
     
     public function mailRecibo(){
        // \Yii::beginProfile('correo_a usuarios');
-
+      if($this->aprobado){
         $mailsPropietarios=$this->unidad->mailsPropietarios();
-        $numerorecibo=$this->detallesFactu[0]->numerorecibo;
+        $numerorecibo=$this->detalleFactu[0]->numerorecibo;
         if(count($mailsPropietarios)>0){
             $idReport=$this->facturacion->reporte_id;
-            $identidad=$this->detallesFactu[0]->identidad;
+            $identidad=$this->detalleFactu[0]->identidad;
             //var_dump($identidad);die();
             $pathPDF=Reporte::findOne($idReport)->creaReporte($idReport, $identidad);        
             $mailer = new \common\components\Mailer();
@@ -197,7 +197,9 @@ class SigiKardexdepa extends \common\models\base\modelBase
                     }
             }
             unlink($pathPDF);
-            
+      } else{
+         $mensajes['error']=yii::t('base.errors','La facturación aún no ha sido aprobada'); 
+      }
           //\Yii::endProfile('correo_a usuarios');
     return $mensajes;
     }

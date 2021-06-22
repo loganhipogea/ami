@@ -491,23 +491,22 @@ class Edificios extends \common\models\base\modelBase
     YII::ERROR($rol,__FUNCTION__);
      die();*/
      $unidades=$this->unidadesImputablesPadres();
-    //YII::ERROR(COUNT($unidades),__FUNCTION__);
+    //print_r($unidades);die();
     
-    foreach($unidades as $unidad){ 
-        // YII::ERROR($unidad->nombre,__FUNCTION__);
-        // YII::ERROR($unidad->hasUser(),__FUNCTION__);
+    foreach($unidades as $unidad){
+        YII::ERROR('***************** '.$unidad->nombre.' **********',__FUNCTION__);
+         YII::ERROR($unidad->nombre,__FUNCTION__);
+         YII::ERROR($unidad->hasUser(),__FUNCTION__);
         $currentProp=$unidad->currentPropietario();
       if(!is_null($currentProp)){
+          YII::ERROR(' tiene propietario',__FUNCTION__);
           $correo=$currentProp->correo;
+            YII::ERROR($correo,__FUNCTION__);
        if(!$unidad->hasUser()){
-           //YII::ERROR('no tiene usuario',__FUNCTION__);
-               
-        
-             YII::ERROR(' tiene propietario',__FUNCTION__);
-            
+           YII::ERROR('no tiene usuario aun ',__FUNCTION__);
             yii::error($correo);
            if(!empty($correo)){
-               yii::error('paso');
+               yii::error('tiene correo ',__FUNCTION__);
            
        $usuario= new \frontend\modules\sigi\models\users\SignupForm();
     
@@ -515,8 +514,10 @@ class Edificios extends \common\models\base\modelBase
        $usuario->username=$unidad->generateUsername();
        $usuario->password=$unidad->generatePwd();
       try {
+          
          $user= $usuario->signup();
       if(is_object($user)){
+            yii::error('funco el sgunp o ',__FUNCTION__);
        $user->refresh();
        $profile=$user->profile;
        $profile->tipo='40';
@@ -536,30 +537,19 @@ class Edificios extends \common\models\base\modelBase
                 }
         }
       } catch (\yii\db\IntegrityException $ex) {           
-       
+        yii::error('NO funco el sgunp o '.$ex->getMessage(),__FUNCTION__);
       }
       
-      // yii::error($user);
-       //yii::error($user->id);
-       
-      
-       
-       //yii::error($usuario->username);
-      // yii::error($usuario->password);
-       
-       
-       
                  unset($usuario);
                 } 
         }else{//si ya tiene usuario
+           yii::error('Ya tiene usuario ',__FUNCTION__); 
           if(!is_null($user=$unidad->obtenerUsuario())){              
        SigiUserEdificios::insertUserEdificio($user->id, $this->id);
           } 
         }
-        
-        
-        
-       }    else{
+       }else{
+           
            
        }  
        //die();

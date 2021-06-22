@@ -1,5 +1,5 @@
 <?PHP
-use yii\widgets\pjax;
+use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;

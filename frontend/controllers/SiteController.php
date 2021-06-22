@@ -413,6 +413,15 @@ Datos de caché de configuración se han actualizado');
     }
 public function actionRutas(){
     
+   echo  \frontend\modules\sigi\models\SigiDetfacturacion::findOne(66758)->unidad->propietarioRecibo()->nombre;
+    echo "<br>";
+     echo  \frontend\modules\sigi\models\SigiDetfacturacion::findOne(66763)->unidad->oldPropietario(\frontend\modules\sigi\models\SigiUnidades::TYP_PROPIETARIO)->nombre;
+ echo "<br>";
+ die();
+     echo  \frontend\modules\sigi\models\SigiDetfacturacion::findOne(66763)->unidad->propietarioRecibo();
+ 
+     
+     die();
     \frontend\modules\sigi\models\SigiSuministros::findOne(2059)->fillDepas();
     \frontend\modules\sigi\models\SigiSuministros::findOne(2060)->fillDepas();
     \frontend\modules\sigi\models\SigiSuministros::findOne(2061)->fillDepas();

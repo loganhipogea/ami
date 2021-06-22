@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\modules\sigi\models\VwSigiFacturecibo;
+use frontend\modules\sigi\models\SigiUnidades;
 use common\models\masters\Clipro;
 $detalle=$dataProvider->getModels()[0];
 $model=$detalle->facturacion;
@@ -148,10 +149,11 @@ $model=$detalle->facturacion;
                 <div style="width: 600px;">
                      <?PHP
                 if(!$detalle->resumido){
-                 if(!$detalle->nuevoprop){//si es un recibo partido por una trnasferencia de un pepoeario viejo
+                 if($detalle->nuevoprop){//si es un recibo partido por 
+                 //una trnasferencia de un pepoeario viejo
                    $propietario=$detalle->unidad->propietarioRecibo();   
                  }else{//si no es transferencia normal
-                    $propietario=$detalle->unidad->oldPropietario(\frontend\modules\sigi\models\SigiUnidades::TYP_PROPIETARIO); 
+                    $propietario=$detalle->unidad->oldPropietario(SigiUnidades::TYP_PROPIETARIO); 
                  }
                      
                   

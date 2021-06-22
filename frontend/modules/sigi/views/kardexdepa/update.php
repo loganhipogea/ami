@@ -22,7 +22,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 <h4><i class="fa fa-edit"></i><?= Html::encode($this->title) ?></h4>
    
     <div class="box box-success">
-    
+     <?php 
+     if($model->aprobado){ ?>
     <?php echo TabsX::widget([
     'position' => TabsX::POS_ABOVE,
      'bordered'=>true,
@@ -58,7 +59,10 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ]);  
 
 ?>
-        
+     <?php }else{ ?>  
+      
+        <h4><?=yii::t('base.labels','La facturación no se encuentra aprobada aún')?></h4>
+    <?php } ?>  
             
         </DIV>
 </DIV>

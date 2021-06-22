@@ -70,7 +70,7 @@ class SigiTransferencias extends \common\models\base\modelBase
             'fecha' => Yii::t('sigi.labels', 'Fecha'),
             'tipotrans' => Yii::t('sigi.labels', 'Tipotrans'),
             'nombre' => Yii::t('sigi.labels', 'Nuevo Prop'),
-            'codpro' => Yii::t('sigi.labels', 'Gr. Gestión'),
+            'codpro' => Yii::t('sigi.labels', 'Grupo Gestión destino'),
             'correo' => Yii::t('sigi.labels', 'Correo'),
             'dni' => Yii::t('sigi.labels', 'Dni'),
             'parent_id' => Yii::t('sigi.labels', 'Asignado a:'),
@@ -333,12 +333,20 @@ class SigiTransferencias extends \common\models\base\modelBase
    * Es decir primero transfiera , luego facture
    */
   public function validate_facturacion($attribute,$params){
-      $carbon=$this->toCarbon('fecha');      
+      
+      $carbon=$this->toCarbon('fecha');   
+      yii::error($carbon->format('m'));
+      yii::error($carbon->format('y'));
+       yii::error($this->unidad->hasFacturacion(
+                            (integer)$carbon->format('m'),
+                            $carbon->format('Y')
+             ));
      if($this->unidad->hasFacturacion(
-                            $carbon->format('m'),
-                            $carbon->format('y')
+                            (integer)$carbon->format('m'),
+                            $carbon->format('Y')
              )
-        ) $this->addError ('unidad_id',yii::t('base.labels','Ya hay facturación para este mes'));
+        ) 
+      $this->addError ('fecha',yii::t('base.labels','Ya existe facturación de esta unidad  para este mes, por favor revise'));
       
   }
   

@@ -626,7 +626,7 @@ class SigiFacturacion extends \common\models\base\modelBase
      //$unidades= $this->edificio->unidadesImputablesPadres();
      $unidades= $this->unidadesFacturables();
      $unidadesTransferidas=array_combine(array_column($this->transfEsteMes(),'unidad_id'),array_column($this->transfEsteMes(),'fecha'));
-     
+      //var_dump(date('j',strtotime($unidadesTransferidas[6795])));die();
      //$medidorAACC=$this->edificio->firstMedidorAACC();
      
      
@@ -653,7 +653,7 @@ class SigiFacturacion extends \common\models\base\modelBase
         
         
         $dias=$diasEnEsteMes;
-         
+        
         if(in_array($unidad->id,array_keys($unidadesTransferidas))){
             $dias=date('j',strtotime($unidadesTransferidas[$unidad->id])); 
         }else{

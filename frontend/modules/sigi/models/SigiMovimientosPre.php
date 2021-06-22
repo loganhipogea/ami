@@ -38,7 +38,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
      
      const MOV_COBROS='50';
    
-    public $booleanFields=['activo','ingreso'];
+    public $booleanFields=['activo'];
     public $dateorTimeFields = [
         'fechaop' => self::_FDATE,
        'fechaprog' => self::_FDATE,
@@ -119,7 +119,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
             [['kardex_id','monto','diferencia','ingreso'], 'safe'],
          
              [['monto'], 'validate_monto'],
-            
+            [['monto_conciliado'], 'safe'],
             [['monto'], 'validate_monto_fraccionado','on'=>self::SCE_CONCILIACION_PAGO],
             [['kardex_id'], 'required','on'=>self::SCE_CONCILIACION_PAGO],
             
@@ -247,10 +247,10 @@ class SigiMovimientosPre extends \common\models\base\modelBase
       $this->sincronizeStatus($insert);
       
       if($insert && $this->movBanco->tipoMov->isCobranza){
-          $this->ingreso=self::G_GRUPO_INGRESOS;
+         // $this->ingreso=self::G_GRUPO_INGRESOS;
       }
       if($insert && $this->movBanco->tipoMov->isPago){
-          $this->ingreso=self::G_GRUPO_EGRESOS;
+         // $this->ingreso=self::G_GRUPO_EGRESOS;
       }
     //  var_dump($this->kardex_id,$this->kardex->monto);die();
       //Le sumamos el monto actual, porque aun no graba

@@ -28,7 +28,7 @@ use yii\widgets\Pjax;
              <?=(!$aprobado)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Generar Recibos'), ['id'=>'boton_recibos','class' => 'btn btn-warning']):''?>      
               <?=(!$aprobado)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Compilar Recibos'), ['id'=>'boton_compile_recibos','class' => 'btn btn-warning']):''?>       
            
-                     <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Enviar recibos'), ['id'=>'boton_recibos_mail','class' => 'btn btn-warning'])?>    
+                     <?=($aprobado)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Enviar recibos'), ['id'=>'boton_recibos_mail','class' => 'btn btn-warning']):''?>    
        
         
                 <?php Pjax::begin(['id'=>'mippjax','timeout'=>false]) ?>

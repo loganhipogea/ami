@@ -19,7 +19,7 @@ use dosamigos\chartjs\ChartJs;
         'id'=>'migrilla',
         'dataProvider' =>NEW 
         \yii\data\ActiveDataProvider([
-            'query'=> frontend\modules\sigi\models\SigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id]),
+            'query'=> frontend\modules\sigi\models\SigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id,'aprobado'=>'1']),
         ]),
          'summary' => '',
          //'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],

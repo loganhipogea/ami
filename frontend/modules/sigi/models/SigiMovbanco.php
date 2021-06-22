@@ -126,7 +126,7 @@ class SigiMovbanco extends \common\models\base\modelBase
     
     public function getMovimientosDetallePago()
     {
-        return $this->hasMany(SigiMovimientosPago::className(), ['idop' => 'id']);
+        return $this->hasMany(SigiMovimientospago::className(), ['idop' => 'id']);
     }
     /*
      * Suma los montos conciliados con 

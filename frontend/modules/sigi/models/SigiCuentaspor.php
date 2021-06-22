@@ -440,7 +440,7 @@ public function existsDetalleFacturacion($unidad,$colector,$prorateo=false,$dias
  * Funcion corta 
  */
 public function insertaRegistro($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$esResumido){
-    $maxDias=date('t', strtotime($this->facturacion->swichtDate('fecha',false)));
+    $maxDias=30;
     
     if($dias==$maxDias){
       $this->insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,1,'1',$esResumido);  
@@ -458,12 +458,21 @@ private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$pa
     if($factor==1){
         $grupocobranza=(!$unidad->miApoderado()->cobranzaindividual)?$unidad->codpro:$unidad->numero;
     }else{
-       if($nuevoProp=='0') { ///Si es registro con propietario antiguo es necesario obtener el apoderado antiguo  para mantener el grupo de cobranza original
+       if($nuevoProp=='0') { 
+       /////Si es registro con propietario antiguo
+       // es necesario obtener el apoderado antiguo  
+       // para mantener el grupo de cobranza original
             $codproant=$unidad->lastTransferencia()->codproant;
-            $apoderadoant= SigiApoderados::find()->where(['edificio_id'=>$this->edificio_id,'codpro'=>$codproant])->one();
-           $grupocobranza=($apoderadoant->facturindividual)?$codproant:$unidad->numero;  
+            //yii::error('UNIDAD  '.$unidad->numero);
+            ///yii::error('UNIDAD  '.$unidad->numero);
+            $apoderadoant= SigiApoderados::find()->
+               where(['edificio_id'=>$this->edificio_id,'codpro'=>$codproant])
+                    ->one();
+            // yii::error('apoderado anterior  '.$apoderadoant->codpro);
+           $grupocobranza=($apoderadoant->facturindividual)?$unidad->numero:$codproant;  
+           //yii::error('GRUPO DE COBRANZA :  '.$grupocobranza);
        }else{ ///si es registro con propiestario nuevo , puede haber cambiado de apoderado pero no importa 
-          $grupocobranza=(!$unidad->miApoderado()->facturindividual)?$unidad->codpro:$unidad->numero;    
+          $grupocobranza=($unidad->miApoderado()->facturindividual)?$unidad->numero:$unidad->codpro;    
        }
     }
     

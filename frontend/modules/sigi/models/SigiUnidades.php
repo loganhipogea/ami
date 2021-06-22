@@ -679,11 +679,11 @@ public  function generatePwd(){
 }
 
 public function hasFacturacion($mes,$annio){
-  /*yii::error(SigiDetfacturacion::find()->where([
+  yii::error(SigiDetfacturacion::find()->where([
        'unidad_id'=>$this->id,
        'mes'=>$mes,
        'anio'=>$annio
-           ])->createCommand()->rawSql); */
+           ])->createCommand()->rawSql,__FUNCTION__); 
    return  SigiDetfacturacion::find()->where([
        'unidad_id'=>$this->id,
        'mes'=>$mes,
@@ -719,7 +719,7 @@ public function misDeudasProvider(){
                 ])->andWhere(['>',
                        'deuda',
                         h::gsetting('sigi','montominimo_deudor')
-                ])
+                ])->andWhere(['aprobado'=>'1'])
            ]
           );
   }

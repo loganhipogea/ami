@@ -18,7 +18,7 @@ class SigiMovimientosPreSearch extends SigiMovimientosPre
     {
         return [
             [['id', 'idop', 'edificio_id', 'cuenta_id', 'user_id'], 'integer'],
-            [['fechaop', 'fechacre', 'tipomov', 'glosa', 'activo'], 'safe'],
+            [['fechaop', 'fechacre', 'tipomov', 'glosa', 'activo','monto_conciliado'], 'safe'],
             [['monto', 'igv', 'monto_usd'], 'number'],
         ];
     }
