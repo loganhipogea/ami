@@ -51,7 +51,7 @@ class SigiSanciones extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['edificio_id', 'unidad_id', 'unidad_id_ocurrencia', 'propietario_id', 'activo', 'tipo', 'descripcion', 'monto','focurrencia','fecha'], 'required'],
+            [['edificio_id', 'unidad_id',  'propietario_id', 'tipo', 'descripcion', 'monto','focurrencia','fecha'], 'required'],
             [['edificio_id', 'unidad_id', 'unidad_id_ocurrencia', 'propietario_id'], 'integer'],
             [['monto'], 'number'],
             [['detalle'], 'string'],

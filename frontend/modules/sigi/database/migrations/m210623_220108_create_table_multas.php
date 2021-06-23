@@ -25,7 +25,7 @@ class m210623_220108_create_table_multas extends baseMigration
              //'idop' => $this->integer(20)->notNull(),
             'edificio_id' => $this->integer(11)->notNull(),
            'unidad_id' => $this->integer(11)->notNull(),
-           'unidad_id_ocurrencia' => $this->integer(11)->notNull(),
+           'unidad_id_ocurrencia' => $this->integer(11),
             'propietario_id' => $this->integer(11)->notNull(),
            'fecha' =>  $this->char(10)->append($this->collateColumn()),
            'focurrencia' =>  $this->char(19)->append($this->collateColumn()),

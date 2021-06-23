@@ -75,7 +75,7 @@ class PorpagarController extends baseController
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }else{
-          var_dump($model->load(Yii::$app->request->post()),$model->save());die(); 
+          
         }
         return $this->render('create', [
             'model' => $model,
@@ -238,7 +238,8 @@ public function actionCreateMulta(){
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view_sancion', 'id' => $model->id]);
         }else{
-           
+           //var_dump($model->load(Yii::$app->request->post()),$model->getFirstError());die(); 
+       
         }
         return $this->render('create_multa', [
             'model' => $model,
@@ -257,8 +258,7 @@ public function actionUpdateMulta($id){
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view_sancion', 'id' => $model->id]);
         }else{
-           
-        }
+            }
         return $this->render('update_multa', [
             'model' => $model,
         ]);
