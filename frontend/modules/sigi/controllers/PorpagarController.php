@@ -228,5 +228,52 @@ public function actionEditProgPago($id){
         } 
 }    
     
-    
+
+public function actionCreateMulta(){
+    $model = new \frontend\modules\sigi\models\SigiSanciones();
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view_sancion', 'id' => $model->id]);
+        }else{
+           
+        }
+        return $this->render('create_multa', [
+            'model' => $model,
+        ]);
+}
+
+public function actionUpdateMulta($id){
+    $model =\frontend\modules\sigi\models\SigiSanciones::findOne($id);
+    if(is_null($model))
+    throw new NotFoundHttpException(Yii::t('sigi.labels', 'The requested page does not exist.'));
+   
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view_sancion', 'id' => $model->id]);
+        }else{
+           
+        }
+        return $this->render('update_multa', [
+            'model' => $model,
+        ]);
+}
+  
+public function actionIndexMulta(){
+    $searchModel = new SigiSancionesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index_multa', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+   }
+
+
+
 }

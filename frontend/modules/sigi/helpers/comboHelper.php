@@ -294,7 +294,13 @@ class comboHelper extends Combito
                   ->all(),
                 'codigo','descripcion');
     }  
-    
+  
+   public static function getCboPropietarios($unidad_id){
+  return ArrayHelper::map(
+                  \frontend\modules\sigi\models\SigiPropietarios::find()
+                  ->andWhere(['unidad_id'=>$unidad_id,'activo'=>'1'])->all(),
+                'codigo','descripcion');
+    }  
 }
 
 
