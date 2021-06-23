@@ -35,6 +35,21 @@ class SigiCuentas extends \common\models\base\modelBase
         return '{{%sigi_cuentas}}';
     }
 
+    
+     public function behaviors()
+         {
+                return [
+		
+		/*'fileBehavior' => [
+			'class' => '\frontend\modules\attachments\behaviors\FileBehaviorAdvanced' 
+                               ],*/
+                    'auditoriaBehavior' => [
+			'class' => '\common\behaviors\AuditBehavior' ,
+                               ],
+		
+                    ];
+        }
+    
     /**
      * {@inheritdoc}
      */
@@ -44,7 +59,7 @@ class SigiCuentas extends \common\models\base\modelBase
             [['tipo', 'codmon',  'nombre', 'numero', 'banco_id', 'edificio_id'], 'required'],
             [['banco_id', 'edificio_id'], 'integer'],
             [['detalles', 'indicaciones', 'indicaciones2'], 'string'],
-             [['cci'], 'safe'],
+             [['cci','saldo'], 'safe'],
             [['cci'], 'string', 'max' => 100],
             [['tipo'], 'string', 'max' => 3],
             [['codmon'], 'string', 'max' => 5],
@@ -121,14 +136,25 @@ class SigiCuentas extends \common\models\base\modelBase
         return new SigiCuentasQuery(get_called_class());
     }
     
-    public function saldoCuenta(){
+    
+    public function updateSaldo($montoMov,$replace=false){
+        if($replace){
+           $this->saldo=$montoMov;
+        }else{
+           $this->saldo=$this->saldo+$montoMov; 
+               
+        }
+        
+        return $this->save();
+    }
+    /*public function saldoCuenta(){
         $lastCorte= SigiMovbanco::find()->select(['max(id)'])->
         andWhere(['tipomov'=>SigiMovbanco::TIPO_CORTE])->scalar();
         $consulta=$this->getSigiMovBancos()->select(['sum(monto)']);
         if($lastCorte)
         return $consulta->andWhere(['>=','id',$lastCorte])->scalar();
          return $consulta->scalar();
-    }
+    }*/
     
     
 }

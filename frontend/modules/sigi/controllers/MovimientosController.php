@@ -242,7 +242,14 @@ public function actionNuevMovBanco(){
             if(count($datos)>0){
                return ['success'=>2,'msg'=>$datos];  
             }else{
-                $model->save();
+                $transaccion=$model->db->beginTransaction();
+                if($model->save()){
+                   $transaccion->commit();
+                }else{
+                   $transaccion->rollback(); 
+                   return ['error'=>1,'msg'=>$model->getFirstError()];
+                }
+                
                 return ['success'=>1,'id'=>$model->edificio_id];
             }
         }else{
@@ -450,8 +457,8 @@ public function actionUnAprobePago($id){
         'edificio_id'=>$modelMovBanco->edificio_id,
          'cuenta_id'=>$modelMovBanco->cuenta_id,
         'idop'=>$modelMovBanco->id,
-        'tipomov'=>'500',
-        'activo'=>false,
+        'tipomov'=>'103',
+        'activo'=>true,
         //'glosa'=>'PAGO DE CUOTA DE MANT'
     ]);
     $model->setScenario($model::SCE_CONCILIACION_PAGO);
@@ -481,7 +488,7 @@ public function actionUnAprobePago($id){
 
 public function actionEditPago($id){
     $this->layout = "install";
-    $model= \frontend\modules\sigi\models\SigiMovimientosPago::findOne($id);
+    $model= \frontend\modules\sigi\models\SigiMovimientospago::findOne($id);
     if(is_null($model))
      return ['success'=>2,'msg'=>'nada']; 
     $model->setScenario($model::SCE_CONCILIACION_PAGO);
@@ -560,5 +567,38 @@ public function actionDeleteVoucher($id){
                 
         }
    }
+   
+   
+  
+public function actionUpdateSaldo($id){
+    $this->layout = "install";
+    $model= \frontend\modules\sigi\models\SigiCuentas::findOne($id);
+    if(is_null($model))
+     return ['success'=>2,'msg'=>'nada']; 
+    //$model->setScenario($model::SCE_CONCILIACION_PAGO);
+           
+      $datos=[];
+        if(h::request()->isPost){
+          $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_actualiza_saldo_cuenta', [
+               'id'=>$id,
+                        'model' => $model,
+                //'modelMovBanco'=> $modelMovBanco,
+               'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        ]);  
+        } 
+} 
+    
+   
    
 }

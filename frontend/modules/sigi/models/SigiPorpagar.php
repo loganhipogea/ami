@@ -37,9 +37,9 @@ class SigiPorpagar extends \common\models\base\modelBase
     public $dateorTimeFields=[
         'fechaprog'=>self::_FDATE,
          'fechadoc'=>self::_FDATE,
-         'fechadoc1'=>self::_FDATE
+         'fechaprog1'=>self::_FDATE
     ];
-    public $fechadoc1=null;
+    public $fechaprog1=null;
     public $monto1=null;
     public static function tableName()
     {
@@ -61,15 +61,17 @@ class SigiPorpagar extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codocu', 'edificio_id','codpro',  'monto','cargoedificio_id',   'glosa', 'fechadoc','codmon'], 'required'],
+            [['codocu', 'edificio_id','codpro',  'monto','cargoedificio_id',   'glosa', 'fechadoc','codmon','fechaprog'], 'required'],
             [['edificio_id', 'unidad_id'], 'integer'],
             [['monto', 'igv', 'monto_usd'], 'number'],
             [['detalle'], 'string'],
+            // [['numdocu'], 'safe'],
             [['fechaprog'], 'validate_fechas'],
              [['fechaprog'], 'validate_programacion'],
-            [['codmon','codpro','fechaprog','cuenta_id'], 'safe'],
+            [['codmon','codpro','fechaprog','cuenta_id','numdocu'], 'safe'],
             [['codocu'], 'string', 'max' => 3],
             [['codpresup', 'fechadoc'], 'string', 'max' => 10],
+             [['numdocu'], 'string', 'max' => 30],
             [['glosa'], 'string', 'max' => 40],
             [['codestado'], 'string', 'max' => 2],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
@@ -89,17 +91,22 @@ public function scenarios() {
     {
         return [
             'id' => Yii::t('sigi.labels', 'ID'),
-            'codocu' => Yii::t('sigi.labels', 'Codocu'),
-            'edificio_id' => Yii::t('sigi.labels', 'Edificio ID'),
-            'unidad_id' => Yii::t('sigi.labels', 'Unidad ID'),
+            'codocu' => Yii::t('sigi.labels', 'Documento'),
+            'codpro' => Yii::t('sigi.labels', 'Proveedor'),
+            'edificio_id' => Yii::t('sigi.labels', 'Edificio'),
+            'unidad_id' => Yii::t('sigi.labels', 'Unidad'),
             'monto' => Yii::t('sigi.labels', 'Monto'),
+              'monto1' => Yii::t('sigi.labels', 'Monto'),
             'igv' => Yii::t('sigi.labels', 'Igv'),
             'codpresup' => Yii::t('sigi.labels', 'Codpresup'),
             'monto_usd' => Yii::t('sigi.labels', 'Monto Usd'),
             'glosa' => Yii::t('sigi.labels', 'Glosa'),
-            'fechadoc' => Yii::t('sigi.labels', 'Fechadoc'),
+            'fechadoc' => Yii::t('sigi.labels', 'F Doc'),
+             'fechaprog' => Yii::t('sigi.labels', 'F Pago'),
+             'fechaprog1' => Yii::t('sigi.labels', 'F Pago'),
             'codestado' => Yii::t('sigi.labels', 'Codestado'),
             'detalle' => Yii::t('sigi.labels', 'Detalle'),
+             'numdocu' => Yii::t('sigi.labels', 'Número Doc'),
         ];
     }
 
@@ -258,6 +265,11 @@ public function scenarios() {
      public function montoConciliado(){
       // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
         return $this->getProgramaPagos()->select(['sum(monto)'])->scalar();
+    }
+    
+     public function montoPagado(){
+      // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
+        return $this->getMovimientosPago()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar();
     }
     
 }

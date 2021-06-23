@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
          [    'attribute'=>'edificio_id',
                'filter'=> frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                'value'=>function($model){
-                        return $model->edificio->nombre;
+                        return $model->edificio->codigo;
                }
                ],
 
@@ -61,6 +61,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [    'attribute'=>'codmon',
                'value'=>function($model){
                         return $model->codmon;
+               }
+               ],
+             [    'attribute'=>'saldo',
+               'value'=>function($model){
+                        return $model->saldo;
                }
                ],
              

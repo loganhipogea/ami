@@ -9,14 +9,18 @@
  */
 namespace frontend\modules\sigi\helpers;
 use common\helpers\ComboHelper as Combito;
+use frontend\modules\sigi\models\SigiUserEdificios;
 use yii\helpers\ArrayHelper;
 use yii;
 class comboHelper extends Combito
 {
      public static function getCboEdificios(){
+         //$idsEdificios= ;
         return ArrayHelper::map(
-                        \frontend\modules\sigi\models\Edificios::find()->all(),
+                        \frontend\modules\sigi\models\Edificios::find()->
+                         andWhere(['id'=>SigiUserEdificios::filterEdificios()])->all(),
                 'id','nombre');
+        
     }
     
     public static function getCboTipoUnidades(){

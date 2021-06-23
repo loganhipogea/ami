@@ -9,6 +9,7 @@ use common\helpers\h;
 use yii\widgets\ActiveForm;
 use frontend\modules\sigi\helpers\comboHelper;
 use common\widgets\selectwidget\selectWidget;
+use common\widgets\auditwidget\auditWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiCuentaspor */
 /* @var $form yii\widgets\ActiveForm */
@@ -32,7 +33,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), '
         <div class="col-md-12">
             <div class="form-group no-margin">
               <?php  
-                $url= Url::to(['/sigi/movimientos/corte-cuenta','id'=>$model->id,'gridName'=>'grilla_cargospor','idModal'=>'buscarvalor']);
+                $url= Url::to(['/sigi/movimientos/update-saldo','id'=>$model->id,'gridName'=>'grilla_billete','idModal'=>'buscarvalor']);
                          $options = [
                            'class'=>'botonAbre',
                             'data-pjax' => '0',
@@ -40,6 +41,9 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), '
                         echo Html::a('<span class="btn btn-success fa fa-cut"></span>',$url,$options);
                      
              ?> 
+               <?php  
+             echo auditWidget::widget(['model'=>$model]);
+               ?>  
             </div>
         </div>
     </div>
@@ -56,7 +60,12 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), '
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h3><?=$model->saldoCuenta().' '?></h3>
+                <h4>Saldo </h4>
+              <h3>
+                  <?php Pjax::begin(['id'=>'grilla_billete','timeout'=>false]);  ?>     
+                       <?=$model->moneda->simbolo.'  '.Yii::$app->formatter->asDecimal($model->saldo,3)?>
+                   <?php Pjax::end();  ?> 
+              </h3>
 
               <br>
               <br>

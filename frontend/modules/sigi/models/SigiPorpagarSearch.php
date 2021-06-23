@@ -20,7 +20,7 @@ class SigiPorpagarSearch extends SigiPorpagar
     {
         return [
             [['id', 'edificio_id', 'unidad_id'], 'integer'],
-            [['codocu', 'codpresup', 'glosa', 'fechadoc','fechadoc1','monto','monto1', 'codestado', 'detalle'], 'safe'],
+            [['codocu', 'codpresup', 'glosa', 'fechadoc','fechaprog1','monto','monto1', 'codestado', 'detalle'], 'safe'],
             [['monto', 'igv', 'monto_usd'], 'number'],
         ];
     }
@@ -79,12 +79,12 @@ public function getClipro()
             ->andFilterWhere(['like', 'codestado', $this->codestado])
             ->andFilterWhere(['like', 'detalle', $this->detalle]);
 
-         if(!empty($this->fechadoc) && !empty($this->fechadoc1)){
+         if(!empty($this->fechaprog) && !empty($this->fechaprog1)){
          $query->andFilterWhere([
              'between',
              'fechadoc',
-             $this->openBorder('fechadoc',false),
-             $this->openBorder('fechadoc1',true)
+             $this->openBorder('fechaprog',false),
+             $this->openBorder('fechaprog1',true)
                         ]);  
             } 
          if(!empty($this->monto) && !empty($this->monto1)){

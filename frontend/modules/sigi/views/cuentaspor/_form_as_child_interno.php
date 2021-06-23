@@ -15,7 +15,7 @@ use common\widgets\selectwidget\selectWidget;
 ?>
 
 <div class="sigi-cuentaspor-form">
-   
+   <?php $esEditable=($modelFacturacion->isAprobado())?false:true;   ?>
     <?php $form = ActiveForm::begin(['id'=>'myformulario',
     'fieldClass'=>'\common\components\MyActiveField'
     ]); ?>

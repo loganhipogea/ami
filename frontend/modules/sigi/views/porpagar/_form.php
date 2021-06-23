@@ -23,21 +23,13 @@ use common\helpers\h;
         <div class="col-md-12">
             <div class="form-group no-margin">
                 
-        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Save'), ['class' => 'btn btn-success']) ?>
-          <?=(!$model->isNewRecord)?Html::button('<span class="fa fa-money"></span>   '.Yii::t('sta.labels', 'Programar Pago'), ['class' => 'btn btn-warning','href' => '#','id'=>'btn-programa-pago']):''?>   
+        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Guardar'), ['class' => 'btn btn-success']) ?>
              
             </div>
         </div>
     </div>
       <div class="box-body">
     
- 
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'codocu')->dropDownList(
- comboHelper::getCboDocuments(),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
-             ) ?>
- </div>
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
      
     <?= ComboDep::widget([
@@ -80,6 +72,20 @@ use common\helpers\h;
 
 
  </div> 
+          
+  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'codocu')->dropDownList(
+ comboHelper::getCboDocuments(),
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ) ?>
+ </div>
+ 
+             
+ <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <?= $form->field($model, 'numdocu')->textInput(['maxlength' => true]) ?> 
+
+ </div>
+          
           
  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <?= $form->field($model, 'codmon')->dropDownList(
@@ -160,10 +166,7 @@ use common\helpers\h;
                             'options'=>['class'=>'form-control']
                             ]) ?>
 </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'codestado')->textInput(['maxlength' => true]) ?>
-
- </div>
+  
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
      <?= $form->field($model, 'detalle')->textarea(['rows' => 6]) ?>
 

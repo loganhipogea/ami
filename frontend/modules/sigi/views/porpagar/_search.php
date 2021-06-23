@@ -77,9 +77,9 @@ use common\helpers\h;
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
       <?php 
       
-        echo $form->field($model, 'fechadoc')->widget(
+        echo $form->field($model, 'fechaprog')->widget(
         DatePicker::classname(), [
-         'name' => 'fechadoc',
+         'name' => 'fechaprog',
             'language' => h::app()->language,
             'options' => ['placeholder' =>yii::t('sta.labels', '--Seleccione un valor--')],
     //'convertFormat' => true,
@@ -93,9 +93,9 @@ use common\helpers\h;
   </div> 
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
       <?php 
-        echo $form->field($model, 'fechadoc1')->widget(
+        echo $form->field($model, 'fechaprog1')->widget(
         DatePicker::classname(), [
-         'name' => 'fechadoc1',
+         'name' => 'fechaprog1',
             'options' => ['placeholder' =>yii::t('sta.labels', '--Seleccione un valor--')],
     //'convertFormat' => true,
                 'pluginOptions' => [

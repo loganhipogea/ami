@@ -58,9 +58,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $model->documento->desdocu;
                }
                ],
+              'numdocu',
            [    'attribute'=>'Edificio',
                'value'=>function($model){
-                        return $model->edificio->nombre;
+                        return $model->edificio->codigo;
                }
                ],
             [    'attribute'=>'Proveedor',
@@ -68,9 +69,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         return substr($model->clipro->despro,0,20);
                }
                ],
-             'fechadoc',          
+             'fechadoc', 
+             'fechaprog', 
             'codmon',
             'monto',
+             [    'attribute'=>'Pagado',
+               'value'=>function($model){
+                        return $model->montoPagado()*-1;
+               }
+               ],
             //'igv',
             //'codpresup',
             //'monto_usd',

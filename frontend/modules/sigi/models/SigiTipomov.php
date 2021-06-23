@@ -4,6 +4,7 @@ use Yii;
 class SigiTipomov extends \common\models\base\modelBase
 {
     const TIPOMOV_DEFAULT='100';
+    CONST MOV_AJUSTE='104';
     /**
      * {@inheritdoc}
      */

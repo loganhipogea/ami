@@ -175,6 +175,19 @@ class SigiMovbanco extends \common\models\base\modelBase
       return parent::beforeSave($insert);
   }
   
+  
+  public function afterSave($insert, $changedAttributes) {
+      if($insert){
+          //aplicamos la transaccion
+         $this->cuenta->updateSaldo($this->monto);
+      }else{
+          if(in_array('monto', array_keys($changedAttributes))){
+           $this->cuenta->updateSaldo($this->monto-$changedAttributes['monto']);   
+          }      }      
+      return parent::afterSave($insert, $changedAttributes);
+  }
+  
+  
   public function validate_monto($attribute,$params){
     if(($this->tipoMov->signo > 0 && $this->monto < 0) or
      ($this->tipoMov->signo < 0 && $this->monto > 0) )
