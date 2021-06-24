@@ -1,6 +1,6 @@
 <?php
 namespace frontend\modules\sigi\database\migrations;
-use yii\db\Migration;
+//use yii\db\Migration;
 use console\migrations\baseMigration;
 class m210623_220108_create_table_multas extends baseMigration
 {

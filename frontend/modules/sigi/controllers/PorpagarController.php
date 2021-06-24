@@ -5,6 +5,7 @@ namespace frontend\modules\sigi\controllers;
 use Yii;
 use frontend\modules\sigi\models\SigiPorpagar;
 use frontend\modules\sigi\models\SigiPorpagarSearch;
+use frontend\modules\sigi\models\SigiSancionesSearch;
 use frontend\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

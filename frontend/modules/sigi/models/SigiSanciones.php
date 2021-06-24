@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\modules\sigi\models;
-
+use frontend\modules\sigi\behaviors\FileBehavior;
 use Yii;
 
 /**
@@ -36,7 +36,14 @@ class SigiSanciones extends \common\models\base\modelBase
          'focurrencia1'=>self::_FDATETIME
     ];
     
-    
+     public function behaviors()
+    {
+	return [		
+		'fileBehavior' => [
+			'class' => FileBehavior::className()
+		]		
+	];
+    }
     /**
      * {@inheritdoc}
      */

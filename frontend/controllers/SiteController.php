@@ -413,6 +413,12 @@ Datos de caché de configuración se han actualizado');
     }
 public function actionRutas(){
     
+    \backend\components\Installer::
+     createMenuSingle(['/sigi/porpagar/index-multa'=>'Infracciones'],
+             'Administradores');
+    
+    die();
+    
    echo  \frontend\modules\sigi\models\SigiDetfacturacion::findOne(66758)->unidad->propietarioRecibo()->nombre;
     echo "<br>";
      echo  \frontend\modules\sigi\models\SigiDetfacturacion::findOne(66763)->unidad->oldPropietario(\frontend\modules\sigi\models\SigiUnidades::TYP_PROPIETARIO)->nombre;

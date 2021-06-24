@@ -1,6 +1,7 @@
 <?php
 namespace backend\components;
 use common\helpers\FileHelper;
+use mdm\admin\models\Menu;
 use common\models\masters\Combovalores;
 use Yii;
 use yii\web\Controller;
@@ -659,9 +660,44 @@ public static function setConfigYii($key,$value,$filePath){
    
    }
         
+/*
+ * CREA UN ITEM DE UN MENU
+ * ROUTE array aspociatico de un solo elemento: 
+ * ['/miruta/accion/nombre'=>'Accion menu']
+ * parent_name: El nombre del menu padre
+ */
+public static function createMenuSingle($route,$parent_name=''){
+    (new \mdm\admin\models\Route())->addNew(array_keys($route));
+    
+             $modelMenu=new \mdm\admin\models\Menu();
+            //echo  $modelMenu::find()->where(['name'=>$parent_name])->createCommand()->rawSql; die();
+             //var_dump($modelMenu::find()->where(['name'=>$parent_name])->one());die();
+             $other=$modelMenu::find()->where(['name'=>$parent_name])->one();
+             if(is_object($other)) 
+                 $result= $other->id;
+             else $result= '';
+             $modelMenu->setAttributes([
+                 'name'=> array_values($route)[0],
+                 'route'=>array_keys($route)[0],
+                 'parent'=>$result,
+                 'orden'=>'',
+                 'data'=>'']
+                     );
+           if(!$modelMenu->save())
+           yii::error($modelMenu->getFirstErrors(),__FUNCTION__);
+             unset($modelMenu);
+          
+}
 
-
-
-
+public static function deleteMenuSingle($route,$parent_name=''){
+    $other=\mdm\admin\models\Menu::find()->where(['name'=>$parent_name])->one();
+             if(is_object($other)) 
+                 $result= $other->id;
+             else $result= '';
+    
+   $modelMenu=\mdm\admin\models\Menu::deleteAll(['name'=>array_values($route)[0],'parent'=>$result]);
+            //echo  $modelMenu::find()->where(['name'=>$parent_name])->createCommand()->rawSql; die();
+            
+}
 
 }

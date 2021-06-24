@@ -299,7 +299,7 @@ class comboHelper extends Combito
   return ArrayHelper::map(
                   \frontend\modules\sigi\models\SigiPropietarios::find()
                   ->andWhere(['unidad_id'=>$unidad_id,'activo'=>'1'])->all(),
-                'codigo','descripcion');
+                'id','nombre');
     }  
 }
 

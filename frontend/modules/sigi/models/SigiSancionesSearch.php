@@ -21,7 +21,7 @@ class SigiSancionesSearch extends SigiSanciones
         return [
             [['id', 'edificio_id', 'unidad_id','propietario_id'], 'integer'],
             [['edificio_id', 'unidad_id','propietario_id', 'fecha','fecha1','monto','monto1', 'focurrencia','focurrencia1', 'detalle'], 'safe'],
-            [['monto', 'igv', 'monto_usd'], 'number'],
+            //[['monto', 'igv', 'monto_usd'], 'number'],
         ];
     }
 

@@ -106,6 +106,7 @@ use common\helpers\h;
      }else{
          $dati= comboHelper::getCboPropietarios($model->unidad_id);
      }
+    // var_dump($model->unidad_id,$dati);
      ?>
       
      <?= $form->field($model, 'propietario_id')->dropDownList(
