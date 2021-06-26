@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model frontend\modules\sigi\models\SigiPorpagar */
 
 $this->title = Yii::t('sigi.labels', 'Crear sanción');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Sanciones'), 'url' => ['index_multas']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Sanciones'), 'url' => ['index-multa']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sigi-porpagar-create">

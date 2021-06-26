@@ -13,7 +13,7 @@ ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 $this->title = Yii::t('sigi.labels', 'Editar Sanción: {name}', [
     'name' => $model->descripcion,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Sanciones'), 'url' => ['index_multas']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Sanciones'), 'url' => ['index-multa']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Editar');
 ?>

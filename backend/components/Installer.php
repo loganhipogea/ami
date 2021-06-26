@@ -667,6 +667,7 @@ public static function setConfigYii($key,$value,$filePath){
  * parent_name: El nombre del menu padre
  */
 public static function createMenuSingle($route,$parent_name=''){
+    
     (new \mdm\admin\models\Route())->addNew(array_keys($route));
     
              $modelMenu=new \mdm\admin\models\Menu();

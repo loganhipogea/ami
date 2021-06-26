@@ -237,7 +237,7 @@ public function actionCreateMulta(){
                 return ActiveForm::validate($model);
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view_sancion', 'id' => $model->id]);
+            return $this->redirect(['update-multa', 'id' => $model->id]);
         }else{
            //var_dump($model->load(Yii::$app->request->post()),$model->getFirstError());die(); 
        
@@ -257,7 +257,7 @@ public function actionUpdateMulta($id){
                 return ActiveForm::validate($model);
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view_sancion', 'id' => $model->id]);
+            return $this->redirect(['update-multa', 'id' => $model->id]);
         }else{
             }
         return $this->render('update_multa', [

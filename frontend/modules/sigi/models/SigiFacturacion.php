@@ -227,7 +227,7 @@ class SigiFacturacion extends \common\models\base\modelBase
     
     
     
-    public function generateFacturacionMes(){
+    public function generateFacturacionMes(){        
         $errores=[];
         yii::error('generando facturacion');
         if(count($this->getSigiCuentaspor()->select('codmon')->distinct()->column())==1){
@@ -626,7 +626,9 @@ class SigiFacturacion extends \common\models\base\modelBase
      //$unidades= $this->edificio->unidadesImputablesPadres();
      $unidades= $this->unidadesFacturables();
      $unidadesTransferidas=array_combine(array_column($this->transfEsteMes(),'unidad_id'),array_column($this->transfEsteMes(),'fecha'));
-      //var_dump(date('j',strtotime($unidadesTransferidas[6795])));die();
+     YII::ERROR('UNIDADES TRANSFERIDAS');
+        YII::ERROR($unidadesTransferidas);
+     //var_dump(date('j',strtotime($unidadesTransferidas[6795])));die();
      //$medidorAACC=$this->edificio->firstMedidorAACC();
      
      
@@ -648,14 +650,17 @@ class SigiFacturacion extends \common\models\base\modelBase
      $diasEnEsteMes=30;//date('t',strtotime($this->swichtDate('fecha',false)));
      
      foreach($unidades as $unidad){
-         //yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
+         yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
          ///verficando primero si la unidad ha sido transferida 
         
         
         $dias=$diasEnEsteMes;
         
         if(in_array($unidad->id,array_keys($unidadesTransferidas))){
+             yii::error(' '.$unidad->numero.'*********HA SIDO TRANSFERIDA**********');
+        
             $dias=date('j',strtotime($unidadesTransferidas[$unidad->id])); 
+            yii::error('*********DIAS**********  '.$dias);
         }else{
            $dias=$diasEnEsteMes;  
         }
@@ -867,19 +872,21 @@ class SigiFacturacion extends \common\models\base\modelBase
    * 
    */
   public function transfEsteMes(){
+      
       $bordes=$this->fechasBordes();
+       yii::error(SigiTransferencias::find()->select(['unidad_id','fecha'])->where([
+             'between',
+             'fecha',
+             $bordes[0],
+             $bordes[1],
+                        ])->createCommand()->getRawSql());
      return  SigiTransferencias::find()->select(['unidad_id','fecha'])->where([
              'between',
              'fecha',
              $bordes[0],
              $bordes[1],
                         ])->asArray()->all();
-     yii::error(SigiTransferencias::find()->select(['unidad_id','fecha'])->where([
-             'between',
-             'fecha',
-             $bordes[0],
-             $bordes[1],
-                        ])->createCommand()->getRawSql());
+    
   }
   
   /*
@@ -1020,11 +1027,29 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   public function unidadesFacturables(){
       $idsFacturados=SigiDetfacturacion::find()->select(['unidad_id'])->distinct()->
-              andWhere(['facturacion_id'=>$this->id])->column();
-     yii::error(SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
+              andWhere(['facturacion_id'=>$this->id])->
+              orderBy(['id'=>SORT_ASC])->column();
+     /*Eliminamos los dos últimos registros ids,si es que los hubiera,
+      * esto con el fin de que si se interrumpió el proceso por termino 
+      * de tiempo de respuesta, el proceso se reanude asegurándose de 
+      * retomar dos ids procesados con anterioridad, quizas lso registros del último id
+      * no fueron completados, de esta forma nos aseguramos de que se reanude
+      * sin perder ninguna concatenacion
+      * 
+      * 
+      * ---  ---- ---- ---- ---- ---- ---- <interrupcion>
+      *            <Reanudacion> ---- ---- ----- ----- ---- ---- ---- ...asi sucesivamente
+      * 
+      */
+      if(count($idsFacturados)>=2){
+        array_pop($idsFacturados); array_pop($idsFacturados);  
+      }
+     
+      
+     /*yii::error(SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
              'imputable'=>'1',
                 ])->andWhere(['parent_id'=>null])->andWhere(['not in','unidad_id',$idsFacturados])
-             ->createCommand()->rawSql,__FUNCTION__);
+             ->createCommand()->rawSql,__FUNCTION__);*/
      
       
       return SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([

@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h4><?= Html::encode($this->title) ?></h4>
     <div class="box box-success">
      <div class="box-body">
+          <?= Html::a(Yii::t('sigi.labels', 'Crear infracción'), ['create-multa'], ['class' => 'btn btn-success']) ?>
     <?php Pjax::begin(); ?>
     <?php //echo $this->render('_search_multas', ['model' => $searchModel]); ?>
 
