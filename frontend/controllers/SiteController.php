@@ -412,6 +412,25 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    $tiempo= microtime(true);
+    set_time_limit(500);
+    $tiempomaximo=ini_get('max_execution_time');
+     echo $tiempo.'<br>';
+      echo 'El tiempo maximo '.$tiempomaximo.'  Segundos<br>';
+    sleep(305);
+   $tiempo2= microtime(true);
+   $diferencia=$tiempo2-$tiempo;
+   if($diferencia < $tiempomaximo){
+      echo " Se uso  " .$diferencia." Segundos ";
+   }else{
+      echo " Se acabo el tiempo ";  
+   }
+    
+    die();
+    //ini_set();
+   echo ini_get('max_execution_time'); die();
+    
+    
     
     \backend\components\Installer::
      createMenuSingle(['/sigi/porpagar/index-multa'=>'Infracciones'],

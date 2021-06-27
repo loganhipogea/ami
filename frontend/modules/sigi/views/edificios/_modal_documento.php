@@ -1,4 +1,5 @@
 <?php
+ use kartik\date\DatePicker;
 use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -59,7 +60,38 @@ use frontend\modules\sigi\helpers\comboHelper;
      <?= $form->field($model, 'importante')->checkbox([]) ?>
 
  </div>
-   
+  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <?= $form->field($model, 'finicio')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                     'format' => h::gsetting('timeUser', 'date')  , 
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'2019:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control',
+                                 //'disabled'=>(!$aprobado)?false:true
+                                 ]
+                            ]) ?>
+ </div> 
+  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <?= $form->field($model, 'ftermino')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                     'format' => h::gsetting('timeUser', 'date')  , 
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'2019:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control',
+                                 //'disabled'=>(!$aprobado)?false:true
+                                 ]
+                            ]) ?>
+ </div> 
  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
  <?= $form->field($model, 'detalle')->
  textarea([]) ?>

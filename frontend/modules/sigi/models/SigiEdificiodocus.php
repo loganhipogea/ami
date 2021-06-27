@@ -20,7 +20,10 @@ use Yii;
 class SigiEdificiodocus extends \common\models\base\modelBase
 {
    public $booleanFields=['importante']; 
-    
+     public $dateorTimeFields=[
+         'finicio'=>self::_FDATE,
+         'ftermino'=>self::_FDATE
+             ];
     /**
      * {@inheritdoc}
      */
@@ -44,9 +47,9 @@ class SigiEdificiodocus extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['edificio_id', 'codocu','nombre', 'detalle'], 'required'],
+            [['edificio_id', 'codocu','nombre', 'detalle'], 'required','finicio','ftermino'],
             [['edificio_id'], 'integer'],
-            [['importante'], 'safe'],
+            [['importante','finicio','ftermino'], 'safe'],
             [['detalle'], 'string'],
             [['codocu'], 'string', 'max' => 3],
             [['nombre'], 'string', 'max' => 60],
@@ -66,6 +69,8 @@ class SigiEdificiodocus extends \common\models\base\modelBase
             'codocu' => Yii::t('app', 'Documento'),
             'nombre' => Yii::t('app', 'Nombre'),
             'detalle' => Yii::t('app', 'Detalle'),
+            'finicio' => Yii::t('base.labels', 'F. Inicio'),
+            'ftermino' => Yii::t('base.labels', 'F. Término'),
         ];
     }
 
@@ -92,5 +97,11 @@ class SigiEdificiodocus extends \common\models\base\modelBase
     public static function find()
     {
         return new SigiEdificiodocusQuery(get_called_class());
+    }
+    
+    public function validate_fechas($attribute, $params){
+       if($this->toCarbon('finicio')->gt($this->toCarbon('ftermino')))
+           $this->addError ($attribute,yii::t('base.errors','La fecha de inicio es posterior a la fecha de término'));
+        
     }
 }

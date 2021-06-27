@@ -241,7 +241,13 @@ class SigiFacturacion extends \common\models\base\modelBase
                $errores['success']=yii::t('sigi.errors','Se ha generado la facturacion sin problemas '.$this->balanceMontos());  
             }
           }*/
-           $this->shortFactu();           
+           $this->shortFactu();
+           if($this->hasErrors()){
+           $errores['error']=array_values($this->firstErrors[0]);
+            return $errores;
+           }
+           
+           
           $this->asignaIdentidad();//Importante  
            $this->asignaNumero();
            $this->updateAllMontoKardex();
@@ -621,7 +627,11 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   /*Facturacion sin nmucho detalle */
   public function shortFactu(){
-      
+      /*
+      * Tomamos el control del tiempo
+      */
+     $tiempoInicio= microtime(true);
+     
       /*Solo unidades padres que sean imputables*/
      //$unidades= $this->edificio->unidadesImputablesPadres();
      $unidades= $this->unidadesFacturables();
@@ -649,8 +659,17 @@ class SigiFacturacion extends \common\models\base\modelBase
       
      $diasEnEsteMes=30;//date('t',strtotime($this->swichtDate('fecha',false)));
      
+     
+     
      foreach($unidades as $unidad){
-         yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
+        $tiempoFinal= microtime(true);
+        /*
+         * Controlamos el tiempo de ejecucion 
+         */
+       if(h::gsetting('general','nSegundosEsperaApache')>($tiempoFinal-$tiempoInicial)){
+        
+           yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
+       
          ///verficando primero si la unidad ha sido transferida 
         
         
@@ -863,9 +882,14 @@ class SigiFacturacion extends \common\models\base\modelBase
           }
            //yii::error('********** FIN DE  unidad  '.$unidad->numero.'*******************');
       
-       }
+       }else{
+         $this->addError('fecha',yii::t('base.errors','El tiempo de respuesta se ha agotado, pero el procedimiento no se ha completado aún, repita el proceso para retomarlo'));
+         break;
+     }
+       
+     
   }
-  
+  }
   /*
    * Devuelve las transferencias de departamentos 
    * acaecidas durante el mes de la facturacion 
