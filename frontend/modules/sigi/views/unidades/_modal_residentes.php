@@ -79,8 +79,10 @@ use frontend\modules\sigi\helpers\comboHelper;
 
  </div>   
  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'recibo')->checkbox([]) ?> 
- </div> 
+     <?= $form->field($model, 'resumirprop')->checkbox([]) ?>
+      
+
+ </div>   
   
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
      <?= $form->field($model, 'detalle')->textarea(['rows' => 6]) ?>

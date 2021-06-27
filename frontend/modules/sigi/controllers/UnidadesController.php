@@ -467,6 +467,7 @@ public function actionAjaxMainRecibo($id){
              h::response()->format = \yii\web\Response::FORMAT_JSON;
     $propietario= \frontend\modules\sigi\models\SigiPropietarios::findOne($id);
     if(!is_null($propietario)){
+        if(!$propietario->activo) return ['error'=>Yii::t('sigi.labels', 'Este propietario no está activo')];
         $propietario->updateAll(['recibo'=>'0'],['unidad_id'=>$propietario->unidad->id]);
         $propietario->updateAll(['recibo'=>'1'],['unidad_id'=>$propietario->unidad->id,'id'=>$id]);
         return ['success'=>Yii::t('sigi.labels',$propietario->nombre.'  Se estableció como titular del recibo')]; 

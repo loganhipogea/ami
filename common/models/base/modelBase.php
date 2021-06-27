@@ -1639,13 +1639,20 @@ public function firstMessage($category=null){
   * PERO EN FORMATO ESTABECIDO POR LA APLICACION  pejem dd/mm/yyyy
   * devuelve un string   
   */
- public static function currentDateInFormat($dateTime=false){
+ public static function currentDateInFormat($dateTime=false,$secondsToFuture=0){
      if($dateTime){
-         return self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDateTime()),'datetime',true);  
-     }else{
-         return self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);   
+         if($secondsToFuture>0)
+         return self::SwichtFormatDate (self::CarbonNow()->addSeconds($secondsToFuture)->format(\common\helpers\timeHelper::formatMysqlDateTime()),self::_FDATETIME,true);  
+         return self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDateTime()),self::_FDATETIME,true);  
+    
+        }else{
+        if($secondsToFuture>0)
+         return self::SwichtFormatDate (self::CarbonNow()->addSeconds($secondsToFuture)->format(\common\helpers\timeHelper::formatMysqlDate()),self::_FDATE,true);  
+        
+         return self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),self::_FDATE,true);   
      }
  }
+ 
  
 }   
 

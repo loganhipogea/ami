@@ -47,9 +47,10 @@ class SigiEdificiodocus extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['edificio_id', 'codocu','nombre', 'detalle'], 'required','finicio','ftermino'],
+            [['edificio_id', 'codocu','nombre', 'detalle','finicio','ftermino'], 'required'],
             [['edificio_id'], 'integer'],
             [['importante','finicio','ftermino'], 'safe'],
+             [['finicio'], 'validate_fechas'],
             [['detalle'], 'string'],
             [['codocu'], 'string', 'max' => 3],
             [['nombre'], 'string', 'max' => 60],

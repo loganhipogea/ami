@@ -59,6 +59,8 @@ use frontend\modules\sigi\models\SigiEdificiodocusSearch;
             'codocu',
               'nombre',              
             'documento.desdocu',
+             'finicio',
+             'ftermino',
                 [
               'attribute' => '',
                'format'=>'raw',

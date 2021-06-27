@@ -37,7 +37,7 @@ class SigiUnidades extends \common\models\base\modelBase
     const SCENARIO_BASICO='basica';
     const SCENARIO_PARENT='parent';
     const SCENARIO_UPDATE_BASICO='update_basico';
-    public $booleanFields=['esnuevo','imputable'];
+    public $booleanFields=['esnuevo','imputable','resumirprop'];
     public $hardFields=['edificio_id','numero'];
     /**
      * {@inheritdoc}
@@ -75,8 +75,8 @@ class SigiUnidades extends \common\models\base\modelBase
              ['codpro', 'validateApoderado'],
             ['numero', 'unique', 'targetAttribute' => ['edificio_id','numero','codtipo']],
             [['area', 'participacion'], 'number'],
-            //[['area'], 'required'],
-            //['imputable', 'validateArea'],
+            [['area'], 'required'],
+            ['resumirprop', 'safe'],
             //['imputable', 'validateArea'],
             /*['parent_id', 'validateParent',
                 'except' => ['import_basica',self::SCENARIO_UPDATE_BASICO,self::SCENARIO_HIJO,self::SCENARIO_COMPLETO]

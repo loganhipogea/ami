@@ -15,6 +15,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\helpers\h;
 use yii\helpers\Url;
+use common\helpers\timeHelper;
 
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -311,7 +312,9 @@ class EdificiosController extends baseController
         $modeledificio = $this->findModel($id);        
        $model=New \frontend\modules\sigi\models\SigiEdificiodocus();
        $model->edificio_id=$id;
-       
+       $model->finicio= $model::currentDateInFormat();
+       $model->ftermino=$model::currentDateInFormat(false,60*60*24*60); //Dos meses
+      
        $datos=[];
         if(h::request()->isPost){
             $model->load(h::request()->post());
