@@ -11,7 +11,7 @@ class SigiPropietarios extends \common\models\base\modelBase
     CONST SCENARIO_EMPRESA='empresa';
     CONST SCENARIO_TELEFONO='telefonos_correos';
     //CONST ROL_PROPIETARIO='r_propietario';
-    public $booleanFields=['espropietario','recibemail','activo','recibo'];
+    public $booleanFields=['espropietario','recibemail','activo','recibo','resumirprop'];
     /**
      * {@inheritdoc}
      */

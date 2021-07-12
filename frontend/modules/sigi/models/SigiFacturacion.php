@@ -243,7 +243,7 @@ class SigiFacturacion extends \common\models\base\modelBase
           }*/
            $this->shortFactu();
            if($this->hasErrors()){
-           $errores['error']=array_values($this->firstErrors[0]);
+           $errores['error']=$this->getFirstError();//array_values($this->firstErrors[0]);
             return $errores;
            }
            
@@ -660,13 +660,19 @@ class SigiFacturacion extends \common\models\base\modelBase
      $diasEnEsteMes=30;//date('t',strtotime($this->swichtDate('fecha',false)));
      
      
-     
+     yii::error('tiempos de espera',__FUNCTION__);
+     $tiempoEspera=h::gsetting('general','nSegundosEsperaApache');
      foreach($unidades as $unidad){
         $tiempoFinal= microtime(true);
         /*
          * Controlamos el tiempo de ejecucion 
          */
-       if(h::gsetting('general','nSegundosEsperaApache')>($tiempoFinal-$tiempoInicial)){
+        
+        yii::error(h::gsetting('general','nSegundosEsperaApache'),__FUNCTION__);
+       yii::error('diferencia',__FUNCTION__);
+        yii::error($tiempoFinal-$tiempoInicio,__FUNCTION__);
+       //yii::error($tiempoFinal,__FUNCTION__);
+        if($tiempoEspera < ($tiempoFinal-$tiempoInicial)){
         
            yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
        
@@ -769,11 +775,11 @@ class SigiFacturacion extends \common\models\base\modelBase
                       * Recordar que estos medidores se anclan o se registran
                       * dentro de una unidad que es imputable=0
                       */
-                     //yii::error(' recorriendo los medidores aacc  ');
+                     yii::error(' recorriendo los medidores aacc  ');
                        $nMedidoresAACC=$this->edificio->nMedidoresAaCc();
                          foreach($this->edificio->medidoresAaCc() as $medidorAACC){
                             if($medidorAACC->hasUnitAfiliado($unidad->id)){
-                                //yii::error('Esta unida esta afiliada a este medidor '.$medidorAACC->unidad->numero);
+                                yii::error('Esta unida esta afiliada a este medidor '.$medidorAACC->unidad->numero);
                                 /*Siempre que esta unidad este afiliada al medidor AACC
                                 
                              /*En este calculo se obtiene = (consumo actual) /(Consumo total) */
@@ -791,18 +797,18 @@ class SigiFacturacion extends \common\models\base\modelBase
                                  * $medidorAACC->participacionRead() este si es para cada meiddor
                                  */
                              $participacionAACC=$medidorAACC->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
-                             //yii::error('paraticipacion de este medidor :'.$participacionAACC);
+                             yii::error('paraticipacion de este medidor :'.$participacionAACC);
                              if($medidorAACC->plano){  
-                                // yii::error('Este mdidor es plano');
+                                 yii::error('Este mdidor es plano');
                                   
                                   
                                 $ndepasafiliados=$medidorAACC->ndepasRepartoPadres(); 
-                                //yii::error('cantidad de departamentos afiliados :'.$ndepasafiliados);
+                                yii::error('cantidad de departamentos afiliados :'.$ndepasafiliados);
                                 if($ndepasafiliados>0){
                                     $montoAux=$participacionAACC*
                                             //$medidorAACC->participacionRead($this->mes,$this->ejercicio)*
                                             $cuenta->monto/($nMedidoresAACC*$ndepasafiliados);
-                                    //yii::error('monto auxi= '.$participacionAACC.' * '.$cuenta->monto.'/('.$ndepasafiliados.'*'.$nMedidoresAACC.'  ) = '.$montoAux);
+                                    yii::error('monto auxi= '.$participacionAACC.' * '.$cuenta->monto.'/('.$ndepasafiliados.'*'.$nMedidoresAACC.'  ) = '.$montoAux);
                                     /*Aqui ya no es incrementable el monto,(osea monto=monto+ ...  es un solo calculo total*/
                                     $monto+= $montoAux;
                                   }
@@ -1088,6 +1094,12 @@ class SigiFacturacion extends \common\models\base\modelBase
             $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>($this->reporte_id==2)?true:false]);
             //echo $contenido; die();
             $pdf=ModuleReporte::getPdf(); 
+            
+            /*
+             * Tamaño de papel
+             */
+           // $pdf->landscape='L';
+            
               $stylesheet = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
                 //$stylesheet2 = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
                $pdf->WriteHTML($stylesheet, 1);

@@ -38,9 +38,10 @@ class SigiLecturas extends \common\models\base\modelBase
     {
         return [
             [['suministro_id','lectura','flectura', 'unidad_id', 'mes','anio'], 'required','on'=>'default'],
-              [['flectura'], 'valida_depa','on'=>self::SCENARIO_IMPORTACION],
+              
+            [['flectura'], 'valida_depa','on'=>self::SCENARIO_IMPORTACION],
             [['mes','anio','edificio_id','flectura'],'required','on'=>self::SCENARIO_SESION],
-            
+            [['lectura', 'mes','anio','edificio_id','unidad_id','flectura','suministro_id','codedificio'],'required','on'=>self::SCENARIO_SESION],
             
             [['suministro_id', 'unidad_id', 'mes'], 'required','on'=>'default'],
             //[['suministro_id','mes', 'anio'], 'unique', 'targetAttribute' => ['mes']],

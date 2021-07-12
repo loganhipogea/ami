@@ -36,6 +36,7 @@ class Module extends \yii\base\Module
             $fontData = $defaultFontConfig['fontdata'];
 //$mpdf = new \common\components\MyMpdf([/*
 $mpdf = new \Mpdf\Mpdf([
+    'format'=>'A4',
     'fontDir' => array_merge($fontDirs,[
        Yii::getAlias('@fonts')
     ]),

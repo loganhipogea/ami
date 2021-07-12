@@ -23,7 +23,7 @@ class SigiTransferenciasSearch extends SigiTransferencias
     {
         return [
             [['id', 'edificio_id', 'unidad_id', 'parent_id'], 'integer'],
-            [['fecha', 'tipotrans', 'nombre', 'correo', 'dni','unidad.numero'], 'safe'],
+            [['edificio_id', 'fecha', 'tipotrans', 'nombre', 'correo', 'dni','unidad.numero'], 'safe'],
         ];
     }
 
@@ -65,7 +65,7 @@ class SigiTransferenciasSearch extends SigiTransferencias
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-           // 'd.edificio_id' => $this->edificio_id,
+            'edificio_id' => $this->edificio_id,
             'unidad_id' => $this->unidad_id,
             'parent_id' => $this->parent_id,
         ]);
