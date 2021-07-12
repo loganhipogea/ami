@@ -10,6 +10,7 @@
 namespace frontend\modules\sigi\helpers;
 use common\helpers\ComboHelper as Combito;
 use frontend\modules\sigi\models\SigiUserEdificios;
+use frontend\modules\sigi\models\SigiSuministros;
 use yii\helpers\ArrayHelper;
 use yii;
 class comboHelper extends Combito
@@ -301,6 +302,23 @@ class comboHelper extends Combito
                   ->andWhere(['unidad_id'=>$unidad_id,'activo'=>'1'])->all(),
                 'id','nombre');
     }  
+    
+    
+     public static function IdsMedidoresByEdificio($edificio_id,$tipo=SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT,$exceptions=[]){
+     $idsSuministros= 
+             \frontend\modules\sigi\models\SigiSuministros::find()-> 
+             select(['id'])->andWhere([
+                                        'edificio_id'=>$edificio_id,
+                                        'tipo'=>$tipo
+                                                    ])->column();
+        
+         return ArrayHelper::map(
+                          \frontend\modules\sigi\models\SigiSuministros::find()
+                  ->andWhere(['id'=>array_diff($idsSuministros, $exceptions)])->all(),
+                'id','codsuministro');
+    }
+    
+    
 }
 
 

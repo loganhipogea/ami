@@ -476,5 +476,43 @@ public function actionAjaxMainRecibo($id){
     }
    }
 }
+
+  public function actionReplaceMedidor($id){        
+         $this->layout = "install";         
+        $modelAnt = \frontend\modules\sigi\models\SigiSuministros::findOne($id);  
+        $model=New \frontend\modules\sigi\models\SigiSuministros();
+        $model->setScenario($model::SCENARIO_REEMPLAZO);
+        $model->setAttributes($modelAnt->attributes);
+        $model->codsuministro=null;
+        //$model->codsuministro=null;
+       
+       $datos=[];
+        if(h::request()->isPost){
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                
+                $model->save();
+                //yii::error();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->unidad_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_reemplazo_medidor', [
+                        'model' => $model,
+               'modelAnt' => $modelAnt,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }
+    }
+
+
  
 }

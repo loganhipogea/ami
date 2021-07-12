@@ -29,6 +29,7 @@ class SigiSuministros extends \common\models\base\modelBase
      */
     CONST COD_TYPE_SUMINISTRO_DEFAULT='101'; //medidor tipo agua 
     const SCENARIO_IMPORTACION='importacion_simple';
+    const SCENARIO_REEMPLAZO='reemplazo';
      const SCENARIO_CODSUMINISTRO='cod_suministro';
      public $booleanFields=['activo','plano'];
      
@@ -61,7 +62,8 @@ class SigiSuministros extends \common\models\base\modelBase
             [['codedificio'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['codedificio' => 'codigo'],'on'=>self::SCENARIO_IMPORTACION],
              //[['codepa'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['codedificio' => 'codigo']],
      
-            
+             [['id_anterior','delta_anterior','codsuministro'], 'safe','on'=>self::SCENARIO_REEMPLAZO],
+            [['codsuministro','delta_anterior','id_anterior'], 'required','on'=>self::SCENARIO_REEMPLAZO],
             
             [['codpro'], 'string', 'max' => 6],
             [['codsuministro'], 'string', 'max' => 12],
@@ -77,6 +79,9 @@ public function scenarios()
         $scenarios = parent::scenarios(); 
        $scenarios[self::SCENARIO_IMPORTACION] = ['codepa','codedificio','tipo','codum','codpro','codsuministro'];
         $scenarios[self::SCENARIO_CODSUMINISTRO] = ['id','codsuministro'];
+       $scenarios[self::SCENARIO_REEMPLAZO] = ['unidad_id','edificio_id','tipo',
+           'codpro','codum','codsuministro','numerocliente','detalles','frecuencia',
+           'limsup','liminf','activo','plano','id_anterior','delta_anterior'];
         return $scenarios;
     }
     
@@ -442,6 +447,9 @@ public function afterSave($insert, $changedAttributes) {
     if(!$this->unidad->imputable){
         $this->fillDepas();
     }
+    if($this->getScenario()==self::SCENARIO_REEMPLAZO){
+        $this->resolveReemplazo();
+    }
     return parent::afterSave($insert, $changedAttributes);
 }
 /*
@@ -547,5 +555,9 @@ public function porcPartUnidadAfiliada($unidad){
     return 0;
 }
 
+public function resolveReemplazo(){
+    $medAnt=self::findOne($this->id_anterior);
+    $medAnt->activo=false; $medAnt->save();
+}
 
 }
