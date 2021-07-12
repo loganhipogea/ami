@@ -412,6 +412,54 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    
+    
+      $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+            $fontDirs = $defaultConfig['fontDir'];
+            $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+            $fontData = $defaultFontConfig['fontdata'];
+//$mpdf = new \common\components\MyMpdf([/*
+$mpdf = new \Mpdf\Mpdf([
+    'format'=>'A4',
+    'fontDir' => array_merge($fontDirs,[
+       Yii::getAlias('@fonts')
+    ]),
+    'fontdata' => $fontData + [
+        'cour' => [
+            'R' => 'cour.ttf',
+            'I' => 'CourierITALIC.ttf',
+        ]
+    ],
+    //'default_font' => 'cour'
+]);
+print_r($mpdf->fontdata);die(); 
+          
+          //$mpdf=new \Mpdf\Mpdf();
+          //echo get_class($mpdf);die();
+          /* $pdf->methods=[ 
+           'SetHeader'=>[($model->tienecabecera)?$header:''], 
+            'SetFooter'=>[($model->tienepie)?'{PAGENO}':''],
+        ];*/
+           $mpdf->simpleTables = true;
+                 $mpdf->packTableData = true;
+           $mpdf->showImageErrors = true;
+           $mpdf->curlAllowUnsafeSslRequests = true; //Permite imagenes de url externas
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     $tiempo= microtime(true);
     set_time_limit(500);
     $tiempomaximo=ini_get('max_execution_time');

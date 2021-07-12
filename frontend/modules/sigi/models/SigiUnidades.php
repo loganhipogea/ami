@@ -478,7 +478,7 @@ class SigiUnidades extends \common\models\base\modelBase
    
    
    public function firstMedidor($type){
-       return $this->getSigiSuministros()->andWhere(['tipo'=>$type])->one();
+       return $this->getSigiSuministros()->andWhere(['tipo'=>$type,'activo'=>'1'])->one();
    }  
    
    public function propietarioRecibo(){

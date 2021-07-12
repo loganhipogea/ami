@@ -11,7 +11,7 @@ return [
     
    
     
-    
+     'timeZone' => 'America/Lima',
    'name'=>'Diar gestión',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
