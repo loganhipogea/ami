@@ -4,7 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
  //use kartik\date\DatePicker;
 use common\widgets\selectwidget\selectWidget;
-use common\helpers\h;
+ use kartik\date\DatePicker;
+ use common\helpers\h;
 use frontend\modules\sigi\helpers\comboHelper;
 
 /* @var $this yii\web\View */
@@ -41,14 +42,8 @@ use frontend\modules\sigi\helpers\comboHelper;
  
    
   <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-     <?= 
-            $form->field($model, 'tipo')->
-            dropDownList($model->comboDataField('tipo') ,
-                    ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
-                    // 'class'=>'probandoSelect2',
-                      'disabled'=>true,
-                        ]
-                    )  ?>
+      <?= $form->field($modelAnt, 'codsuministro')->textInput(['disabled'=>true,'maxlength' => true]) ?>
+
 </div>
    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
      <?= $form->field($modelAnt, 'frecuencia')->textInput(['disabled'=>true,'maxlength' => true]) ?>
@@ -60,7 +55,7 @@ use frontend\modules\sigi\helpers\comboHelper;
 
  </div>   
   <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-     <?= $form->field($modelAnt, 'codum')->textInput(['value'=>$model->um->desum,'disabled'=>true,'maxlength' => true]) ?>
+     <?= $form->field($modelAnt, 'codum')->textInput(['value'=>$modelAnt->um->desum,'disabled'=>true,'maxlength' => true]) ?>
 
  </div> 
     
@@ -71,11 +66,11 @@ use frontend\modules\sigi\helpers\comboHelper;
 
  </div>
   <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'codsuministro')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'codsuministro_actual')->textInput(['maxlength' => true]) ?>
 
  </div>        
   <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-     <?= $form->field($modelAnt, 'activo')->checkBox([]) ?>
+     <?= $form->field($modelAnt, 'activo')->checkBox(['disabled'=>true,]) ?>
 
  </div>         
    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -83,25 +78,52 @@ use frontend\modules\sigi\helpers\comboHelper;
 
  </div>   
  
-  
-<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-     <?= 
-            $form->field($model, 'id_anterior')->
-            dropDownList(comboHelper::IdsMedidoresByEdificio($modelAnt->edificio_id) ,
-                    ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
-                    // 'class'=>'probandoSelect2',
-                      //'disabled'=>true,
-                        ]
-                    )  ?>
-</div>
-  <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'delta_anterior')->textInput(['maxlength' => true]) ?>
-
- </div> 
- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'detalles')->textarea(['rows' => 4]) ?>
+ 
+ 
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+      <?= $form->field($model, 'fecha_reemplazo')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                       'format' => h::getFormatShowDate(),
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'2010:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control']
+                            ]) ?>
 
  </div>
+<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'ultima_lectura')->textInput() ?>
+
+ </div>      
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+      <?= $form->field($model, 'fecha_ultima_lectura')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                       'format' => h::getFormatShowDate(),
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'2010:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control',]
+                            ]) ?>
+
+ </div>  
+          
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+     <?= $form->field($model, 'lectura_actual')->textInput() ?>
+
+ </div>         
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+     <?= $form->field($model, 'detalle')->textarea(['rows' => 4]) ?>
+
+ </div>        
+          
     <?php ActiveForm::end(); ?>
 
 

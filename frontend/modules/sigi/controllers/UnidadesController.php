@@ -480,10 +480,12 @@ public function actionAjaxMainRecibo($id){
   public function actionReplaceMedidor($id){        
          $this->layout = "install";         
         $modelAnt = \frontend\modules\sigi\models\SigiSuministros::findOne($id);  
-        $model=New \frontend\modules\sigi\models\SigiSuministros();
-        $model->setScenario($model::SCENARIO_REEMPLAZO);
-        $model->setAttributes($modelAnt->attributes);
-        $model->codsuministro=null;
+        $model=New \frontend\modules\sigi\models\SigiReempmedidor();
+        //$model->setScenario($model::SCENARIO_REEMPLAZO);
+        $model->setAttributes([
+            'suministro_id_ant'=>$modelAnt->id,
+                 ]);
+        //$model->codsuministro=null;
         //$model->codsuministro=null;
        
        $datos=[];

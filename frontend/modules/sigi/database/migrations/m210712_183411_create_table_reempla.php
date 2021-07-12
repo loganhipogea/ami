@@ -24,6 +24,7 @@ class m210712_183411_create_table_reempla extends baseMigration
             'id'=>$this->primaryKey(),
              //'idop' => $this->integer(20)->notNull(),
             'suministro_id_ant' => $this->integer(11)->notNull(),
+            'suministro_id_act' => $this->integer(11),
            'ultima_lectura' => $this->decimal(12,4)->notNull(),
            'fecha_ultima_lectura' =>  $this->char(10)->append($this->collateColumn()),
           'fecha_reemplazo' =>  $this->char(10)->append($this->collateColumn()),
