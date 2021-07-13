@@ -99,21 +99,7 @@ use frontend\modules\sigi\helpers\comboHelper;
      <?= $form->field($model, 'ultima_lectura')->textInput() ?>
 
  </div>      
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-      <?= $form->field($model, 'fecha_ultima_lectura')->widget(DatePicker::class, [
-                            'language' => h::app()->language,
-                           'pluginOptions'=>[
-                                       'format' => h::getFormatShowDate(),
-                                   'changeMonth'=>true,
-                                  'changeYear'=>true,
-                                 'yearRange'=>'2010:'.date('Y'),
-                               ],
-                          
-                            //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control',]
-                            ]) ?>
-
- </div>  
+  
           
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
      <?= $form->field($model, 'lectura_actual')->textInput() ?>

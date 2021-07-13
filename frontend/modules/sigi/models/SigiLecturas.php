@@ -140,7 +140,7 @@ class SigiLecturas extends \common\models\base\modelBase
           
           if($this->isDateForFirstRead(true)){
                $this->lecturaant=$this->lastReadValue(); 
-                $this->delta=$this->lectura;  
+                $this->delta=$this->lectura+$this->deltaPredecesor();  
           }else{
             $this->lecturaant=$this->lastReadValue(); 
                 $this->delta=$this->lectura-$this->lecturaant; 
@@ -526,5 +526,13 @@ class SigiLecturas extends \common\models\base\modelBase
     ])->exists();
      return false;
  } 
-  
+
+ public function deltaPredecesor(){
+    if(!is_null($reeemplazo=$this->suministro->hasReemplazo())){
+         return $reemplazo->suministroAnt->lastRead(null,true)->delta;
+      }else{
+          return 0;
+      }
+ }
+ 
 }

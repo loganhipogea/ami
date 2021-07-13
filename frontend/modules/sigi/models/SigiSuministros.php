@@ -447,9 +447,7 @@ public function afterSave($insert, $changedAttributes) {
     if(!$this->unidad->imputable){
         $this->fillDepas();
     }
-    if($this->getScenario()==self::SCENARIO_REEMPLAZO){
-        $this->resolveReemplazo();
-    }
+    
     return parent::afterSave($insert, $changedAttributes);
 }
 /*
@@ -559,5 +557,20 @@ public function resolveReemplazo(){
     $medAnt=self::findOne($this->id_anterior);
     $medAnt->activo=false; $medAnt->save();
 }
+
+public function hasReemplazo(){
+    if($this->hasLecturas(true)) return false;
+    $model=SigiReempmedidor::find()->andWhere(['suministro_id_ant'=>$this->id])->orderBy(['id'=>SORT_DESC])->one();
+    return !is_null($model)?$model:false;
+}
+
+public function hasLecturas($facturable=false){
+    $flag=($facturable)?'0':'1';
+    return $this->getLecturas()->andWhere(['suministro_id'=>$this->id,'facturable'=>$flag])->exists();
+}
+
+
+        
+
 
 }

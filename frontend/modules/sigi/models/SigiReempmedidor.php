@@ -41,9 +41,12 @@ class SigiReempmedidor extends \common\models\base\modelBase
     {
         return [
             [['suministro_id_ant', 'ultima_lectura',
-                'fecha_ultima_lectura', 'fecha_reemplazo',
+                //'fecha_ultima_lectura', 
+                'fecha_reemplazo',
                 'codsuministro_actual'], 'required'],
-            [['suministro_id_ant'], 'integer'],
+            [['suministro_id_ant','suministro_id_act'], 'integer'],
+            [['suministro_id_act' ],'safe'],
+            [['fecha_reemplazo' ],'validate_fechas'],
             [['ultima_lectura', 'lectura_actual'], 'number'],
             [['detalle'], 'string'],
             [['fecha_ultima_lectura', 'fecha_reemplazo'], 'string', 'max' => 10],
@@ -59,12 +62,12 @@ class SigiReempmedidor extends \common\models\base\modelBase
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'suministro_id_ant' => Yii::t('app', 'Suministro Id Ant'),
+            'suministro_id_ant' => Yii::t('app', 'Suministro Ant'),
             'ultima_lectura' => Yii::t('app', 'Ultima Lectura'),
-            'fecha_ultima_lectura' => Yii::t('app', 'Fecha Ultima Lectura'),
+            'fecha_ultima_lectura' => Yii::t('app', 'Fec Ult Lectura'),
             'fecha_reemplazo' => Yii::t('app', 'Fecha Reemplazo'),
-            'codsuministro_actual' => Yii::t('app', 'Codsuministro Actual'),
-            'lectura_actual' => Yii::t('app', 'Lectura Actual'),
+            'codsuministro_actual' => Yii::t('app', 'Cod Nuevo Suministro'),
+            'lectura_actual' => Yii::t('app', 'Lectura inicial de seteo'),
             'detalle' => Yii::t('app', 'Detalle'),
         ];
     }
@@ -85,4 +88,46 @@ class SigiReempmedidor extends \common\models\base\modelBase
     {
         return new SigiReempmedidorQuery(get_called_class());
     }
+    
+    public function afterSave($insert, $changedAttributes) {
+        
+        //self::updateAll(['suministro_id_act'=> ])
+      RETURN   parent::afterSave($insert, $changedAttributes);
+    }
+    
+    public function resolveSuministro(){
+        $model=New SigiSuministros();
+        $modelAnt=$this->suministroAnt;
+        $model->setAttributes($modelAnt->attributes);
+        $model->codsuministro=$this->codsuministro_actual; 
+        $model->liminf=(is_null($this->lectura_actual))?0:$this->lectura_actual;
+        $grabo=$model->save();
+        $model->refresh();
+        $modelLectura=New SigiLecturas();
+        $modelLectura->setAttributes([
+            'suministro_id'=>$this->suministroAnt->id,
+            'lectura'=>$this->ultima_lectura,
+             'flectura'=>$this->fecha_ultima_lectura,
+            'unidad_id'=>$modelAnt->unidad_id,
+            'mes'=>date('j',strtotime($this->swichtDate('fecha_ultima_lectura',false))),
+            'anio'=>date('Y',strtotime($this->swichtDate('fecha_ultima_lectura',false))),
+             ]);
+        //return $model;
+    }
+  
+    
+    
+  public function validate_fechas($attribute,$params){
+      $flectura=$this->sumnistroAnt->
+                      lastRead()->flectura;
+      if($this->toCarbon('fecha_reemplazo')->
+              lt(
+                      $this->sumnistroAnt->
+                      lastRead()->toCarbon('flectura')
+                 )) 
+       $this->addError('fecha_reemplazo',yii::t('sigi.errors',
+               'La fecha de reemplazo no puede ser anterior a la última fecha de lectura {flectura}',
+               ['flectura'=>$flectura])
+               );
+  }
 }

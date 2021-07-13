@@ -496,8 +496,13 @@ public function actionAjaxMainRecibo($id){
             if(count($datos)>0){
                return ['success'=>2,'msg'=>$datos];  
             }else{
-                
-                $model->save();
+                $transaccion=$model->getDb()->beginTransaction();
+                if($model->save() && $model->resolveSuministro()){
+                   $transaccion->commit(); 
+                }else{
+                   $transaccion->rollBack(); 
+                   return ['success'=>2,'msg'=>'error']; 
+                }
                 //yii::error();
                 //$model->assignStudentsByRandom();
                   return ['success'=>1,'id'=>$model->unidad_id];
