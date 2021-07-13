@@ -165,12 +165,12 @@ public function getEdificio()
                         
              }else{
                  $fecha=self::resolveFormatDate($fecha);
-                    yii::error('ya pe');
+                    //yii::error('ya pe');
                     /*yii::error($this->queryReads()->andWhere(['facturable'=>$valorFacturable])->andWhere(['<=','flectura',$fecha])/*->andWhere(['<=','id',$this->queryReads()->max('id')])
                    ->orderBy('id desc')->limit(1)->createCommand()->rawSql);*/
                         $query=$this->queryReads()->andWhere(['facturable'=>$valorFacturable])->andWhere(['<=','flectura',$fecha])/*->andWhere(['<=','id',$this->queryReads()->max('id')])*/
                    ->orderBy('id desc')->limit(1); 
-                     yii::error($query->createCommand()->rawSql);    
+                     //yii::error($query->createCommand()->rawSql);    
                     }        
        return $query->one(); 
     }
