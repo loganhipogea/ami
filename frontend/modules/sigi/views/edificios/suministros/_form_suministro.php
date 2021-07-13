@@ -26,13 +26,19 @@ use frontend\modules\sta\helpers\comboHelper;
         <div class="col-md-12">
             <div class="form-group no-margin">
                   <?php
- $url= Url::to(['/sigi/unidades/agrega-lectura','id'=>$model->id,'gridName'=>'grilla-staff','idModal'=>'buscarvalor']);
+                Pjax::begin(['id'=>'botonpajax']);
+                 if($model->activo){
+ $url= Url::to(['/sigi/unidades/agrega-lectura','id'=>$model->id,'gridName'=>'botonpajax','idModal'=>'buscarvalor']);
    echo  Html::button(yii::t('base.verbs','Agregar Lectura'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Lectura'),'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-success']); 
-  ?>
-                                <?php
- $url= Url::to(['/sigi/unidades/replace-medidor','id'=>$model->id,'gridName'=>'grilla-staff','idModal'=>'buscarvalor']);
-   echo  Html::button(yii::t('base.verbs','Reemplazar este medidor'), ['href' => $url, 'title' => yii::t('sta.labels','Reemplazar'),'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-warning']); 
-  ?>
+                 } ?>
+    <?php
+        
+      if($model->activo){
+            $url= Url::to(['/sigi/unidades/replace-medidor','id'=>$model->id,'gridName'=>'botonpajax','idModal'=>'buscarvalor']);
+            echo  Html::button(yii::t('base.verbs','Reemplazar este medidor'), ['href' => $url, 'title' => yii::t('sta.labels','Reemplazar'),'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-warning']); 
+                } 
+            Pjax::end();
+      ?>
             </div>
         </div>
     </div>
