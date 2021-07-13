@@ -214,7 +214,7 @@ class SigiLecturas extends \common\models\base\modelBase
          if(!$medidor->isDateForLastRead($this->flectura)){
              //yii::error($this->nextReadNumeric($this->flectura),__FUNCTION__);
               if($this->lectura > $this->nextReadNumeric($this->flectura))
-              $this->addError('lectura','Existe una lectura posterior, y es menor que la lectura que esta intentando ingresar "{{ultimalectura}}"',['ultimalectura'=>$this->nextReadNumeric($this->flectura)]);
+              $this->addError('lectura','Existe una lectura posterior a '.$this->flectura.', y es menor que la lectura que esta intentando ingresar '.$this->nextReadNumeric($this->flectura)->lectura,['flectura'=>$this->flectura,'ultimalectura'=>$this->nextReadNumeric($this->flectura)->lectura]);
            }
         
      } 
@@ -273,7 +273,7 @@ class SigiLecturas extends \common\models\base\modelBase
     	return $edificio;
     }
     private function depa(){
-        //yii::error('funcion depa',__FUNCTION__);
+       // yii::error('funcion depa',__FUNCTION__);
         /*yii::error(SigiUnidades::find()->where([
             'numero'=>$this->codepa,
             'edificio_id'=>$this->edificioByCode()->id,
@@ -351,6 +351,7 @@ class SigiLecturas extends \common\models\base\modelBase
                  andWhere(['<>','id',!is_null($this->id)?$this->id:0])->
       andWhere(['>=','flectura',static::SwichtFormatDate($this->flectura, 'date',false)])->
       orderBy('flectura ASC')->limit(1);
+         yii::error($query->createCommand()->rawSql,__FUNCTION__);
         if(!$allRecords){///Si se trata de solo facturables 
            $query=$query->andWhere(['facturable'=>$valorFacturable]);
        }

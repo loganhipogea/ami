@@ -25,8 +25,8 @@ class SigiReempmedidor extends \common\models\base\modelBase
      */
     
      public $dateorTimeFields = [
-        'fecha_ultima_lectura' => self::_FDATETIME,
-        'fecha_reemplazo' => self::_FDATETIME,
+        'fecha_ultima_lectura' => self::_FDATE,
+        'fecha_reemplazo' => self::_FDATE,
         //'ftermino' => self::_FDATETIME
     ];
     public static function tableName()
@@ -46,7 +46,8 @@ class SigiReempmedidor extends \common\models\base\modelBase
                 'codsuministro_actual'], 'required'],
             [['suministro_id_ant','suministro_id_act'], 'integer'],
             [['suministro_id_act' ],'safe'],
-            [['fecha_reemplazo' ],'validate_fechas'],
+            [['fecha_reemplazo' ],'validate_lectura'],
+            [['ultima_lectura' ],'validate_lectura'],
             [['ultima_lectura', 'lectura_actual'], 'number'],
             [['detalle'], 'string'],
             [['fecha_ultima_lectura', 'fecha_reemplazo'], 'string', 'max' => 10],
@@ -102,27 +103,53 @@ class SigiReempmedidor extends \common\models\base\modelBase
         $model->codsuministro=$this->codsuministro_actual; 
         $model->liminf=(is_null($this->lectura_actual))?0:$this->lectura_actual;
         $grabo=$model->save();
-        $model->refresh();
-        $modelLectura=New SigiLecturas();
-        $modelLectura->setAttributes([
+        //$model->refresh();
+        $mod=$this->preparaLectura();
+        $grabo1=$mod->save();
+        YII::ERROR($model->getErrors());
+         YII::ERROR($mod->getErrors());
+         SigiSuministros::updateAll(['activo'=>'0'], ['id'=>$this->suministroAnt->id]);
+         return ($grabo && $grabo1 );
+    }
+ 
+ private function preparaLectura(){
+     $modelLectura=New SigiLecturas();
+     //yii::error($this->fecha_reemplazo,__FUNCTION__);
+     //yii::error($this->swichtDate('fecha_reemplazo',false),__FUNCTION__);
+     // yii::error('verificando si refresca las fechas',__FUNCTION__);
+       $this->refresh();
+       //yii::error($this->fecha_reemplazo,__FUNCTION__); 
+     $modelLectura->setAttributes([
             'suministro_id'=>$this->suministroAnt->id,
             'lectura'=>$this->ultima_lectura,
-             'flectura'=>$this->fecha_ultima_lectura,
-            'unidad_id'=>$modelAnt->unidad_id,
-            'mes'=>date('j',strtotime($this->swichtDate('fecha_ultima_lectura',false))),
-            'anio'=>date('Y',strtotime($this->swichtDate('fecha_ultima_lectura',false))),
+             'flectura'=>$this->fecha_reemplazo,
+            'unidad_id'=>$this->suministroAnt->unidad_id,
+            'codepa'=>$this->suministroAnt->unidad->numero,
+             'codedificio'=>$this->suministroAnt->edificio->codigo,
+            'mes'=>date('n',strtotime($this->swichtDate('fecha_reemplazo',false))),
+            'anio'=>date('Y',strtotime($this->swichtDate('fecha_reemplazo',false))),
              ]);
-        //return $model;
-    }
-  
+        //yii::error($modelLectura->attributes,__FUNCTION__);
+        return $modelLectura;
+ }   
     
+ pUBLIC function validate_lectura($attribute,$params){
+     $modelLectura=$this->preparaLectura();
+   if(!$modelLectura->validate()){
+       $this->addError('ultima_lectura',$modelLectura->getFirstError());
+       $modelLectura->clearErrors();
+       return; 
+   }
+    
+ }
     
   public function validate_fechas($attribute,$params){
-      $flectura=$this->sumnistroAnt->
+      $flectura=$this->suministroAnt->
                       lastRead()->flectura;
+      //var_dump($this->suministroAnt->lastRead(),$flectura);die();
       if($this->toCarbon('fecha_reemplazo')->
               lt(
-                      $this->sumnistroAnt->
+                      $this->suministroAnt->
                       lastRead()->toCarbon('flectura')
                  )) 
        $this->addError('fecha_reemplazo',yii::t('sigi.errors',
@@ -130,4 +157,9 @@ class SigiReempmedidor extends \common\models\base\modelBase
                ['flectura'=>$flectura])
                );
   }
+  
+  
+  
+  
+  
 }

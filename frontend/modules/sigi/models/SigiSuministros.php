@@ -48,7 +48,7 @@ class SigiSuministros extends \common\models\base\modelBase
     {
         return [
             [['tipo', 'codpro', 'codum', 'unidad_id'], 'required'],
-              [['liminf', 'limsup','activo','plano'], 'safe'],
+              [['liminf', 'limsup','activo','plano','edificio_id'], 'safe'],
             [['unidad_id', 'frecuencia'], 'integer'],
             [['detalles'], 'string'],
             [['tipo'], 'string', 'max' => 3],
@@ -154,21 +154,23 @@ public function getEdificio()
     public function lastRead($fecha=null,$facturable=false)
     {
         
-        $fecha=self::resolveFormatDate($fecha);
+        
         
         
         //$query=$this->queryReads(); 
         $valorFacturable=($facturable)?'1':['0','1'];        
              if(is_null($fecha)){
                         $query=$this->queryReads()->andWhere(['facturable'=>$valorFacturable ,'id'=>$this->queryReads()->max('id')]);
-                //yii::error($this->queryReads()->createCommand()->rawSql);
+                yii::error($this->queryReads()->createCommand()->rawSql);
                         
              }else{
-                    //yii::error('ya pe');
+                 $fecha=self::resolveFormatDate($fecha);
+                    yii::error('ya pe');
                     /*yii::error($this->queryReads()->andWhere(['facturable'=>$valorFacturable])->andWhere(['<=','flectura',$fecha])/*->andWhere(['<=','id',$this->queryReads()->max('id')])
                    ->orderBy('id desc')->limit(1)->createCommand()->rawSql);*/
                         $query=$this->queryReads()->andWhere(['facturable'=>$valorFacturable])->andWhere(['<=','flectura',$fecha])/*->andWhere(['<=','id',$this->queryReads()->max('id')])*/
                    ->orderBy('id desc')->limit(1); 
+                     yii::error($query->createCommand()->rawSql);    
                     }        
        return $query->one(); 
     }

@@ -505,7 +505,7 @@ public function actionAjaxMainRecibo($id){
                 }
                 //yii::error();
                 //$model->assignStudentsByRandom();
-                  return ['success'=>1,'id'=>$model->unidad_id];
+                  return ['success'=>1,'id'=>$model->id];
             }
         }else{
            return $this->renderAjax('_modal_reemplazo_medidor', [

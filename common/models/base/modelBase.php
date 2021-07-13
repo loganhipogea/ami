@@ -664,7 +664,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             public function beforeSave($insert) {
                 $insert=$this->isNewRecord;
          $this->prepareTimeFields(false);//Convierte los campos fechas y tiempo almacenables en BD
-       $this->convertBooleanFields(false);
+         $this->convertBooleanFields(false);
          // $this->setPrimaryKey($this->prefijo);
          return  parent::beforeSave( $insert);
         }
@@ -1258,7 +1258,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
         
          if (!in_array($attribute, 
                  array_keys($this->dateorTimeFields))){
-            throw new ServerErrorHttpException(Yii::t('base.errors', 'Wrong property {valor}  in field time {campo} Times  ',['campo'=>$attribute])); 
+               throw new ServerErrorHttpException(Yii::t('base.errors', 'Wrong property {valor}  in field time {campo} Times  ',['campo'=>$attribute])); 
          }
          
          $type=$this->dateorTimeFields[$attribute];
