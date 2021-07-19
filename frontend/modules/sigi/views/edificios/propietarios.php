@@ -44,7 +44,18 @@ $this->title = Yii::t('base.names', 'Propietarios');
                            
                    ]
                 ],
-           
+           [
+                'class' => 'kartik\grid\ExpandRowColumn',
+                'width' => '50px',
+                'value' => function ($model, $key, $index, $column) {
+                            return GridView::ROW_COLLAPSED;
+                                },
+                      'detail' => function ($model, $key, $index, $column) {
+                            return $this->render('/propietarios/correos', ['model'=>$model,'id'=>$model->id]);
+                            },
+                    //'headerOptions' => ['class' => 'kartik-sheet-style'], 
+                    'expandOneOnly' => true
+                ],
             ['attribute'=>'unidad_id',
                 'value'=>function($model){
                          return $model->unidad->nombre;

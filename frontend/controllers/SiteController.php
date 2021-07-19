@@ -419,20 +419,16 @@ public function actionRutas(){
             $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
             $fontData = $defaultFontConfig['fontdata'];
 //$mpdf = new \common\components\MyMpdf([/*
-$mpdf = new \Mpdf\Mpdf([
-    'format'=>'A4',
-    'fontDir' => array_merge($fontDirs,[
-       Yii::getAlias('@fonts')
-    ]),
-    'fontdata' => $fontData + [
-        'cour' => [
-            'R' => 'cour.ttf',
-            'I' => 'CourierITALIC.ttf',
-        ]
-    ],
-    //'default_font' => 'cour'
-]);
+$mpdf = \frontend\modules\report\Module::getPdf(['format'=>'A5-L']);
+//$mpdf->curlAllowUnsafeSslRequests=TRUE;
+$mpdf->Output();
+//print_r(get_object_vars($mpdf));
+die();
+
+
 print_r($mpdf->fontdata);die(); 
+
+
           
           //$mpdf=new \Mpdf\Mpdf();
           //echo get_class($mpdf);die();

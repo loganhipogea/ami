@@ -29,14 +29,13 @@ class Module extends \yii\base\Module
     }
    
     
-    public static function  getPdf(){
+    public static function  getPdf($config=[]){
                $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
             $fontDirs = $defaultConfig['fontDir'];
             $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
             $fontData = $defaultFontConfig['fontdata'];
-//$mpdf = new \common\components\MyMpdf([/*
-$mpdf = new \Mpdf\Mpdf([
-    'format'=>'A4',
+     
+  $configInicial=['format'=>'A4',
     'fontDir' => array_merge($fontDirs,[
        Yii::getAlias('@fonts')
     ]),
@@ -45,9 +44,16 @@ $mpdf = new \Mpdf\Mpdf([
             'R' => 'cour.ttf',
             'I' => 'CourierITALIC.ttf',
         ]
-    ],
-    //'default_font' => 'cour'
-]);
+    ],];
+  foreach($config as $key=>$value){
+      if(array_key_exists($key, $configInicial)){
+         $configInicial[$key]=$value;
+      }else{
+        $configInicial[$key]=$config[$key];  
+      }
+  }
+//$mpdf = new \common\components\MyMpdf([/*
+$mpdf = new \Mpdf\Mpdf($configInicial);
 //print_r($mpdf->fontdata);die();
           
           //$mpdf=new \Mpdf\Mpdf();

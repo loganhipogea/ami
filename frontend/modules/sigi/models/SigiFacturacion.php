@@ -31,7 +31,8 @@ class SigiFacturacion extends \common\models\base\modelBase
     const EST_CREADO='C';
     const EST_APROBADO='A';
     //const EST_ANULADO='A';
-    
+    private $_reporte=null;
+     private $_edificio=null;
    //public static $varsToReplace=['$cuenta'=>'','$dias'=>'','$banco'=>'','$correo_cobranza'=>''];
     public $hardFields=['edificio_id','mes','ejercicio'];
      public $dateorTimeFields=['fvencimiento'=>self::_FDATE,'fecha'=>self::_FDATE];
@@ -82,6 +83,8 @@ class SigiFacturacion extends \common\models\base\modelBase
    
     public function getSigiCuentaspor()
     {
+        
+        
         return $this->hasMany(SigiCuentaspor::className(), ['facturacion_id' => 'id']);
     }
     
@@ -105,12 +108,22 @@ class SigiFacturacion extends \common\models\base\modelBase
      */
     public function getEdificio()
     {
-        return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
+        if(is_null($this->_edificio)){
+          return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
+       }else{
+          return $this->_edificio;
+       }
+        
     }
     
     
     public function getReporte(){
-       return $this->hasOne(Reporte::className(), ['id' => 'reporte_id']);
+       if(is_null($this->_reporte)){
+          return $this->hasOne(Reporte::className(), ['id' => 'reporte_id']); 
+       }else{
+          return $this->_reporte;
+       }
+       
    
     }
     
@@ -1089,15 +1102,19 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   
   public function recibo($idKardex,$disk=false){   
-        YII::ERROR('EL ID KARDEX '.$idKardex,__FUNCTION__);
+         $formato=$this->reporte->tamanopapel;
+      
+      
            $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
             $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>($this->reporte_id==2)?true:false]);
-            //echo $contenido; die();
-            $pdf=ModuleReporte::getPdf(); 
+            
+//echo $contenido; die();
+            $pdf=ModuleReporte::getPdf(['format'=>$formato]); 
             
             /*
              * Tamaño de papel
              */
+            
            // $pdf->landscape='L';
             
               $stylesheet = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
