@@ -1,7 +1,7 @@
 <?php
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
@@ -56,6 +56,7 @@ $this->title = Yii::t('base.names', 'Propietarios');
                     //'headerOptions' => ['class' => 'kartik-sheet-style'], 
                     'expandOneOnly' => true
                 ],
+            'id',
             ['attribute'=>'unidad_id',
                 'value'=>function($model){
                          return $model->unidad->nombre;

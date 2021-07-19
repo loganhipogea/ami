@@ -32,6 +32,8 @@ class SigiMailsprop extends \common\models\base\modelBase
             [['propietario_id', 'correo'], 'required'],
             [['propietario_id'], 'integer'],
             [['correo'], 'string', 'max' => 100],
+            [['correo','propietario_id'], 'unique', 'targetAttribute' => ['correo']],
+             [['correo'], 'email'],
             [['propietario_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiPropietarios::className(), 'targetAttribute' => ['propietario_id' => 'id']],
         ];
     }

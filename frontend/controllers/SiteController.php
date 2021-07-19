@@ -412,6 +412,12 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    $model=\frontend\modules\sigi\models\SigiUnidades::findOne(4357);
+    //var_dump($model->getSigiPropietarios());die();
+    print_r($model->mailsPropietarios());
+    die();
+    
+    
     
     
       $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();

@@ -184,6 +184,8 @@ class SigiPropietarios extends \common\models\base\modelBase
   }
   
   
-  
+public function correos(){
+   return  SigiMailsprop::find()->select(['correo'])->andWhere(['propietario_id'=>$this->id])->column();
+}  
      
 }

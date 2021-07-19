@@ -176,21 +176,21 @@ class PropietariosController extends baseController
        
        $datos=[];
         if(h::request()->isPost){
-            $model->load(h::request()->post());
+            $modelMail->load(h::request()->post());
              h::response()->format = \yii\web\Response::FORMAT_JSON;
-            $datos=\yii\widgets\ActiveForm::validate($model);
+            $datos=\yii\widgets\ActiveForm::validate($modelMail);
             if(count($datos)>0){
                return ['success'=>2,'msg'=>$datos];  
             }else{
-                $model->save();
+                $modelMail->save();
                 //$model->assignStudentsByRandom();
-                  return ['success'=>1,'id'=>$model->propietario_id];
+                  return ['success'=>1,'id'=>$modelMail->propietario_id];
             }
         }else{
            return $this->renderAjax('_modal_mail', [
-                        'model' => $model,
+                        'model' => $modelMail,
                         'id' => $id,
-                        'gridName'=>h::request()->get('gridName'),
+                        'gridName'=>h::request()->get('idGrilla'),
                         'idModal'=>h::request()->get('idModal'),
                         //'cantidadLibres'=>$cantidadLibres,
           
@@ -203,7 +203,7 @@ class PropietariosController extends baseController
       public function actionEditaMail($id){        
          $this->layout = "install";
          
-        $modelMail= \frontend\modules\sigi\models\SigiMailsprop::findOne($id);
+        $model= \frontend\modules\sigi\models\SigiMailsprop::findOne($id);
        //$modelMail->propietario_id=$id;
        
        $datos=[];
@@ -222,7 +222,7 @@ class PropietariosController extends baseController
            return $this->renderAjax('_modal_mail', [
                         'model' => $model,
                         'id' => $id,
-                        'gridName'=>h::request()->get('gridName'),
+                        'gridName'=>h::request()->get('idGrilla'),
                         'idModal'=>h::request()->get('idModal'),
                         //'cantidadLibres'=>$cantidadLibres,
           

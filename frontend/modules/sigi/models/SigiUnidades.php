@@ -636,8 +636,15 @@ class SigiUnidades extends \common\models\base\modelBase
  }
  
  public function mailsPropietarios(){
-    return $this->getSigiPropietarios()->select(['correo'])->
+     $correos=$this->getSigiPropietarios()->select(['correo'])->
       where(['recibemail'=>'1'])->column();
+     foreach($this->getSigiPropietarios()->all() as $fila){
+         $correos[]=$fila->correo;
+         //var_dump($fila->correo);
+         $correos=array_merge($correos,$fila->correos());
+     }
+    return array_unique($correos);
+    
  }
  
  /*Devuel mve le residente inmediato anteiror*
