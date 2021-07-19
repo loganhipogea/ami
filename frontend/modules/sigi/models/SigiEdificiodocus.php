@@ -37,10 +37,13 @@ class SigiEdificiodocus extends \common\models\base\modelBase
 	return [		
 		'fileBehavior' => [
 			'class' => FileBehavior::className()
-		]		
+		],
+             'auditoriaBehavior' => [
+			'class' => '\common\behaviors\AuditBehavior' ,
+                               ],
 	];
             }
-    
+ 
     /**
      * {@inheritdoc}
      */

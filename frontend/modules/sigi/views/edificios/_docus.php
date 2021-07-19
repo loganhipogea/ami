@@ -73,6 +73,16 @@ use frontend\modules\sigi\models\SigiEdificiodocusSearch;
                        }
                     },
                     ],
+               [
+           
+            'attribute' => 'audit',
+           'format'=>'raw',
+            //'width' => '310px',
+            'value'=>function($model){
+               return common\widgets\auditwidget\auditWidget::widget(['model'=>$model]);                    
+            }
+         ],             
+                            
         ],
     ]); ?>
          <?php 

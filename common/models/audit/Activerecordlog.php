@@ -39,7 +39,8 @@ class Activerecordlog extends \yii\db\ActiveRecord
     {
         return [
             [['clave'], 'string'],
-            [['model', 'field', 'nombrecampo'], 'string', 'max' => 45],
+            [[ 'field', 'nombrecampo'], 'string', 'max' => 45],
+             [[ 'model'], 'string', 'max' => 100],            
             [['ip', 'creationdate'], 'string', 'max' => 20],
             [['controlador'], 'string', 'max' => 60],
             [['description'], 'string', 'max' => 105],
