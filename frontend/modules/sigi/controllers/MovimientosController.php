@@ -600,5 +600,24 @@ public function actionUpdateSaldo($id){
 } 
     
    
+ /**
+     * Lists all SigiMovimientosPre models.
+     * @return mixed
+     */
+    public function actionIndexTipoMov()
+    {
+        $searchModel = new SigiMovimientosPreSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
+
+
+
    
 }
