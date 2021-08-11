@@ -52,7 +52,7 @@ class SigiMovbanco extends \common\models\base\modelBase
             [['cuenta_id', 'edificio_id', 'noper'], 'integer'],
             [['monto'], 'number'],
              [['monto'],'validate_monto'],
-             [['tipomov','cuenta_id','monto','descripcion','monto_conciliado','diferencia'], 'safe'],
+             [['tipomov','cuenta_id','monto','descripcion','monto_conciliado','diferencia','detalle'], 'safe'],
             //[['fopera', 'fval'], 'string', 'max' => 10],
             [['descripcion'], 'string', 'max' => 30],
             [['cuenta_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCuentas::className(), 'targetAttribute' => ['cuenta_id' => 'id']],
