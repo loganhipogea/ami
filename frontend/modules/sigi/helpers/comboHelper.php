@@ -289,10 +289,15 @@ class comboHelper extends Combito
          */ return $combo; 
     }
     
-  public static function getCboTipoMov(){
+  public static function getCboTipoMov($edificio_id=null){
+  if(is_null($edificio_id))
   return ArrayHelper::map(
                   \frontend\modules\sigi\models\SigiTipomov::find()
                   ->all(),
+                'codigo','descripcion');
+  return ArrayHelper::map(
+                  \frontend\modules\sigi\models\SigiTipomov::find()
+                  ->andWhere(['edificio_id'=>$edificio_id])->all(),
                 'codigo','descripcion');
     }  
   

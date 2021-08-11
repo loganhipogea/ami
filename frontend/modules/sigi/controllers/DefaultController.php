@@ -170,8 +170,10 @@ class DefaultController extends Controller
    public function actionPanelResidente(){
        $user= h::user();
        $mail=h::user()->identity->email;
-       $propietario= \frontend\modules\sigi\models\SigiPropietarios::find()->andWhere(['correo'=>$mail])->one();
-      if(!is_null($propietario)){         
+       $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->andWhere(['correo'=>$mail])->all();
+      if(count($propietarios)>0){ 
+       return  $this->render('residente',
+                    ['propietarios'=>$propietarios]);  
        $unidad=$propietario->unidad;       
            $medidor=$unidad->firstMedidor(\frontend\modules\sigi\models\SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT);
             return  $this->render('panel_residente',

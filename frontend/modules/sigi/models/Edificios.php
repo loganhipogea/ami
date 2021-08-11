@@ -490,7 +490,7 @@ class Edificios extends \common\models\base\modelBase
                 $rol=\Yii::$app->authManager->getRole($role);
     YII::ERROR($rol,__FUNCTION__);
      die();*/
-     $unidades=$this->unidadesImputablesPadres();
+     $unidades=$this->unitsForUsers();
     //print_r($unidades);die();
     
     foreach($unidades as $unidad){
@@ -506,47 +506,50 @@ class Edificios extends \common\models\base\modelBase
            YII::ERROR('no tiene usuario aun ',__FUNCTION__);
             yii::error($correo);
            if(!empty($correo)){
-               yii::error('tiene correo ',__FUNCTION__);
-           
-       $usuario= new \frontend\modules\sigi\models\users\SignupForm();
-    
-       $usuario->email=$correo;
-       $usuario->username=$unidad->generateUsername();
-       $usuario->password=$unidad->generatePwd();
-      try {
-          
-         $user= $usuario->signup();
-      if(is_object($user)){
-            yii::error('funco el sgunp o ',__FUNCTION__);
-       $user->refresh();
-       $profile=$user->profile;
-       $profile->tipo='40';
-       $profile->save(); 
-       SigiUserEdificios::insertUserEdificio($user->id, $this->id);
-       $role=h::gsetting('sigi','roleResidente');
-                $rol=\Yii::$app->authManager->getRole($role);
-                /****LE ASIGNA EL ROL */
-                if(!is_null($rol)){
-                  $vari= Yii::$app->authManager->assign(
-                 $rol,
-                 $user->id); 
-                  //yii::error($vari);
-                  //var_dump($vari);die();
-                }else{
-                    //yii::error('Rol nulo');
-                }
-        }
-      } catch (\yii\db\IntegrityException $ex) {           
-        yii::error('NO funco el sgunp o '.$ex->getMessage(),__FUNCTION__);
-      }
+               yii::error('tiene correo ',__FUNCTION__);           
+               $userHallado=\common\helpers\h::user()->identity->findByEmail($correo);
+               if(is_null($userHallado)){
+                   $usuario= new \frontend\modules\sigi\models\users\SignupForm();    
+                $usuario->email=$correo;
+                $usuario->username=$unidad->generateUsername();
+                $usuario->password=$unidad->generatePwd();
+                    try {          
+                            $user= $usuario->signup();
+                            if(is_object($user)){
+                                    yii::error('funco el sgunp o ',__FUNCTION__);
+                                    $user->refresh();
+                                    $profile=$user->profile;
+                                    $profile->tipo='40';
+                                    $profile->save(); 
+                                SigiUserEdificios::insertUserEdificio($user->id, $this->id);
+                                    $role=h::gsetting('sigi','roleResidente');
+                                    $rol=\Yii::$app->authManager->getRole($role);
+                                            /****LE ASIGNA EL ROL */
+                                                if(!is_null($rol)){
+                                                    $vari= Yii::$app->authManager->assign(
+                                                        $rol,
+                                                            $user->id);                   
+                                                 }else{
+                                            //yii::error('Rol nulo');
+                                                    }
+                                          }
+                                                    } catch (\yii\db\IntegrityException $ex) {           
+                                                        yii::error('NO funco el sgunp o '.$ex->getMessage(),__FUNCTION__);
+                                                } 
       
-                 unset($usuario);
-                } 
+                                            unset($usuario);
+               }else{
+                  yii::error('Ya existia un usuario con este correo ',__FUNCTION__);                             
+                    SigiUserEdificios::insertUserEdificio($userHallado->id, $this->id);
+                   
+               } 
+                
+                    } 
         }else{//si ya tiene usuario
-           yii::error('Ya tiene usuario ',__FUNCTION__); 
-          if(!is_null($user=$unidad->obtenerUsuario())){              
-       SigiUserEdificios::insertUserEdificio($user->id, $this->id);
-          } 
+                yii::error('Ya tiene usuario ',__FUNCTION__); 
+                if(!is_null($user=$unidad->obtenerUsuario())){              
+                    SigiUserEdificios::insertUserEdificio($user->id, $this->id);
+                } 
         }
        }else{
            
@@ -607,6 +610,34 @@ class Edificios extends \common\models\base\modelBase
            ->andWhere(['parent_id'=>null])
            ->column();
  }
+ 
+ 
+ 
+/*
+ * Extrae las unidades que solo 
+ * son candidatas a tener usuario
+ * por ejemplo excluye aquellas que tienen 
+ * como propietario a la inmobiliaria 
+ * Solo unidades que presenten junta directiva 
+ * propietario
+ * y que nos ean hijas
+ */
+public function unitsForUsers(){
+    /*Primero, los apoderados deben 
+     * de ser tipo junta directiva
+     * la inmobilaria aqui no importa
+     */
+   $apoderados= $this->getApoderados()->select('codpro')->
+            andWhere(['tienejunta'=>'1'])->column();
+   return $this->queryUnidades()->andWhere([
+             'imputable'=>'1',
+             'codpro'=>$apoderados,
+                ])->andWhere(['parent_id'=>null])->all(); 
+         
+    
+}
+ 
+ 
  
 }
  

@@ -15,7 +15,8 @@ class cboDepWidget extends \yii\base\Widget
     public $model;//EL modelo
     public $form; //El active FOrm 
     public $campo;//el nombre del campo modelo
-    public $idcombodep; //El id del comboa  aactuaklizar
+    public $idcombodep=null; //El id del comboa  aactuaklizar
+    
     public $data=[];// data del combo box a renderizar
     public $idComboSource=null;
     /*
@@ -59,9 +60,10 @@ class cboDepWidget extends \yii\base\Widget
         throw new InvalidConfigException('The "model" property is not subclass from "modelBase".');
         if(!($this->form instanceof \yii\widgets\ActiveForm))
         throw new InvalidConfigException('The "form" property is not subclass from "ActiveForm".'.get_class($this->form));
-  if(empty($this->idcombodep ))
+  /*if(empty($this->idcombodep ))
+      
         throw new InvalidConfigException('The "idcombodep" property is empty.');
-  
+  */
        
     }
 
@@ -71,7 +73,15 @@ class cboDepWidget extends \yii\base\Widget
        
          // Register AssetBundle
         cboDepWidgetAsset::register($this->getView());
-        $this->makeJs();
+        /*
+         * Si es para actualizar un solo combo 
+         */
+        if(!is_null($this->idcombodep)){
+           $this->makeJs(); 
+        }else{//para varios combos
+           $this->makeJsMultiple(); 
+        }
+        
          return  $this->render('controls',[
                 'model'=>$this->model,
                 'form'=>$this->form,
@@ -98,14 +108,18 @@ class cboDepWidget extends \yii\base\Widget
    url:'".\yii\helpers\Url::toRoute('/'.$this->controllerName.'/'.$this->actionName)."',
    type:'post',
    dataType:'html',
-   data:{isremotesource:'".$this->isSourceFromDb()."' ,filtro:var_filtro,source:".Json::encode($this->source)."},
+   data:{ismultiple:'no'  ,isremotesource:'".$this->isSourceFromDb()."' ,filtro:var_filtro,source:".Json::encode($this->source)."},
    error:  function(xhr, status, error){ 
                             var n = Noty('id');                      
                              $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ xhr.responseText);
                               $.noty.setType(n.options.id, 'error');         
                                 }, 
 success: function (data) {// success callback function
-           $('#".$this->idcombodep."').html(data);
+         
+        
+         $('#".$this->idcombodep."').html(data);
+        
+           
     }
        }); //ajax 
         } //on change
@@ -114,7 +128,40 @@ success: function (data) {// success callback function
                         }     
         
    
-   
+  private function makeJsMultiple(){
+   $this->getView()->registerJs("$(document).ready(function() {
+    $('#".$this->getIdControl()."').on('change',function(){
+  var_filtro=$('#".$this->getIdControl()." option:selected').val();
+     //alert(var_filtro);
+  $.ajax({ 
+   url:'".\yii\helpers\Url::toRoute('/'.$this->controllerName.'/'.$this->actionName)."',
+   type:'post',
+   dataType:'html',
+   data:{ ismultiple:'yes'  ,isremotesource:'".$this->isSourceFromDb()."' ,filtro:var_filtro,source:".Json::encode($this->source)."},
+   error:  function(xhr, status, error){ 
+                            var n = Noty('id');                      
+                             $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ xhr.responseText);
+                              $.noty.setType(n.options.id, 'error');         
+                                }, 
+success: function (data) {// success callback function
+
+    var datos=JSON.parse(data);                   
+    var apostrofe='\'';
+    var michi='#';
+
+for(var clave in datos) {   
+  eval('$('+apostrofe+michi+clave+apostrofe+').html(datos[clave])'); 
+}  
+        
+         
+        
+           
+    }
+       }); //ajax 
+        } //on change
+    );//on change
+     });",\yii\web\View::POS_END);
+                        }    
    
 
    private function getIdControl(){

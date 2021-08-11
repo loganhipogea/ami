@@ -79,7 +79,7 @@ class TipomovController extends baseController
         
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->codigo]);
+            return $this->redirect(['index', /*'id' => $model->codigo*/]);
         }
 
         return $this->render('create', [
@@ -104,7 +104,7 @@ class TipomovController extends baseController
         }
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->codigo]);
+            return $this->redirect(['index', /*'id' => $model->codigo*/]);
         }
 
         return $this->render('update', [

@@ -20,6 +20,7 @@ class SigiTipomov extends \common\models\base\modelBase
             [['codigo','descripcion','signo','edificio_id'], 'required'],
            
             [['codigo'], 'string', 'max' => 3],
+             [['concicliable','signo'], 'safe'],
             [['descripcion'], 'string', 'max' => 40],
             [['codigo'], 'unique'],
              [['edificio_id'], 'safe'],
@@ -40,6 +41,10 @@ class SigiTipomov extends \common\models\base\modelBase
         return $this->hasMany(SigiMovimientosPre::className(), ['tipomov' => 'codigo']);
     }
 
+     public function getEdificio()
+    {
+        return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
+    }
     /**
      * {@inheritdoc}
      * @return SigiTipomovQuery the active query used by this AR class.

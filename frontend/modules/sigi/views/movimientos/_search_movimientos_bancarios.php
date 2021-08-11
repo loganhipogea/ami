@@ -77,19 +77,43 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
     </div>
 
 
-   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
- <?php  
-  echo $form->field($model, 'edificio_id')->
-            dropDownList(\frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
+   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  
+  
+    <?= ComboDep::widget([
+               'model'=>$model,               
+               'form'=>$form,
+               'data'=> frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
+               'campo'=>'edificio_id',
+               'idcombodep'=>'sigimovbancosearch-tipomov',
+               'source'=>[\frontend\modules\sigi\models\SigiTipomov::className()=>
+                                [
+                                  'campoclave'=>'codigo' , //columna clave del modelo ; se almacena en el value del option del select 
+                                        'camporef'=>'descripcion',//columna a mostrar 
+                                        'campofiltro'=>'edificio_id'  
+                                ]
+                                ],
+                            ]
+               
+               
+        )  ?>
+  
+    </div> 
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+<?php 
+echo $form->field($model, 'tipomov')->
+            dropDownList([],
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un Valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                       //'disabled'=>($model->isNewRecord)?'disabled':null,
-                      ]
-                    );   
- 
- ?>
-    </div>
+                        ]
+                    ) ?>
+ </div>  
+
+
+
+
+
+   
 
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <?= 

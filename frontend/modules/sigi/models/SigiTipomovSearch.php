@@ -17,7 +17,7 @@ class SigiTipomovSearch extends SigiTipomov
     public function rules()
     {
         return [
-            [['codigo', 'descripcion'], 'safe'],
+            [['codigo', 'descripcion','edificio_id'], 'safe'],
         ];
     }
 
@@ -57,6 +57,7 @@ class SigiTipomovSearch extends SigiTipomov
 
         // grid filtering conditions
         $query->andFilterWhere(['like', 'codigo', $this->codigo])
+              ->andFilterWhere(['edificio_id'=> $this->edificio_id])   
             ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
 
         return $dataProvider;

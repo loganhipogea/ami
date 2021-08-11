@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use frontend\modules\sigi\helpers\comboHelper;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\modules\sigi\models\SigiTipomovSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -19,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('sigi.labels', 'Crear tipo'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('sigi.labels', 'Crear'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div style='overflow:auto;'>
     <?= GridView::widget([
@@ -47,9 +48,23 @@ $this->params['breadcrumbs'][] = $this->title;
          
          
          
-
+            ['attribute'=>'edificio_id',
+                'filter'=> comboHelper::getCboEdificios(),
+                'value'=>function($model){
+                    return $model->edificio->nombre;         
+                  }
+                ],            
             'codigo',
             'descripcion',
+                        [
+    'attribute' => 'conciliable',
+    'format' => 'raw',
+    'value' => function ($model) {
+        return \yii\helpers\Html::checkbox('conciliable[]', $model->conciliable, [ 'disabled' => true]);
+
+             },
+
+          ],
 
           
         ],

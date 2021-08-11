@@ -749,4 +749,7 @@ public function hasManyPropietarios(){
   return ($this->getSigiPropietarios()->andWhere(['activo'=>'1','tipo'=>self::TYP_PROPIETARIO])->count() > 1);
 }
 
+
+
+
 }

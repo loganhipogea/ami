@@ -51,7 +51,7 @@ use common\widgets\selectwidget\selectWidget;
                'form'=>$form,
                'data'=> ComboHelper::getCboEdificios(),
                'campo'=>'edificio_id',
-               'idcombodep'=>'sigimovbanco-cuenta_id',
+              // 'idcombodep'=>['sigimovbanco-cuenta_id','sigimovbanco-tipomov'],
                /* 'source'=>[ //fuente de donde se sacarn lso datos 
                     /*Si quiere colocar los datos directamente 
                      * para llenar el combo aqui , hagalo coloque la matriz de los datos
@@ -71,18 +71,25 @@ use common\widgets\selectwidget\selectWidget;
                                          *
                         
                          ]*/
-                   'source'=>[\frontend\modules\sigi\models\SigiCuentas::className()=>
-                                [
-                                        'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
-                                        'camporef'=>'nombre',//columna a mostrar 
-                                        'campofiltro'=>'edificio_id'  
-                                ]
-                                ],
+                   'source'=>[
+                                   'sigimovbanco-cuenta_id'=>[                       
+                                                \frontend\modules\sigi\models\SigiCuentas::className()=>
+                                            [
+                                                'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
+                                                'camporef'=>'nombre',//columna a mostrar 
+                                                'campofiltro'=>'edificio_id'  
+                                            ]
+                                              ],
+                                    'sigimovbanco-tipomov'=>[\frontend\modules\sigi\models\SigiTipomov::className()=>
+                                                [
+                                                'campoclave'=>'codigo' , //columna clave del modelo ; se almacena en el value del option del select 
+                                                'camporef'=>'descripcion',//columna a mostrar 
+                                                'campofiltro'=>'edificio_id'  
+                                                    ],
+                                            ],
+                             ],
                     
-                            ]
-               
-               
-        )  ?>
+                            ])  ?>
  </div> 
 
  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> 
@@ -101,10 +108,11 @@ use common\widgets\selectwidget\selectWidget;
      </div>          
  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"> 
       
-           <?php 
+           <?php
+            $data=($model->isNewRecord)?[]:comboHelper::getCboTipoMov($model->edificio_id);
           // print_r(\frontend\modules\sigi\helpers\comboHelper::getCboTipoMov());die();
            echo $form->field($model, 'tipomov')->
-            dropDownList(\frontend\modules\sigi\helpers\comboHelper::getCboTipoMov(),
+            dropDownList($data,
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
