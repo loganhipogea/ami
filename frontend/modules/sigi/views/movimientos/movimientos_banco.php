@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Movimientos'
                         //var_dump($model);die();
                         return $model->edificio->nombre ;
                          },
-                 'group'=>true,   
+                // 'group'=>true,   
             ],
          'fopera',
          'descripcion',
@@ -89,7 +89,8 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Movimientos'
                 //'filter'=>frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                 'value' => function($model) { 
                         //var_dump($model);die();
-                        return $model->tipomov->descripcion ;
+                        //return $model->tipomov;
+                        return $model->tipoMov->descripcion ;
                          },
                  //'group'=>true,   
             ],

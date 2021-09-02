@@ -18,7 +18,7 @@ class SigiMovimientosPreSearch extends SigiMovimientosPre
     {
         return [
             [['id', 'idop', 'edificio_id', 'cuenta_id', 'user_id'], 'integer'],
-            [['fechaop', 'fechacre', 'tipomov', 'glosa', 'activo','monto_conciliado'], 'safe'],
+            [['fechaop','fechaop1', 'fechacre', 'tipomov', 'glosa', 'activo','monto_conciliado'], 'safe'],
             [['monto', 'igv', 'monto_usd'], 'number'],
         ];
     }
@@ -69,12 +69,18 @@ class SigiMovimientosPreSearch extends SigiMovimientosPre
             'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'fechaop', $this->fechaop])
-            ->andFilterWhere(['like', 'fechacre', $this->fechacre])
-            ->andFilterWhere(['like', 'tipomov', $this->tipomov])
-            ->andFilterWhere(['like', 'glosa', $this->glosa])
-            ->andFilterWhere(['like', 'activo', $this->activo]);
+        $query->andFilterWhere(['tipomov'=> $this->tipomov])
+            ->andFilterWhere(['like', 'glosa', $this->glosa]);
 
+         if(!empty($this->fechaop) && !empty($this->fechaop1)){
+         $query->andFilterWhere([
+             'between',
+             'fechaop',
+             $this->openBorder('fechaop',false),
+             $this->openBorder('fechaop1',true)
+                        ]);   
+        }
+       
         return $dataProvider;
     }
 }

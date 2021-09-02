@@ -41,12 +41,13 @@ class SigiMovimientosPre extends \common\models\base\modelBase
     public $booleanFields=['activo'];
     public $dateorTimeFields = [
         'fechaop' => self::_FDATE,
+        'fechaop1' => self::_FDATE,
        'fechaprog' => self::_FDATE,
         //'ftermino' => self::_FDATETIME
     ];
     
    public $monto_fraccionado=0;
-    
+    public $fechaop1=null;
     
    public static function movimientos(){
        return [

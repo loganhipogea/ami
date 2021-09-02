@@ -52,6 +52,17 @@ class SigiMovbanco extends \common\models\base\modelBase
             [['cuenta_id', 'edificio_id', 'noper'], 'integer'],
             [['monto'], 'number'],
              [['monto'],'validate_monto'],
+            ['monto', 'unique', 'targetAttribute' => 
+                 ['cuenta_id','edificio_id', 'fopera','monto','tipomov'],
+              'message'=>yii::t('sta.errors',
+                      'Esta combinacion de valores {monto}-{tipomov}-{fopera} ya existe',
+                      ['monto'=>$this->getAttributeLabel('monto'),
+                        'tipomov'=>$this->getAttributeLabel('tipomov'),
+                          'fopera'=>$this->getAttributeLabel('fopera'),
+                          //'codcar'=>$this->getAttributeLabel('codcar')
+                          ]
+                      )
+                ],
              [['tipomov','cuenta_id','monto','descripcion','monto_conciliado','diferencia','detalle'], 'safe'],
             //[['fopera', 'fval'], 'string', 'max' => 10],
             [['descripcion'], 'string', 'max' => 30],
@@ -80,7 +91,7 @@ class SigiMovbanco extends \common\models\base\modelBase
 
     public function scenarios() {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCE_IMPORTACION] = [ 'cuenta_id', 'edificio_id', 'fopera', 'monto', 'noper', 'descripcion'];
+        $scenarios[self::SCE_IMPORTACION] = [ 'cuenta_id', 'edificio_id', 'fopera', 'monto', 'noper', 'descripcion','tipomov'];
          $scenarios[self::SCE_CORTE] = [ 'cuenta_id', 'edificio_id', 'fopera','monto',  'descripcion'];
         
         return $scenarios;

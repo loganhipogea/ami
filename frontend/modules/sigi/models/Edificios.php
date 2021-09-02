@@ -485,15 +485,9 @@ class Edificios extends \common\models\base\modelBase
  
  public function generateUsers(){
      
-     /*$role=h::gsetting('sigi','roleResidente');
-     YII::ERROR($role,__FUNCTION__);
-                $rol=\Yii::$app->authManager->getRole($role);
-    YII::ERROR($rol,__FUNCTION__);
-     die();*/
      $unidades=$this->unitsForUsers();
-    //print_r($unidades);die();
-    
-    foreach($unidades as $unidad){
+     yii::error(count($unidades),__FUNCTION__);
+     foreach($unidades as $unidad){
         YII::ERROR('***************** '.$unidad->nombre.' **********',__FUNCTION__);
          YII::ERROR($unidad->nombre,__FUNCTION__);
          YII::ERROR($unidad->hasUser(),__FUNCTION__);
@@ -629,6 +623,12 @@ public function unitsForUsers(){
      */
    $apoderados= $this->getApoderados()->select('codpro')->
             andWhere(['tienejunta'=>'1'])->column();
+   yii::error($this->getApoderados()->select('codpro')->
+            andWhere(['tienejunta'=>'1'])->createCommand()->rawSql,__FUNCTION__);
+   yii::error($this->queryUnidades()->andWhere([
+             'imputable'=>'1',
+             'codpro'=>$apoderados,
+                ])->andWhere(['parent_id'=>null])->createCommand()->rawSql);
    return $this->queryUnidades()->andWhere([
              'imputable'=>'1',
              'codpro'=>$apoderados,

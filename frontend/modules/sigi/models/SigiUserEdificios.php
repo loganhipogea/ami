@@ -125,6 +125,7 @@ class SigiUserEdificios extends \common\models\base\modelBase
                      'edificio_id'=>$edificio_id,
                      //rr'activa'=>'0',
                     ])->one();
+        yii::error($model->attributes,__FUNCTION__);
         $model->activa=true; $model->save();
       
     }

@@ -145,7 +145,7 @@ use common\widgets\selectwidget\selectWidget;
  <?= $form->field($model, 'descripcion')->textInput()?>
  </div> 
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
- <?= $form->field($model, 'detalle')->textInput()?>
+ <?= $form->field($model, 'detalle')->textarea()?>
  </div> 
  </div>
  

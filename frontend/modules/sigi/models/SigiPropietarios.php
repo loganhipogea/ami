@@ -114,11 +114,27 @@ class SigiPropietarios extends \common\models\base\modelBase
     }
     
     public function afterSave($insert, $changedAttributes) {
-        RETURN parent::afterSave($insert, $changedAttributes);
+        
         IF(in_array('recibo',array_keys($changedAttributes)) && $this->recibo
                 && $this->activo){
            self::updateAll(['recibo'=>'0'],['unidad_id'=>$this->unidad_id,['<>','id',$this->id]]);
         }
+        /*
+         * Si está registrado como usuario en el edificio
+         * y cambia el correo, borrar la afiliacion
+         */
+         IF(in_array('correo',array_keys($changedAttributes))){
+             yii::error('encontradn0 el usuario con '.$changedAttributes['correo'],__FUNCTION__);
+             $user=\common\models\User::findByEmail($changedAttributes['correo']);
+             yii::error($user,__FUNCTION__);
+             if(!is_null($user)){
+                 yii::error('funjco',__FUNCTION__);
+                $user->email=$this->correo; $user->save();
+               SigiUserEdificios::deleteAll(['user_id'=>$user->id,'edificio_id'=>$this->edificio->id]); 
+             }
+             
+        }
+       RETURN parent::afterSave($insert, $changedAttributes); 
     }
     
     public function departamento(){

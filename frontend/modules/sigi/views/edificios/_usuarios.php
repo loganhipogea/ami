@@ -41,6 +41,7 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                 ],
            
             'usuario.username',
+            'usuario.email',
         ],
     ]); ?>
          

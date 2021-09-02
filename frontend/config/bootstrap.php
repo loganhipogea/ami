@@ -1,2 +1,2 @@
 <?php
-//Yii::setAlias('@messages', dirname(dirname(__DIR__)). '/messages');
+Yii::setAlias('@temp', dirname(dirname(__DIR__)) . '/frontend/web/temp');

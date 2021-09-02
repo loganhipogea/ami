@@ -83,6 +83,7 @@ class SigiMovbancoSearch extends SigiMovbanco
              $this->openBorder('fopera1',true)
                         ]);  
      }   
+      //\yii::error($query->createCommand()->rawSql,__FUNCTION__);
         return $dataProvider;
     
    }

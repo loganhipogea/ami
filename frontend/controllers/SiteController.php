@@ -412,6 +412,12 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    echo yii::getAlias('@temp'); die();
+    
+     $model=\frontend\modules\sigi\models\SigiUnidades::findOne(4357);
+    
+    
+    
     $model=\frontend\modules\sigi\models\SigiUnidades::findOne(4357);
     //var_dump($model->getSigiPropietarios());die();
     print_r($model->mailsPropietarios());
@@ -763,4 +769,53 @@ public function actionCookies(){
       $this->layout="install";
       return $this->render('faltadepago');
   }
+  
+  public function actionPruebaChat(){
+  // yii::error('url telegram',__FUNcTION__);
+       yii::error('en la funcion bot -telegram ');
+       
+       $update = json_decode(file_get_contents("php://input"), TRUE);
+       //var_dump($update);die();
+       $chatId = $update["message"]["chat"]["id"];
+        $message = $update["message"]["text"];
+        yii::error('chat id',__FUNCTION__);
+         yii::error($chatId,__FUNCTION__);
+         yii::error('mensaje',__FUNCTION__);
+         yii::error($message,__FUNCTION__);
+        
+        switch($message){
+         case '/start' :
+              yii::error('case start ');
+             $mensaje='Hola he iniciado';
+             $this->sendMessage($chatId, $mensaje);
+                break;
+        case '/hola' :
+            yii::error('case hola ');
+             $mensaje='Hola tambien como estas';
+            $this->sendMessage($chatId, $mensaje);
+                break;
+          default:
+              yii::error('case default ');
+             $mensaje='No entiendo habla bien';
+              $this->sendMessage($chatId, $mensaje);
+                break;  
+          
+      }
+      
+       //$cliente=\common\models\MediaApps::findOne(13)->client;
+       //$respuesta=$cliente->sendMessage($chatId,$message);
+       //var_dump($respuesta);
+   }
+   
+   public function sendMessage($chatId, $mensaje){
+       //yii::error('enviando mensaje',__FUNCTION__);
+        yii::error('chat id',__FUNCTION__);
+         yii::error($chatId,__FUNCTION__);
+         yii::error('mensaje',__FUNCTION__);
+         yii::error($mensaje,__FUNCTION__);
+       yii::error('enviando mensaje');
+      $url=  'https://api.telegram.org/bot1866798661:AAHFfSizi4mkrRDjydoZ0VE-xjZaK6PyBhM/sendMessage?chat_id='.$chatId.'&text='. urlencode($mensaje);
+      file_get_contents($url);
+   }
+   
 }

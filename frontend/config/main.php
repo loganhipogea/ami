@@ -141,6 +141,7 @@ return [
             'site/login/',
             'site/clear-cache/',
             'site/falta-pagos',
+            'site/prueba-chat',
              'site/request-password-reset',
             'site/reset-password', 
            'site/logout',
