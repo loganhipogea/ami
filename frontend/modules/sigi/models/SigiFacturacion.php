@@ -1103,27 +1103,44 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   public function recibo($idKardex,$disk=false){   
          $formato=$this->reporte->tamanopapel;
-      
-      
            $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
-            $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>($this->reporte_id==2)?true:false]);
-            
-//echo $contenido; die();
-            $pdf=ModuleReporte::getPdf(['format'=>$formato]); 
-            
+           switch ($this->reporte_id) {
+                case 1:
+                $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>false]);
+          
+                break;
+                case 2:
+                     $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>true]);
+          
+                     break;
+                 
+                 case 3:
+                
+                         $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
+          
+                    break;
+                case 4:
+                yii::error('recibo comlpejo',__FUNCTION__);
+                yii::error('Formato '.$formato,__FUNCTION__);
+                         $contenido= h::currentController()->render('@frontend/modules/sigi/views/facturacion/reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
+          
+                    break;
+                    
+                 default:
+                 $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>false]);
+          
+            }
+             $pdf=ModuleReporte::getPdf(['format'=>$formato]);             
             /*
              * Tamaño de papel
              */
-            
-           // $pdf->landscape='L';
-            
-              $stylesheet = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
-                //$stylesheet2 = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
+             $stylesheet = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
                $pdf->WriteHTML($stylesheet, 1);
-        //$pdf->WriteHTML($stylesheet2,1);
              $pdf->WriteHTML($contenido);
              yii::error('paso Write html');
             if(!$disk){
+                // $ruta=$this->pathTempToStore();
+               //yii::error('y la ruta es  '.$ruta); 
                 $pdf->output(/*$ruta, \Mpdf\Output\Destination::FILE*/);
             }else{
                  yii::error('escribiendo en disco',__FUNCTION__);
@@ -1132,10 +1149,10 @@ class SigiFacturacion extends \common\models\base\modelBase
                   yii::error('haciendo el  output al file  '.$ruta,__FUNCTION__);
                 $pdf->output($ruta, \Mpdf\Output\Destination::FILE);  
                 yii::error('YA BHIZO EK OUTPUR '.$ruta,__FUNCTION__);
-                $kardex=SigiKardexdepa::findOne($idKardex);
+               /* $kardex=SigiKardexdepa::findOne($idKardex);
                 $kardex->deleteAllAttachments();
-                $kardex->attachFromPath($ruta);
-                @unlink($ruta);
+                $kardex->attachFromPath($ruta);*/
+                //@unlink($ruta);
             }
   }
   
@@ -1382,5 +1399,11 @@ class SigiFacturacion extends \common\models\base\modelBase
      } 
      
      
-  
+  public function testPDF(){
+      $pdf=ModuleReporte::getPdf(['format'=>'A5-L']);  
+       //$pdf=\frontend\modules\report\Module::getPdf(['format'=>'A4-L']);
+     $pdf->WriteHTML("<div style ='position:absolute;  left:148px;  top:105px;  font-size:10;  font-family:cour;  color:#000;'>POSICION 148,105</div>");
+               RETURN  $pdf->output(/*$ruta, \Mpdf\Output\Destination::FILE*/);
+    
+  }
 }

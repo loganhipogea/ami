@@ -52,6 +52,7 @@ class Module extends \yii\base\Module
         $configInicial[$key]=$config[$key];  
       }
   }
+  //print_r($configInicial);die();
 //$mpdf = new \common\components\MyMpdf([/*
 $mpdf = new \Mpdf\Mpdf($configInicial);
 //print_r($mpdf->fontdata);die();

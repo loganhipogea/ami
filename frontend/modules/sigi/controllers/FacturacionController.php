@@ -587,6 +587,19 @@ public function actionResumen($id){
             }
    } 
 
-
+public function actionTestPdf(){
+    $model=$this->findModel(111);
+    $model->generaRecibos();
+   // $this->recibo($kardex['kardex_id'],true);
+    /*$idsKARDEX=[7091,7092,7093,7094,7095,7096];
+    
+     foreach($idsKARDEX as $id=>$identidad){
+         $model->recibo($identidad,true); 
+     }*/
+    //\frontend\modules\sigi\models\SigiKardexdepa::findOne(7092)->deleteAllAttachments();die();
+    //echo \frontend\modules\sigi\models\SigiKardexdepa::findOne(7092)->files[0]->path; die();
+    //\frontend\modules\sigi\models\SigiFacturacion::findOne(111)->recibo(7092,true);die();
+    
+}
 
 }

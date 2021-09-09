@@ -17,7 +17,16 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     
     'modules' => [
-	
+	 'telegram' => [
+        'class' => 'onmotion\telegram\Module',
+        'API_KEY' => '1989528761:AAFAosVxQS447NVDEXHit3Xr9ACUsk1oaoI',
+        'BOT_NAME' => 'vikocaricia',
+        'hook_url' => 'https://www.diarplataforma.com/frontend/web/telegram/default/hook', // must be https! (if not prettyUrl https://yourhost.com/index.php?r=telegram/default/hook)
+        'PASSPHRASE' => 'frase_para_login',
+        // 'db' => 'db2', //db file name from config dir
+        // 'userCommandsPath' => '@app/modules/telegram/UserCommands',
+        // 'timeBeforeResetChatHandler' => 60
+    ],
 	'attachments' => [
 		'class' => nemmo\attachments\Module::className(),
 		'tempPath' => '@app/uploads/temp',

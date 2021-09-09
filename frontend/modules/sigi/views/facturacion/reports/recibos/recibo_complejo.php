@@ -16,39 +16,49 @@ $model=$detalle->facturacion;
         <?php $this->registerCssFile('@web/css/reporte.css') ?>
     </head>
    <body style="overflow-y: scroll;">
-           
+ <!--  LOGO DEL RECIBO    !-->        
    <div style="position:absolute;
-            width:180px;height:80px;
-            padding:0px; top:4px;
-            left:4px; border-style:solid; border-width:0px; border-color:#e1e1e1 ">
+            width:126px;height:56px;
+            padding:0px; top:2px;
+            left:2px; border-style:solid; border-width:0px; border-color:#e1e1e1 ">
 
         <div style="position:absolute; padding:1px;border-style:none;top:5px; left:5px; ">
             <div style="float:right">
-                <?=Html::img('@web/sigi/logo_diar.jpg',['width'=>120,'height'=>120])?>
+                <?=Html::img('@web/sigi/logo_diar.jpg',['width'=>84,'height'=>84])?>
             </div>
 
         </div>
     </div>
-
-<div style=" position:absolute;  left:551px;  top:41px;  font-size:12;  font-family:cour;  color:#000; ">
+ 
+  
+ <!-- INICIO DE LA PRUEBA   !-->
+ <div style=" position:absolute;  left:548px;  top:416px;  font-size:10;  font-family:cour;  color:#000; ">
+    POSICION 548px,416px
+ </div>
+ <!-- FIN DE LA PRUEBA    !-->
+ 
+ <!-- FIN DEL   LOGO DEL RECIBO    !-->
+  <!--  FECHA    !--> 
+<div style=" position:absolute;  left:385px;  top:28px;  font-size:10;  font-family:cour;  color:#000; ">
     Fecha :
 </div>
- <div style=" position:absolute;  left:681px;  top:41px;  font-size:12;  font-family:cour;  font-weight:bold;  color:#000; ">
+  <!-- FIN DE LA   FECHA    !--> 
+ <div style=" position:absolute;  left:476px;  top:28px;  font-size:10;  font-family:cour;  font-weight:bold;  color:#000; ">
        <?=$model->fecha?>
 </div>
-  <div style=" position:absolute; width:380px;
-       left:381px;  top:941px; 
+  <div style=" position:absolute; width:266px;
+       left:266px;  top:658px; 
        font-size:12;  font-family:cour;
        font-weight:none;  color:#000; text-align:justify ">
    <?=$model->detalles?>
  </div>
- <div style="position:absolute;  left:120x;  top:51px;  font-size:16;  font-family:cour;  font-weight:bold;  color:#000; ">
+ <div style="position:absolute;  left:84x;  top:51px;  font-size:9;  font-family:cour;  font-weight:bold;  color:#000; ">
     <?=$model->edificio->nombre?>
  </div>
- <div style="position:absolute;   left:120px;  top:71px;  font-size:8;  font-family:arial;  font-weight:none;  color:#000; ">
+ <div style="position:absolute;   left:84px;  top:50px;  font-size:8;  font-family:arial;  font-weight:none;  color:#000; ">
       <?=$model->edificio->direccion?>
  </div>
- <div style=" position:absolute;  left:51px;  top:108px;  font-size:14;  font-family:arial;  font-weight:bold;  color:#F72; ">
+ <div style=" position:absolute;  left:35px;  top:75px;  font-size:9;  font-family:arial;  font-weight:bold;  color:#F72; ">
      <?php  
      if(!$detalle->resumido){
         echo $detalle->unidad->nombre;  
@@ -62,7 +72,7 @@ $model=$detalle->facturacion;
              
       ?>
  </div>
- <div style=" position:absolute;  left:51px;  top:941px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
+ <div style=" position:absolute;  left:35px;  top:658px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
    <?php
      if(!$detalle->resumido){     
          $areas= $detalle->unidad->arrayParticipaciones();     
@@ -85,7 +95,7 @@ $model=$detalle->facturacion;
      
      
     <div>
-      <div style="width: 300px;">
+      <div style="width: 210px;">
               <div >
                 <table >
                   <thead>
@@ -137,16 +147,16 @@ $model=$detalle->facturacion;
    </div>
  
  </div>
-       <div style=" position:absolute;  left:501px;  top:16px;  font-size:15;  font-family:cour;  color:#000; ">Recibo N° :<?=$detalle->numerorecibo?></div>
+       <div style=" position:absolute;  left:350px;  top:11px;  font-size:12;  font-family:cour;  color:#000; ">Recibo N° :<?=$detalle->numerorecibo?></div>
 
-       <div style=" position:absolute;  left:551px;  top:56px;  font-size:12;  font-family:cour;  color:#000; ">F Vencimiento :</div>
-       <div style=" position:absolute;  left:681px;  top:56px;  font-size:12;  font-family:cour;  font-weight:bold;  color:#000; "><?=$model->fvencimiento?></div>
+       <div style=" position:absolute;  left:385px;  top:39px;  font-size:9;  font-family:cour;  color:#000; ">F Vencimiento :</div>
+       <div style=" position:absolute;  left:476px;  top:39px;  font-size:9;  font-family:cour;  font-weight:bold;  color:#000; "><?=$model->fvencimiento?></div>
        
        
-       <div style=" position:absolute;  left:51px;  top:151px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
+       <div style=" position:absolute;  left:35px;  top:105px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
             <div>
                
-                <div style="width: 600px;">
+                <div style="width: 420px;">
                      <?PHP
                 if(!$detalle->resumido){
                  if($detalle->nuevoprop){//si es un recibo partido por 
@@ -200,15 +210,15 @@ $model=$detalle->facturacion;
     
                 </div>
        </div>
-       <div style=" position:absolute;  left:551px;  top:71px;  font-size:12;  font-family:cour;  color:#000; ">Dias facturados :</div>
-       <div style=" position:absolute;  left:681px;  top:71px;  font-size:12;  font-family:cour;  font-weight:none;  color:#000; "><?=$detalle->dias?></div>
+       <div style=" position:absolute;  left:385px;  top:50px;  font-size:9;  font-family:cour;  color:#000; ">Dias facturados :</div>
+       <div style=" position:absolute;  left:476px;  top:50px;  font-size:9;  font-family:cour;  font-weight:none;  color:#000; "><?=$detalle->dias?></div>
        
        
        
        
        
        
-       <div style="position:absolute; width:90%; left:50px; top:200px">
+       <div style="position:absolute; width:132px; left:35px; top:140px">
                
                         <?php
                          /*
@@ -243,6 +253,7 @@ $model=$detalle->facturacion;
                                    // yii::error($detalles[0]['monto'],__FUNCTION__);
                                 }
                                 $vista=($compacto)?'modelo_compacto':'modelo_simple';
+                                if($modelo->reporte_id==4)$vista='modelo_complejo';
                                 echo $this->render($vista,[
                                     'modelo'=>$model,
                                     'grupos'=>$grupos,

@@ -412,6 +412,17 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+   //\frontend\modules\sigi\models\SigiKardexdepa::findOne(7092)->deleteAllAttachments();die();
+    //echo \frontend\modules\sigi\models\SigiKardexdepa::findOne(7092)->files[0]->path; die();
+    \frontend\modules\sigi\models\SigiFacturacion::findOne(111)->recibo(7092,true);die();
+    
+    //$kardex->files[0]->path
+    
+     $pdf=\frontend\modules\report\Module::getPdf(['format'=>'A4-L']);
+     $pdf->WriteHTML("<div style ='position:absolute;  left:148px;  top:105px;  font-size:10;  font-family:cour;  color:#000;'>POSICION 148,105</div>");
+                $pdf->output(/*$ruta, \Mpdf\Output\Destination::FILE*/);
+     die();
+    
     echo yii::getAlias('@temp'); die();
     
      $model=\frontend\modules\sigi\models\SigiUnidades::findOne(4357);
