@@ -111,11 +111,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
     <?= $form->field($model, 'tienecabecera')->checkBox() ?>
 
  </div> 
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
-   <?= $form->field($model, 'lastimport')->textInput(['maxlength' => true,'disabled'=>true]) ?>
-
- </div>
-  
+ 
     
    
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
@@ -126,7 +122,14 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
                        ]
                     ) ?>
  </div> 
- 
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
+   <?= $form->field($model, 'delimitador')->
+            dropDownList([','=>'COMAS ,',';'=>'PUNTO Y COMA ;','|'=>'PIPELINE |'],
+                    ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
+                     //'disabled'=>(!$model->isNewRecord)?true:false
+                       ]
+                    ) ?>
+ </div> 
     
     
   
