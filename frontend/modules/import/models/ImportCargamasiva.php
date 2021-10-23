@@ -49,7 +49,7 @@ class ImportCargamasiva extends modelBase
         return [
             [['insercion', 'escenario', 'descripcion', 'format', 'modelo'], 'required'],
             [['user_id'], 'integer'],
-            [['tienecabecera'], 'safe'],
+            [['tienecabecera','delimitador'], 'safe'],
             [['escenario', 'descripcion'], 'string', 'max' => 40],
             [['lastimport'], 'string', 'max' => 18],
             [['format'], 'string', 'max' => 3],
@@ -304,7 +304,9 @@ public function isDateorTime($tipo,$nombrecampo,$longitud){
      return (((substr(strtoupper($tipo),0,4)=='CHAR')or
                   (substr(strtoupper($tipo),0,5)=='VARCHAR')
                    )&& (in_array($longitud,[10,19])) && 
-                    (in_array($nombrecampo,$this->modelAsocc()->dateorTimeFields)));
+                    (in_array($nombrecampo,$this->modelAsocc()->dateorTimeFields))
+             );
+     
  }
  
  
