@@ -130,8 +130,15 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
         return new ImportCargamasivaUserQuery(get_called_class());
     }
     
+    public function delimitador(){
+        if(is_null($delimitador=$this->cargamasiva->delimitador))
+         $delimitador=h::gsetting('import', 'delimiterCsv');
+        return $delimitador;
+    }
+    
     public function getCsv(){
      //var_dump($this->firstLineTobegin());die();
+        
         yii::error('primera linea para importar:  '.$this->firstLineTobegin(),__METHOD__);
       if(is_null($this->_csv)){
          
@@ -139,7 +146,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                  'filename' => $this->pathFileCsv(),
               'startFromLine' =>$this->firstLineTobegin(),
                  'fgetcsvOptions' => [ 
-                                     'delimiter' => h::gsetting('import', 'delimiterCsv'),
+                                     'delimiter' => $this->delimitador(),
                                        ] 
                                 ]);
           return $this->_csv;
@@ -183,10 +190,21 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     }else{
         $this->addError('activo',yii::t('import.errors','No hay ningún archivo adjunto para efectuar la importación'));
          //throw new \yii\base\Exception(Yii::t('import.errors', 'No hay ningún archivo csv adjunto'));
-     
+        return false;
     } 
        
    }
+   
+   
+    /*public function pathFileCsvOnlyRoute($separator=false){
+        if(is_string($ruta=$this->pathFileCsv())){
+            return pathinfo($ruta)['dirname'].($separator)?DIRECTORY_SEPARATOR:'';
+        }else{
+            // $this->addError('activo',yii::t('import.errors','No hay ningún archivo adjunto para efectuar la importación'));
+       
+            return false;
+        }
+     }*/
    
    
    /*
@@ -439,9 +457,9 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                 ){
             //yii::error('Ya paso ..., inciando el proceso',__METHOD__);  
             // VAR_DUMP($carga->pathFileCsv());die();
-                        yii::error('Ya paso ..., Leyendo datos ',__METHOD__);  
+                       // yii::error('Ya paso ..., Leyendo datos ',__METHOD__);  
                       $datos=$this->dataToImport(); //todo el array de datos para procesar, siempre empezara desde current_linea para adelante 
-                      yii::error('El archivo tenia  '.count($datos).' Filas ',__METHOD__);  
+                     // yii::error('El archivo tenia  '.count($datos).' Filas ',__METHOD__);  
                       yii::error('Ya leyo  los datos estanb listos ',__METHOD__);  
                       $filashijas=$cargamasiva->ChildsAsArray();
                    // $linea=($carmasiva->tienecabecera)?$linea:$linea-1;//
@@ -449,16 +467,39 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                     $this->setScenario(self::SCENARIO_RUNNING);
                     //yii::error('Iniciando Buclede datos leidos del CSV desde la linea  Linea => '.$linea,__METHOD__);  
                      yii::error('Iniciando Buclede datos leidos del CSV ',__METHOD__);   
+                     
+                    $model=($cargamasiva->insercion)?$cargamasiva->modelAsocc():$cargamasiva->findModelAsocc($fila);
+                     
+                    
+                     yii::error('Creando el archivo csv de errores',__FUNCTION__);
+                     
+                     /*
+                      * Agrtegado para darle funcionalidad para declarar erroes de carga
+                      * pero en un archivo CSV , para que el usuario mas adelante lo pueda descargar
+                      */
+                     if(count($this->files)>1)
+                     $this->deleteFile($this->files[1]->id);
+                     $rutaCsvTemp=yii::getAlias('@frontend/web/img_repo').DIRECTORY_SEPARATOR.'errores_'.uniqid().'.csv';
+                     $resource=fopen($rutaCsvTemp,'w+');
+                     //$resource= fopen('php://output', 'w');
+                     $campos=$cargamasiva->childsField($model);
+                     $campos[]='Linea';$campos[]='Error';
+                     fputcsv($resource, $campos);
+                     
+                     
                 foreach ($datos as $fila){ 
                     yii::error('Esta es la fila a importar ');
                     yii::error($fila,__METHOD__);
+                    $model=($cargamasiva->insercion)?$cargamasiva->modelAsocc():$cargamasiva->findModelAsocc($fila);
+                    
                      //Devuelve el modelo asociado a la importacion
                      //dependiendo si es insercion o actualizacion usa una u otra funcion
                     //yii::error('Esta es la linea => '.$linea,__METHOD__);   
                      //yii::error($fila,__METHOD__);   
                    // yii::error($fila,__METHOD__);  
-                    $model=($cargamasiva->insercion)?$cargamasiva->modelAsocc():$cargamasiva->findModelAsocc($fila);
+                     
                      yii::error('Colocando atributos => '.$linea,__METHOD__); 
+                                           
                      $model->setAttributes($cargamasiva->AttributesForModel($fila,$filashijas));
                         if($verdadero){
                             try{ 
@@ -484,12 +525,20 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                             }  else{
                             $model->validate(); 
                             } 
+                                          $filaerror=$fila;
+                                             $filaerror[]=$linea;
                                         if($model->hasErrors()){
+                                            
+                                             $filaerror[]=utf8_encode($model->getFirstError());
+                                              fputcsv($resource, $filaerror);
                                              yii::error('Tiene errores, aegar log  => '.$linea,__METHOD__); 
                                             // var_dump($model->getErrors()); die(); 
                                             $this->logCargaByLine($linea,$model->getErrors());
+                                            }else{
+                                               $filaerror[]='Ok';
+                                                 fputcsv($resource, $filaerror);
                                             }
-                                        unset($model);
+                                      unset($model); //
                                  /*Solo si es carga actualizar la linea actual*/
                                if($verdadero){
                                 $this->setAttributes([
@@ -511,7 +560,9 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                                       }
                             $linea++; 
                          }//fin del for 
-                            
+                      $this->attachFromPath($rutaCsvTemp);   
+                      fclose($resource);   
+                         
                     $this->setScenario(static::SCENARIO_RUNNING);
                     $this->rawDateUser('fechacarga'); //asigan la fecha actual 
                                     $this->setAttributes([
