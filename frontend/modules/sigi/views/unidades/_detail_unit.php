@@ -156,7 +156,8 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
     <?= GridView::widget([
         'dataProvider' =>new \yii\data\ActiveDataProvider([
-            'query'=> frontend\modules\sigi\models\VwSigiKardexdepa::find()->andWhere(['unidad_id'=>$model->id])
+            'query'=> frontend\modules\sigi\models\VwSigiKardexdepa::find()->
+                andWhere(['unidad_id'=>$model->id])->orderBy(['fecha'=>SORT_DESC])
         ]),
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],

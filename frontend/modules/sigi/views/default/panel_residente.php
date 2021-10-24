@@ -19,7 +19,7 @@ use dosamigos\chartjs\ChartJs;
         'id'=>'migrilla',
         'dataProvider' =>NEW 
         \yii\data\ActiveDataProvider([
-            'query'=> frontend\modules\sigi\models\SigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id,'aprobado'=>'1']),
+            'query'=> frontend\modules\sigi\models\SigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id,'aprobado'=>'1','historico'=>'0']),
         ]),
          'summary' => '',
          //'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
@@ -100,6 +100,7 @@ use dosamigos\chartjs\ChartJs;
     <br>
     <h4>Deudas pendientes</h4>
 <?php
+    //var_dump($unidad->misDeudasProvider()->query->createCommand()->rawSql);die();
  Pjax::begin(['id'=>'grilla-deudas']); ?>
     <?php //echo $unidad->misDeudasProvider()->query->createCommand()->rawSql; die();  ?>
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
@@ -111,7 +112,7 @@ use dosamigos\chartjs\ChartJs;
         'columns' => [
              
              
-            'nombre',
+            //'nombre',
             
                 /*[
                 'class' => 'kartik\grid\ExpandRowColumn',

@@ -39,7 +39,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
     CONST  STATUS_CANCELADO_CONF='2';
     public $montoNominal=0;  
     
-     public $booleanFields = ['cancelado','aprobado'];
+     public $booleanFields = ['cancelado','aprobado','historico'];
        const SCE_STATUS='status';
        const SCE_BATCH='batch';
     public $dateorTimeFields = [
@@ -91,11 +91,12 @@ class SigiKardexdepa extends \common\models\base\modelBase
         return [
             [['facturacion_id',  'edificio_id', 'unidad_id', 'mes', 'fecha', 'anio'], 'required', 'except'=>[self::SCE_BATCH]],
             [['mes', 'fecha', 'anio'], 'required'],
+            [['monto'], 'required'],
             
            // [['facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
             [['monto', 'igv'], 'number'],
             [['detalles'], 'string'],
-             [['cancelado','monto','enviado','aprobado'], 'safe'],
+             [['cancelado','monto','enviado','aprobado','historico'], 'safe'],
             
             [['unidad_id'], 'validate_unidad_batch','on'=>self::SCE_BATCH],
             [['unidad_id'], 'required','on'=>self::SCE_BATCH,'message'=>yii::t('sigi.errors','El número de la unidad no es el correcto')],
@@ -226,10 +227,10 @@ class SigiKardexdepa extends \common\models\base\modelBase
   }
   
   public function beforeSave($insert) {
-    yii::error('Evebto before Save');
-     yii::error('atributos');
-     yii::error($this->attributes);
+ 
+      
       if($insert){
+          $this->historico=($this->getScenario()==self::SCE_BATCH)?TRUE:FALSE;
           $this->cancelado=self::STATUS_CANCELADO_NADA;
       }
       
@@ -297,6 +298,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
           'cancelado'=>'0',
           'enviado'=>'1',
           'aprobado'=>'1',
+          'historico'=>true,
                                             
       ]);
         yii::error($this->attributes,__FUNCTION__);

@@ -712,7 +712,7 @@ public function desacopla(){
  * 
  */
 public function misDeudasProvider(){
-   // $unidad=$this->unidad;
+  // echo  $unidad=$this->id;die();
    /*echo  VwKardexPagos::find()->andWhere([
                'unidad_id'=>$this->id,
                 ])->andWhere(['>',
