@@ -543,8 +543,12 @@ class SigiFacturacion extends \common\models\base\modelBase
      
     }
  
-    
+  public function afterValidate() {
+     
+      parent::afterValidate();
+  } 
   public function beforeSave($insert){
+      
       if($insert){
           $this->estado=self::EST_CREADO;
       }
@@ -1406,4 +1410,6 @@ class SigiFacturacion extends \common\models\base\modelBase
                RETURN  $pdf->output(/*$ruta, \Mpdf\Output\Destination::FILE*/);
     
   }
+  
+  
 }

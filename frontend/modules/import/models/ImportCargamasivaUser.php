@@ -477,8 +477,16 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                       * Agrtegado para darle funcionalidad para declarar erroes de carga
                       * pero en un archivo CSV , para que el usuario mas adelante lo pueda descargar
                       */
-                     if(count($this->files)>1)
-                     $this->deleteFile($this->files[1]->id);
+                     if(count($this->files)>1){
+                        $i = 1;
+                        while ( $i < count($this->files)):
+                            yii::error('borrando archivos ');
+                                 $this->deleteFile($this->files[$i]->id);
+                                $i++;
+                        endwhile;
+                            
+                        }
+                    
                      $rutaCsvTemp=yii::getAlias('@frontend/web/img_repo').DIRECTORY_SEPARATOR.'errores_'.uniqid().'.csv';
                      $resource=fopen($rutaCsvTemp,'w+');
                      //$resource= fopen('php://output', 'w');
@@ -501,7 +509,9 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                      yii::error('Colocando atributos => '.$linea,__METHOD__); 
                                            
                      $model->setAttributes($cargamasiva->AttributesForModel($fila,$filashijas));
-                        if($verdadero){
+                       yii::error('Estos son los attributos '.$linea,__METHOD__); 
+                       yii::error($model->attributes,__METHOD__);
+                     if($verdadero){
                             try{ 
                                  yii::error('Grabando registro  => '.$linea,__METHOD__); 
                     
@@ -523,13 +533,13 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                             
                             
                             }  else{
-                            $model->validate(); 
+                            yii::error($model->validate(),__FUNCTION__); 
                             } 
                                           $filaerror=$fila;
                                              $filaerror[]=$linea;
                                         if($model->hasErrors()){
                                             
-                                             $filaerror[]=utf8_encode($model->getFirstError());
+                                             $filaerror[]= str_replace($cargamasiva->delimitador  ,'',  utf8_encode($model->getFirstError()));
                                               fputcsv($resource, $filaerror);
                                              yii::error('Tiene errores, aegar log  => '.$linea,__METHOD__); 
                                             // var_dump($model->getErrors()); die(); 
@@ -562,7 +572,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                          }//fin del for 
                       $this->attachFromPath($rutaCsvTemp);   
                       fclose($resource);   
-                         
+                      unlink($rutaCsvTemp);
                     $this->setScenario(static::SCENARIO_RUNNING);
                     $this->rawDateUser('fechacarga'); //asigan la fecha actual 
                                     $this->setAttributes([

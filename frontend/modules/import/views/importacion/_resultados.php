@@ -13,7 +13,11 @@ use yii\web\View;
 </div>
 <?php }elseif($nerrores>0){  ?>
 <div class="alert alert-danger" role="alert">       
-       <?= yii::t('import.labels','El proceso ha concluido con {nerrores} errores',['nerrores'=>$nerrores]);?>        
+       <?= yii::t('import.labels','El proceso ha concluido con {nerrores} errores',['nerrores'=>$nerrores]);?>  
+       <?php 
+         if(count($model->files)>1)
+          echo Html::a('Descargar errores',$model->urlFiles[count($model->files)-1],[]);
+       ?>
 </div>
 <?php 
 }else{ ?>

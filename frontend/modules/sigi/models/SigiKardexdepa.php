@@ -41,6 +41,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
     
      public $booleanFields = ['cancelado','aprobado'];
        const SCE_STATUS='status';
+       const SCE_BATCH='batch';
     public $dateorTimeFields = [
         'fecha' => self::_FDATE,
         'enviado'=>self::_FDATETIME
@@ -74,6 +75,11 @@ class SigiKardexdepa extends \common\models\base\modelBase
      public function scenarios() {
         $scenarios = parent::scenarios();       
          $scenarios[self::SCE_STATUS] = ['cancelado'];
+          $scenarios[self::SCE_BATCH] = ['facturacion_id', 'edificio_id',
+                                        'unidad_id', 'mes', 'fecha', 'anio',
+                                        /*'cancelado','monto','enviado','aprobado',*/
+                                        'monto','detalles'
+                                            ];
        return $scenarios;
     }
     
@@ -83,12 +89,16 @@ class SigiKardexdepa extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['facturacion_id',  'edificio_id', 'unidad_id', 'mes', 'fecha', 'anio'], 'required'],
+            [['facturacion_id',  'edificio_id', 'unidad_id', 'mes', 'fecha', 'anio'], 'required', 'except'=>[self::SCE_BATCH]],
+            [['mes', 'fecha', 'anio'], 'required'],
+            
            // [['facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
             [['monto', 'igv'], 'number'],
             [['detalles'], 'string'],
              [['cancelado','monto','enviado','aprobado'], 'safe'],
             
+            [['unidad_id'], 'validate_unidad_batch','on'=>self::SCE_BATCH],
+            [['unidad_id'], 'required','on'=>self::SCE_BATCH,'message'=>yii::t('sigi.errors','El número de la unidad no es el correcto')],
             [['fecha'], 'string', 'max' => 10],
             [['anio'], 'string', 'max' => 4],
             [['codmon'], 'string', 'max' => 3],
@@ -208,11 +218,21 @@ class SigiKardexdepa extends \common\models\base\modelBase
       yii::error('trigger');
   }
   
+  public function beforeValidate() {
+      $this->resolveIdsBatch();
+     
+      return parent::beforeValidate();
+       
+  }
   
   public function beforeSave($insert) {
+    yii::error('Evebto before Save');
+     yii::error('atributos');
+     yii::error($this->attributes);
       if($insert){
           $this->cancelado=self::STATUS_CANCELADO_NADA;
       }
+      
       return parent::beforeSave($insert);
   }
   
@@ -243,7 +263,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
       } return false;
   }
   
-  
+      
   
   
   
@@ -266,4 +286,66 @@ class SigiKardexdepa extends \common\models\base\modelBase
       $deuda=VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['id'=>$this->id])->scalar(); 
      return (is_null($deuda))?0:$deuda;
   }
+  
+  private function resolveIdsBatch(){
+      
+      $this->setAttributes([
+         
+          'unidad_id'=>$this->resolveUnidadId(),
+           'facturacion_id'=>$this->resolveFacturacionId(),
+          //'fecha'=>, 
+          'cancelado'=>'0',
+          'enviado'=>'1',
+          'aprobado'=>'1',
+                                            
+      ]);
+        yii::error($this->attributes,__FUNCTION__);
+  }
+  
+  private function resolveUnidadId(){
+      yii::error($this->attributes);
+      $m=$this->edificio->getUnidades()->andWhere([
+          'numero'=>$this->unidad_id
+      ])->one();
+      yii::error($this->edificio->getUnidades()->andWhere([
+          'numero'=>$this->unidad_id
+      ])->createCommand()->rawSql,__FUNCTION__);
+      return is_null($m)?null:$m->id;
+  }
+  
+   private function resolveFacturacionId(){
+      $m= SigiFacturacion::find()->andWhere([
+          //'unidad_id'=>$this->unidad_id,
+          'edificio_id'=>$this->edificio_id,
+          'mes'=>$this->mes,
+          'ejercicio'=>$this->anio,
+      ])->one();
+      yii::error(SigiFacturacion::find()->andWhere([
+          //'unidad_id'=>$this->unidad_id,
+          'edificio_id'=>$this->edificio_id,
+          'mes'=>$this->mes,
+          'ejercicio'=>$this->anio,
+      ])->createCommand()->rawSql,__FUNCTION__);
+      return is_null($m)?null:$m->id;
+  }
+ 
+  public function validate_unidad_batch($attribute,$params){
+           /*Existe este numero de departameneto*/
+          // yii::error($this->unidad,__FUNCTION__);
+        
+          
+     /*Duplicado*/
+      if(Self::find()->andWhere([ //'unidad_id'=>$this->unidad_id,
+          'edificio_id'=>$this->edificio_id,
+          'mes'=>$this->mes,
+          'anio'=>$this->anio,
+          'unidad_id'=>$this->unidad_id,
+          ])->exists()) {
+          $this->addError('unidad_id',yii::t('base.errors','Este kardex ya existe'));
+          return ;
+      }
+      
+  }
+  
+  
 }

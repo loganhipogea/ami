@@ -412,6 +412,38 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    $model=new \frontend\modules\sigi\models\SigiKardexdepa();
+    $model->setAttributes([
+    'id' => null,
+    'facturacion_id' => null,
+    'operacion_id' => null,
+    'edificio_id' => '22',
+    'unidad_id' => null,
+    'mes' => '2',
+    'fecha' => '15/02/2020',
+    'anio' => '2020',
+    'codmon' => null,
+    'numerorecibo' => null,
+    'monto' => '',
+    'igv' => null,
+    'detalles' => null,
+    'reporte_id' => null,
+    'noperacion' => null,
+    'banco_id' => null,
+    'cancelado' => null,
+    'enviado' => null,
+    'aprobado' => null,
+]);
+    $model->setScenario($model::SCE_BATCH);
+    var_dump($model->validate());
+    die();
+    
+   $MODEL= \frontend\modules\sigi\models\SigiKardexdepa::findOne(1080);
+   //$MODEL->edificio_id=589;
+   
+   VAR_DUMP($MODEL->save());
+   VAR_DUMP($MODEL->getFirstError());
+    die();
    //\frontend\modules\sigi\models\SigiKardexdepa::findOne(7092)->deleteAllAttachments();die();
     //echo \frontend\modules\sigi\models\SigiKardexdepa::findOne(7092)->files[0]->path; die();
     \frontend\modules\sigi\models\SigiFacturacion::findOne(111)->recibo(7092,true);die();

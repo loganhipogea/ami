@@ -229,10 +229,12 @@ CONST FIRE_METHOD='triggerUpload';
         $userTempDir = $this->getModule()->getUserDirPath();
         foreach (FileHelper::findFiles($userTempDir) as $file) {
             if (!$this->getModule()->attachFile($file, $this->owner)) {
+                
                 throw new \Exception(\Yii::t('yii', 'File upload failed.'));
             }
+            @unlink($file);
         }
-        rmdir($userTempDir);
+        @rmdir($userTempDir);
         if($this->owner->hasMethod(self::FIRE_METHOD)){
             $this->owner->{self::FIRE_METHOD}();
         }
