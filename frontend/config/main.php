@@ -148,6 +148,7 @@ return [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/login/',
+            'site/index',
             'site/clear-cache/',
             'site/falta-pagos',
             'site/prueba-chat',

@@ -298,7 +298,7 @@ use common\widgets\selectwidget\selectWidget;
                   'value'=>'colector.cargo.descargo'
                   ],  */             
             'colector.cargo.descargo',
-            //'descripcion',
+            'descripcion',
            // 'colector.id',
           
            // 'fedoc',
@@ -361,7 +361,11 @@ use common\widgets\selectwidget\selectWidget;
   if(!$aprobado)  
  echo  Html::button(yii::t('base.verbs','Agregar concepto individual'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_apoderado', 'class' => 'botonAbre btn btn-success']); 
 ?> 
-
+<?php
+ $urlx= Url::to(['/sigi/facturacion/recupera-docs','id'=>$model->id,'gridName'=>'grilla_cargospor']);
+  if(!$aprobado)  
+ echo  Html::button(yii::t('base.verbs','Insertar documentos'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Elemento'),'id'=>'btn_docusx', 'class' => 'btn btn-success']); 
+?> 
 
  <?php 
   $string="$('#boton_facturacion').on( 'click', function(){      
@@ -401,6 +405,43 @@ use common\widgets\selectwidget\selectWidget;
   $this->registerJs($string, \yii\web\View::POS_END);
 ?>
 
+ <?php 
+  $string="$('#btn_docusx').on( 'click', function(){      
+       $.ajax({
+              url: '".$urlx."', 
+              type: 'get',
+              data:{},
+              dataType: 'json', 
+              error:  function(xhr, textStatus, error){               
+                            var n = Noty('id');                      
+                              $.noty.setText(n.options.id, error);
+                              $.noty.setType(n.options.id, 'error');       
+                                }, 
+              success: function(json) {
+              var n = Noty('id');
+                      
+                       if ( !(typeof json['error']==='undefined') ) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
+                              $.noty.setType(n.options.id, 'error');  
+                          }    
+
+                             if ( !(typeof json['warning']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['warning']);
+                              $.noty.setType(n.options.id, 'warning');  
+                             } 
+                          if ( !(typeof json['success']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['success']);
+                              $.noty.setType(n.options.id, 'success');  
+                             }      
+                            $.pjax.reload({container: '#grilla_cargospor', async: false});
+                        }
+                        });
+
+
+             })";
+  
+  $this->registerJs($string, \yii\web\View::POS_END);
+?>
  <?php 
   $string="$('#boton_resetear').on( 'click', function(){      
        $.ajax({

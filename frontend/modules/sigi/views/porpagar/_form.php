@@ -24,7 +24,9 @@ use common\helpers\h;
             <div class="form-group no-margin">
                 
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Guardar'), ['class' => 'btn btn-success']) ?>
-             
+         <?php if(!$model->isNewRecord && !$model->en_recibo){?>
+            <?= Html::button('<span class="fa fa-calendar"></span>   '.Yii::t('sigi.labels', 'Programar'), ['id'=>'btn-programa-pago','class' => 'btn btn-danger']) ?>     
+         <?php } ?>
             </div>
         </div>
     </div>
@@ -97,6 +99,10 @@ use common\helpers\h;
   
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'monto')->textInput(['maxlength' => true,'disabled'=>$model->hasChilds()]) ?>
+
+  </div>
+  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'en_recibo')->checkbox() ?>
 
   </div>
  <div class="col-lg-6 col-md-8 col-sm-6 col-xs-12">
@@ -219,3 +225,4 @@ use common\helpers\h;
 
 </div>
     </div>
+ 

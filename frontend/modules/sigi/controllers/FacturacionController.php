@@ -602,4 +602,21 @@ public function actionTestPdf(){
     
 }
 
+   public function actionRecuperaDocs($id){
+     if(h::request()->isAjax){
+         h::response()->format = \yii\web\Response::FORMAT_JSON;
+        $model=$this->findModel($id);
+        $ndocs=$model->rescueDocsFromEdificios();
+        if($ndocs== 0){
+            return ['warning'=>yii::t('base.labels','No se encontró ningún documento para anexar')];
+        }else{
+           return ['success'=>yii::t('base.labels','Se agregaron {numero} documentos',['numero'=>$ndocs])];
+       
+        }
+       
+            }
+   } 
+
+
+
 }

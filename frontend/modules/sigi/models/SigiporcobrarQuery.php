@@ -3,11 +3,11 @@
 namespace frontend\modules\sigi\models;
 
 /**
- * This is the ActiveQuery class for [[SigiPorpagar]].
+ * This is the ActiveQuery class for [[Sigiporcobrar]].
  *
- * @see SigiPorpagar
+ * @see Sigiporcobrar
  */
-class SigiPorpagarQuery extends \frontend\modules\sigi\components\ActiveQueryScope
+class SigiporcobrarQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -17,12 +17,12 @@ public function init()
     {
       //var_dump(SigiUserEdificios::filterEdificios());die();
        //$this->andWhere([ 'in', 'codfac',['FIM','FIP'] ]);
-      $this->alias('t')->andWhere(['ingreso'=>'0']);
+      $this->alias('t')->andWhere(['ingreso'=>'1']);
         parent::init();
     }
     /**
      * {@inheritdoc}
-     * @return SigiPorpagar[]|array
+     * @return Sigiporcobrar[]|array
      */
     public function all($db = null)
     {
@@ -31,7 +31,7 @@ public function init()
 
     /**
      * {@inheritdoc}
-     * @return SigiPorpagar|array|null
+     * @return Sigiporcobrar|array|null
      */
     public function one($db = null)
     {

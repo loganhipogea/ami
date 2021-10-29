@@ -20,9 +20,16 @@ class m211024_193213_alterporpagar extends baseMigration
                 $this->addColumn ($table, 'unidad_id',$this->integer(11));
                
             }
+            if(!$this->existsColumn($table,'facturacion_id')){
+                $this->addColumn ($table, 'facturacion_id',$this->integer(11));
+               
+            }
                 
                 //$this->addColumn($table, 'id_anterior', $this->integer(11)); 
-           
+             (new \yii\db\Query)
+    ->createCommand()->update($table,['ingreso'=>'0'])
+  ->execute();
+            
     }
     /**
      * {@inheritdoc}

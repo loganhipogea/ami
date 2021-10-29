@@ -829,7 +829,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
         }
         
         
-        public  static function  firstOrCreateStatic($attributes,$scenario=null,$verifyAttributes=null){  
+        public  static function  firstOrCreateStatic($attributes,$scenario=null,$verifyAttributes=null,$returnModel=FALSE){  
             //print_r($attributes);
             //$model=self::find()->where($attributes)->one();
             $myAttributesVerify=(is_null($verifyAttributes))?$attributes:$verifyAttributes;
@@ -851,21 +851,22 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                  IF(!$model->insert()){
                      yii::error($model->getErrors(),__METHOD__);
                       //print_r($model->getErrors());die();
-                     return false;
+                     return (!$returnModel)?false:null;
                  }
                    // print_r($model->getErrors());die();
-                    unset($model);
+                 
+                    //unset($model);
                     //echo "ok  ----->";
-                        return true;
+                       return (!$returnModel)?true:$model;
                 } catch (\yii\db\Exception $exception) {
                     yii::error($exception->getMessage());
                   //  echo "    --->  error  :    ". $exception->getMessage();
-                     return false;
+                     return (!$returnModel)?false:null;
              } 
                 
             } else{
                
-                return false;
+                return (!$returnModel)?false:null;
             }
             
         }

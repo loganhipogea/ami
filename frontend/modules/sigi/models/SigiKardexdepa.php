@@ -99,7 +99,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
              [['cancelado','monto','enviado','aprobado','historico'], 'safe'],
             
             [['unidad_id'], 'validate_unidad_batch','on'=>self::SCE_BATCH],
-            [['unidad_id'], 'required','on'=>self::SCE_BATCH,'message'=>yii::t('sigi.errors','El número de la unidad no es el correcto')],
+            [['unidad_id','edificio_id'], 'required','on'=>self::SCE_BATCH,'message'=>yii::t('sigi.errors','El número de la unidad no es el correcto')],
             [['fecha'], 'string', 'max' => 10],
             [['anio'], 'string', 'max' => 4],
             [['codmon'], 'string', 'max' => 3],

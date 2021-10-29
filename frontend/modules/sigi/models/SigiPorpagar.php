@@ -34,6 +34,7 @@ class SigiPorpagar extends \common\models\base\modelBase
     const ESTADO_ANULADO='99';
     const ESTADO_PROGRAMADO='20';
     const SCE_ESTADO='estado';
+     public $booleanFields = ['ingreso','en_recibo'];
     public $dateorTimeFields=[
         'fechaprog'=>self::_FDATE,
          'fechadoc'=>self::_FDATE,
@@ -62,13 +63,13 @@ class SigiPorpagar extends \common\models\base\modelBase
     {
         return [
             [['codocu', 'edificio_id','codpro',  'monto','cargoedificio_id',   'glosa', 'fechadoc','codmon','fechaprog'], 'required'],
-            [['edificio_id', 'unidad_id'], 'integer'],
+            [['edificio_id', 'unidad_id','facturacion_id'], 'integer'],
             [['monto', 'igv', 'monto_usd'], 'number'],
             [['detalle'], 'string'],
             // [['numdocu'], 'safe'],
             [['fechaprog'], 'validate_fechas'],
              [['fechaprog'], 'validate_programacion'],
-            [['codmon','codpro','fechaprog','cuenta_id','numdocu'], 'safe'],
+            [['codmon','codpro','fechaprog','cuenta_id','numdocu','ingreso','nivel','en_recibo'], 'safe'],
             [['codocu'], 'string', 'max' => 3],
             [['codpresup', 'fechadoc'], 'string', 'max' => 10],
              [['numdocu'], 'string', 'max' => 30],
@@ -233,6 +234,8 @@ public function scenarios() {
             'edificio_id'=>$this->edificio_id,
              'cuenta_id'=>$this->edificio->cuentaActiva()->id,
             'fechaprog'=>$this->fechaprog,
+            //'monto'=>$this->monto;
+            'nivel'=>'A',
             'codestado'=> SigiPropago::ESTADO_CREADO,
         ];
     }

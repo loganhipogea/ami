@@ -46,7 +46,8 @@ class SigiPropago extends \common\models\base\modelBase
             'porpagar_id',
             'edificio_id',
             'fechaprog',
-            'cuenta_id'
+            'cuenta_id',
+            'nivel'
             ];
          $scenarios[self::SCE_ESTADO] = [
             'codestado',
@@ -61,7 +62,7 @@ class SigiPropago extends \common\models\base\modelBase
         return [
             [['porpagar_id', 'edificio_id', 'fechaprog','monto'], 'required'],
             [['porpagar_id', 'edificio_id'], 'integer'],
-            [['cuenta_id'], 'safe'],
+            [['cuenta_id','nivel'], 'safe'],
            [['monto'], 'validate_monto_fraccionado'],
            [['nivel'], 'string', 'max' => 1],
             [['cuenta'], 'string', 'max' => 30],
@@ -114,9 +115,23 @@ class SigiPropago extends \common\models\base\modelBase
         return new SigiPropagoQuery(get_called_class());
     }
     
+    
+    private function completeAttributos(){
+        $clipro=$this->porpagar->clipro;
+        $this->setAttributes([
+                'cuenta'=>$clipro->cuenta,
+            'cci'=>$clipro->cci,
+            'codbanco'=>$clipro->codbanco,
+            'codmon'=>$clipro->codmon,
+                ]);
+    }
+    
     public function beforeSave($insert) {
       if($insert){
+          $this->completeAttributos();
           $this->codestado=self::ESTADO_CREADO;
+          
+          
       }
         return parent::beforeSave($insert);
     }
@@ -139,5 +154,7 @@ class SigiPropago extends \common\models\base\modelBase
          $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento} '.$this->getOldAttribute('monto'),['monto_movimiento'=>$this->porpagar->monto,'monto'=>$this->monto]));
       }
   }
+  
+ 
     
 }

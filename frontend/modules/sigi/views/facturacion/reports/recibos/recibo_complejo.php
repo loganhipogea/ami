@@ -218,7 +218,7 @@ $model=$detalle->facturacion;
        
        
        
-       <div style="position:absolute; width:132px; left:35px; top:140px">
+       
                
                         <?php
                          /*
@@ -233,8 +233,9 @@ $model=$detalle->facturacion;
                          $array_depas=array_unique($array_depas);
                             $resumido=(count($array_depas)>1)?true:false;      
                         // var_dump( $resumido);die();
-                                $grupos=VwSigiFacturecibo::find()->select(['codgrupo','desgrupo'])->andWhere(['>','montototal',0])->
-                                   andWhere(['kardex_id'=>$detalle->kardex_id])->distinct()->asArray()->all();
+                                $grupos=VwSigiFacturecibo::find()->select(['codgrupo','desgrupo','count(codgrupo) as cant'])->andWhere(['>','montototal',0])->
+                                   andWhere(['kardex_id'=>$detalle->kardex_id])->
+                                    groupBy(['codgrupo','desgrupo'])->distinct()->asArray()->all();
                                 if(!$resumido){
                                    $detalles=VwSigiFacturecibo::find()->select(['codgrupo',
                                     'desgrupo','aacc',
@@ -252,18 +253,18 @@ $model=$detalle->facturacion;
                                    // yii::error('Es resumido',__FUNCTION__);
                                    // yii::error($detalles[0]['monto'],__FUNCTION__);
                                 }
-                                $vista=($compacto)?'modelo_compacto':'modelo_simple';
-                                if($modelo->reporte_id==4)$vista='modelo_complejo';
-                                echo $this->render($vista,[
+                                $vista=($compacto)?'modelo_compacto':'modelo_simple_complejo';
+                                if($modelo->reporte_id==4)$vista='modelo_simple_complejo';
+                               /* echo $this->render($vista,[
                                     'modelo'=>$model,
                                     'grupos'=>$grupos,
                                     'detalles'=>$detalles,
                                     'codmon'=>$detalle->codmon,
-                                    ]);
+                                    ]);*/
                          
                          ?>
                
-        </div>       
+             
    </body>
     </html>
     

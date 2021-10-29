@@ -1124,9 +1124,10 @@ class SigiFacturacion extends \common\models\base\modelBase
           
                     break;
                 case 4:
-                yii::error('recibo comlpejo',__FUNCTION__);
-                yii::error('Formato '.$formato,__FUNCTION__);
-                         $contenido= h::currentController()->render('@frontend/modules/sigi/views/facturacion/reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
+                     $contenido= h::currentController()->render('reports/recibos/modelo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
+                //yii::error('recibo comlpejo',__FUNCTION__);
+                //yii::error('Formato '.$formato,__FUNCTION__);
+                        // $contenido= h::currentController()->render('@frontend/modules/sigi/views/facturacion/reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
           
                     break;
                     
@@ -1134,7 +1135,9 @@ class SigiFacturacion extends \common\models\base\modelBase
                  $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>false]);
           
             }
-             $pdf=ModuleReporte::getPdf(['format'=>$formato]);             
+             $pdf=ModuleReporte::getPdf(['format'=>$formato]);
+                
+             
             /*
              * Tamaño de papel
              */
@@ -1153,10 +1156,10 @@ class SigiFacturacion extends \common\models\base\modelBase
                   yii::error('haciendo el  output al file  '.$ruta,__FUNCTION__);
                 $pdf->output($ruta, \Mpdf\Output\Destination::FILE);  
                 yii::error('YA BHIZO EK OUTPUR '.$ruta,__FUNCTION__);
-               /* $kardex=SigiKardexdepa::findOne($idKardex);
+                $kardex=SigiKardexdepa::findOne($idKardex);
                 $kardex->deleteAllAttachments();
-                $kardex->attachFromPath($ruta);*/
-                //@unlink($ruta);
+                $kardex->attachFromPath($ruta);
+                @unlink($ruta);
             }
   }
   
@@ -1222,9 +1225,10 @@ class SigiFacturacion extends \common\models\base\modelBase
      $i=1;
      foreach($this->getKardexDepa()->batch($tamano) as $kardexes ){
          
-          $mpdf = new \Mpdf\Mpdf();
+          $mpdf = new \Mpdf\Mpdf(['format'=>$this->reporte->tamanopapel]);
         
          foreach($kardexes as $kardex){
+             yii::error('el kardex id es  '.$kardex->id,__FUNCTION__);
                 $mpdf->AddPage();
                 $pagecount = $mpdf->SetSourceFile($kardex->files[0]->path);
                     if ($pagecount > 0) {
@@ -1312,6 +1316,7 @@ class SigiFacturacion extends \common\models\base\modelBase
     * bancacrios 
     */
   public function isRelated(){
+      
       $isCompromise=false;
       $isCompromise= SigiMovimientosPre::find()->andWhere([
           'kardex_id'=>$this->idsKardex()
@@ -1411,5 +1416,56 @@ class SigiFacturacion extends \common\models\base\modelBase
     
   }
   
+  /*
+   * Esta funcion recupera los documentos 
+   * por cobrar o por pagar para incluirlos en el recibo mensual
+   */
+  public function rescueDocsFromEdificios(){
+      $fechaLim=$this->toCarbon('fecha')->subMonths(3)->format(\common\helpers\timeHelper::formatMysqlDate());
+                
+      $criteria=['edificio_id'=>$this->edificio_id,
+                  'en_recibo'=>'1',
+                  ];
+      $datos=(new \yii\db\Query())->from('{{%sigi_porpagar}}')
+       ->andWhere(['>','fechadoc',$fechaLim])->where($criteria)->andWhere(['facturacion_id'=>null])->all();
+      
+     
+      foreach($datos as $fila){
+        $this->insertDocu($fila); 
+      }
+      return count($datos);
+  }
   
+  public function insertDocu($fila){
+      $scenario=(empty($fila['unidad_id']))?SigiCuentaspor::SCENARIO_RECIBO_EXTERNO_MASIVO:SigiCuentaspor::SCENARIO_RECIBO_INTERNO;
+      $model= SigiCuentaspor::firstOrCreateStatic(
+              ['facturacion_id'=>$this->id,
+                  'edificio_id'=>$this->edificio_id,
+                'codocu'=>$fila['codocu'], 
+                'numerodoc'=>$fila['numdocu'], 
+                  'descripcion'=>$fila['glosa'], 
+                   'codpro'=>$fila['codpro'], 
+                  'fedoc'=>$fila['fechadoc'], 
+                   'colector_id'=>$fila['cargoedificio_id'],  
+                   'mes'=>$this->mes, 
+                  'anio'=>$this->ejercicio, 
+                  'monto'=>$fila['monto'], 
+                  'codmon'=>$fila['codmon'], 
+                  'unidad_id'=>$fila['unidad_id'], 
+                  'mesconsumo'=>$this->mes, 
+                  'consumo'=>0],
+             $scenario,
+              ['facturacion_id'=>$this->id,
+                'codocu'=>$model->codocu, 
+                'numerodoc'=>$model->numdocu,                 
+                   'codpro'=>$model->codpro,
+                   
+                  ],true);
+      if(!is_null($model)){
+          if(is_null($d= SigiPorpagar::findOne($fila['id'])))
+           $d= Sigiporcobrar::findOne($fila['id']);
+          if($d->hasAttachments())
+          $model->attachFromPath($d->files[0]->path);
+      }
+  }
 }

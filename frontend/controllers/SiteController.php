@@ -73,7 +73,8 @@ class SiteController extends \frontend\controllers\base\baseController
      *
      * @return mixed
      */
-    public function actionIndex()    {       
+    public function actionIndex()    {   
+       
         // $this->layout="install";       
       
         $urlBackend=str_replace('frontend','backend',yii::$app->urlManager->baseUrl);
@@ -84,6 +85,8 @@ class SiteController extends \frontend\controllers\base\baseController
             }else{
                 
                 if(yii::$app->user->isGuest){
+                    $this->layout="plataforma"; 
+                   return $this->render('plataforma/nosotros');
                    // echo "holsa"; die();
                   return  $this->redirect(['site/login']);
                     
@@ -126,7 +129,7 @@ class SiteController extends \frontend\controllers\base\baseController
      */
     public function actionLogin()
     {
-     
+    
         $this->layout="install";
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
