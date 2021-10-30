@@ -415,6 +415,39 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    $expresion=New \yii\db\Expression('a.lectura-a.delta as lanterior');
+
+    echo (new \yii\db\Query())         
+    ->select([
+      'a.kardex_id', 'a.dias','a.resumido','a.grupocobranza','a.nuevoprop','a.codmon',
+      'a.id',$expresion,'a.consumototal','a.numerorecibo',
+      'a.montototal','a.participacion as particmed','a.codsuministro','a.aacc','a.delta',
+      'a.lectura','a.cuentaspor_id','a.edificio_id','a.unidad_id','a.colector_id',
+       'a.grupo_id','a.monto','a.igv','a.grupounidad','a.grupofacturacion','a.facturacion_id',
+        'a.mes','a.anio','a.identidad','a.unidades',
+        'b.fecha','b.fvencimiento','b.descripcion','b.detalles',
+        'c.nombre as nombreedificio','c.codigo','c.direccion',
+        'd.numero','d.nombre','d.area','d.participacion',
+        'f.descargo','f.codcargo',
+        'g.codgrupo','g.descripcion as desgrupo',
+        'h.numero as numerodepa','h.nombre as nombredepa','h.area as areadepa',
+        'h.participacion as participaciondepa','mx.simbolo'
+         ])
+    ->from(['a'=>'{{%sigi_detfacturacion}}'])->
+     innerJoin('{{%sigi_facturacion}} b', 'a.facturacion_id=b.id')->
+     innerJoin('{{%sigi_edificios}} c', 'c.id=b.edificio_id')->  
+      innerJoin('{{%sigi_unidades}} d', 'd.id=a.grupounidad_id')->   
+      innerJoin('{{%sigi_unidades}} h', 'h.id=a.unidad_id')->
+      innerJoin('{{%sigi_cargosedificio}} e', 'e.id=a.colector_id')-> 
+       innerJoin('{{%sigi_cargos}} f', 'e.cargo_id=f.id')->   
+        innerJoin('{{%sigi_cargosgrupoedificio}} g', 'a.grupo_id=g.id')->
+         innerJoin('{{%monedas}} mx', 'mx.codmon=a.codmon')->createCommand()->rawSql;
+    die();
+    
+    
+    
+    
+    
     $model=new \frontend\modules\sigi\models\SigiKardexdepa();
     $model->setAttributes([
     'id' => null,

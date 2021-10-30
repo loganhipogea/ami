@@ -4,8 +4,8 @@ use yii\helpers\Url;
 use frontend\modules\sigi\models\VwSigiFacturecibo;
 use frontend\modules\sigi\models\SigiUnidades;
 use common\models\masters\Clipro;
-$detalle=$dataProvider->getModels()[0];
-$model=$detalle->facturacion;
+$detalle=$model->sigiDetfacturacion[0];
+
 ?>
 <!DOCTYPE html>
     <html lang="es">
@@ -33,7 +33,7 @@ $model=$detalle->facturacion;
   
  <!-- INICIO DE LA PRUEBA   !-->
  <div style=" position:absolute;  left:548px;  top:416px;  font-size:10;  font-family:cour;  color:#000; ">
-    POSICION 548px,416px
+    
  </div>
  <!-- FIN DE LA PRUEBA    !-->
  
@@ -227,13 +227,10 @@ $model=$detalle->facturacion;
                           * $resumido=true: Quiere decir que debe de ersumirse 
                           * ya agrupase en un solo recibo
                           */
-                         $array_depas=$dataProvider->query->select(['unidad_id'])->distinct()->column();
-                         //yii::error('el toipo',__FUNCTION__);
-                         //yii::error($array_depas,__FUNCTION__);
-                         $array_depas=array_unique($array_depas);
+                        /* $array_depas=$dataProvider->query->select(['unidad_id'])->distinct()->column();
+                          $array_depas=array_unique($array_depas);
                             $resumido=(count($array_depas)>1)?true:false;      
-                        // var_dump( $resumido);die();
-                                $grupos=VwSigiFacturecibo::find()->select(['codgrupo','desgrupo','count(codgrupo) as cant'])->andWhere(['>','montototal',0])->
+                               $grupos=VwSigiFacturecibo::find()->select(['codgrupo','desgrupo','count(codgrupo) as cant'])->andWhere(['>','montototal',0])->
                                    andWhere(['kardex_id'=>$detalle->kardex_id])->
                                     groupBy(['codgrupo','desgrupo'])->distinct()->asArray()->all();
                                 if(!$resumido){
@@ -247,21 +244,22 @@ $model=$detalle->facturacion;
                                    $detalles=VwSigiFacturecibo::find()->select(['codgrupo',
                                     'desgrupo','aacc',
                                     'descargo',/*'codsuministro','unidades','lanterior','lectura','delta',*/
-                                    'sum(monto) as monto','montototal','simbolo'])->andWhere(['kardex_id'=>$detalle->kardex_id])
+                                   /* 'sum(monto) as monto','montototal','simbolo'])->andWhere(['kardex_id'=>$detalle->kardex_id])
                                     ->groupBy(['codgrupo','desgrupo','descargo','montototal','simbolo'])->asArray()->all();  
                                 
-                                   // yii::error('Es resumido',__FUNCTION__);
-                                   // yii::error($detalles[0]['monto'],__FUNCTION__);
-                                }
+                                  }
                                 $vista=($compacto)?'modelo_compacto':'modelo_simple_complejo';
-                                if($modelo->reporte_id==4)$vista='modelo_simple_complejo';
+                               if($modelo->reporte_id==4)$vista='modelo_simple_complejo';
                                /* echo $this->render($vista,[
                                     'modelo'=>$model,
                                     'grupos'=>$grupos,
                                     'detalles'=>$detalles,
                                     'codmon'=>$detalle->codmon,
                                     ]);*/
-                         
+                         echo $this->render('modelo_simple_complejo',[
+                                    'datos'=>$datos,
+                                    'codmon'=>$detalle->codmon,
+                                    ]);
                          ?>
                
              

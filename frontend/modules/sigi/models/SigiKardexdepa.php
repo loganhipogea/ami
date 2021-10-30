@@ -348,6 +348,56 @@ class SigiKardexdepa extends \common\models\base\modelBase
       }
       
   }
+ 
+   /*
+   * Sacando los grupos de concepto a mostrar en el recibo
+   */
+  private  function groupsToRecibo(){
+     return  $this->getDetalleFactu()->select(['grupo_id','count(grupo_id) as cant'])->
+     groupBy(['grupo_id'])->orderBy(['count(grupo_id)'=>SORT_DESC])->distinct()->asArray()->all();
+  }
   
+   /*
+   * Sacando los detalles de grupo para el recibo
+   */
+  public function groupDetailsForRecibo(){ 
+      $resumido=$this->isResumido();
+      $expresion= new \yii\db\Expression('lectura-delta as lanterior');
+      
+      
+                $groups=self::groupsToRecibo();
+         $container=[];
+    if(!$resumido){
+        foreach($groups as $grupo){
+                 $container[$grupo['grupo_id']]=(new \yii\db\Query())->
+                    select(['unidades','g.descripcion as desgrupo','f.descargo','codgrupo', 'aacc','codsuministro','unidades',$expresion,'lectura','delta',
+                    'a.monto','montototal'])
+                    ->from('{{%sigi_detfacturacion}} a')
+                     ->innerJoin('{{%sigi_cargosedificio}} e','e.id=a.colector_id')
+                    ->innerJoin('{{%sigi_cargos}} f', 'e.cargo_id=f.id')  
+                    ->innerJoin('{{%sigi_cargosgrupoedificio}} g', 'a.grupo_id=g.id') 
+                    ->andWhere(['kardex_id' =>$this->id])->andWhere(['a.grupo_id'=>$grupo['grupo_id']])
+                    ->all();
+                 }      
+        
+         }else{
+                $container[$grupo['grupo_id']]=(new \yii\db\Query())->
+                    select(['unidades','g.codgrupo','g.descripcion','aacc','f.descargo','sum(a.monto) as monto','montototal'])
+                    ->from('{{%sigi_detfacturacion}}a')
+                     ->innerJoin('{{%sigi_cargosedificio}} e','e.id=a.colector_id')
+                    ->innerJoin('{{%sigi_cargos}} f', 'e.cargo_id=f.id')  
+                    ->innerJoin('{{%sigi_cargosgrupoedificio}} g', 'a.grupo_id=g.id') 
+                    ->andWhere(['kardex_id' =>$this->id])
+                    ->groupBy(['g.codgrupo','g.descripcion','f.descargo','montototal'])
+                    ->all();
+        }      
+      return $container;
+  }
   
+  public function isResumido(){
+     $array_depas=array_unique($this->getDetalleFactu()->select(['unidad_id'])->distinct()->column()); 
+     return (count($array_depas)>1);
+      
+  }
+    
 }

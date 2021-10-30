@@ -8,6 +8,7 @@ use frontend\modules\sigi\models\SigiCuentaspor;
 use frontend\modules\sigi\models\SigiDetfacturacion;
 use frontend\modules\sigi\models\SigiDetFacturacionSearch;
 use frontend\modules\sigi\models\SigiKardexdepa;
+use frontend\modules\sigi\models\VwSigiFacturecibo;
 use Yii;
 use  yii\web\ServerErrorHttpException;
 USE yii\data\ActiveDataProvider;
@@ -1107,6 +1108,10 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   public function recibo($idKardex,$disk=false){   
          $formato=$this->reporte->tamanopapel;
+         $kardex=SigiKardexdepa::findOne($idKardex);
+         $datos=$kardex->groupDetailsForRecibo();
+       
+         
            $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
            switch ($this->reporte_id) {
                 case 1:
@@ -1124,7 +1129,7 @@ class SigiFacturacion extends \common\models\base\modelBase
           
                     break;
                 case 4:
-                     $contenido= h::currentController()->render('reports/recibos/modelo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
+                     $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['datos'=>$datos,'model'=>$this,'dataProvider'=>$dataProvider,'compacto'=>false]);
                 //yii::error('recibo comlpejo',__FUNCTION__);
                 //yii::error('Formato '.$formato,__FUNCTION__);
                         // $contenido= h::currentController()->render('@frontend/modules/sigi/views/facturacion/reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
@@ -1156,7 +1161,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                   yii::error('haciendo el  output al file  '.$ruta,__FUNCTION__);
                 $pdf->output($ruta, \Mpdf\Output\Destination::FILE);  
                 yii::error('YA BHIZO EK OUTPUR '.$ruta,__FUNCTION__);
-                $kardex=SigiKardexdepa::findOne($idKardex);
+                
                 $kardex->deleteAllAttachments();
                 $kardex->attachFromPath($ruta);
                 @unlink($ruta);
@@ -1468,4 +1473,6 @@ class SigiFacturacion extends \common\models\base\modelBase
           $model->attachFromPath($d->files[0]->path);
       }
   }
+ 
+  
 }
