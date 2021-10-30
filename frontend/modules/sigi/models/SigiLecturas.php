@@ -530,7 +530,7 @@ class SigiLecturas extends \common\models\base\modelBase
 
  public function deltaPredecesor(){
     if(!is_null($reeemplazo=$this->suministro->hasReemplazo())){
-        var_dump($reeemplazo->attributes);die();
+        var_dump($reemplazo,$reeemplazo->attributes);die();
          return $reemplazo->suministroAnt->lastRead(null,true)->delta;
       }else{
           return 0;
