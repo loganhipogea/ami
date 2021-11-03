@@ -14,7 +14,11 @@ use frontend\modules\sta\helpers\comboHelper;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\Edificios */
 /* @var $form yii\widgets\ActiveForm */
+$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Suministros'), 'url' => ['/sigi/edificios/suministros']];
+
+
 ?>
+
 <h4><?=yii::t('sigi.labels','Gestionar Suministro').' - '.$model->comboValueField('tipo')?></h4>
 <div class="box box-success">
 <div class="edificios-form">
@@ -28,7 +32,7 @@ use frontend\modules\sta\helpers\comboHelper;
                   <?php
                 Pjax::begin(['id'=>'botonpajax']);
                  if($model->activo){
- $url= Url::to(['/sigi/unidades/agrega-lectura','id'=>$model->id,'gridName'=>'botonpajax','idModal'=>'buscarvalor']);
+ $url= Url::to(['/sigi/unidades/agrega-lectura','id'=>$model->id,'gridName'=>'grilla-lecturas','idModal'=>'buscarvalor']);
    echo  Html::button(yii::t('base.verbs','Agregar Lectura'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Lectura'),'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-success']); 
                  } ?>
     <?php
@@ -73,13 +77,16 @@ use frontend\modules\sta\helpers\comboHelper;
      <?= $form->field($model, 'codum')->textInput(['maxlength' => true,'disabled' => true]) ?>
  </div>        
           
-  
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+     <?= $form->field($model, 'plano')->checkbox(['disabled' => true]) ?>
+ </div>        
+         
           
      
     <?php ActiveForm::end(); ?>
           
   
-<?php Pjax::begin(['id'=>'grilla-lecturas']);?>
+
 </div>
     </div>
    <?php echo TabsX::widget([
@@ -110,9 +117,7 @@ use frontend\modules\sta\helpers\comboHelper;
     ],
 ]);  
 ?>
-<?PHP
- Pjax::end();
-?>
+
    
  
 

@@ -500,6 +500,7 @@ public function actionAjaxMainRecibo($id){
                 if($model->save() && $model->resolveSuministro()){
                    $transaccion->commit(); 
                 }else{
+                    ECHO "NO "; DIE();
                    $transaccion->rollBack(); 
                    return ['success'=>2,'msg'=>'error']; 
                 }

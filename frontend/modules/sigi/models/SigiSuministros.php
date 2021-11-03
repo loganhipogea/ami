@@ -376,13 +376,20 @@ public function lastReads($forGraphical=false){
    $nlecturas=min(\common\helpers\h::gsetting('sigi','numeroMaxLecturas'),
                 $this->lecturasFacturablesQuery()->count()
                );
-   $registrosLecturas=$this->
+  /* $registrosLecturas=$this->
            lecturasFacturablesQuery()->
            orderBy('flectura ASC')->limit($nlecturas)->all();
    $lecturas=[];
     foreach($registrosLecturas as $lectura){
         $lecturas[$lectura->mes]=$lectura->delta;
     }
+    */
+    $lecturas= SigiLecturas::find()->select(['mes','sum(delta) as consumo'])
+     ->andWhere(['suministro_id'=>$this->id])->groupBy(['mes','anio'])->limit($nlecturas)->
+     asArray()->all();
+    $lecturas=array_combine(array_column($lecturas,'mes'),array_column($lecturas,'consumo'));
+    
+    
     if($forGraphical){
         $meses= array_values(\common\helpers\timeHelper::mapMonths(array_keys($lecturas)));
         $lecturas=array_combine($meses,array_values($lecturas));

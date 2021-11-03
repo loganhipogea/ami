@@ -1,4 +1,4 @@
-<?php
+  <?php
        // $totalMesRaw=array_sum(array_column($detalles,'monto'));
         //$totalMes=Yii::$app->formatter->asDecimal(array_sum(array_column($detalles,'monto')),2);
         //$codgrupo=$grupo['codgrupo'];
@@ -9,19 +9,19 @@
        
         
         
-                 // $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'monto')),3);
-                  //$subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'montototal')),3);
+                  $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'monto')),3);
+                  $subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'montototal')),3);
         ?> 
         <table style="">
            <tr>
-                <td ><b>cualquier cosa</b></td>
-                 <td ><b>Monto</b></td>
-                 <td ><b>Cuota</b></td>
+                <td width="70%" style="padding: 1px;"><b><?=$bloque[0]['desgrupo']?></b></td>
+                 <td width="20%"  align="right" style="padding: 1px;"><b>Monto</b></td>
+                 <td width="20%"   align="right" style="padding: 1px;"><b>Cuota</b></td>
             </tr> 
             
         <?php
         
-       /* foreach($bloque as $clave=>$fila){
+        foreach($bloque as $clave=>$fila){
             if($fila['monto']!=0){
              $suministro=(empty(trim($fila['codsuministro'])))?'':'  Cod Suministro : '.(trim($fila['codsuministro']));
              $suministroAACC=($fila['aacc']=='1')?' => [AACC] ':' ';
@@ -31,21 +31,21 @@
      $consumo=(empty(trim($fila['delta'])))?'':'  Consumo: '.trim(round($fila['delta'],3));
          $descripcion= $fila['descargo'].$suministro.$suministroAACC.$lanterior.$lactual.$consumo.$unidades;
         
-       */
+       
             
             ?>
             <tr>
-                <td > descripcion</td>
-                 <td >100</td>
-                  <td >200</td>
+                <td width="70%" style="padding: 1px;"> <?=$descripcion?></td>
+                 <td width="20%"  align="right" style="padding: 1px;"><?=$codmon.'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
+                  <td width="20%"   align="right" style="padding: 1px;"><?=$codmon.'  '.Yii::$app->formatter->asDecimal($fila['monto'],3)?></td>
             </tr>
-        <?php /*}
-        }*/
+        <?php }
+        }
         ?>
             <tr>
-                <td ><b>Total</b></td>
-                <td ><b>458</b></td>
-                  <td ><b>580</b></td>
+                <td width="70%" align="right" style="padding: 1px;"><b>Total</b></td>
+                <td width="20%"  align="right" style="padding: 1px;" ><b><?=$codmon.'  '.$subtotalTotal?></b></td>
+                  <td width="20%"   align="right" style="padding: 1px;"><b><?=$codmon.'  '.$subtotalCuota?></b></td>
             </tr>
         </table>
 

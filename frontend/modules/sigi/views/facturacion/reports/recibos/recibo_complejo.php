@@ -4,8 +4,7 @@ use yii\helpers\Url;
 use frontend\modules\sigi\models\VwSigiFacturecibo;
 use frontend\modules\sigi\models\SigiUnidades;
 use common\models\masters\Clipro;
-$detalle=$model->sigiDetfacturacion[0];
-
+$detalle=$kardex->detalleFactu[0];
 ?>
 <!DOCTYPE html>
     <html lang="es">
@@ -256,6 +255,7 @@ $detalle=$model->sigiDetfacturacion[0];
                                     'detalles'=>$detalles,
                                     'codmon'=>$detalle->codmon,
                                     ]);*/
+                        
                          echo $this->render('modelo_simple_complejo',[
                                     'datos'=>$datos,
                                     'codmon'=>$detalle->codmon,

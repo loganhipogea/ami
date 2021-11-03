@@ -1,7 +1,5 @@
 <?php
-
 namespace frontend\modules\sigi\models;
-
 use Yii;
 
 /**
@@ -106,10 +104,15 @@ class SigiReempmedidor extends \common\models\base\modelBase
         //$model->refresh();
         $mod=$this->preparaLectura();
         $grabo1=$mod->save();
+        $modelAnt->activo=false;
+        $grabo3=$modelAnt->save();
+        YII::ERROR('veoocando erroer re');
         YII::ERROR($model->getErrors());
          YII::ERROR($mod->getErrors());
+         YII::ERROR($modelAnt->getErrors());
+         
          SigiSuministros::updateAll(['activo'=>'0'], ['id'=>$this->suministroAnt->id]);
-         return ($grabo && $grabo1 );
+         return ($grabo && $grabo1 && $grabo3 );
     }
  
  private function preparaLectura(){
@@ -124,6 +127,7 @@ class SigiReempmedidor extends \common\models\base\modelBase
             'lectura'=>$this->ultima_lectura,
              'flectura'=>$this->fecha_reemplazo,
             'unidad_id'=>$this->suministroAnt->unidad_id,
+          'edificio_id'=>$this->suministroAnt->edificio_id,
             'codepa'=>$this->suministroAnt->unidad->numero,
              'codedificio'=>$this->suministroAnt->edificio->codigo,
             'mes'=>date('n',strtotime($this->swichtDate('fecha_reemplazo',false))),
@@ -153,7 +157,7 @@ class SigiReempmedidor extends \common\models\base\modelBase
                       lastRead()->toCarbon('flectura')
                  )) 
        $this->addError('fecha_reemplazo',yii::t('sigi.errors',
-               'La fecha de reemplazo no puede ser anterior a la última fecha de lectura {flectura}',
+               'La fecha de reemplazo no puede ser anterior a la última fecha de lectura {flectura} del suministro a cambiar',
                ['flectura'=>$flectura])
                );
   }

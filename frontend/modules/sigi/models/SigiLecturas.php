@@ -47,7 +47,7 @@ class SigiLecturas extends \common\models\base\modelBase
             //[['suministro_id','mes', 'anio'], 'unique', 'targetAttribute' => ['mes']],
              [['suministro_id', 'unidad_id'], 'integer'],
             [['lectura', 'lecturaant', 'delta'], 'number'],
-            ['lectura', 'valida_lectura'],
+            //['lectura', 'valida_lectura'],
             [['codepa'], 'string', 'max' => 12],
              [['mes','codedificio'], 'safe'],
             /*
@@ -62,7 +62,7 @@ class SigiLecturas extends \common\models\base\modelBase
            
             /*Escenario imortacion*/
             // [['codepa'], 'valida_depa','on'=>self::SCENARIO_IMPORTACION],
-            [['codepa'], 'validate_general','on'=>self::SCENARIO_IMPORTACION],
+            [['flectura'], 'validate_general'],
              
             // [['codepa'], 'valida_lectura','on'=>self::SCENARIO_IMPORTACION],
             [['flectura'], 'unique', 'targetAttribute' =>['codepa','mes','anio','codedificio', 'codtipo'] ,'on'=>self::SCENARIO_IMPORTACION],
@@ -138,11 +138,12 @@ class SigiLecturas extends \common\models\base\modelBase
           $this->resolveIds();
           IF(empty($this->codepa))$this->codepa=$this->unidad->numero;
           
-          if($this->isDateForFirstRead(true)){
-               $this->lecturaant=$this->lastReadValue(); 
-                $this->delta=$this->lectura+$this->deltaPredecesor();  
-          }else{
-            $this->lecturaant=$this->lastReadValue(); 
+          
+          $this->lecturaant=$this->lastReadValue(); 
+          
+          if($this->isDateForFirstRead()){
+               $this->delta=$this->lectura+$this->deltaPredecesor();  
+          }else{              
                 $this->delta=$this->lectura-$this->lecturaant; 
           }
           
@@ -181,13 +182,13 @@ class SigiLecturas extends \common\models\base\modelBase
     {
       /*Validando fecha*/
         // yii::error('validando fecha ',__FUNCTION__);
-         $depa= $this->depa(); 
+         //$depa= $this->depa(); 
    //YII::ERROR($depa);
-   if(is_null($depa)){
+  /* if(is_null($depa)){
       // YII::ERROR('DEPA ER ES NULO');
           $this->addError('codepa',yii::t('sigi.labels','El codigo de departamento para este edificio no existe '.$this->getScenario()));
           return;
-      }
+      }*/
       
             
       if(!$this->medidor()->activo)
@@ -236,6 +237,7 @@ class SigiLecturas extends \common\models\base\modelBase
           return;
       }       
    $depa= $this->depa(); 
+   
    //YII::ERROR($depa);
    if(is_null($depa)){
        //YII::ERROR('DEPA ES NULO');
@@ -273,15 +275,24 @@ class SigiLecturas extends \common\models\base\modelBase
     	return $edificio;
     }
     private function depa(){
+       
        // yii::error('funcion depa',__FUNCTION__);
         /*yii::error(SigiUnidades::find()->where([
             'numero'=>$this->codepa,
             'edificio_id'=>$this->edificioByCode()->id,
             ])->createCommand()->getRawSql());*/
+        /*ECHO SigiUnidades::find()->where([
+            'numero'=>$this->codepa,
+            'edificio_id'=>$this->edificioByCode()->id,
+            ])->createCommand()->getRawSql(); DIE();*/
+       if(!empty($this->codepa))
        return  SigiUnidades::find()->where([
             'numero'=>$this->codepa,
             'edificio_id'=>$this->edificioByCode()->id,
             ])->one();
+       var_dump($this->suministro);die();
+       return  $this->suministro->unidad;
+       
     }
     
     
@@ -321,53 +332,57 @@ class SigiLecturas extends \common\models\base\modelBase
      * AllRECORDS:  TRUE Criterio apra facturables y no facturables
      * false:  criterios para solamente facturables por default  false
      */
-    public function isDateForFirstRead($allRecords=false){
-        return is_null($this->previousRead($allRecords))?true:false;
+    public function isDateForFirstRead(){
+        return is_null($this->previousRead())?true:false;
     }
-    public function previousRead($allRecords=false){
+    public function previousRead(){
         
-       $this->hasCompleteCriteriaFields();       
-       //yii::error($this->facturable);
-         $valorFacturable=($this->resolveFacturable())?'1':'0'; 
+       $this->hasCompleteCriteriaFields();  
+       $query=self::find()->where(['suministro_id'=>$this->resolveSuministroId()])->
+      andWhere(['<>','id',!is_null($this->id)?$this->id:0])->
+      andWhere(['<=','flectura',static::SwichtFormatDate($this->flectura, 'date',false)])->
+      orderBy('flectura DESC')->limit(1);
+       return $query->one();
+       
+       
+       
+       
+     
+        /* $valorFacturable=($this->resolveFacturable())?'1':'0'; 
           $query=self::find()->where(['suministro_id'=>$this->resolveSuministroId()])->
                  andWhere(['<>','id',!is_null($this->id)?$this->id:0])->
       andWhere(['<=','flectura',static::SwichtFormatDate($this->flectura, 'date',false)])->
       orderBy('flectura DESC')->limit(1);
        if(!$allRecords){///Si se trata de solo facturables 
+           YII::ERROR('EJECUTNADO ALLRECORDS',__FUNCTION__);
            $query=$query->andWhere(['facturable'=>$valorFacturable]);
-       }/*yii::error($query->createCommand()->getRawSql());*/
-      return $query->one();  
+       }yii::error($query->createCommand()->getRawSql(),__FUNCTION__);
+      return $query->one();  */
     }
     
-    public function isDateForLastRead($allRecords=false){
-        return is_null($this->nextRead($allRecords))?true:false;
+    public function isDateForLastRead(){
+        return is_null($this->nextRead())?true:false;
     }
     
     
-    public function nextRead($allRecords=false){
+    public function nextRead(){
        $this->hasCompleteCriteriaFields();        
-        $valorFacturable=($this->resolveFacturable())?'1':'0'; 
+       // $valorFacturable=($this->resolveFacturable())?'1':'0'; 
          $query=self::find()->where(['suministro_id'=>$this->resolveSuministroId()])->
                  andWhere(['<>','id',!is_null($this->id)?$this->id:0])->
       andWhere(['>=','flectura',static::SwichtFormatDate($this->flectura, 'date',false)])->
       orderBy('flectura ASC')->limit(1);
-         yii::error($query->createCommand()->rawSql,__FUNCTION__);
-        if(!$allRecords){///Si se trata de solo facturables 
-           $query=$query->andWhere(['facturable'=>$valorFacturable]);
-       }
-       // yii::error('Sql nextRead');
-        //yii::error($query->createCommand()->getRawSql(),__FUNCTION__);
+       
       return $query->one();  
     }
-    public function lastReadValue($allRecords=false){
-        //yii::error('** lastReadValue() **');
+    public function lastReadValue(){
        
-      $registro=$this->previousRead($allRecords);
-      // yii::error('Registro '.(IS_NULL($registro)?' ES ':' NO ES ').'  NULO');
+      $registro=$this->previousRead();
+       //yii::error('Registro '.(IS_NULL($registro)?' ES ':' NO ES ').'  NULO',__FUNCTION__);
       return(is_null($registro))?$this->medidor()->liminf:$registro->lectura;
     } 
-    public function nextReadValue($allRecords=false){
-      $registro=$this->nextRead($allRecords);
+    public function nextReadValue(){
+      $registro=$this->nextRead();
       return(is_null($registro))?$this->medidor()->limsup:$registro->lectura;
   } 
     private function hasCompleteCriteriaFields(){
@@ -394,28 +409,53 @@ class SigiLecturas extends \common\models\base\modelBase
            yii::error('ultima lectura');  
           yii::error($this->lastReadValue(true)); */
           
-          
-          
-        if($this->isDateForFirstRead(true) && $this->isNewRecord){
+         if(!$this->suministro->activo)
+        $this->addError('flectura',yii::t('sigi.errors','Este suministro está desactivado, no pude insertar lecturas'));
             
-            
-            
-        }elseif($this->isDateForLastRead(true)){
+        
+          /*
+          * Verificando el mes de facturacion, 
+          * para el caso de lecturas no facturables
+           * el mes y el año deben de corresponder a la fecha de lectura
+          */
+             
            
-             if($this->lectura < $this->lastReadValue(true)){
-                 //yii::error('isDateForLastRead');
-                 $this->addError('lectura',yii::t('sigi.errors','Hay una lectura {lectura} anterior a esta fecha, y es mayor a la que pretende ingresar',['lectura'=>$this->lastReadValue(true)]));
-             }
-        }else{
-            // yii::error('Esta en el medio');
-           if($this->lectura < $this->lastReadValue(true)){
-               $this->addError('lectura',yii::t('sigi.errors','Hay una lectura {lectura} anterior a esta fecha, y es mayor a la que pretende ingresar',['lectura'=>$this->lastReadValue(true)]));
-           } 
-           if($this->lectura > $this->nextReadValue(true)){
-               $this->addError('lectura',yii::t('sigi.errors','Hay una lectura {lectura} posterior a esta fecha, y  es menor a la que pretende ingresar',['lectura'=>$this->nextReadValue(true)]));
+            if(!$this->facturable && ( 
+               ((integer)$this->toCarbon('flectura')->month <> $this->mes or
+                (integer)$this->toCarbon('flectura')->year <> (integer)$this->anio    
+                 )))
+               $this->addError('mes',yii::t('sigi.errors','El mes o el año no corresponden a la fecha de lectura'));
             
-           } 
+        
+        
+         /*
+          * Verificando los casos 
+          */
+        
+        $esPrimeraLectura=$this->isDateForFirstRead();
+        $esUltimaLectura=$this->isDateForLastRead();
+       // var_dump($esUltimaLectura);die();
+        /*
+         * Si quiere insertar una nueva lectura con fecha anterior a una ya registrada
+         */
+        if($this->isNewRecord && !$esUltimaLectura ){
+           $this->addError('flectura',yii::t('sigi.errors','Hay una lectura posterior a esta fecha'));
         }
+        /*
+         * Si quiere crear /editar una lectura con valor menor a una anterior
+         */
+          if(!$esPrimeraLectura && ($this->lectura < $this->lastReadValue())){
+              $this->addError('lectura',yii::t('sigi.errors','Hay una lectura {lectura} anterior a esta fecha, y es mayor a la que pretende ingresar',['lectura'=>$this->lastReadValue()]));
+         } 
+         /*
+         * Si quiere crear /editar una lectura con valor mayor a una posterior
+         */
+          if(!$esUltimaLectura && ($this->lectura > $this->nextReadValue())){
+              $this->addError('lectura',yii::t('sigi.errors','Hay una lectura {lectura} anterior a esta fecha, y es mayor a la que pretende ingresar',['lectura'=> $this->nextReadValue()]));
+         } 
+            
+       
+        
         //yii::error('*********Fin de validate general*************');
     }
       /*
@@ -529,9 +569,9 @@ class SigiLecturas extends \common\models\base\modelBase
  } 
 
  public function deltaPredecesor(){
-     return 0;
-    if(!is_null($reeemplazo=$this->suministro->hasReemplazo())){
-        var_dump($reemplazo,$reeemplazo->attributes);die();
+     $reeemplazo=$this->suministro->hasReemplazo();
+    if(!is_null($reemplazo)){
+        
          return $reemplazo->suministroAnt->lastRead(null,true)->delta;
       }else{
           return 0;

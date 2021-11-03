@@ -397,6 +397,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                     'mes'=>$this->mes,
                'facturable'=>'1',
                     'codtipo'=>$type,
+                    'activo'=>'1',
                 ])->count();
        
       if($nlecturas ==0){
@@ -1110,9 +1111,9 @@ class SigiFacturacion extends \common\models\base\modelBase
          $formato=$this->reporte->tamanopapel;
          $kardex=SigiKardexdepa::findOne($idKardex);
          $datos=$kardex->groupDetailsForRecibo();
-       
+       //var_dump($datos);die();
          
-           $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
+           //$dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
            switch ($this->reporte_id) {
                 case 1:
                 $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>false]);
@@ -1129,7 +1130,8 @@ class SigiFacturacion extends \common\models\base\modelBase
           
                     break;
                 case 4:
-                     $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['datos'=>$datos,'model'=>$this,'dataProvider'=>$dataProvider,'compacto'=>false]);
+                    //yii::error($this,__FUNCTION__);
+                     $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['datos'=>$datos,'model'=>$this,'kardex'=>$kardex,'dataProvider'=>$dataProvider,'compacto'=>false]);
                 //yii::error('recibo comlpejo',__FUNCTION__);
                 //yii::error('Formato '.$formato,__FUNCTION__);
                         // $contenido= h::currentController()->render('@frontend/modules/sigi/views/facturacion/reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
