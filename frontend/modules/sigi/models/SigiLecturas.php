@@ -420,12 +420,12 @@ class SigiLecturas extends \common\models\base\modelBase
           */
              
            
-            if(!$this->facturable && ( 
+           /* if(!$this->facturable && ( 
                ((integer)$this->toCarbon('flectura')->month <> $this->mes or
                 (integer)$this->toCarbon('flectura')->year <> (integer)$this->anio    
                  )))
                $this->addError('mes',yii::t('sigi.errors','El mes o el año no corresponden a la fecha de lectura'));
-            
+            */
         
         
          /*

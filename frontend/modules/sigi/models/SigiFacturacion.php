@@ -1183,7 +1183,15 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   public function generaRecibos(){
       //$this->purgeRecibos();
-      YII::ERROR('ENTRNADO EN GENERA RECIBOS');
+      //YII::ERROR('ENTRNADO EN GENERA RECIBOS');
+      $sesion=h::session();
+      if($sesion->has(self::hashSesion())){
+          
+      }else{
+          $sesion->set()
+      }
+      
+      
       $contador=0;
       $kardexes= SigiDetfacturacion::find()-> 
        select(['kardex_id'])->distinct()->andWhere(['facturacion_id'=>$this->id])->
@@ -1191,19 +1199,20 @@ class SigiFacturacion extends \common\models\base\modelBase
        //yii::error('KARDEXES');
      // yii::error($kardexes);
       foreach($kardexes as $kardex ){
-          YII::ERROR('EN EL BUCLE   KARDEX_ID '.$kardex['kardex_id']);
+          //YII::ERROR('EN EL BUCLE   KARDEX_ID '.$kardex['kardex_id']);
           $kardexModel=SigiKardexdepa::findOne($kardex['kardex_id']);
           if(!$kardexModel->hasAttachments()){
-              yii::error('kardex id no tiene arttach  '.$kardex['kardex_id'],__FUNCTION__);
-             yii::error('entrando a la funcion recibo',__FUNCTION__);
+              //yii::error('kardex id no tiene arttach  '.$kardex['kardex_id'],__FUNCTION__);
+            // yii::error('entrando a la funcion recibo',__FUNCTION__);
             
               $this->recibo($kardex['kardex_id'],true);
                 $contador++; 
             }else{
-              YII::ERROR(' KARDEX_ID tiene attach '.$kardex['kardex_id']);  
+              //YII::ERROR(' KARDEX_ID tiene attach '.$kardex['kardex_id']);  
             }
             unset($kardexModel);
           }
+      
          // $this->compileRecibos();
       return $contador;
   }
@@ -1476,5 +1485,9 @@ class SigiFacturacion extends \common\models\base\modelBase
       }
   }
  
+ private static function hashSesion(){
+    return h::userId().'_'.$this->id.'_facturacion';
+ }
+  
   
 }
