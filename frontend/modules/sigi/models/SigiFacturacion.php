@@ -397,7 +397,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                     'mes'=>$this->mes,
                'facturable'=>'1',
                     'codtipo'=>$type,
-                    'activo'=>'1',
+                   // 'activo'=>'1',
                 ])->count();
        
       if($nlecturas ==0){
