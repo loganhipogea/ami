@@ -409,9 +409,9 @@ class SigiLecturas extends \common\models\base\modelBase
            yii::error('ultima lectura');  
           yii::error($this->lastReadValue(true)); */
           
-         if(!$this->suministro->activo)
+         /*if(!$this->suministro->activo)
         $this->addError('flectura',yii::t('sigi.errors','Este suministro está desactivado, no pude insertar lecturas'));
-            
+            */
         
           /*
           * Verificando el mes de facturacion, 
