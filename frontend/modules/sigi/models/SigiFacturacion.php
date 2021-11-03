@@ -1184,12 +1184,12 @@ class SigiFacturacion extends \common\models\base\modelBase
   public function generaRecibos(){
       //$this->purgeRecibos();
       //YII::ERROR('ENTRNADO EN GENERA RECIBOS');
-      $sesion=h::session();
+      /*$sesion=h::session();
       if($sesion->has(self::hashSesion())){
           
       }else{
           $sesion->set()
-      }
+      }*
       
       
       $contador=0;
