@@ -123,9 +123,9 @@ class h {
      */
     public static function getIfNotPutSetting($seccion,$llave,$valorsino,
             $type=\yii2mod\settings\models\enumerables\SettingType::STRING_TYPE ){
-        yii::error('detectando',__FUNCTION__);
+        //yii::error('detectando',__FUNCTION__);
         
-        yii::$app->settings->invalidateCache(); 
+        //yii::$app->settings->invalidateCache(); 
         
         if(yii::$app->settings->has($seccion,$llave)){
             return yii::$app->settings->get($seccion,$llave);        

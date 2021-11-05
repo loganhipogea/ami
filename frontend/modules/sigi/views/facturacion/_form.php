@@ -65,9 +65,23 @@ use common\widgets\selectwidget\selectWidget;
       <?php Pjax::begin(['id'=>'letrero','timeout'=>true]); ?>
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
           <!-- small box -->
+          <div class="small-box bg-orange">
+            <div class="inner">
+              <h3>S/.<?='    '.Yii::$app->formatter->asDecimal($model->montoTotal(),2)?></h3>
+
+              <p>Monto cargado</p>
+            </div>
+            <div class="icon">
+                <span style="color:white;opacity:0.5;"><i class="fa fa-money"></i></span>
+            </div>
+            
+          </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>S/.<?='    '.round($model->montoFacturado(),1)?></h3>
+              <h3>S/.<?='    '.Yii::$app->formatter->asDecimal($model->montoFacturado(),2)?></h3>
 
               <p>Monto facturado</p>
             </div>

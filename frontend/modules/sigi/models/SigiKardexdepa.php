@@ -91,7 +91,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
         return [
             [['facturacion_id',  'edificio_id', 'unidad_id', 'mes', 'fecha', 'anio'], 'required', 'except'=>[self::SCE_BATCH]],
             [['mes', 'fecha', 'anio'], 'required'],
-            [['monto'], 'required'],
+            [['monto'], 'required','on'=>[self::SCE_BATCH]],
             
            // [['facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
             [['monto', 'igv'], 'number'],
@@ -184,17 +184,17 @@ class SigiKardexdepa extends \common\models\base\modelBase
       if($this->aprobado){
         $mailsPropietarios=$this->unidad->mailsPropietarios();
         $numerorecibo=$this->detalleFactu[0]->numerorecibo;
-        if(count($mailsPropietarios)>0){
+        if(count($mailsPropietarios)>0 && count($this->files)>0){
             $idReport=$this->facturacion->reporte_id;
             $identidad=$this->detalleFactu[0]->identidad;
             //var_dump($identidad);die();
-            $pathPDF=Reporte::findOne($idReport)->creaReporte($idReport, $identidad);        
+            //$pathPDF=Reporte::findOne($idReport)->creaReporte($idReport, $identidad);        
             $mailer = new \common\components\Mailer();
             $message =new  \yii\swiftmailer\Message();
             $message->setSubject(Yii::t('sigi.labels','Recibo mensual ').' '.timeHelper::cboMeses()[$this->facturacion->mes].' '.$numerorecibo)
             ->setFrom([h::gsetting('sigi','correoCobranza1')=>'Cobranza Diar'])
             ->setTo($mailsPropietarios)
-             ->attach($pathPDF)
+             ->attach($this->files[0]->path)
             ->SetHtmlBody(timeHelper::saludo().' Estimado residente'
                     . 'adjunto encontrará el recibo correspondiente al mes de '.timeHelper::cboMeses()[$this->facturacion->mes].' Se'
                     . 'recomienda su pago dentro de los plazos establecidos');           
@@ -207,7 +207,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
                         $mensajes['error']=$Ste->getMessage();
                     }
             }
-            unlink($pathPDF);
+            //unlink($pathPDF);
       } else{
          $mensajes['error']=yii::t('base.errors','La facturación aún no ha sido aprobada'); 
       }
@@ -220,6 +220,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
   }
   
   public function beforeValidate() {
+      if($this->getScenario()==self::SCE_BATCH)
       $this->resolveIdsBatch();
      
       return parent::beforeValidate();
@@ -364,33 +365,53 @@ class SigiKardexdepa extends \common\models\base\modelBase
       $resumido=$this->isResumido();
       $expresion= new \yii\db\Expression('lectura-delta as lanterior');
       
-      
+      //YII::ERROR('grupos para el recibo');
+        
                 $groups=self::groupsToRecibo();
+               //var_dump($groups);die();
          $container=[];
     if(!$resumido){
-        foreach($groups as $grupo){
-                 $container[$grupo['grupo_id']]=(new \yii\db\Query())->
+        foreach($groups as $filagGrupo){
+                 $container[$filagGrupo['grupo_id']]=(new \yii\db\Query())->
                     select(['unidades','g.descripcion as desgrupo','f.descargo','codgrupo', 'aacc','codsuministro','unidades',$expresion,'lectura','delta',
                     'a.monto','montototal'])
                     ->from('{{%sigi_detfacturacion}} a')
                      ->innerJoin('{{%sigi_cargosedificio}} e','e.id=a.colector_id')
                     ->innerJoin('{{%sigi_cargos}} f', 'e.cargo_id=f.id')  
                     ->innerJoin('{{%sigi_cargosgrupoedificio}} g', 'a.grupo_id=g.id') 
-                    ->andWhere(['kardex_id' =>$this->id])->andWhere(['a.grupo_id'=>$grupo['grupo_id']])
+                    ->andWhere(['kardex_id' =>$this->id])->andWhere(['a.grupo_id'=>$filagGrupo['grupo_id']])
                     ->all();
+                
                  }      
         
          }else{
-                $container[$grupo['grupo_id']]=(new \yii\db\Query())->
-                    select(['unidades','g.codgrupo','g.descripcion','aacc','f.descargo','sum(a.monto) as monto','montototal'])
+              foreach($groups as $filagGrupo){
+                 $container[$filagGrupo['grupo_id']]=(new \yii\db\Query())->
+                    select(['g.codgrupo','g.descripcion as desgrupo','aacc','f.descargo','montototal',
+                        'sum(a.monto) as monto'])
                     ->from('{{%sigi_detfacturacion}}a')
                      ->innerJoin('{{%sigi_cargosedificio}} e','e.id=a.colector_id')
                     ->innerJoin('{{%sigi_cargos}} f', 'e.cargo_id=f.id')  
                     ->innerJoin('{{%sigi_cargosgrupoedificio}} g', 'a.grupo_id=g.id') 
-                    ->andWhere(['kardex_id' =>$this->id])
-                    ->groupBy(['g.codgrupo','g.descripcion','f.descargo','montototal'])
+                    ->andWhere(['kardex_id' =>$this->id])->andWhere(['a.grupo_id'=>$filagGrupo['grupo_id']])
+                    ->groupBy(['g.codgrupo','g.descripcion','aacc','f.descargo','montototal'])
                     ->all();
-        }      
+                 yii::error('key grupo');yii::error($key_grupo);
+                 yii::error((new \yii\db\Query())->
+                    select(['g.codgrupo','g.descripcion','aacc','f.descargo','montototal',
+                        'sum(a.monto) as monto'])
+                    ->from('{{%sigi_detfacturacion}}a')
+                     ->innerJoin('{{%sigi_cargosedificio}} e','e.id=a.colector_id')
+                    ->innerJoin('{{%sigi_cargos}} f', 'e.cargo_id=f.id')  
+                    ->innerJoin('{{%sigi_cargosgrupoedificio}} g', 'a.grupo_id=g.id') 
+                    ->andWhere(['kardex_id' =>$this->id])->andWhere(['a.grupo_id'=>$filagGrupo['grupo_id']])
+                    ->groupBy(['g.codgrupo','g.descripcion','aacc','f.descargo','montototal'])
+                    ->createCommand()->rawSql);
+              
+              }
+             
+        }   
+        
       return $container;
   }
   

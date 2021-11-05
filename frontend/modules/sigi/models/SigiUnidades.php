@@ -349,7 +349,7 @@ class SigiUnidades extends \common\models\base\modelBase
         //die();
       /*verificar que cuando es imputable area debe ser obligatorio*/
         yii::error($this->imputable);
-        if( empty($this->area) && $this->imputable){
+        if( is_null($this->area) && $this->imputable){
             $this->addError('area',yii::t('sigi.errors','Esta unidad es imputable y debe de tener participación'));
         }
       
@@ -588,7 +588,8 @@ class SigiUnidades extends \common\models\base\modelBase
      
      if(count($areasHijos)>0){
          $datosAreas=$areasHijos;
-         $datosAreas[]=['nombre'=>$this->nombre,'numero'=>$this->numero,'area'=>$this->area+0,'participacion'=>$this->participacion+0];
+         array_unshift($datosAreas,['nombre'=>$this->nombre,'numero'=>$this->numero,'area'=>$this->area+0,'participacion'=>$this->participacion+0]);
+         
           
      }else{
          $datosAreas=[['nombre'=>$this->nombre,'numero'=>$this->numero,'area'=>$this->area+0,'participacion'=>$this->participacion+0]];

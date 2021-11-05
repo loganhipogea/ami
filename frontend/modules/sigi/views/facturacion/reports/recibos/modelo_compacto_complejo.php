@@ -76,9 +76,10 @@ use common\models\masters\Monedas;
 ?>
    
 <div style="padding:5px; border: 1px solid #000;margin-bottom: 35px;  "  >
-    Total Recibo : <?=$totalMes.'   '.NumeroAletras::convert(              
-              round($totalMes,3),
-               Monedas::findOne($codmon)->desmon,
-              true)  ?>
+    Total Recibo : <?=$totalMes.'   '.
+        //Yii::$app->formatter->asSpellout(round($totalMes,3));
+        (new NumeroAletras)->toWords(              
+              round($totalMesRaw,2)).'  '.
+               Monedas::findOne($codmon)->desmon ?>
 </div>
 

@@ -29,35 +29,48 @@ $detalle=$kardex->detalleFactu[0];
         </div>
     </div>
  
-  
- <!-- INICIO DE LA PRUEBA   !-->
- <div style=" position:absolute;  left:548px;  top:416px;  font-size:10;  font-family:cour;  color:#000; ">
-    
- </div>
- <!-- FIN DE LA PRUEBA    !-->
- 
  <!-- FIN DEL   LOGO DEL RECIBO    !-->
-  <!--  FECHA    !--> 
-<div style=" position:absolute;  left:385px;  top:28px;  font-size:10;  font-family:cour;  color:#000; ">
-    Fecha :
-</div>
-  <!-- FIN DE LA   FECHA    !--> 
- <div style=" position:absolute;  left:476px;  top:28px;  font-size:10;  font-family:cour;  font-weight:bold;  color:#000; ">
+ 
+ 
+  <!--  NUMERO RECIBO FECHA Y FECHA DE VENCIMIENTO   !--> 
+    <div style=" position:absolute;  left:350px;  top:11px;  font-size:12px;  font-family:cour;  color:#000; ">Recibo N° :<?=$detalle->numerorecibo?></div>
+    <div style=" position:absolute;  left:385px;  top:39px;  font-size:9px;  font-family:cour;  color:#000; ">
+         F Vencimiento :
+    </div>
+    <div style=" position:absolute;  left:476px;  top:39px;  font-size:9px;  font-family:cour;  font-weight:bold;  color:#000; ">
+                <?=$model->fvencimiento?>
+    </div>
+     <div style=" position:absolute;  left:385px;  top:28px;  font-size:10;  font-family:cour;  color:#000; ">
+       Fecha emisión :
+     </div>
+     <div style=" position:absolute;  left:476px;  top:28px;  font-size:10;  font-family:cour;  font-weight:bold;  color:#000; ">
        <?=$model->fecha?>
-</div>
-  <div style=" position:absolute; width:266px;
-       left:266px;  top:658px; 
-       font-size:12;  font-family:cour;
-       font-weight:none;  color:#000; text-align:justify ">
-   <?=$model->detalles?>
- </div>
- <div style="position:absolute;  left:84x;  top:51px;  font-size:9;  font-family:cour;  font-weight:bold;  color:#000; ">
+      </div>
+     
+       <div style=" position:absolute;  left:385px;  top:50px;  font-size:9px;  font-family:cour;  color:#000; ">
+           Dias facturados :
+       </div>
+       <div style=" position:absolute; width:100px;  left:476px;  top:50px;  font-size:9px;  font-family:cour;  font-weight:none;  color:#000; ">
+                <?=$detalle->dias?>
+       </div>
+       
+       
+ <!-- FIN NUMERO RECIBO FECHA Y FECHA DE VENCIMIENTO   !--> 
+ 
+    
+  
+  <!--  NOMBRE Y DIRECCION  DEL EDIFICIO    !--> 
+ <div style="position:absolute;  left:90x;  top:40px;  font-size:9px;  font-family:cour;  font-weight:bold;  color:#000; ">
     <?=$model->edificio->nombre?>
  </div>
- <div style="position:absolute;   left:84px;  top:50px;  font-size:8;  font-family:arial;  font-weight:none;  color:#000; ">
+ <div style="position:absolute;   left:90px;  top:48px;  font-size:8px;  font-family:arial;  font-weight:none;  color:#000; ">
       <?=$model->edificio->direccion?>
  </div>
- <div style=" position:absolute;  left:35px;  top:75px;  font-size:9;  font-family:arial;  font-weight:bold;  color:#F72; ">
+  <!-- FIN DEL  NOMBRE Y DIRECCION  DEL EDIFICIO    !--> 
+
+  
+<!--  NOMBRE DEL DEPA    !--> 
+    <div style=" position:absolute;  left:35px;  top:75px;  font-size:9px;  font-family:arial;  font-weight:bold;  color:#F72; ">
      <?php  
      if(!$detalle->resumido){
         echo $detalle->unidad->nombre;  
@@ -65,25 +78,61 @@ $detalle=$kardex->detalleFactu[0];
         /*Si es un recibo compacto */
          $nombre=Clipro::findOne($detalle->grupocobranza)->despro; 
         echo    $nombre;
-     }
-    
-        
-             
+     }    
       ?>
- </div>
- <div style=" position:absolute;  left:35px;  top:658px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
-   <?php
+    </div>
+<!-- FIN DEL  NOMBRE DEL DEPA    !--> 
+
+
+       <!-- NOMBRE DEL PROPIESTARIO -->
+       <div style=" position:absolute;  left:35px;  top:105px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
+            <div>
+               
+                <div style="width: 420px;">
+                     <?PHP
+                if(!$detalle->resumido){
+                 if($detalle->nuevoprop){//si es un recibo partido por 
+                 //una trnasferencia de un pepoeario viejo
+                   $propietario=$detalle->unidad->propietarioRecibo();   
+                 }else{//si no es transferencia normal
+                    $propietario=$detalle->unidad->oldPropietario(SigiUnidades::TYP_PROPIETARIO); 
+                 }
+                     
+                  
+                ?>
+              <div>
+                        <?=$propietario->nombre?>
+              </div>
+                <?PHP } ELSE { 
+                   
+                    ?>
+                 <?PHP echo 'El presente recibo incluye todas las unidades dentro de su propiedad' ?></td>
+                                 
+                <?PHP }    ?>
+              <!-- /.table-responsive -->
+            </div>
+    
+                </div>
+       </div>
+        <!-- FIN DEL NOMBRE DEL PROPIESTARIO -->
+        
+        
+        <?php
      if(!$detalle->resumido){     
          $areas= $detalle->unidad->arrayParticipaciones();     
         //yii::error( $areas,__FUNCTION__);
         }else{
            
-            $Aareas= VwSigiFacturecibo::find()->select(['nombre','numero','area','participacion'])->distinct()->andWhere(['kardex_id'=>$detalle->kardex_id,'resumido'=>'1'])->asArray()->all();
+            $Aareas= VwSigiFacturecibo::find()->
+            select(['nombre','numero','area','participacion'])->distinct()->
+            andWhere(['kardex_id'=>$detalle->kardex_id,'resumido'=>'1'])->asArray()->all();
            // $areasOriginales=$Aareas;
             if(count($Aareas)>10){
                 $areas= array_sum(array_column($Aareas,'area'));
                  $participacion= array_sum(array_column($Aareas,'participacion' ));
-               $Aareas=[['nombre'=>$nombre,'numero'=>'','area'=>$areas,'participacion'=>$participacion]]; 
+               $Aareas=[
+                ['nombre'=>$nombre,'numero'=>'','area'=>$areas,'participacion'=>$participacion]
+                       ]; 
             }else{
                 
             }
@@ -91,12 +140,11 @@ $detalle=$kardex->detalleFactu[0];
            $areas= ['aareas'=>$Aareas,'atotal'=>$AreaTotal];
         }
      ?>
-     
-     
-    <div>
-      <div style="width: 210px;">
-              <div >
-                <table >
+        
+        
+         <!-- TABLA DE RESUMEN DE AREAS     !--> 
+        <div style="display:table; position:absolute; width:210px; left:580px;  top:658px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
+         <table >
                   <thead>
                   <tr>
                     <th>Nombre</th>
@@ -139,80 +187,24 @@ $detalle=$kardex->detalleFactu[0];
                   </tr>
                   </tbody>
                 </table>
-              </div>
               <!-- /.table-responsive -->
-            </div>
-    
-   </div>
- 
- </div>
-       <div style=" position:absolute;  left:350px;  top:11px;  font-size:12;  font-family:cour;  color:#000; ">Recibo N° :<?=$detalle->numerorecibo?></div>
-
-       <div style=" position:absolute;  left:385px;  top:39px;  font-size:9;  font-family:cour;  color:#000; ">F Vencimiento :</div>
-       <div style=" position:absolute;  left:476px;  top:39px;  font-size:9;  font-family:cour;  font-weight:bold;  color:#000; "><?=$model->fvencimiento?></div>
-       
-       
-       <div style=" position:absolute;  left:35px;  top:105px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
-            <div>
-               
-                <div style="width: 420px;">
-                     <?PHP
-                if(!$detalle->resumido){
-                 if($detalle->nuevoprop){//si es un recibo partido por 
-                 //una trnasferencia de un pepoeario viejo
-                   $propietario=$detalle->unidad->propietarioRecibo();   
-                 }else{//si no es transferencia normal
-                    $propietario=$detalle->unidad->oldPropietario(SigiUnidades::TYP_PROPIETARIO); 
-                 }
-                     
-                  
-                ?>
-              <div>
-                        <table>
-                            <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Documento</th>
-                                        <th>Calificación</th>
-                                    </tr>
-                            </thead>
-                            <tbody>
-                                    <tr>
-                                            <td><?=$propietario->nombre?></td>
-                                            <td><?=$propietario->dni?></td>
-                                            <td><?=$propietario->tipo?></td>
-                                     </tr>
-                           </tbody>
-                       </table>
-              </div>
-                <?PHP } ELSE { 
-                   
-                    ?>
-                  <table>
-                            <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                       
-                                    </tr>
-                            </thead>
-                            <tbody>
-                                    <tr>
-                                            <td><?PHP echo 'El presente recibo incluye todas las unidades dentro de su propiedad' ?></td>
-                                            
-                                     </tr>
-                           </tbody>
-                       </table>
-                    
-                <?PHP }    ?>
-              <!-- /.table-responsive -->
-            </div>
-    
-                </div>
        </div>
-       <div style=" position:absolute;  left:385px;  top:50px;  font-size:9;  font-family:cour;  color:#000; ">Dias facturados :</div>
-       <div style=" position:absolute;  left:476px;  top:50px;  font-size:9;  font-family:cour;  font-weight:none;  color:#000; "><?=$detalle->dias?></div>
+       <div style="display:table; position:absolute; width:210px; left:890px;  top:658px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
+        
+         <?=$model->detalles?>
+       </div>
+ 
+    
+ </div>
+   <!-- FIN DE LA  TABLA DE RESUMEN DE AREAS     !--> 
+   
+   
+   
+   
        
        
+       
+      
        
        
        

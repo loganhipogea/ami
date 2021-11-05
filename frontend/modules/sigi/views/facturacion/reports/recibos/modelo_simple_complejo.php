@@ -4,14 +4,24 @@ use common\models\masters\Monedas;
 
 $i=1;
 ?>
- 
+   <?php 
+          $totalMes=0;
+          $moneda=Monedas::findOne($codmon);
+          $simbolo=$moneda->simbolo;
+          $desmon=$moneda->desmon;
+          unset($moneda);?>
 <div style="  
     margin: 0 auto;
      position:absolute; color:black; left:30px;
      top:200px; width:500px; font-size:9px;  font-family:arial;
-     font-weight:bold; background-color:yellow; ">
+     font-weight:bold;  ">
        
-       <?php $bloque=$datos[array_keys($datos)[0]] // foreach($datos as $keydato=>$bloque){   ?>
+     
+       <?php    foreach($datos as $bloque){
+              $totalMes+=array_sum(array_column($bloque,'monto'));
+          }
+        $totalMes=Yii::$app->formatter->asDecimal($totalMes,3);
+       $bloque=$datos[array_keys($datos)[0]] // foreach($datos as $keydato=>$bloque){   ?>
             <?php   $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'monto')),3);
                     $subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'montototal')),3);
                 ?> 
@@ -39,16 +49,16 @@ $i=1;
             ?>
             <tr>
                 <td width="70%" style="padding: 1px;"> <?=$descripcion?></td>
-                 <td width="20%"  align="right" style="padding: 1px;"><?=$codmon.'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
-                  <td width="20%"   align="right" style="padding: 1px;"><?=$codmon.'  '.Yii::$app->formatter->asDecimal($fila['monto'],3)?></td>
+                 <td width="20%"  align="right" style="padding: 1px;"><?=$simbolo.'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
+                  <td width="20%"   align="right" style="padding: 1px;"><?=$simbolo.'  '.Yii::$app->formatter->asDecimal($fila['monto'],3)?></td>
             </tr>
         <?php }
         }
         ?>
             <tr>
                 <td width="70%" align="right" style="padding: 1px;"><b>Total</b></td>
-                <td width="20%"  align="right" style="padding: 1px;" ><b><?=$codmon.'  '.$subtotalTotal?></b></td>
-                  <td width="20%"   align="right" style="padding: 1px;"><b><?=$codmon.'  '.$subtotalCuota?></b></td>
+                <td width="20%"  align="right" style="padding: 1px;" ><b><?=$simbolo.'  '.$subtotalTotal?></b></td>
+                <td width="20%"   align="right" style="padding: 1px;"><b><?=$simbolo.'  '.$subtotalCuota?></b></td>
             </tr>
         </table>
        <?php  ?>
@@ -67,7 +77,7 @@ $i=1;
     margin: 0 auto;
      position:absolute; color:black; left:580px;
      top:100px; width:500px; font-size:9px;  font-family:arial;
-     font-weight:bold; background-color:yellow; ">
+     font-weight:bold; ">
        
        <?php 
        //quitando el primer elemento de los datos , porque ya se renderesixo arriba
@@ -76,7 +86,7 @@ $i=1;
             <?php   $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'monto')),3);
                     $subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'montototal')),3);
                 ?> 
-        <table style="">
+        <table style="border-style:0px;">
            <tr>
                 <td ><b><?=$bloque[0]['desgrupo']?></b></td>
                  <td ><b>Monto</b></td>
@@ -100,28 +110,30 @@ $i=1;
             ?>
             <tr>
                 <td width="70%" style="padding: 1px;"> <?=$descripcion?></td>
-                 <td width="20%"  align="right" style="padding: 1px;"><?=$codmon.'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
-                  <td width="20%"   align="right" style="padding: 1px;"><?=$codmon.'  '.Yii::$app->formatter->asDecimal($fila['monto'],3)?></td>
+                 <td width="20%"  align="right" style="padding: 1px;"><?=$simbolo.'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
+                  <td width="20%"   align="right" style="padding: 1px;"><?=$simbolo.'  '.Yii::$app->formatter->asDecimal($fila['monto'],3)?></td>
             </tr>
         <?php }
         }
         ?>
-            <tr>
-                <td width="70%" align="right" style="padding: 1px;"><b>Total</b></td>
-                <td width="20%"  align="right" style="padding: 1px;" ><b><?=$codmon.'  '.$subtotalTotal?></b></td>
-                  <td width="20%"   align="right" style="padding: 1px;"><b><?=$codmon.'  '.$subtotalCuota?></b></td>
+            <tr style="border-style:0px;">
+                <td width="70%" align="right" style="border-style: 0px;padding: 1px;"><b>Total</b></td>
+                <td width="20%"  align="right" style="border-style: 0px;padding: 1px;" ><b><?=$simbolo.'  '.$subtotalTotal?></b></td>
+                  <td width="20%"   align="right" style="border-style: 0px;padding: 1px;"><b><?=$simbolo.'  '.$subtotalCuota?></b></td>
             </tr>
         </table>
        <?php } ?>
-       
-  </div>    
-     
-
-<div style="padding:3px; border: 1px solid #000;margin-bottom: 17px; font-size:7px;  "  >
-    Total Recibo : <?=$totalMes.'   '.
+       <div style="  
+    margin: 0 auto;
+     position:relative; color:black; 
+     width:500px; font-size:9px;  font-family:arial;
+     font-weight:bold; ">
+          Total Recibo : <?=$totalMes.'   '.
         //Yii::$app->formatter->asSpellout(round($totalMes,3));
         (new NumeroAletras)->toWords(              
-              round($totalMesRaw,2)).'  '.
-               Monedas::findOne($codmon)->desmon ?>
-</div>
+              round($totalMes,2)).'   '.$desmon ?>
+    </div>  
+  </div>    
+    
+
 

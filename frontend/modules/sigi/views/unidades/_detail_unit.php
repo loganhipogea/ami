@@ -177,14 +177,16 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                                return '';
                            }
                            },
-                    'mail' => function($url, $model) {  
+                    'mail' => function($url, $model) { 
+                               $kardex=$model->kardexDepa; 
                          $url=\yii\helpers\Url::toRoute(['/sigi/facturacion/send-recibo',
-                             
-                             'id'=>$model->id,
+                            
+                             'id'=>$kardex->id,
                             ]);
+                         if($kardex->aprobado && $kardex->hasAttachments())
                           return Html::button('<span class="glyphicon glyphicon-envelope"></span>', ['id'=>$model->id, 'family' =>'holas','title' => $url, 'class' => 'btn btn-danger']);
                         //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
-                     
+                           return '';
                           }
                         
                         

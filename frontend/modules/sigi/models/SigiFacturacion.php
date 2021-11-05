@@ -11,6 +11,7 @@ use frontend\modules\sigi\models\SigiKardexdepa;
 use frontend\modules\sigi\models\VwSigiFacturecibo;
 use Yii;
 use  yii\web\ServerErrorHttpException;
+use yii\base\Exception;
 USE yii\data\ActiveDataProvider;
 use frontend\modules\report\models\Reporte;
 /**
@@ -255,9 +256,14 @@ class SigiFacturacion extends \common\models\base\modelBase
                $errores['success']=yii::t('sigi.errors','Se ha generado la facturacion sin problemas '.$this->balanceMontos());  
             }
           }*/
-           $this->shortFactu();
+           try{
+                $this->shortFactu();
+           } catch (\Exception $ex) {
+               $this->addError('fecha',$ex->getMessage());
+           }
+          
            if($this->hasErrors()){
-           $errores['error']=$this->getFirstError();//array_values($this->firstErrors[0]);
+                $errores['error']=$this->getFirstError();//array_values($this->firstErrors[0]);
             return $errores;
            }
            
@@ -591,12 +597,17 @@ class SigiFacturacion extends \common\models\base\modelBase
         'facturacion_id'=>$this->id,
         'mes'=>$this->mes,
         'anio'=>$this->ejercicio,
-        'fecha'=>$this->fecha, ];
+        'fecha'=>$this->fecha,
+       
+            ];
+        
      $modelo=New SigiKardexdepa();
      $modelo->setAttributes($attributes);
+    
       if($modelo->save()){
           //var_dump('0k');die();
       }else{
+       
         var_dump($modelo->getErrors());die();  
       }
       return $modelo;
@@ -646,6 +657,7 @@ class SigiFacturacion extends \common\models\base\modelBase
   
   /*Facturacion sin nmucho detalle */
   public function shortFactu(){
+      set_time_limit(300);
       /*
       * Tomamos el control del tiempo
       */
@@ -653,10 +665,13 @@ class SigiFacturacion extends \common\models\base\modelBase
      
       /*Solo unidades padres que sean imputables*/
      //$unidades= $this->edificio->unidadesImputablesPadres();
-     $unidades= $this->unidadesFacturables();
+     
+     
+     
+     
      $unidadesTransferidas=array_combine(array_column($this->transfEsteMes(),'unidad_id'),array_column($this->transfEsteMes(),'fecha'));
-     YII::ERROR('UNIDADES TRANSFERIDAS');
-        YII::ERROR($unidadesTransferidas);
+     //YII::ERROR('UNIDADES TRANSFERIDAS');
+       // YII::ERROR($unidadesTransferidas);
      //var_dump(date('j',strtotime($unidadesTransferidas[6795])));die();
      //$medidorAACC=$this->edificio->firstMedidorAACC();
      
@@ -667,7 +682,8 @@ class SigiFacturacion extends \common\models\base\modelBase
      $hasCobranzaMasiva=$this->hasCobranzaMasiva();
      
      if($hasCobranzaMasiva){
-       //Obteniendo la unidad Grupal        
+       //Obteniendo la unidad Grupal 
+          //yii::error('OBTENIENDIO LA UNIDAD GRUPAL',__FUNCTION__);
       $kardexGrupal=$this->kardexDepaComun();
        $kardexGrupal->refresh();  
        //yii::error('ID kardex grupal',__FUNCTION__);
@@ -679,21 +695,24 @@ class SigiFacturacion extends \common\models\base\modelBase
      $diasEnEsteMes=30;//date('t',strtotime($this->swichtDate('fecha',false)));
      
      
-     yii::error('tiempos de espera',__FUNCTION__);
+     //yii::error('tiempos de espera',__FUNCTION__);
      $tiempoEspera=h::gsetting('general','nSegundosEsperaApache');
-     foreach($unidades as $unidad){
+    
+     
+     foreach($this->unidadesFacturablesQuery()->batch(10) as $unidades ){
+          foreach($unidades as $unidad){
         $tiempoFinal= microtime(true);
         /*
          * Controlamos el tiempo de ejecucion 
          */
         
-        yii::error(h::gsetting('general','nSegundosEsperaApache'),__FUNCTION__);
-       yii::error('diferencia',__FUNCTION__);
-        yii::error($tiempoFinal-$tiempoInicio,__FUNCTION__);
+        //yii::error(h::gsetting('general','nSegundosEsperaApache'),__FUNCTION__);
+       //yii::error('diferencia',__FUNCTION__);
+        //yii::error($tiempoFinal-$tiempoInicio,__FUNCTION__);
        //yii::error($tiempoFinal,__FUNCTION__);
         if($tiempoEspera < ($tiempoFinal-$tiempoInicial)){
         
-           yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
+          // yii::error('********** Recorriendo unidad  '.$unidad->numero.'*******************');
        
          ///verficando primero si la unidad ha sido transferida 
         
@@ -701,10 +720,10 @@ class SigiFacturacion extends \common\models\base\modelBase
         $dias=$diasEnEsteMes;
         
         if(in_array($unidad->id,array_keys($unidadesTransferidas))){
-             yii::error(' '.$unidad->numero.'*********HA SIDO TRANSFERIDA**********');
+             //yii::error(' '.$unidad->numero.'*********HA SIDO TRANSFERIDA**********');
         
             $dias=date('j',strtotime($unidadesTransferidas[$unidad->id])); 
-            yii::error('*********DIAS**********  '.$dias);
+            //yii::error('*********DIAS**********  '.$dias);
         }else{
            $dias=$diasEnEsteMes;  
         }
@@ -794,11 +813,11 @@ class SigiFacturacion extends \common\models\base\modelBase
                       * Recordar que estos medidores se anclan o se registran
                       * dentro de una unidad que es imputable=0
                       */
-                     yii::error(' recorriendo los medidores aacc  ');
+                     //yii::error(' recorriendo los medidores aacc  ');
                        $nMedidoresAACC=$this->edificio->nMedidoresAaCc();
                          foreach($this->edificio->medidoresAaCc() as $medidorAACC){
                             if($medidorAACC->hasUnitAfiliado($unidad->id)){
-                                yii::error('Esta unida esta afiliada a este medidor '.$medidorAACC->unidad->numero);
+                                //yii::error('Esta unida esta afiliada a este medidor '.$medidorAACC->unidad->numero);
                                 /*Siempre que esta unidad este afiliada al medidor AACC
                                 
                              /*En este calculo se obtiene = (consumo actual) /(Consumo total) */
@@ -816,18 +835,19 @@ class SigiFacturacion extends \common\models\base\modelBase
                                  * $medidorAACC->participacionRead() este si es para cada meiddor
                                  */
                              $participacionAACC=$medidorAACC->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
-                             yii::error('paraticipacion de este medidor :'.$participacionAACC);
+                             //yii::error('paraticipacion de este medidor :'.$participacionAACC);
                              if($medidorAACC->plano){  
-                                 yii::error('Este mdidor es plano');
+                                // yii::error('Este mdidor es plano');
                                   
                                   
                                 $ndepasafiliados=$medidorAACC->ndepasRepartoPadres(); 
+                                
                                 yii::error('cantidad de departamentos afiliados :'.$ndepasafiliados);
                                 if($ndepasafiliados>0){
                                     $montoAux=$participacionAACC*
                                             //$medidorAACC->participacionRead($this->mes,$this->ejercicio)*
                                             $cuenta->monto/($nMedidoresAACC*$ndepasafiliados);
-                                    yii::error('monto auxi= '.$participacionAACC.' * '.$cuenta->monto.'/('.$ndepasafiliados.'*'.$nMedidoresAACC.'  ) = '.$montoAux);
+                                    //yii::error('monto auxi= '.$participacionAACC.' * '.$cuenta->monto.'/('.$ndepasafiliados.'*'.$nMedidoresAACC.'  ) = '.$montoAux);
                                     /*Aqui ya no es incrementable el monto,(osea monto=monto+ ...  es un solo calculo total*/
                                     $monto+= $montoAux;
                                   }
@@ -913,7 +933,8 @@ class SigiFacturacion extends \common\models\base\modelBase
      }
        
      
-  }
+      }
+     }
   }
   /*
    * Devuelve las transferencias de departamentos 
@@ -1060,7 +1081,8 @@ class SigiFacturacion extends \common\models\base\modelBase
       $seconds=300;
       $tolerance=10;
       set_time_limit($seconds);
-      $registros=SigiKardexdepa::find()->andWhere(['<','enviado',
+      try {
+        $registros=SigiKardexdepa::find()->andWhere(['<','enviado',
           self::CarbonNow()->subSeconds($seconds-$tolerance)->format('Y-m-d H:i:s')
                    ])->andWhere(['facturacion_id'=>$this->id])->all();
      /* yii::error(SigiKardexdepa::find()->andWhere(['<','enviado',
@@ -1068,13 +1090,18 @@ class SigiFacturacion extends \common\models\base\modelBase
                    ])->andWhere(['facturacion_id'=>$this->id])->createCommand()->rawSql,__FUNCTION__);*/
       foreach($registros as $kardex){
          $kardex->mailRecibo();
+      }  
+      } catch (\yii\base\Exception $ex) {
+          return ['error'=>$ex->getMessage()];
       }
+      return ['success',yii::t('base.labels','Se enviaron masivamente los recibos')];
+               
   }
    
  
   
   
-  public function unidadesFacturables(){
+  public function unidadesFacturablesQuery(){
       $idsFacturados=SigiDetfacturacion::find()->select(['unidad_id'])->distinct()->
               andWhere(['facturacion_id'=>$this->id])->
               orderBy(['id'=>SORT_ASC])->column();
@@ -1095,43 +1122,49 @@ class SigiFacturacion extends \common\models\base\modelBase
       }
      
       
-     /*yii::error(SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
+     yii::error(SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
              'imputable'=>'1',
                 ])->andWhere(['parent_id'=>null])->andWhere(['not in','unidad_id',$idsFacturados])
-             ->createCommand()->rawSql,__FUNCTION__);*/
+             ->createCommand()->rawSql,__FUNCTION__);
+  
      
       
       return SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
              'imputable'=>'1',
-                ])->andWhere(['parent_id'=>null])->andWhere(['not in','id',$idsFacturados])->all();
+                ])->andWhere(['parent_id'=>null])->andWhere(['not in','id',$idsFacturados]);
   }
   
   
-  public function recibo($idKardex,$disk=false){   
+  public function recibo($idKardex,$disk=false){
+      set_time_limit(300);
+          ini_set("pcre.backtrack_limit", "10000000");
          $formato=$this->reporte->tamanopapel;
          $kardex=SigiKardexdepa::findOne($idKardex);
-         $datos=$kardex->groupDetailsForRecibo();
-       //var_dump($datos);die();
+         
+       
          
            //$dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
            switch ($this->reporte_id) {
                 case 1:
+                  $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
                 $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>false]);
           
                 break;
                 case 2:
-                     $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>true]);
+                    $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
+                     $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>false]);
           
                      break;
                  
                  case 3:
-                
-                         $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
+                            $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
+                       $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>true]);
           
                     break;
                 case 4:
+                    $datos=$kardex->groupDetailsForRecibo();
                     //yii::error($this,__FUNCTION__);
-                     $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['datos'=>$datos,'model'=>$this,'kardex'=>$kardex,'dataProvider'=>$dataProvider,'compacto'=>false]);
+                     $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['datos'=>$datos,'model'=>$this,'kardex'=>$kardex,'compacto'=>false]);
                 //yii::error('recibo comlpejo',__FUNCTION__);
                 //yii::error('Formato '.$formato,__FUNCTION__);
                         // $contenido= h::currentController()->render('@frontend/modules/sigi/views/facturacion/reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>false]);
@@ -1148,8 +1181,8 @@ class SigiFacturacion extends \common\models\base\modelBase
             /*
              * Tamaño de papel
              */
-             $stylesheet = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
-               $pdf->WriteHTML($stylesheet, 1);
+             //$stylesheet = file_get_contents(\yii::getAlias("@frontend/web/css/reporte.css")); // external css
+              // $pdf->WriteHTML($stylesheet, 1);
              $pdf->WriteHTML($contenido);
              yii::error('paso Write html');
             if(!$disk){
@@ -1184,12 +1217,12 @@ class SigiFacturacion extends \common\models\base\modelBase
   public function generaRecibos(){
       //$this->purgeRecibos();
       //YII::ERROR('ENTRNADO EN GENERA RECIBOS');
-      /*$sesion=h::session();
-      if($sesion->has(self::hashSesion())){
+      $sesion=h::session();
+      if($sesion->has($this->hashSesion())){
           
       }else{
-          $sesion->set()
-      }*
+        
+      }
       
       
       $contador=0;
@@ -1485,7 +1518,7 @@ class SigiFacturacion extends \common\models\base\modelBase
       }
   }
  
- private static function hashSesion(){
+ private  function hashSesion(){
     return h::userId().'_'.$this->id.'_facturacion';
  }
   

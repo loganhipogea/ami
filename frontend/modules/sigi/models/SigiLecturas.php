@@ -135,7 +135,7 @@ class SigiLecturas extends \common\models\base\modelBase
     
     public function beforeSave($insert) {
       if($insert){
-          $this->resolveIds();
+          
           IF(empty($this->codepa))$this->codepa=$this->unidad->numero;
           
           
@@ -246,7 +246,7 @@ class SigiLecturas extends \common\models\base\modelBase
       } 
   //VERIFICANDO QUE EL DEPA TENGA MDEIDOR DE ESTE TIPO
      if(is_null($this->medidor())){
-        $this->addError('codepa',yii::t('sigi.labels','Este departamento no tiene ningun medidor del tipo {medidor}',['medidor'=> SigiSuministros::comboValueFieldStatic('tipo',SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT)]));
+        $this->addError('codepa',yii::t('sigi.labels','Este departamento {depa} no tiene ningun medidor del tipo {medidor}',['depa'=>$depa->numero,'medidor'=> SigiSuministros::comboValueFieldStatic('tipo',SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT)]));
           return;  
      }
      
@@ -280,8 +280,8 @@ class SigiLecturas extends \common\models\base\modelBase
         /*yii::error(SigiUnidades::find()->where([
             'numero'=>$this->codepa,
             'edificio_id'=>$this->edificioByCode()->id,
-            ])->createCommand()->getRawSql());*/
-        /*ECHO SigiUnidades::find()->where([
+            ])->createCommand()->getRawSql());
+        ECHO SigiUnidades::find()->where([
             'numero'=>$this->codepa,
             'edificio_id'=>$this->edificioByCode()->id,
             ])->createCommand()->getRawSql(); DIE();*/
@@ -290,7 +290,7 @@ class SigiLecturas extends \common\models\base\modelBase
             'numero'=>$this->codepa,
             'edificio_id'=>$this->edificioByCode()->id,
             ])->one();
-       var_dump($this->suministro);die();
+       //var_dump($this->suministro);die();
        return  $this->suministro->unidad;
        
     }
@@ -408,10 +408,10 @@ class SigiLecturas extends \common\models\base\modelBase
           yii::error($this->lectura); 
            yii::error('ultima lectura');  
           yii::error($this->lastReadValue(true)); */
-          
-         /*if(!$this->suministro->activo)
-        $this->addError('flectura',yii::t('sigi.errors','Este suministro está desactivado, no pude insertar lecturas'));
-            */
+        // yii::error($this->suministro,__FUNCTION__);
+      if(!$this->suministro->activo)
+        $this->addError('flectura',yii::t('sigi.errors','Este suministro está desactivado, no puede insertar lecturas'));
+            
         
           /*
           * Verificando el mes de facturacion, 
@@ -420,12 +420,12 @@ class SigiLecturas extends \common\models\base\modelBase
           */
              
            
-           /* if(!$this->facturable && ( 
+            if(!$this->facturable && ( 
                ((integer)$this->toCarbon('flectura')->month <> $this->mes or
                 (integer)$this->toCarbon('flectura')->year <> (integer)$this->anio    
                  )))
                $this->addError('mes',yii::t('sigi.errors','El mes o el año no corresponden a la fecha de lectura'));
-            */
+            
         
         
          /*
@@ -550,7 +550,8 @@ class SigiLecturas extends \common\models\base\modelBase
   public function beforeValidate() {
       if(empty($this->codepa) && !empty($this->unidad_id)){
           $this->codepa=$this->unidad->numero;
-      }          
+      } 
+      $this->resolveIds();
       return parent::beforeValidate();
   }    
    
