@@ -149,6 +149,7 @@ class SigiFacturacion extends \common\models\base\modelBase
           $this->refresh();
           //yii::error('El id d efacturacion es');
           ///yii::error($this->id);
+          if(!$this->hasNextFacturacion())
           $this->createAutoFac(); //cREA LOS RECIBOS AUTOMATICOS DEL PRESUPUESTO
       }
         return parent::afterSave($insert,$changedAttributes );
