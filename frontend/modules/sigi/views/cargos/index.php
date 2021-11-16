@@ -22,16 +22,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
      <div class="btn-group">  
-         <?PHP $accion=(!$esbeneficio)?'Crear concepto':'Crear Beneficio'; ?>
-        <?= Html::a(Yii::t('sigi.labels', $accion), ['create'], ['class' => 'btn btn-success']) ?>
+         <?PHP 
+         $accion=(!$esbeneficio)?'Crear concepto':'Crear Beneficio';
+         $url=(!$esbeneficio)?'create':'crea-beneficio';
+         $url_ed=(!$esbeneficio)?'update':'update-beneficio';
+         ?>
+        <?= Html::a(Yii::t('sigi.labels', $accion), [$url], ['class' => 'btn btn-success']) ?>
        <?php 
        $gridColumns= [
             
          ['class' => 'yii\grid\ActionColumn',
                 'template'=>'{update}{view}{delete}',
                 'buttons'=>[
-                    'update'=>function($url,$model){
-                        $url=\yii\helpers\Url::toRoute(['update','id'=>$model->id]);
+                    'update'=>function($url,$model) use($url_ed){
+                        $url=\yii\helpers\Url::toRoute([$url_ed,'id'=>$model->id]);
                         return \yii\helpers\Html::a(
                                 '<span class="btn btn-success glyphicon glyphicon-pencil"></span>',
                                 $url,

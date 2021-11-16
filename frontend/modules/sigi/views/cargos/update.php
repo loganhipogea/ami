@@ -10,11 +10,13 @@ ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiCargos */
 $esbeneficio=$model instanceof SigiBeneficios;
+$url=($esbeneficio)?'view-beneficio':'view';
+$url_ben=($esbeneficio)?'index-beneficios':'index';
 $this->title = Yii::t('sigi.labels', 'Editar: {name}', [
     'name' => $model->codcargo,
 ]);
-$this->params['breadcrumbs'][] = ['label' =>($esbeneficio)?Yii::t('sigi.labels', 'Centro de beneficio'):Yii::t('sigi.labels', 'Cargos'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' =>($esbeneficio)?Yii::t('sigi.labels', 'Centros de beneficio'):Yii::t('sigi.labels', 'Cargos'), 'url' => [$url_ben]];
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => [$url, 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');
 ?>
 <div class="sigi-cargos-update">

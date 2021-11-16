@@ -90,7 +90,14 @@ $this->params['breadcrumbs'][] = $this->title;
                }
                  
                  ],
-            'numero',
+            //'numero',
+            ['attribute'=>'mes',
+               'filter'=> \common\helpers\timeHelper::cboMeses(),
+               'value'=>function($model){
+                       return \common\helpers\timeHelper::mes($model->mes); 
+               }
+                 
+                 ],
             'nombre',
            // 'facturacion_id',
             //'operacion_id',
@@ -100,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'fecha',
             //'anio',
             //'codmon',
-            'numrecibo',
+           // 'numrecibo',
                        //  'cancelado',
             ['attribute'=>'monto',
                 'format' => ['decimal', 3],

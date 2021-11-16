@@ -5,7 +5,8 @@ namespace frontend\modules\sigi\controllers;
 use Yii;
 use frontend\modules\sigi\models\SigiMovimientosPre;
 use frontend\modules\sigi\models\SigiMovimientosPreSearch;
-
+use frontend\modules\sigi\models\SigiCuentas;
+use frontend\modules\sigi\models\SigiCuentasSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\helpers\h;
@@ -615,7 +616,15 @@ public function actionUpdateSaldo($id){
         ]);
     }
 
-
+ public function actionEstadoCuentas(){    
+        $searchModel = new SigiCuentasSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('index_cuentas', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+      
+ }
 
 
 
