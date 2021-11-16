@@ -46,7 +46,7 @@ class migrationMenu extends baseMigration
    private static function insertRoute($route){
       if(!self::existsRoute($route)){
         (new \yii\db\Query())->createCommand()
-                ->insert($table,['name'=>$route])
+                ->insert(self::TABLE_ROUTE,['name'=>$route])
                 ->execute();
       }
    }   
