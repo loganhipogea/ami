@@ -22,7 +22,7 @@ class m211116_190532_addopmenu12 extends baseMigration
         migrationMenu::deleteOption('C. Beneficios',
                 '/sigi/cargos/index-beneficios',
                 'Gestion');
-        return false;
+        
     }
 
     

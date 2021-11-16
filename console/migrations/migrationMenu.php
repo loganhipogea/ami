@@ -40,7 +40,7 @@ class migrationMenu extends baseMigration
    private static function existsOptionParent($optionParent){
       $result=  (new \yii\db\Query())->from(self::TABLE_MENU)
               ->andWhere(['name'=>$optionParent])->all();
-      if(count($result)>0)return $result[0]['parent'];
+      if(count($result)>0)return $result[0]['id'];
       return false;
    }  
    private static function insertRoute($route){
