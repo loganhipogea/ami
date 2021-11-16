@@ -1,7 +1,7 @@
 <?php
 namespace frontend\modules\sigi\database\migrations;
 use console\migrations\baseMigration;
-use console\migrations\menuMigration;
+use console\migrations\migrationMenu;
 class m211116_190532_addopmenu12 extends baseMigration
 {
     /**
@@ -9,7 +9,7 @@ class m211116_190532_addopmenu12 extends baseMigration
      */
     public function safeUp()
     {
-        menuMigration::insertOption('C. Beneficios',
+        migrationMenu::insertOption('C. Beneficios',
                 '/sigi/cargos/index-beneficios',
                 'Gestion');
     }
@@ -19,7 +19,7 @@ class m211116_190532_addopmenu12 extends baseMigration
      */
     public function safeDown()
     {
-        menuMigration::deleteOption('C. Beneficios',
+        migrationMenu::deleteOption('C. Beneficios',
                 '/sigi/cargos/index-beneficios',
                 'Gestion');
         return false;

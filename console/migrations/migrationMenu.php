@@ -7,7 +7,7 @@ use yii\db\Migration;
  * valido solo para MYSQL
  * uSELA Y VERA COMO LE SIMPLKIFICA LA VIDA 
  */
-class menuMigration extends baseMigration
+class migrationMenu extends baseMigration
 {
     const TABLE_MENU='{{%menu}}' ;
     const TABLE_ROUTE='{{%auth_item}}' ;
