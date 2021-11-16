@@ -149,9 +149,11 @@ return [
         'allowActions' => [
             'site/login/',
             'site/index',
+            'site/plataforma',
+            'site/login-residente',
             'site/clear-cache/',
             'site/falta-pagos',
-            'site/prueba-chat',
+            'site/envia-mail-cont',
              'site/request-password-reset',
             'site/reset-password', 
            'site/logout',

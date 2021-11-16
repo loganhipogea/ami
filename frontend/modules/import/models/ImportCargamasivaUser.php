@@ -520,6 +520,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                      
                               }  else{
                                    yii::error('no grabo    => '.$linea,__METHOD__); 
+                                   yii::error($model->attributes,__METHOD__);
                                  yii::error($model->getErrors()); 
                               }
                             } catch (\yii\db\Exception $ex) {
@@ -534,6 +535,8 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                             
                             }  else{
                             yii::error($model->validate(),__FUNCTION__); 
+                            yii::error('ESTOS SON LOS ERRORES',__FUNCTION__); 
+                             yii::error($model->getErrors(),__FUNCTION__); 
                             } 
                                           $filaerror=$fila;
                                              $filaerror[]=$linea;

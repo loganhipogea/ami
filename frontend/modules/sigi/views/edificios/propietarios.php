@@ -1,6 +1,7 @@
 <?php
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\export\ExportMenu;
@@ -58,12 +59,23 @@ $this->title = Yii::t('base.names', 'Propietarios');
                 ],
             'id',
             ['attribute'=>'unidad_id',
+                'header'=>'Unidad',
+                'format'=>'html',
                 'value'=>function($model){
-                         return $model->unidad->nombre;
+                         return Html::a($model->unidad->nombre,Url::to(['unidades/update','id'=>$model->unidad_id,'target'=>'_blank']));
                 }
                // 'filter'=> \frontend\modules\sigi\helpers\comboHelper::getCboUnitsByEdificio($id_edificio)
              //'group'=>true
              ],
+                ['attribute'=>'unidad_id',
+                 'header'=>'Apoderad',
+                'value'=>function($model){
+                         return $model->unidad->clipro->codpro;
+                }
+               // 'filter'=> \frontend\modules\sigi\helpers\comboHelper::getCboUnitsByEdificio($id_edificio)
+             //'group'=>true
+             ],
+                    
              ['attribute'=>'nombre',
              //'group'=>true
              ],

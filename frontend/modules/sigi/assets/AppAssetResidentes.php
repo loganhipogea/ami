@@ -1,12 +1,12 @@
 <?php
-namespace frontend\assets;
+namespace frontend\modules\sigi\assets;
 
 use yii\web\AssetBundle;
 
 /**
  * Main frontend application asset bundle.
  */
-class AppAsset extends AssetBundle
+class AppAssetResidentes extends AssetBundle
 {
  public $basePath = '@webroot';
     public $baseUrl = '@web';
@@ -14,14 +14,7 @@ class AppAsset extends AssetBundle
     public $css = [
        // 'css/app.css',
         'css/site.css',
-        'css/personal.css',
-        'css/font-awesome.min_1.css',       
-        'css/ionicons.min.css',
-        'css/akaunting-green.css',
-         'css/bootstrap.min.css',
-         'css/bootstrap.min.css',
-        'css/install.css',
-         'css/select2.css',
+        
     ];
     public $js = [
          'js/jquery-ui.js',

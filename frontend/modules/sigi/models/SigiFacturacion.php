@@ -32,11 +32,13 @@ class SigiFacturacion extends \common\models\base\modelBase
 {
     const EST_CREADO='C';
     const EST_APROBADO='A';
+    const SCE_BATCH='batch';
     //const EST_ANULADO='A';
     private $_reporte=null;
      private $_edificio=null;
    //public static $varsToReplace=['$cuenta'=>'','$dias'=>'','$banco'=>'','$correo_cobranza'=>''];
     public $hardFields=['edificio_id','mes','ejercicio'];
+     public $booleanFields = ['historico'];
      public $dateorTimeFields=['fvencimiento'=>self::_FDATE,'fecha'=>self::_FDATE];
     /**
      * {@inheritdoc}
@@ -52,10 +54,11 @@ class SigiFacturacion extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['edificio_id', 'mes', 'descripcion','fecha','fvencimiento','reporte_id'], 'required'],
+            [['edificio_id', 'mes', 'descripcion','fecha','fvencimiento','reporte_id'], 'required','except'=>self::SCE_BATCH],
+            [['edificio_id', 'mes', 'fecha', 'ejercicio'],'required','on'=>self::SCE_BATCH],
             [['edificio_id'], 'integer'],
-              [['fvencimiento','detalleinterno','unidad_id','reporte_id','estado'], 'safe'],
-            ['fvencimiento', 'validateFechas'],
+            [['fvencimiento','detalleinterno','unidad_id','edificio_id','mes','fecha','reporte_id','estado','historico'], 'safe'],
+            ['fvencimiento', 'validateFechas','except'=>self::SCE_BATCH],
             [['detalles'], 'string'],
             [['mes','ejercicio','edificio_id'], 'unique', 'targetAttribute' => ['mes','ejercicio','edificio_id']],
             [['mes'], 'string', 'max' => 2],
@@ -65,7 +68,13 @@ class SigiFacturacion extends \common\models\base\modelBase
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
         ];
     }
-
+ public function scenarios() {
+        $scenarios = parent::scenarios();       
+          $scenarios[self::SCE_BATCH] = ['edificio_id', 'mes', 'fecha', 'ejercicio',
+                                       
+                                            ];
+       return $scenarios;
+    }
     /**
      * {@inheritdoc}
      */
@@ -149,7 +158,7 @@ class SigiFacturacion extends \common\models\base\modelBase
           $this->refresh();
           //yii::error('El id d efacturacion es');
           ///yii::error($this->id);
-          if(!$this->hasNextFacturacion())
+          if(!$this->historico)
           $this->createAutoFac(); //cREA LOS RECIBOS AUTOMATICOS DEL PRESUPUESTO
       }
         return parent::afterSave($insert,$changedAttributes );
@@ -552,10 +561,13 @@ class SigiFacturacion extends \common\models\base\modelBase
      
     }
  
-  public function afterValidate() {
-     
-      parent::afterValidate();
-  } 
+ public function beforeValidate() {
+     yii::error('before validate');
+     if($this->getScenario()==self::SCE_BATCH)
+      $this->resolveBatch();
+     return parent::beforeValidate();
+ }
+ 
   public function beforeSave($insert){
       
       if($insert){
@@ -1523,5 +1535,12 @@ class SigiFacturacion extends \common\models\base\modelBase
     return h::userId().'_'.$this->id.'_facturacion';
  }
   
+private function resolveBatch(){
+    yii::error('resolve batch');
+    $this->historico=true;
+    $this->descripcion='Facturación '.\common\helpers\timeHelper::mes($this->mes).'  '.$this->ejercicio;
+                 //yii::error($this->descripcion);
+    
+}
   
 }

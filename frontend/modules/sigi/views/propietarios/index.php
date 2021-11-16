@@ -63,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'unidad_id',
+            
             'tipo',
             'codepa',
             'correo',

@@ -86,7 +86,7 @@ class SiteController extends \frontend\controllers\base\baseController
                 
                 if(yii::$app->user->isGuest){
                     $this->layout="plataforma"; 
-                   return $this->render('plataforma/nosotros');
+                   return $this->render('plataforma/inicio');
                    // echo "holsa"; die();
                   return  $this->redirect(['site/login']);
                     
@@ -121,6 +121,8 @@ class SiteController extends \frontend\controllers\base\baseController
        
         
     }
+    
+    
 
     /**
      * Logs in a user.
@@ -415,6 +417,28 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    $model=new \frontend\modules\sigi\models\SigiFacturacion();
+    $model->setScenario($model::SCE_BATCH);
+   $model->setAttributes([
+    'id' => null,
+    'edificio_id' => '16',
+    'mes' => '7',
+    'ejercicio' => '2021',
+    'fecha' => '09/07/2021',
+    'descripcion' => null,
+    'detalles' => null,
+    'fvencimiento' => null,
+    'reporte_id' => null,
+    'detalleinterno' => null,
+    'unidad_id' => null,
+    'estado' => null,
+    'historico' => null,
+]);
+  var_dump($model->save(),$model->getErrors());
+  DIE();
+    
+    
+    
     $expresion=New \yii\db\Expression('a.lectura-a.delta as lanterior');
 
     echo (new \yii\db\Query())         
@@ -897,4 +921,82 @@ public function actionCookies(){
       file_get_contents($url);
    }
    
+   
+   public function actionPlataforma($id){
+       $this->layout="plataforma"; 
+       
+        switch ($id) {
+            case 1:
+                return $this->render('plataforma/inicio');
+                break;
+            case 2:
+                return $this->render('plataforma/nosotros');
+                break;
+            case 3:
+                return $this->render('plataforma/clientes');
+                break;
+            case 4:
+                return $this->render('plataforma/contacto');
+                break;
+            break;
+       }
+             
+   }
+   
+   public function actionEnviaMailCont(){
+        if(h::request()->isAjax){
+           h::response()->format = \yii\web\Response::FORMAT_JSON;
+                $datos=h::request()->post();
+                    $mensaje=$datos['mensaje'].'  Teléfono '.$datos['telefono'];
+               if(empty($datos['nombre']))return [['error'=>'Ingrese su nombre']];
+               if(empty($datos['correo'])){
+                   return ['error'=>'Ingrese su correo'];  
+               }else{
+                   $valid=New \yii\validators\EmailValidator();
+                   if(!$valid->validate($datos['correo']))
+                   return ['error'=>'Dirección de correo no válida'];
+               }
+               if(empty($datos['mensaje']))
+                   return ['error'=>'Ingrese el mensaje'];  
+                   
+                   
+            $mailer = new \common\components\Mailer();
+            $message =new  \yii\swiftmailer\Message();
+             $message->setSubject('Mensaje nuevo de la página web')
+                 ->setFrom([$datos['correo']=>$datos['nombre']])
+                ->setTo('hipogea@hotmail.com')->SetHtmlBody($mensaje);
+             try{
+                 $resultado=$mailer->send($message);
+             } catch (\Exception $ex) {
+            return ['error'=>$ex->getMessage()];
+                 } 
+             }
+            return ['success'=>'Se envió el correo, pronto nos estaremos comunicando con Ud. Muchas Gracias.'];
+        } 
+  
+   public function actionLoginResidente(){
+   
+        $model=new LoginForm();
+
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\widgets\ActiveForm::validate($model);
+        }
+        
+         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+              $this->redirect(Url::toRoute(['/sigi/default/panel-residente']));
+               //$this->redirect(Url::toRoute([Yii::$app->user->resolveUrlAfterLogin()]));
+             } else {
+          
+            $model->password = '';
+                    $this->layout="plataforma"; 
+                   return $this->render('plataforma/inicio');
+        }
+    
+
+   }     
+        
 }
+   
+   
+

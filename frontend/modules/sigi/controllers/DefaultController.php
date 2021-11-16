@@ -168,11 +168,13 @@ class DefaultController extends Controller
    
     
    public function actionPanelResidente(){
+       $this->layout='residentes';
        $user= h::user();
        $mail=h::user()->identity->email;
-       $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->andWhere(['correo'=>$mail])->all();
+       $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->
+       andWhere(['correo'=>$mail])->all();
       if(count($propietarios)>0){ 
-       return  $this->render('residente',
+       return  $this->render('residentes/inicio',
                     ['propietarios'=>$propietarios]);  
        $unidad=$propietario->unidad;       
            $medidor=$unidad->firstMedidor(\frontend\modules\sigi\models\SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT);
@@ -243,5 +245,17 @@ class DefaultController extends Controller
        
             }
    }  
-   
+   public function actionResiFactu(){
+       $this->layout='residentes';
+       $user= h::user();
+       $mail=h::user()->identity->email;
+       $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->
+       andWhere(['correo'=>$mail])->all();
+      if(count($propietarios)>0){ 
+       return  $this->render('residentes/residente_facturacion',
+                    ['propietarios'=>$propietarios]);
+      }else{
+          throw new ServerErrorHttpException(yii::t('base.errors','Residente no encontrado con el correo '.$mail));  
+      } 
+    }
 }

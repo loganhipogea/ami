@@ -2,9 +2,9 @@
 use yii\helpers\Html;
 use yii\web\View;
 
-    if (class_exists('frontend\assets\AppAsset')) {
+    if (class_exists('frontend\assets\AppAssetPlataforma')) {
         //var_dump($this);die();
-        frontend\assets\AppAsset::register($this);
+        frontend\assets\AppAssetPlataforma::register($this);
        // echo "salio";
        //die();
     } else {
@@ -32,24 +32,24 @@ use yii\web\View;
          <?php $this->registerCssFile("@web/css/plataforma/dropdown.css"); ?>
          <?php $this->registerCssFile("@web/css/plataforma/jcstyle.css"); ?>
         <?php $this->registerCssFile("@web/css/plataforma/jcstyle.css"); ?>
-
-        
-         <?php $this->registerjsFile("@web/js/plataforma/jquery.js",['position'=>View::POS_HEAD]); ?>
-         <?php $this->registerjsFile("@web/js/plataforma/jquery.jcarousel.min.js",['position'=>View::POS_HEAD]); ?>
-                <?php $this->registerjsFile("@web/js/plataforma/jcarousellite_1.0.1c4.js",['position'=>View::POS_HEAD]); ?>
-            
-         <?php $this->registerjsFile("@web/js/plataforma/bnpsajaxweb.js",['position'=>View::POS_HEAD]); ?>
-       <?php $this->registerjsFile("@web/js/plataforma/bnpsgeneralw.js",['position'=>View::POS_HEAD]); ?>
-       <?php $this->registerjsFile("@web/js/plataforma/jquery-cycle.js",['position'=>View::POS_HEAD]); ?>
-        <?php $this->registerjsFile("@web/js/plataforma/jquery.innerfade.js",['position'=>View::POS_HEAD]); ?>
-        
-             <?php $this->registerjsFile("@web/js/plataforma/bnpsitelb.js",['position'=>View::POS_HEAD]); ?>
- <?php $this->registerjsFile("@web/js/plataforma/jquery.inf.js",['position'=>View::POS_HEAD]); ?>
+        <?php $this->registerCssFile("@web/css/plataforma/lightSlider.css"); ?>
        
-         <?php $this->registerjsFile("@web/js/plataforma/jquery.dropdownPlain.js",['position'=>View::POS_HEAD]); ?>
+        
+        <?php //$this->registerjsFile("@web/js/plataforma/jquery.min.js",['position'=>View::POS_BEGIN]); ?>
+        <?php ///$this->registerjsFile("@web/js/plataforma/jquery.lightSlider.js",['position'=>View::POS_BEGIN]); ?>
+         <?php // $this->registerjsFile("@web/js/plataforma/jquery.js",['position'=>View::POS_HEAD]); ?>
+         <?php //$this->registerjsFile("@web/js/plataforma/jquery.jcarousel.min.js",['position'=>View::POS_HEAD]); ?>
+         <?php //$this->registerjsFile("@web/js/plataforma/jcarousellite_1.0.1c4.js",['position'=>View::POS_HEAD]); ?>
+          <?php // $this->registerjsFile("@web/js/plataforma/bnpsajaxweb.js",['position'=>View::POS_HEAD]); ?>
+       <?php //$this->registerjsFile("@web/js/plataforma/bnpsgeneralw.js",['position'=>View::POS_HEAD]); ?>
+       <?php //$this->registerjsFile("@web/js/plataforma/jquery-cycle.js",['position'=>View::POS_HEAD]); ?>
+        <?php //$this->registerjsFile("@web/js/plataforma/jquery.innerfade.js",['position'=>View::POS_HEAD]); ?>
+          <?php // $this->registerjsFile("@web/js/plataforma/bnpsitelb.js",['position'=>View::POS_HEAD]); ?>
+        <?php //$this->registerjsFile("@web/js/plataforma/jquery.inf.js",['position'=>View::POS_HEAD]); ?>
+        <?php // $this->registerjsFile("@web/js/plataforma/jquery.dropdownPlain.js",['position'=>View::POS_HEAD]); ?>
+        <?php //$this->registerjsFile("@web/js/plataforma/efecto.js",['position'=>View::POS_HEAD]); ?>
        
       
-        
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>

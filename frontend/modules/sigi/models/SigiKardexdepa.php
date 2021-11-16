@@ -76,7 +76,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
         $scenarios = parent::scenarios();       
          $scenarios[self::SCE_STATUS] = ['cancelado'];
           $scenarios[self::SCE_BATCH] = ['codepa','codedificio', 'mes', 'fecha', 'anio',
-                                       'monto','detalles'
+                                       'monto','detalles',
                                             ];
        return $scenarios;
     }
@@ -98,7 +98,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
             [['detalles'], 'string'],
              [['cancelado','monto','enviado','aprobado','historico'], 'safe'],
             
-            [['unidad_id'], 'validate_batch','on'=>self::SCE_BATCH],
+            [['codepa'], 'validate_batch','on'=>self::SCE_BATCH],
             [['unidad_id','edificio_id'], 'required','on'=>self::SCE_BATCH,'message'=>yii::t('sigi.errors','El número de la unidad no es el correcto')],
             [['fecha'], 'string', 'max' => 10],
             [['anio'], 'string', 'max' => 4],
@@ -231,6 +231,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
  
       
       if($insert){
+          $this->aprobado=($this->getScenario()==self::SCE_BATCH)?TRUE:FALSE;         
           $this->historico=($this->getScenario()==self::SCE_BATCH)?TRUE:FALSE;
           $this->cancelado=self::STATUS_CANCELADO_NADA;
       }
@@ -293,17 +294,16 @@ class SigiKardexdepa extends \common\models\base\modelBase
      return (is_null($model))?null:$model->id;
   }
   private function resolveIdsBatch(){
-      
+      $this->edificio_id=$this->resolveEdificio();
+      $this->unidad_id=$this->resolveUnidadId();
+     // yii::error('OTENOIENOD EL FACTURACION IU',__FUNCTION__);
+       //yii::error($this->resolveFacturacionId(),__FUNCTION__);
+      $this->facturacion_id=$this->resolveFacturacionId();
       $this->setAttributes([
-         
-          'unidad_id'=>$this->resolveUnidadId(),
-           'facturacion_id'=>$this->resolveFacturacionId(),
-          'edificio_id'=>$this->resolveEdificio(),
-          //'fecha'=>, 
           'cancelado'=>'0',
           'enviado'=>'1',
-          'aprobado'=>'1',
-          'historico'=>true,
+          'aprobado'=>true,
+          'historico'=>true, 
                                             
       ]);
         yii::error($this->attributes,__FUNCTION__);
@@ -312,10 +312,10 @@ class SigiKardexdepa extends \common\models\base\modelBase
   private function resolveUnidadId(){
       yii::error($this->attributes);
       $m=$this->edificio->getUnidades()->andWhere([
-          'numero'=>$this->unidad_id
+          'numero'=>$this->codepa
       ])->one();
       yii::error($this->edificio->getUnidades()->andWhere([
-          'numero'=>$this->unidad_id
+          'numero'=>$this->codepa
       ])->createCommand()->rawSql,__FUNCTION__);
       return is_null($m)?null:$m->id;
   }
@@ -343,7 +343,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
           $this->addError('codedificio',yii::t('base.errors','Este edificio no existe'));  
        }
         IF(is_null($this->resolveUnidadId())){
-          $this->addError('codedificio',yii::t('base.errors','Esta unidad no existe')); 
+          $this->addError('codepa',yii::t('base.errors','Esta unidad {depa} no existe',['depa'=>$this->codepa])); 
           
        } 
        IF(is_null($this->resolveFacturacionId())){
@@ -356,6 +356,12 @@ class SigiKardexdepa extends \common\models\base\modelBase
           'anio'=>$this->anio,
           'unidad_id'=>$this->unidad_id,
           ])->exists()) {
+          yii::error(Self::find()->andWhere([ //'unidad_id'=>$this->unidad_id,
+          'edificio_id'=>$this->edificio_id,
+          'mes'=>$this->mes,
+          'anio'=>$this->anio,
+          'unidad_id'=>$this->unidad_id,
+          ])->createCommand()->rawSql);
           $this->addError('unidad_id',yii::t('base.errors','Este kardex ya existe'));
           return ;
       }

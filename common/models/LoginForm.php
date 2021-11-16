@@ -45,7 +45,7 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute,yii::t('base.errors','Password o usuario incorrecto o cuenta está desactivada'));
+                $this->addError($attribute,yii::t('base.errors','Usuario/Password Incorrecto(s)'));
             }
         }
     }

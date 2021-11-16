@@ -26,7 +26,7 @@ use common\widgets\selectwidget\selectWidget;
         <div class="col-md-12">
             <div class="form-group no-margin">
              <?php
-             $aprobado=$model->isAprobado();
+             $aprobado=($model->isAprobado() or $model->historico);
              /*var_dump($model->idsToFacturacion());die();*/ ?>   
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Grabar'), ['class' => 'btn btn-success']) ?>
           <?=(!$aprobado)?Html::a('<span class="fa fa-file-pdf" ></span>'.'  '.yii::t('sta.labels','Aprobar'),Url::to(['aprobe','id'=>$model->id]),['data-pjax'=>'0','class'=>"btn btn-success"]):
@@ -153,22 +153,8 @@ use common\widgets\selectwidget\selectWidget;
       
  </div>   
           
-<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-      <?= $form->field($model, 'fvencimiento')->widget(DatePicker::class, [
-                            'language' => h::app()->language,
-                           'pluginOptions'=>[
-                                     'format' => h::gsetting('timeUser', 'date')  , 
-                                   'changeMonth'=>true,
-                                  'changeYear'=>true,
-                                 'yearRange'=>'2014:'.date('Y'),
-                               ],
-                          
-                            //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control',
-                                 'disabled'=>(!$aprobado)?false:true]
-                            ]) ?>
- </div>
-  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+
+  <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
       <?= $form->field($model, 'fecha')->widget(DatePicker::class, [
                             'language' => h::app()->language,
                            'pluginOptions'=>[
@@ -182,6 +168,21 @@ use common\widgets\selectwidget\selectWidget;
                             'options'=>['class'=>'form-control',
                                'disabled'=>(!$aprobado)?false:true  
                                 ]
+                            ]) ?>
+ </div>
+ <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+      <?= $form->field($model, 'fvencimiento')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                     'format' => h::gsetting('timeUser', 'date')  , 
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'2014:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control',
+                                 'disabled'=>(!$aprobado)?false:true]
                             ]) ?>
  </div>
 

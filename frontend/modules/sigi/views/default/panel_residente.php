@@ -153,7 +153,7 @@ use dosamigos\chartjs\ChartJs;
     ]); ?>
     
     <?php 
-    $string1="var v_grid = $('#migrilla');
+    /*$string1="var v_grid = $('#migrilla');
      v_grid.on('kvexprow:beforeLoad', function (event, ind, key, extra) {
           // alert(key);
                Vurl='".Url::to(['/sigi/kardexdepa/ajax-crea-mov','id'=>'parex456'])."';
@@ -179,7 +179,7 @@ use dosamigos\chartjs\ChartJs;
 
 
 });";
-  $this->registerJs($string1, \yii\web\View::POS_END);
+  $this->registerJs($string1, \yii\web\View::POS_END);*/
        ?>  
     
     
