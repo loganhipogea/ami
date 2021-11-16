@@ -1,12 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-
+use frontend\modules\sigi\models\SigiBeneficios;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiCargos */
-
-$this->title = Yii::t('sigi.labels', 'Create Sigi Cargos');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Sigi Cargos'), 'url' => ['index']];
+$esbeneficio=$model instanceof SigiBeneficios;
+$ACCION=($esbeneficio)?'Crear centro beneficio':'Crear concepto';
+$this->title = Yii::t('sigi.labels', $ACCION);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Conceptos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sigi-cargos-create">

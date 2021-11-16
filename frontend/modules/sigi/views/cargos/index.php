@@ -4,11 +4,13 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use frontend\modules\sigi\models\SigiBeneficiosSearch;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\modules\sigi\models\SigiCargosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = Yii::t('sigi.labels', 'Conceptos');
+$esbeneficio=$searchModel instanceof SigiBeneficiosSearch;
+$nomb=$accion=($esbeneficio)?'Beneficios':'Conceptos'; 
+$this->title = Yii::t('sigi.labels', $nomb);
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sigi-cargos-index">
@@ -20,7 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
      <div class="btn-group">  
-        <?= Html::a(Yii::t('sigi.labels', 'Crear Concepto'), ['create'], ['class' => 'btn btn-success']) ?>
+         <?PHP $accion=(!$esbeneficio)?'Crear concepto':'Crear Beneficio'; ?>
+        <?= Html::a(Yii::t('sigi.labels', $accion), ['create'], ['class' => 'btn btn-success']) ?>
        <?php 
        $gridColumns= [
             

@@ -2,18 +2,18 @@
 
 use yii\helpers\Html;
 use kartik\tabs\TabsX;
-
+use frontend\modules\sigi\models\SigiBeneficios;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sta\models\Talleres */
 ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiCargos */
-
-$this->title = Yii::t('sigi.labels', 'Update Sigi Cargos: {name}', [
+$esbeneficio=$model instanceof SigiBeneficios;
+$this->title = Yii::t('sigi.labels', 'Editar: {name}', [
     'name' => $model->codcargo,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cargos'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' =>($esbeneficio)?Yii::t('sigi.labels', 'Centro de beneficio'):Yii::t('sigi.labels', 'Cargos'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');
 ?>

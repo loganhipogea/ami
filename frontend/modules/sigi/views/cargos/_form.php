@@ -13,12 +13,18 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
     'fieldClass'=>'\common\components\MyActiveField'
     ]); ?>
+    
+    
+    
+    
+    
       <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
                 
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Guardar'), ['class' => 'btn btn-success']) ?>
-
+        <?=(!$model->isNewRecord)?common\widgets\auditwidget\auditWidget::widget(['model'=>$model]):''?>
+           
             </div>
         </div>
     </div>
@@ -26,17 +32,14 @@ use yii\widgets\ActiveForm;
     
  
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'codcargo')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'codcargo')->textInput(['maxlength' => true,'disabled'=>(!$model->isNewRecord)?true:false]) ?>
 
  </div>
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'descargo')->textInput(['maxlength' => true]) ?>
 
  </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'esegreso')->checkBox([]) ?>
-
- </div>
+  
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'regular')->checkBox([]) ?>
 

@@ -15,9 +15,10 @@ use Yii;
  *
  * @property SigiCargosedificio[] $sigiCargosedificios
  */
-class SigiCargos extends \common\models\base\modelBase
+class SigiBeneficios extends \common\models\base\modelBase
 {
-   public function behaviors() {
+    
+    public function behaviors() {
         return [
            
             'auditoriaBehavior' => [
@@ -27,7 +28,7 @@ class SigiCargos extends \common\models\base\modelBase
         ];
     }
     
-    
+  
     public $booleanFields=['esegreso','regular'];
     /**
      * {@inheritdoc}
@@ -81,13 +82,13 @@ class SigiCargos extends \common\models\base\modelBase
      */
     public static function find()
     {
-        return new SigiCargosQuery(get_called_class());
+        return new SigiBeneficiosQuery(get_called_class());
     }
     
     public function beforeSave($insert) {
         //yii::error('before ssave ',__FUNCTION__);
         if($insert)
-        $this->esegreso=true;
+        $this->esegreso=false;
         return parent::beforeSave($insert);
     }
     

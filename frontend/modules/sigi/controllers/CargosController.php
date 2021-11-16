@@ -171,6 +171,67 @@ class CargosController extends baseController
          ];
     }
     
+   public function actionIndexBeneficios()
+    {
+        $searchModel = new \frontend\modules\sigi\models\SigiBeneficiosSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    } 
+    public function actionCreaBeneficio()
+    {
+        $model = new \frontend\modules\sigi\models\SigiBeneficios();
+        
+        
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        
+        
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view-beneficio', 'id' => $model->id]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
     
     
+     public function actionUpdateBeneficio($id)
+    {
+        $model = $this->findModelBeneficio($id);
+
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view-beneficio', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+     public function actionViewBeneficio($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModelBeneficio($id),
+        ]);
+    }
+     protected function findModelBeneficio($id)
+    {
+        if (($model = \frontend\modules\sigi\models\SigiBeneficios::findOne($id)) !== null) {
+            return $model;
+        } 
+
+        throw new NotFoundHttpException(Yii::t('sigi.labels', 'The requested page does not exist.'));
+    }
 }

@@ -1,13 +1,13 @@
 <?php
 
 namespace frontend\modules\sigi\models;
-use frontend\modules\sigi\components\ActiveQueryCargo;
+use frontend\modules\sigi\components\ActiveQueryBeneficio;
 /**
  * This is the ActiveQuery class for [[SigiCargos]].
  *
  * @see SigiCargos
  */
-class SigiCargosQuery extends ActiveQueryCargo
+class SigiBeneficiosQuery extends ActiveQueryBeneficio
 {
     /*public function active()
     {
