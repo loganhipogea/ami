@@ -174,14 +174,12 @@ class SigiMovbanco extends \common\models\base\modelBase
     
    
   public function beforeSave($insert) {
-      if($this->tipomov==self::TIPO_MOVIMIENTO_COBRANZA){
+      
           if($insert){
           /*Al iniciar la diferencia es la misma que el monto puesto que no se ha conciliado nada*/
           $this->diferencia=$this->monto;
          }
-      }else{
-         $this->diferencia=0; 
-      }
+      
       
       return parent::beforeSave($insert);
   }

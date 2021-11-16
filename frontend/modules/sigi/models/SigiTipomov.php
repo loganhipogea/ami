@@ -17,14 +17,14 @@ class SigiTipomov extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codigo','descripcion','signo','edificio_id'], 'required'],
+            [['codigo','descripcion','signo'], 'required'],
            
             [['codigo'], 'string', 'max' => 3],
              [['concicliable','signo'], 'safe'],
             [['descripcion'], 'string', 'max' => 40],
             [['codigo'], 'unique'],
-             [['edificio_id'], 'safe'],
-             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
+            // [['edificio_id'], 'safe'],
+             //[['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
         ];
     }
 

@@ -48,12 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
          
          
          
-            ['attribute'=>'edificio_id',
-                'filter'=> comboHelper::getCboEdificios(),
-                'value'=>function($model){
-                    return $model->edificio->nombre;         
-                  }
-                ],            
+                      
             'codigo',
             'descripcion',
                         [

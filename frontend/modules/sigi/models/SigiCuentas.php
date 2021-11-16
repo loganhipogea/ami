@@ -4,6 +4,7 @@ namespace frontend\modules\sigi\models;
 use common\models\masters\Bancos;
 use common\models\masters\Monedas;
 use common\models\masters\Clipro;
+use frontend\modules\sigi\models\SigiMovbanco;
 use Yii;
 
 /**
@@ -35,7 +36,10 @@ class SigiCuentas extends \common\models\base\modelBase
         return '{{%sigi_cuentas}}';
     }
 
-    
+    public $dateorTimeFields = [
+        'fecult' => self::_FDATE,
+       // 'enviado'=>self::_FDATETIME
+    ];
      public function behaviors()
          {
                 return [
@@ -59,7 +63,7 @@ class SigiCuentas extends \common\models\base\modelBase
             [['tipo', 'codmon',  'nombre', 'numero', 'banco_id', 'edificio_id'], 'required'],
             [['banco_id', 'edificio_id'], 'integer'],
             [['detalles', 'indicaciones', 'indicaciones2'], 'string'],
-             [['cci','saldo'], 'safe'],
+             [['cci','saldo','fecult'], 'safe'],
             [['cci'], 'string', 'max' => 100],
             [['tipo'], 'string', 'max' => 3],
             [['codmon'], 'string', 'max' => 5],
@@ -137,13 +141,11 @@ class SigiCuentas extends \common\models\base\modelBase
     }
     
     
-    public function updateSaldo($montoMov,$replace=false){
-        if($replace){
-           $this->saldo=$montoMov;
-        }else{
-           $this->saldo=$this->saldo+$montoMov; 
-               
-        }
+    public function updateSaldo($monto,$fecha){
+       
+           $this->saldo=$this->saldo+$monto; 
+             $this->fecult=self::SwichtFormatDate($this->$fecha,'date', true);   
+        
         
         return $this->save();
     }
