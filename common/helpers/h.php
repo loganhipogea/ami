@@ -44,6 +44,10 @@ class h {
         return yii::$app->periodo;
     }
     
+    public static function  formato(){
+        return yii::$app->formatter;
+    }
+    
     public static function  session(){
         return yii::$app->session;
     }

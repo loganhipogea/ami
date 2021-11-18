@@ -144,7 +144,16 @@ class SigiCuentas extends \common\models\base\modelBase
     public function updateSaldo($monto,$fecha){
        
            $this->saldo=$this->saldo+$monto; 
-             $this->fecult=self::SwichtFormatDate($this->$fecha,'date', true);   
+           $fecha_cruda=$fecha;
+           /*
+            * Siempre que $fecha sea mayor que
+            * el valor de la fecha actual $this->fecult
+            * ESTO PORQUE puede tratarse de un update
+            * del monto de un movimiento del banco con fecha atrasada
+            * ene ste caso solo actualkziar el saldo, y no l a fecha 
+            */
+           if($this->toCarbon('fecult')->lt(\Carbon\Carbon::createFromFormat(\common\helpers\timeHelper::formatMysqlDate(), $fecha_cruda)))
+             $this->fecult=self::SwichtFormatDate($fecha,'date', true);   
         
         
         return $this->save();

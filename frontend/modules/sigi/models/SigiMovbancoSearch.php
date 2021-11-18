@@ -18,7 +18,7 @@ class SigiMovbancoSearch extends SigiMovbanco
     {
         return [
             [['id',  'edificio_id', 'cuenta_id', ], 'integer'],
-            [['fopera','fopera1','fval1', 'fval', 'tipomov', 'descripcion', 'monto','diferencia','monto_conciliado'], 'safe'],
+            [['fopera','fopera1','fval1', 'fval',  'descripcion', 'monto','diferencia','monto_conciliado'], 'safe'],
             [['monto'], 'number'],
         ];
     }
@@ -64,7 +64,7 @@ class SigiMovbancoSearch extends SigiMovbanco
             'edificio_id' => $this->edificio_id,
             'cuenta_id' => $this->cuenta_id,
            // 'monto' => $this->monto,
-            'tipomov' => $this->tipomov,
+            //'tipomov' => $this->tipomov,
            // 'monto_usd' => $this->monto_usd,
            // 'user_id' => $this->user_id,
         ]);

@@ -83,17 +83,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Movimientos'
                 // 'group'=>true,   
             ],
          'fopera',
-         'descripcion',
-         [
-                'attribute'=>'tipomov',
-                //'filter'=>frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
-                'value' => function($model) { 
-                        //var_dump($model);die();
-                        //return $model->tipomov;
-                        return $model->tipoMov->descripcion ;
-                         },
-                 //'group'=>true,   
-            ],
+         'descripcion',        
            'monto',
             'monto_conciliado',  
             'diferencia',

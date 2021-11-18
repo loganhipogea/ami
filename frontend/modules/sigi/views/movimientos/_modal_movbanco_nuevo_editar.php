@@ -47,7 +47,8 @@ use common\widgets\selectwidget\selectWidget;
     
    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> 
     <?= ComboDep::widget([
-               'model'=>$model,               
+               'model'=>$model, 
+             'inputOptions'=>['disabled'=>$model->hasChilds()],
                'form'=>$form,
                'data'=> ComboHelper::getCboEdificios(),
                'campo'=>'edificio_id',
@@ -102,22 +103,14 @@ use common\widgets\selectwidget\selectWidget;
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>(!$nuevo)?'disabled':null,
                       //'disabled'=>(!$nuevo)?'disabled':null,
+                      'disabled'=>$model->hasChilds()
                         ]
                     ) ?>
   
      </div>          
  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"> 
       
-           <?php
-            $data=($model->isNewRecord)?[]:comboHelper::getCboTipoMov($model->edificio_id);
-          // print_r(\frontend\modules\sigi\helpers\comboHelper::getCboTipoMov());die();
-           echo $form->field($model, 'tipomov')->
-            dropDownList($data,
-                  ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
-                    // 'class'=>'probandoSelect2',
-                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                        ]
-                    ) ?>
+          
       
  </div>         
           
@@ -134,7 +127,7 @@ use common\widgets\selectwidget\selectWidget;
                                ],
                           
                             //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control']
+                            'options'=>['class'=>'form-control','disabled'=>$model->hasChilds()]
                             ]) ?>
  </div>
   

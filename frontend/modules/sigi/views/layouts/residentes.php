@@ -29,107 +29,201 @@ use yii\widgets\ActiveForm;
         <?= Html::csrfMetaTags() ?>
         
         
-         <?php $this->registerCssFile("@web/css/residentes/assets/css/theme.css"); ?>
-        <?php //$this->registerjsFile("@web/js/residentes/jquery.js",['position'=>View::POS_END]); ?>
+         <?php $this->registerCssFile("@web/css/residentes/blanco/bnpsite.css"); ?>
+         <?php $this->registerCssFile("@web/css/residentes/blanco/default.ultimate.css"); ?>
+         <?php $this->registerCssFile("@web/css/residentes/blanco/dropdown.css"); ?>
+         <?php $this->registerCssFile("@web/css/residentes/blanco/jcstyle.css"); ?>
+             <?php //$this->registerjsFile("@web/js/residentes/jquery.js",['position'=>View::POS_END]); ?>
           <?php //$this->registerjsFile("@web/js/residentes/vendors/@popperjs/popper.min.js",['position'=>View::POS_END]); ?>
           <?php //$this->registerjsFile("@web/js/residentes/is/is.min.js",['position'=>View::POS_END]); ?>
          <?php //$this->registerjsFile("@web/js/residentes/vendors/bootstrap/bootstrap.min.js",['position'=>View::POS_END]); ?>
          <?php //$this->registerjsFile("@web/js/residentes/vendors/is/is.min.js",['position'=>View::POS_END]); ?>
           <?php //$this->registerjsFile("@web/js/residentes/theme.js",['position'=>View::POS_END]); ?>
-       <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicons/favicon-16x16.png">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicons/favicon.ico">
-    <link rel="manifest" href="assets/img/favicons/manifest.json">
-    <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
-    <meta name="theme-color" content="#ffffff">
 
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">  
-        
+   
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-   <body >
+   <body bgcolor="#ffffff" style="margin:auto">
        
- <?php $this->beginBody() ?>
- <?php $opcion=$this->context->action->id; ?>
-     <main class="main" id="top">
-      <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" data-navbar-on-scroll="data-navbar-on-scroll">
-        <div class="container"><a class="navbar-brand d-flex align-items-center fw-semi-bold fs-3" href="index.html"> <img class="me-3" src="assets/img/gallery/logo.png" alt="" /></a>
-          <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-          <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-auto pt-2 pt-lg-0 font-base">
-              <?php if($opcion !='panel-residente') { ?>
-              <li class="nav-item px-2" data-anchor="data-anchor"><?=Html::a('Inicio',Url::to(['/sigi/default/panel-residente']), ['class'=>"nav-link  fw-medium active"]) ?></li>
-              <?php } ?>
-              <?php if($opcion !='resi-factu') { ?>
-              <li class="nav-item px-2" data-anchor="data-anchor"><?=Html::a('Facturación',Url::to(['/sigi/default/resi-factu']), ['class'=>"nav-link"]) ?></li>
-              <?php } ?>
-              <li class="nav-item px-2" data-anchor="data-anchor"><a class="nav-link" href="#services">Consumo de agua </a></li>
-              <li class="nav-item px-2" data-anchor="data-anchor"><a class="nav-link" href="#testimonial">Documentos</a></li>
-              <li class="nav-item px-2" data-anchor="data-anchor">
-                <?PHP ActiveForm::begin(['class'=>"ps-lg-5",'action'=>['/site/logout']]); ?>
-            
-                    <button class="btn btn-outline-primary order-0" type="submit">SALIR</button>
-                <?PHP ActiveForm::end(); ?>
-              </LI>
-              <li class="nav-item px-2" data-anchor="data-anchor">
-               
-              </LI>
-            </ul>
-          </div>
-        </div>
-      </nav>
-       
-
-        <?= $content ?>
-
-     
-
-
-      <!-- ============================================-->
-      <!-- <section> begin ============================-->
-      <section id="fixed-bar-pie" class="py-0 bg-primary">
-
-        <div class="container">
-          <div class="row justify-content-between pb-2 pt-8">
-            
-            <div class="col-auto mb-4 d-flex align-items-end">
-              <ul class="list-unstyled list-inline mb-0">
-                <li class="list-inline-item me-3"><a class="text-decoration-none" href="#!">
-                    <svg class="bi bi-facebook" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 16 16">
-                      <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"> </path>
-                    </svg></a></li>
-                <li class="list-inline-item me-3"><a href="#!">
-                    <svg class="bi bi-twitter" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 16 16">
-                      <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"></path>
-                    </svg></a></li>
-                <li class="list-inline-item me-3"><a href="#!">
-                    <svg class="bi bi-instagram" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 16 16">
-                      <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"> </path>
-                    </svg></a></li>
-              </ul>
-            </div>
-          </div>
-          
-        </div><!-- end of .container-->
-
-      </section>
-      <!-- <section> close ============================-->
-      <!-- ============================================-->
-
-
-
-    <!-- ===============================================-->
-    <!--    End of Main Content-->
-    <!-- ===============================================-->
-
-     </MAIN>
-
+    <?php $this->beginBody() ?>
+          <table border="0" cellpadding="0" cellspacing="0" width="1100" align="center" style="position:relative;background:#FFF;" >
+               <tr>     
+                    <td colspan="3">
+			<div id="head">
+			      <div id="div_head"></div>
+                <!-- opciones superiores head -->
+                        <div id="mnu_sup">
+                           <a href="index.php">
+                               <div id="bnpslogo" style="width: 265px;
+                                    height: 88px;                                  
+                                    float: left;
+                                    margin-top: 10px;
+}                                   ">
+                                  LOGO 
+                               </div>
+                                    <div style="height:21px;width:215px;float:left;position:absolute;z-index:60;margin-top:28px;margin-left:93px;font-family: 'trebuchet ms', geneva;font-size: x-large; color: #999999;">
+                                        C. RESIDENCIAL PARQUE SAN MARTIN
+                                    </div>
+                           </a>    
+                         <div id="div_intra">
+                                       
+                            <div id="div_login" align="left"> 
+                                   Aqui nombre de usuario
+                              <div id='logeado'>
+                                  <table border='0' width='90%' align='center' cellpadding='0' cellspacing='0'>
+                                        <tr>
+                                                <td width='4%'>&nbsp;</td>
+                                                <td width='96%'>
+                                                <strong> </strong>
+                                                </td>
+                                          </tr>
+			
+                                            <tr>
+                                                <td height='20'>&nbsp;</td>
+                                                <td>EFREN GROVER CABRERA VITO / Maria Isabel Llacsahuanga Romero </td>
+                                            </tr>
+			
+                                            <tr>
+                                                <td height='20' align='center'>&nbsp;</td>
+                                                <td align='center'>
+                                                <input type='button' name='salir' id='salir' value='' onclick='location.href="bnpssalirw.php"' style='cursor:pointer' />
+                                                </td>
+                                            </tr>
+			
+                                            <tr>
+                                                <td height='12' colspan='2' align='center' valign='middle' ><div class='linea'></div></td>
+                                            </tr>
+			
+                                            <tr>
+                                                <td height='18'></td>
+                                                <td><a href='#' onclick='mostrar_ocultar_capa("logeado","clave")'></a></td>
+                                            </tr>
+			
+                                            <tr>
+                                                <td height='12' colspan='2' align='center' valign='middle'><div class='linea'></div></td>
+                                            </tr>
+                                  </table>
+                                      
+                              </div>
+                                         
+               </div>	
+                          
+           </div>
+                        <!-- fin opciones sup -->         
+      </div>
+                
+                            
+			           <div id="nombre_logeo">EFREN GROVER CABRERA VITO / Maria Isabel Llacsahuanga Romero &nbsp;
+                            <span style=" text-align:right;"><a href="bnpssalirw.php" title="Cerrar Sessi&oacute;n" id="Salir"  style="color:#C81D15; text-align:right;">[ Cerrar Sesi&oacute;n ]</a></span>
+                            &nbsp;
+                            <span style=" text-align:right;"><a href="javascript:;" title="Cambiar Clave" id="cclave"  style="color:#696063; text-align:right;">[ Cambiar Clave ]</a></span>
+                            <div id="div_cambioclave" align="left"> 
+                        	
+                <div id="cambiocla">
+                  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" >
+                       <tr>
+                            <td height="25">&nbsp;</td>
+                            <td valign="bottom"><span >Clave anterior</span></td>
+                        </tr>
+                        <tr>
+                            <td width="192"><strong>&nbsp;&nbsp;&nbsp;</strong></td>
+                            <td width="381"><input type="password" name="txtV1" id="txtV1" size="25" maxlength="20" />                    </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><span >Nueva clave</span></td>
+                        </tr>
+                        <tr>
+                            <td width="192"><strong>&nbsp;&nbsp;&nbsp;</strong></td>
+                            <td><input name="txtV2" type="password" id="txtV2" size="25" maxlength="16"  />                    </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>Verificar clave</td>
+                	</tr>
+                        <tr>
+                  	<td>&nbsp;</td>
+                  	<td><input name="txtV3" type="password" id="txtV3" size="25" maxlength="16"  /></td>
+                	</tr>
+                  <tr>
+                    <td colspan="2"><div id="mensajex" align="center">&nbsp;</div></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" align="center">&nbsp;&nbsp;
+                    <input type="button" value="Cambiar" onclick="grabar_nuevaClave('bnpscamcla.php');" class="boton_login"/>
+				    <input type="button" class="boton_login" onclick="limpiarCamposCamCla();" id="btnCerrar2" value="Cancelar"  style="cursor:pointer; margin-left:5px"/></td>
+                  </tr>
+                  <tr>
+                  	<td colspan="2" align="center">&nbsp;</td>
+                	</tr>
+                  <tr>
+                    <td colspan="2" align="center"></td>
+                  </tr>
+                            </table>
+                            </div>
+             
+                            </div>
+						</div>
+                        
+                                   
+             
+			</td>
+              </tr>
+      <!-- INICIO DEL MENU -->
+              <tr>
+                        <td colspan="3">
+                            <div id="div_fndmnu">
+                                <img src="imagen/bnplineasup.jpg" width="1100px"/>
+                                      <ul id='nav' class='dropdown'>
+                                          <li id='otros'>
+                                           <a href='index.php?opc=998' class='seleccionado'>INICIO</a>
+                                          </li>
+                                          <li>
+                                            <a href='bnpscontenido.php?id_cont=&opc=1'  >REGLAMENTOS</a>                                          
+                                                <ul>
+                                                    <li>
+                                                        <a href='bnpscontenido.php?id_cont=3&opc=1'  >Reglamentos y Estatutos</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href='bnpscontenido.php?id_cont=4&opc=1'  >Junta Directiva</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href='bnpscontenido.php?id_cont=6&opc=1'  >Acuerdos de Asamblea</a>
+                                                    </li>
+                                                </ul>
+                                         </li>
+                                         <li>
+                                                 <a href='bnpscontenido.php?id_cont=&opc=4'  >DEL EDIFICIO</a>
+                                                  <ul>
+                                                      <li>
+                                                          <a href='bnpscontenido.php?id_cont=1&opc=4'  >Balance de Ingresos y Gastos</a>
+                                                      </li>
+                                                      <li>
+                                                          <a href='bnpscontenido.php?id_cont=70&opc=4'  >Comunicados Enviados</a>
+                                                      </li>
+                                                      <li>
+                                                          <a href='bnpscontenido.php?id_cont=67&opc=4'  >Normas de Convivencia</a>
+                                                      </li>
+                                                      <li><a href='bnpscontenido.php?id_cont=2&opc=4'  >Recibo de Mantenimiento</a>
+                                                      </li>
+                                                      <li><a href='bnpscontenido.php?id_cont=4&opc=4'  >Presupuestos</a>
+                                                      </li>
+                                                  </ul>
+                                         </li>
+                                        <li>
+                                           <a href='#'  >DOCUMENTOS</a>
+                                         </li>
+                                        <li id='otros2'>
+                                             <a href='bnpscontactenos.php?opc=999' >CONT&Aacute;CTENOS</a>
+                                         </li>
+                                      </ul>
+                               </div>
+                        </td>
+                    </tr>
+          </table>
     <?php $this->endBody() ?>
-    </body>
+  </body>
     </html>
     <?php $this->endPage() ?>
 

@@ -247,12 +247,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
       self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
       $this->sincronizeStatus($insert);
       
-      if($insert && $this->movBanco->tipoMov->isCobranza){
-         // $this->ingreso=self::G_GRUPO_INGRESOS;
-      }
-      if($insert && $this->movBanco->tipoMov->isPago){
-         // $this->ingreso=self::G_GRUPO_EGRESOS;
-      }
+      
     //  var_dump($this->kardex_id,$this->kardex->monto);die();
       //Le sumamos el monto actual, porque aun no graba
      // $this->diferencia=$this->kardex->monto-($this->cancelado()+$this->monto);       
@@ -324,8 +319,8 @@ public function refreshAttachment(){
 }
   
 public function validate_monto($attribute,$params){
-    if(($this->movBanco->tipoMov->signo > 0 && $this->movBanco->monto < 0) or
-     ($this->movBanco->tipoMov->signo < 0 && $this->movBanco->monto > 0) )
+    if(($this->movBanco->monto >= 0 && $this->monto < 0) or
+     ($this->movBanco->monto < 0 && $this->monto > 0) )
       $this->addError($attribute,yii::t('base.labels','{monto} Este monto no tiene el signo que corresponde al movimiento',['monto'=>$this->monto]));
     
   }

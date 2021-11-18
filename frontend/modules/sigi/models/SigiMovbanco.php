@@ -22,9 +22,7 @@ class SigiMovbanco extends \common\models\base\modelBase
    
     const SCE_IMPORTACION='importacion';
     const SCE_CORTE='corte';
-      const TIPO_NORMAL='N';
-       const TIPO_MOVIMIENTO_COBRANZA='10';
-      const TIPO_CORTE='C'; //MOVIMIENTO PARA HACER UN CORTE
+     
     public $fopera1=null;
         public $fval1=null;
      public $dateorTimeFields = [
@@ -48,27 +46,27 @@ class SigiMovbanco extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['cuenta_id', 'edificio_id', 'fopera', 'monto','tipomov'], 'required'],
+            [['cuenta_id', 'edificio_id', 'fopera', 'monto'], 'required'],
             [['cuenta_id', 'edificio_id', 'noper'], 'integer'],
             [['monto'], 'number'],
              [['monto'],'validate_monto'],
             ['monto', 'unique', 'targetAttribute' => 
-                 ['cuenta_id','edificio_id', 'fopera','monto','tipomov'],
+                 ['cuenta_id','edificio_id', 'fopera','monto'],
               'message'=>yii::t('sta.errors',
-                      'Esta combinacion de valores {monto}-{tipomov}-{fopera} ya existe',
+                      'Esta combinacion de valores {monto}-{fopera} ya existe',
                       ['monto'=>$this->getAttributeLabel('monto'),
-                        'tipomov'=>$this->getAttributeLabel('tipomov'),
+                        //'tipomov'=>$this->getAttributeLabel('tipomov'),
                           'fopera'=>$this->getAttributeLabel('fopera'),
                           //'codcar'=>$this->getAttributeLabel('codcar')
                           ]
                       )
                 ],
-             [['tipomov','cuenta_id','monto','descripcion','monto_conciliado','diferencia','detalle'], 'safe'],
+             [['cuenta_id','monto','descripcion','monto_conciliado','diferencia','detalle'], 'safe'],
             //[['fopera', 'fval'], 'string', 'max' => 10],
             [['descripcion'], 'string', 'max' => 30],
             [['cuenta_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCuentas::className(), 'targetAttribute' => ['cuenta_id' => 'id']],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
-             [['tipomov'], 'exist', 'skipOnError' => true, 'targetClass' => SigiTipomov::className(), 'targetAttribute' => ['tipomov' => 'codigo']],
+             //[['tipomov'], 'exist', 'skipOnError' => true, 'targetClass' => SigiTipomov::className(), 'targetAttribute' => ['tipomov' => 'codigo']],
         ];
     }
 
@@ -90,11 +88,11 @@ class SigiMovbanco extends \common\models\base\modelBase
     }
 
     public function scenarios() {
-        $scenarios = parent::scenarios();
-        $scenarios[self::SCE_IMPORTACION] = [ 'cuenta_id', 'edificio_id', 'fopera', 'monto', 'noper', 'descripcion','tipomov'];
-         $scenarios[self::SCE_CORTE] = [ 'cuenta_id', 'edificio_id', 'fopera','monto',  'descripcion'];
+            $scenarios = parent::scenarios();
+            $scenarios[self::SCE_IMPORTACION] = [ 'cuenta_id', 'edificio_id', 'fopera', 'monto', 'noper', 'descripcion'];
+            $scenarios[self::SCE_CORTE] = [ 'cuenta_id', 'edificio_id', 'fopera','monto',  'descripcion'];
         
-        return $scenarios;
+            return $scenarios;
     }
     
     /**
@@ -113,10 +111,10 @@ class SigiMovbanco extends \common\models\base\modelBase
         return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
     }
 
-     public function getTipoMov()
+     /*public function getTipoMov()
     {
         return $this->hasOne(SigiTipomov::className(), ['codigo' => 'tipomov']);
-    }
+    }*/
     /**
      * {@inheritdoc}
      * @return SigiMovbancoQuery the active query used by this AR class.
@@ -145,9 +143,9 @@ class SigiMovbanco extends \common\models\base\modelBase
      */
     public function montoConciliado(){
       // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
-        if($this->tipoMov->isCobranza){
+        if($this->monto >=0){
             return $this->getMovimientosDetalle()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar();
-        }elseif($this->tipoMov->isPago){
+        }elseif($this->monto < 0){
            return abs($this->getMovimientosDetallePago()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar()); 
         }else{
             
@@ -156,19 +154,18 @@ class SigiMovbanco extends \common\models\base\modelBase
     }
     
     public function refreshMonto(){
-         if($this->tipoMov->conciliable){
+            $signo=($this->monto >=0)?1:-1;
              //echo "salio"; die();
-                $this->monto_conciliado=$this->tipoMov->signo*abs($this->montoConciliado());
+                $this->monto_conciliado=$signo*abs($this->montoConciliado());
                 //var_dump($this->monto_conciliado);die();
-                $this->diferencia=$this->tipoMov->signo*(abs($this->monto)-abs($this->monto_conciliado));
+                $this->diferencia=$signo*(abs($this->monto)-abs($this->monto_conciliado));
                 /*Update All para no despertar el disparador*/
                 $this->updateAll([
                     'diferencia'=>$this->monto-$this->monto_conciliado,
                     'monto_conciliado'=>$this->monto_conciliado,
                         ],
                 ['id'=>$this->id]);
-         }
-      // return $this->save();
+         
        return true;
     }
     
@@ -188,20 +185,20 @@ class SigiMovbanco extends \common\models\base\modelBase
   public function afterSave($insert, $changedAttributes) {
       if($insert){
           //aplicamos la transaccion
-         $this->cuenta->updateSaldo($this->monto);
+         $this->cuenta->updateSaldo($this->monto,$this->fopera);
       }else{
           if(in_array('monto', array_keys($changedAttributes))){
-           $this->cuenta->updateSaldo($this->monto-$changedAttributes['monto']);   
+           $this->cuenta->updateSaldo($this->monto-$changedAttributes['monto'],$this->fopera);   
           }      }      
       return parent::afterSave($insert, $changedAttributes);
   }
   
   
   public function validate_monto($attribute,$params){
-    if(($this->tipoMov->signo > 0 && $this->monto < 0) or
+    /*if(($this->monto > 0 && $this->monto < 0) or
      ($this->tipoMov->signo < 0 && $this->monto > 0) )
       $this->addError('monto',yii::t('base.labels','{monto} Este monto no tiene el signo que corresponde al movimiento',['monto'=>$this->monto]));
-    
-   
+    */
+   return true;
   } 
 }

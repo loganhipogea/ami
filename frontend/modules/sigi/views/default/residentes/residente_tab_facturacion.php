@@ -41,7 +41,7 @@ echo ModalAjax::widget([
          'summary' => '',
          //'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'columns' => [
-               /*[
+               [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}{recibo}{clip}',
                 'buttons' => [
@@ -74,7 +74,7 @@ echo ModalAjax::widget([
                          }        
                       
                     ]
-                ],*/
+                ],
              
             
              [

@@ -300,13 +300,11 @@ public function actionAjaxShowConc(){
         
         
         
-        if($model->tipoMov->isCobranza){
+        if($model->monto >=0){
              return $this->renderAjax("_expand_row_detalle_conc",['id'=>$id]);
-        }elseif($model->tipoMov->isPago){
+        }else{
              return $this->renderAjax("_expand_row_detalle_conc_pagos",['id'=>$id]);
       
-        }else{
-            echo "Este movimiento no es conciliable";
         }
        // var_dump(h::request()->post(),$id);die();
          //h::response()->format = \yii\web\Response::FORMAT_JSON;

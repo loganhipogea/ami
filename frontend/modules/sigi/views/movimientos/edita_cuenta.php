@@ -14,14 +14,14 @@ use common\widgets\auditwidget\auditWidget;
 /* @var $model frontend\modules\sigi\models\SigiCuentaspor */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<?php $this->title = Yii::t('sigi.labels', 'Editar cuenta: {numero}', [
+<?php $this->title = Yii::t('sigi.labels', 'Detalle cuenta: {numero}-{nombre}', [
     'numero' => $model->numero,
+    'nombre' => $model->nombre,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), 'url' => ['cuentas-bancarias']];
 
 ?>
-<br>
-<br>
+
 <h4><i class="fa fa-edit"></i><?= Html::encode($this->title) ?></h4>
  
 <div class="box box-succes">
@@ -48,27 +48,25 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), '
         </div>
     </div>
       <div class="box-body">
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <?= $form->field($model, 'nombre')->textInput(['value'=>$model->edificio->nombre,'disabled' => true])->label('Edificio')?>
 
      </div> 
-   <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
      <?= $form->field($model, 'nombre')->textInput(['value'=>$model->banco->nombre,'disabled' => true])->label('Banco')?>
    </div> 
      
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-                <h4>Saldo </h4>
+                <h3>Saldo </h3>
               <h3>
                   <?php Pjax::begin(['id'=>'grilla_billete','timeout'=>false]);  ?>     
                        <?=$model->moneda->simbolo.'  '.Yii::$app->formatter->asDecimal($model->saldo,3)?>
                    <?php Pjax::end();  ?> 
               </h3>
 
-              <br>
-              <br>
             </div>
             <div class="icon">
                 <span style="color:black;opacity:0.3;"><i class="fa fa-money"></i></span>
@@ -76,11 +74,15 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), '
             
           </div>
   </div>
-     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
      <?= $form->field($model, 'nombre')->textInput(['value'=>$model->clipro->despro,'disabled' => true])->label('Titular')?>
    </div>     
- 
-     
+ <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'numero')->textInput(['disabled' => true])?>
+   </div> 
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'cci')->textInput(['disabled' => true])?>
+   </div>  
     <?php ActiveForm::end(); ?>
 
           
@@ -106,13 +108,15 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Cuentas'), '
         'columns' => [  
             'id',
             'fopera',
-            'tipomov',
+            'descripcion',
+            'noper',
            [
                 'attribute'=>'monto',
+                'contentOptions'=>['style'=>'text-align:right;'],
                 //'filter'=>frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                 'value' => function($model) { 
                         //var_dump($model);die();
-                        return $model->monto ;
+                        return h::formato()->asDecimal($model->monto,2) ;
                          },
                    
             ],

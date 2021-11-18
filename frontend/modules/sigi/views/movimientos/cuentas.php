@@ -59,16 +59,24 @@ $this->params['breadcrumbs'][] = $this->title;
                }
                ],
             [    'attribute'=>'codmon',
+                 'contentOptions'=>['style'=>'width:10%;'],
                'value'=>function($model){
                         return $model->codmon;
                }
                ],
              [    'attribute'=>'saldo',
+                   'format'=>'html',
+                    'contentOptions'=>['style'=>'text-align:right;'],
                'value'=>function($model){
-                        return $model->saldo;
+                     $valor=yii::$app->formatter->asDecimal($model->saldo,2)  ;
+                        return '<span style="font-size:14px;font-weight:bold;color:red;">'.$valor.'</span>';
                }
                ],
-             
+             [    'attribute'=>'fecult',
+               'value'=>function($model){
+                        return $model->fecult;
+               }
+               ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

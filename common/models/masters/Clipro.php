@@ -55,7 +55,7 @@ class Clipro extends \common\models\base\modelBase
         return [
             [['despro', 'rucpro'], 'required'],
             [['deslarga'], 'string'],
-            [['cci', 'codbacno','cuenta'], 'required'],
+            [['cci', 'codbanco','cuenta'], 'safe'],
             //[['codpro'], 'string', 'max' => 6],
             [['despro'], 'string', 'max' => 60],
             [['rucpro', 'telpro'], 'string', 'max' => 15],

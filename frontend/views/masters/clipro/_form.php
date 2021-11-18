@@ -31,24 +31,35 @@ use common\models\masters\Direcciones;
     </div>
     <div class="box-body">
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <?= $form->field($model, 'codpro')->textInput(['disabled'=>'disabled','maxlength' => true]) ?>
+            <?= $form->field($model, 'codpro')->textInput(['disabled'=>'disabled','maxlength' => true]) ?>
     </div>
        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <?= $form->field($model, 'rucpro',['enableAjaxValidation'=>true])->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'rucpro',['enableAjaxValidation'=>true])->textInput(['maxlength' => true]) ?>
       </div>
          <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <?= $form->field($model, 'telpro')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'telpro')->textInput(['maxlength' => true]) ?>
          </div>
-        
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <?= $form->field($model, 'codbanco',['enableAjaxValidation'=>true])->textInput(['maxlength' => true]) ?>
+      </div>
+         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <?= $form->field($model, 'cci')->textInput(['maxlength' => true]) ?>
+         </div> 
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <?= $form->field($model, 'cuenta')->textInput(['maxlength' => true]) ?>
+         </div>
+         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <?= $form->field($model, 'codmon')->textInput(['maxlength' => true]) ?>
+         </div>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-    <?= $form->field($model, 'despro')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'despro')->textInput(['maxlength' => true]) ?>
     </div>
        
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-    <?= $form->field($model, 'web')->textInput(['maxlength' => true]) ?>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <?= $form->field($model, 'web')->textInput(['maxlength' => true]) ?>
           </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <?= $form->field($model, 'deslarga')->textarea(['rows' => 6]) ?>
+                    <?= $form->field($model, 'deslarga')->textarea(['rows' => 6]) ?>
         </div>
    </div>
     
