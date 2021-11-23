@@ -4,6 +4,7 @@ use kartik\grid\GridView;
 //use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+use common\helpers\h;
 use common\helpers\timeHelper;
 use miloschuman\highcharts\Highcharts;
 use miloschuman\highcharts\HighchartsAsset;
@@ -11,7 +12,7 @@ use dosamigos\chartjs\ChartJs;
 use lo\widgets\modal\ModalAjax;
 ?>
 <div class="box box-body">
-    <h4>Recibos emitidos</h4>
+    <h4>Usted tiene una deuda de :  <?=h::formato()->asDecimal($deuda, 2)   ?></h4>
 <?php
 
 
@@ -31,17 +32,34 @@ echo ModalAjax::widget([
  
  Pjax::begin(['id'=>'grilla-recibos']); ?>
     
+    <?php
+      $showResumen=false;
+            
+      if(array_key_exists('SigiKardexdepaSearch', $params))
+      if(array_key_exists('cancelado', $params['SigiKardexdepaSearch'])){
+         if($params['SigiKardexdepaSearch']['cancelado']=='0') 
+         $showResumen=true; 
+      }
+      
+     $searchModel = new frontend\modules\sigi\models\SigiKardexdepaSearch();
+     $dataProvider=$searchModel->searchByResi($unidad->id,$params);
+    
+    ?>
+    
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
     <?= GridView::widget([
         'id'=>'migrilla',
-        'dataProvider' =>NEW 
-        \yii\data\ActiveDataProvider([
+        'dataProvider' =>$dataProvider, 
+        /*\yii\data\ActiveDataProvider([
             'query'=> frontend\modules\sigi\models\SigiKardexdepa::find()->andWhere(['unidad_id'=>$unidad->id,'aprobado'=>'1','historico'=>'0']),
-        ]),
+        ]),*/
          'summary' => '',
+         'showPageSummary'=>$showResumen,
+        'pageSummaryRowOptions'=>['style'=>'text-align:right'],
+         'filterModel' => $searchModel,
          //'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'columns' => [
-               [
+               /*[
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}{recibo}{clip}',
                 'buttons' => [
@@ -74,7 +92,7 @@ echo ModalAjax::widget([
                          }        
                       
                     ]
-                ],
+                ],*/
              
             
              [
@@ -87,20 +105,39 @@ echo ModalAjax::widget([
                     //'headerOptions' => ['class' => 'kartik-sheet-style'], 
                     'expandOneOnly' => true
                 ],
+              ['attribute'=>'cancelado',
+                'format' => 'raw',
+                'filter'=> ['1'=>'Cancelado','0'=>'Pendiente'],
+                 'value' => function ($model) {
+                    return \yii\helpers\Html::checkbox('cancelado[]', $model->cancelado, [ 'disabled' => true]);
+
+                            },
+             ],
             'fecha',
              ['attribute'=>'mes',
+                 'format'=>'raw',
+                'filter'=> timeHelper::cboMeses(),
                 'value'=>function($model){
-                   return timeHelper::mes($model->mes);            
+                     if($model->hasAttachments())
+                       return Html::a(timeHelper::mes($model->mes),$model->files[0]->url,['data-pjax'=>'0']); 
+                        return timeHelper::mes($model->mes); 
                 } 
              ],   
               // 'nombre',   
            
-            /*['attribute'=>'montodepa',
-                'header'=>'Monto',
-                'format' => ['decimal', 3],
+            ['attribute'=>'monto',
+                'header'=>'Monto Fact',
+                'format' => ['decimal', 2],
+                'pageSummary' => true,
                 'contentOptions'=>['align'=>'right'],  
-             ],*/
-              'monto',       
+             ],
+            ['attribute'=>'monto',
+                'header'=>'Deuda',
+                'format' => ['decimal', 2],
+                'pageSummary' => true,
+                'contentOptions'=>['align'=>'right'],  
+             ],
+              //'monto',       
                      
              /* 'descripcion', [
     'attribute' => 'activo',

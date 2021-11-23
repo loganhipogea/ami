@@ -12,7 +12,7 @@ class AppAssetPlataforma extends AssetBundle
     public $baseUrl = '@web';
      public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $css = [
-        'css/residentes/light_tema/slick.css',
+        //'css/residentes/light_tema/slick.css',
        // 'css/app.css',
         //'css/site.css',
         
@@ -27,7 +27,7 @@ class AppAssetPlataforma extends AssetBundle
     public $depends = [
         'yii\web\JqueryAsset',
          'yii\web\YiiAsset',
-        //'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap\BootstrapAsset',
        // '\rmrevin\yii\fontawesome\AssetBundle'
     ];
 }

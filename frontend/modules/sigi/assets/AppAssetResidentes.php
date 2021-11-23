@@ -13,13 +13,15 @@ class AppAssetResidentes extends AssetBundle
      public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $css = [
        // 'css/app.css',
-        'css/site.css',
+        //'css/site.css',
         
     ];
     public $js = [
-         'js/jquery-ui.js',
+         /*'js/jquery-ui.js',
          'js/modal.js',
-          'js/select2.js',
+          'js/select2.js',*/
+       //'js/residentes/jquery.min.js',
+        //'js/residentes/bootstrap.min.js'
         
     ];
     public $depends = [

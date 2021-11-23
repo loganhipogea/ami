@@ -21,14 +21,15 @@ use yii\widgets\ActiveForm;
     <html lang="<?= Yii::$app->language ?>">
     <head>
         <meta charset="<?= Yii::$app->charset ?>"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width"/>
+        
         <meta name="keywords" content="administracion,meotegnia consultores,julian ramirez tenorio, inmuebles, administracion de inmuebles, diar, operacion, gestion, inmobiliaria, centro comercial, condominio, playa, empresarial, comercial, club" />
 
 
 
         <?= Html::csrfMetaTags() ?>
         
-        
+        <?php $this->registerCssFile("@web/css/residentes/blanco/buttons.css"); ?>
          <?php $this->registerCssFile("@web/css/residentes/blanco/bnpsite.css"); ?>
          <?php $this->registerCssFile("@web/css/residentes/blanco/default.ultimate.css"); ?>
          <?php $this->registerCssFile("@web/css/residentes/blanco/dropdown.css"); ?>
@@ -40,188 +41,171 @@ use yii\widgets\ActiveForm;
          <?php //$this->registerjsFile("@web/js/residentes/vendors/is/is.min.js",['position'=>View::POS_END]); ?>
           <?php //$this->registerjsFile("@web/js/residentes/theme.js",['position'=>View::POS_END]); ?>
 
-   
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-   <body bgcolor="#ffffff" style="margin:auto">
+   <body bgcolor="#ffffff"  style="height:auto" class="wrapper">
        
     <?php $this->beginBody() ?>
-          <table border="0" cellpadding="0" cellspacing="0" width="1100" align="center" style="position:relative;background:#FFF;" >
-               <tr>     
-                    <td colspan="3">
-			<div id="head">
-			      <div id="div_head"></div>
-                <!-- opciones superiores head -->
-                        <div id="mnu_sup">
-                           <a href="index.php">
-                               <div id="bnpslogo" style="width: 265px;
-                                    height: 88px;                                  
-                                    float: left;
-                                    margin-top: 10px;
-}                                   ">
-                                  LOGO 
-                               </div>
-                                    <div style="height:21px;width:215px;float:left;position:absolute;z-index:60;margin-top:28px;margin-left:93px;font-family: 'trebuchet ms', geneva;font-size: x-large; color: #999999;">
-                                        C. RESIDENCIAL PARQUE SAN MARTIN
-                                    </div>
-                           </a>    
-                         <div id="div_intra">
-                                       
-                            <div id="div_login" align="left"> 
-                                   Aqui nombre de usuario
-                              <div id='logeado'>
-                                  <table border='0' width='90%' align='center' cellpadding='0' cellspacing='0'>
-                                        <tr>
-                                                <td width='4%'>&nbsp;</td>
-                                                <td width='96%'>
-                                                <strong> </strong>
-                                                </td>
-                                          </tr>
-			
-                                            <tr>
-                                                <td height='20'>&nbsp;</td>
-                                                <td>EFREN GROVER CABRERA VITO / Maria Isabel Llacsahuanga Romero </td>
-                                            </tr>
-			
-                                            <tr>
-                                                <td height='20' align='center'>&nbsp;</td>
-                                                <td align='center'>
-                                                <input type='button' name='salir' id='salir' value='' onclick='location.href="bnpssalirw.php"' style='cursor:pointer' />
-                                                </td>
-                                            </tr>
-			
-                                            <tr>
-                                                <td height='12' colspan='2' align='center' valign='middle' ><div class='linea'></div></td>
-                                            </tr>
-			
-                                            <tr>
-                                                <td height='18'></td>
-                                                <td><a href='#' onclick='mostrar_ocultar_capa("logeado","clave")'></a></td>
-                                            </tr>
-			
-                                            <tr>
-                                                <td height='12' colspan='2' align='center' valign='middle'><div class='linea'></div></td>
-                                            </tr>
-                                  </table>
-                                      
-                              </div>
-                                         
-               </div>	
-                          
-           </div>
-                        <!-- fin opciones sup -->         
+  
+       <div style="text-align: left;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div style=""  class="col-lg-4 col-md-4 col-sm-4 col-xs-12"> 
+             <img src="/frontend/web/img/residentes/bnpslogo.jpg">
+            </div>
+            <div style=""  class="col-lg-8 col-md-8 col-sm-8 col-xs-12 nombreedificio"> 
+                   C. RESIDENCIAL PARQUE SAN MARTIN
+            </div>
+               
       </div>
-                
-                            
-			           <div id="nombre_logeo">EFREN GROVER CABRERA VITO / Maria Isabel Llacsahuanga Romero &nbsp;
-                            <span style=" text-align:right;"><a href="bnpssalirw.php" title="Cerrar Sessi&oacute;n" id="Salir"  style="color:#C81D15; text-align:right;">[ Cerrar Sesi&oacute;n ]</a></span>
-                            &nbsp;
-                            <span style=" text-align:right;"><a href="javascript:;" title="Cambiar Clave" id="cclave"  style="color:#696063; text-align:right;">[ Cambiar Clave ]</a></span>
-                            <div id="div_cambioclave" align="left"> 
-                        	
-                <div id="cambiocla">
-                  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" >
-                       <tr>
-                            <td height="25">&nbsp;</td>
-                            <td valign="bottom"><span >Clave anterior</span></td>
-                        </tr>
-                        <tr>
-                            <td width="192"><strong>&nbsp;&nbsp;&nbsp;</strong></td>
-                            <td width="381"><input type="password" name="txtV1" id="txtV1" size="25" maxlength="20" />                    </td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td><span >Nueva clave</span></td>
-                        </tr>
-                        <tr>
-                            <td width="192"><strong>&nbsp;&nbsp;&nbsp;</strong></td>
-                            <td><input name="txtV2" type="password" id="txtV2" size="25" maxlength="16"  />                    </td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>Verificar clave</td>
-                	</tr>
-                        <tr>
-                  	<td>&nbsp;</td>
-                  	<td><input name="txtV3" type="password" id="txtV3" size="25" maxlength="16"  /></td>
-                	</tr>
-                  <tr>
-                    <td colspan="2"><div id="mensajex" align="center">&nbsp;</div></td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" align="center">&nbsp;&nbsp;
-                    <input type="button" value="Cambiar" onclick="grabar_nuevaClave('bnpscamcla.php');" class="boton_login"/>
-				    <input type="button" class="boton_login" onclick="limpiarCamposCamCla();" id="btnCerrar2" value="Cancelar"  style="cursor:pointer; margin-left:5px"/></td>
-                  </tr>
-                  <tr>
-                  	<td colspan="2" align="center">&nbsp;</td>
-                	</tr>
-                  <tr>
-                    <td colspan="2" align="center"></td>
-                  </tr>
-                            </table>
-                            </div>
-             
-                            </div>
-						</div>
-                        
-                                   
-             
-			</td>
-              </tr>
-      <!-- INICIO DEL MENU -->
-              <tr>
-                        <td colspan="3">
-                            <div id="div_fndmnu">
-                                <img src="imagen/bnplineasup.jpg" width="1100px"/>
-                                      <ul id='nav' class='dropdown'>
-                                          <li id='otros'>
-                                           <a href='index.php?opc=998' class='seleccionado'>INICIO</a>
-                                          </li>
-                                          <li>
-                                            <a href='bnpscontenido.php?id_cont=&opc=1'  >REGLAMENTOS</a>                                          
-                                                <ul>
-                                                    <li>
-                                                        <a href='bnpscontenido.php?id_cont=3&opc=1'  >Reglamentos y Estatutos</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href='bnpscontenido.php?id_cont=4&opc=1'  >Junta Directiva</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href='bnpscontenido.php?id_cont=6&opc=1'  >Acuerdos de Asamblea</a>
-                                                    </li>
-                                                </ul>
-                                         </li>
-                                         <li>
-                                                 <a href='bnpscontenido.php?id_cont=&opc=4'  >DEL EDIFICIO</a>
-                                                  <ul>
-                                                      <li>
-                                                          <a href='bnpscontenido.php?id_cont=1&opc=4'  >Balance de Ingresos y Gastos</a>
-                                                      </li>
-                                                      <li>
-                                                          <a href='bnpscontenido.php?id_cont=70&opc=4'  >Comunicados Enviados</a>
-                                                      </li>
-                                                      <li>
-                                                          <a href='bnpscontenido.php?id_cont=67&opc=4'  >Normas de Convivencia</a>
-                                                      </li>
-                                                      <li><a href='bnpscontenido.php?id_cont=2&opc=4'  >Recibo de Mantenimiento</a>
-                                                      </li>
-                                                      <li><a href='bnpscontenido.php?id_cont=4&opc=4'  >Presupuestos</a>
-                                                      </li>
-                                                  </ul>
-                                         </li>
-                                        <li>
-                                           <a href='#'  >DOCUMENTOS</a>
-                                         </li>
-                                        <li id='otros2'>
-                                             <a href='bnpscontactenos.php?opc=999' >CONT&Aacute;CTENOS</a>
-                                         </li>
-                                      </ul>
-                               </div>
-                        </td>
-                    </tr>
-          </table>
+      
+        <div  style="clear:right;height:auto;" class=" rayagris col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div style="text-align: left; clear:right;" class="col-lg-8 col-md-8 col-sm-12 col-xs-12"> 
+                <i style="font-size:2em"><span class="fa fa-user"></span></i>
+                JULIAN RAMIREZ TENORIO/JESSENIA ESPINOZA RIVERA
+            </div>
+            <div style="clear:right; text-align: center" class="col-lg-4 col-md-4 col-sm-12 col-xs-12"> 
+              <?= Html::a('Salir', ['create'], ['class' => 'btn btn-danger']) ?>
+               <?= Html::a('Cambiar clave', ['create'], ['class' => 'btn btn-warning']) ?>
+            </div>
+           
+       </div>
+       
+      <div  class="rayagris col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+       <div id="div_fndmnu">                
+                <ul id='nav' class='dropdown'>
+                    <li id='otros'>
+                        <a href='/frontend/web/sigi/default/panel-residente' class='seleccionado'>
+                            Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href='#'  >
+                            Facturación
+                        </a>
+                            <ul>
+                                <li>
+                                    <a href='/frontend/web/sigi/default/resi-factu'  >
+                                        Recibos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href='/frontend/web/sigi/default/resi-agua'>
+                                        Consumo de agua
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href='bnpscontenido.php?id_cont=6&opc=1'  >
+                                        Deudores
+                                    </a>
+                                </li>
+                            </ul>
+                   </li>
+                    <li>
+                        <a href='bnpscontenido.php?id_cont=&opc=4'  >
+                            Documentos
+                        </a>
+                      <ul>
+                          <li>
+                              <a href='bnpscontenido.php?id_cont=1&opc=4'  >
+                                  Balance Ingresos/Gastos
+                              </a>
+                          </li>
+                          <li>
+                              <a href='bnpscontenido.php?id_cont=70&opc=4'  >
+                                  Comunicados Enviados
+                              </a>
+                          </li>
+                          <li>
+                              <a href='bnpscontenido.php?id_cont=67&opc=4'  >
+                                  Normas de Convivencia
+                              </a>
+                          </li>
+                          <li>
+                              <a href='bnpscontenido.php?id_cont=2&opc=4'  >
+                                  Acuerdos
+                              </a>
+                          </li>
+                          <li>
+                              <a href='bnpscontenido.php?id_cont=4&opc=4'  >
+                                  Presupuestos
+                              </a>
+                          </li>
+                      </ul>
+                    </li>
+                    
+                   
+                </ul>
+       </div>
+      </div> 
+       
+       
+       
+       
+       
+       
+       <?php  
+       echo $content;       
+       ?>
+       
+       <div id="piefooter" style="background-color: black; bottom:0px;position: fixed;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+             <div style="" class="col-lg-2 col-md-3 col-sm-6 col-xs-6"> 
+                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                   <?=Html::a('<span class="fa fa-money iconopie"></span>',Url::to(['/sigi/default/resi-factu'])) ?>
+                    
+                 </div>
+                 <div  class=" letrapie col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                   <?=Html::a('Estado de cuenta',Url::to(['/sigi/default/resi-factu'])) ?>
+                    
+                 </div>
+            </div>
+             <div style="" class="col-lg-2 col-md-3 col-sm-6 col-xs-6"> 
+                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                    <?=Html::a('<span class="fa fa-tint iconopie"></span>',Url::to(['/sigi/default/resi-agua'])) ?>
+                   
+                 </div>
+                 <div  class=" letrapie col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                     <?=Html::a('Agua potable',Url::to(['/sigi/default/resi-agua'])) ?>
+                   
+                 </div>
+            </div>
+           <div style="" class="col-lg-2 col-md-3 col-sm-6 col-xs-6"> 
+                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                    <span class="fa fa-envelope iconopie"></span>
+                 </div>
+                 <div  class=" letrapie col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                     
+                     <?=Html::a('Mensajes',Url::to(['/message/message/inbox'])) ?>
+                 </div>
+            </div>
+           <div style="" class="col-lg-2 col-md-3 col-sm-6 col-xs-6"> 
+                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                    <span class="fa fa-phone iconopie"></span>
+                 </div>
+                 <div  class=" letrapie col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                    Emergencias
+                 </div>
+            </div>
+           <div style="" class="col-lg-2 col-md-3 col-sm-6 col-xs-6"> 
+                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                    <span class="fa fa-eye iconopie"></span>
+                 </div>
+                 <div  class=" letrapie col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                    FACTURACION
+                 </div>
+            </div>
+           <div style="" class="col-lg-2 col-md-3 col-sm-6 col-xs-6"> 
+                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                    <span class="fa fa-eye iconopie"></span>
+                 </div>
+                 <div  class=" letrapie col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
+                    FACTURACION
+                 </div>
+            </div>
+            
+           
+       </div>
+       
+       
     <?php $this->endBody() ?>
   </body>
     </html>

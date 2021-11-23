@@ -14,31 +14,27 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');*/
 ?>
 
 
-    
+    <div class="box box-success"> 
+        <br>.<BR>
+        <h4><span class="fa fa-tint"></span>           Consumo de agua potable</h4>
    
-   <div class="box box-success">
     <?php 
     $items=[];
-    $deudatotal=0;
-    $deuda=0;
     foreach($propietarios as $propietario){
         $unidad=$propietario->unidad; 
-        $deuda=$unidad->deuda();
-        $deudatotal+=$deuda;
         if(empty($unidad->parent_id)){
            $medidor=$unidad->firstMedidor(\frontend\modules\sigi\models\SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT);
            
         $items[]=[
             'label'=>'<i class="fa fa-cubes"></i> '.$unidad->numero, //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render(
-                    'residente_tab_facturacion',
+                    'residente_tab_lecturas',
                     [
-                            'searchModel' =>$searchModel,
-                            'dataProvider'=> $dataProvider,
+                            //'searchModel' =>$searchModel,
+                            //'dataProvider'=> $dataProvider,
                             'unidad' => $unidad,
                         'medidor'=>$medidor,
-                        'params'=>$params,
-                        'deuda'=>$deuda
+                        'params'=>$params
                     ]),
             //'active' => true,
              'options' => ['id' => uniqid()],
@@ -53,4 +49,4 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');*/
     'items' => $items,
 ]);  ?>
 
-</div>
+    </div>

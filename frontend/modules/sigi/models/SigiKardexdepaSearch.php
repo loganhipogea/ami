@@ -18,7 +18,7 @@ class SigiKardexdepaSearch extends SigiKardexdepa
     {
         return [
             [['id', 'facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
-            [['fecha', 'anio', 'codmon', 'numerorecibo', 'detalles'], 'safe'],
+            [['fecha', 'anio', 'codmon', 'numerorecibo', 'detalles','cancelado','mes'], 'safe'],
             [['monto', 'igv'], 'number'],
         ];
     }
@@ -74,6 +74,40 @@ class SigiKardexdepaSearch extends SigiKardexdepa
             ->andFilterWhere(['like', 'codmon', $this->codmon])
             ->andFilterWhere(['like', 'numerorecibo', $this->numerorecibo])
             ->andFilterWhere(['like', 'detalles', $this->detalles]);
+
+        return $dataProvider;
+    }
+    
+    
+    public function searchByResi($unidad_id,$params)
+    {
+        $query = SigiKardexdepa::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        //var_dump($params);
+        $this->load($params);
+        
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+         
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,           
+            'unidad_id' => $unidad_id,
+             'cancelado' => $this->cancelado,
+            'mes' => $this->mes,
+           // 'historico' =>'0',
+            'aprobado' => '1',
+        ]);
+
+        
 
         return $dataProvider;
     }

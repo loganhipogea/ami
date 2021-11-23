@@ -117,7 +117,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
            // [['monto'],'required', 'except'=>self::SCE_CONCILIACION_PAGO],
             [['monto', 'igv', 'monto_usd'], 'number'],
            // [['fechaop'], 'string', 'max' => 10],
-            [['kardex_id','monto','diferencia','ingreso'], 'safe'],
+            [['kardex_id','monto','diferencia','ingreso','unidad_id'], 'safe'],
          
              [['monto'], 'validate_monto'],
             [['monto_conciliado'], 'safe'],
@@ -247,7 +247,10 @@ class SigiMovimientosPre extends \common\models\base\modelBase
       self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
       $this->sincronizeStatus($insert);
       
-      
+      /*
+       * Unidad id
+       */
+      $this->unidad_id=$this->kardex->unidad_id;
     //  var_dump($this->kardex_id,$this->kardex->monto);die();
       //Le sumamos el monto actual, porque aun no graba
      // $this->diferencia=$this->kardex->monto-($this->cancelado()+$this->monto);       

@@ -276,16 +276,24 @@ class SigiKardexdepa extends \common\models\base\modelBase
   }
   
   /*
-   * Deuda del mes 
+   * Deuda del mismo recibo 
    */
   public function deuda(){
-     return VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar();
+      return $this->monto-$this->montoPagado();
+     //return VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar();
    }
-  
+  public function montoPagado(){
+      $valor=$this->getMovimientos()->select(['sum(monto)'])->scalar();
+     if($valor>0)return $valor;
+    return 0;
+     //return VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar();
+   }
+   
    /*
-    * Deuda del recibo
+    * Deuda total
     */
   public function deudaKardex(){
+      
       $deuda=VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['id'=>$this->id])->scalar(); 
      return (is_null($deuda))?0:$deuda;
   }

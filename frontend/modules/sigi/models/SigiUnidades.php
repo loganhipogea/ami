@@ -194,6 +194,18 @@ class SigiUnidades extends \common\models\base\modelBase
     {
         return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
     }
+    
+    
+     public function getMovimientos()
+    {
+        return $this->hasMany(SigiMovimientosPre::className(), ['unidad_id' => 'id']);
+    }
+    
+    
+     public function getKardexes()
+    {
+        return $this->hasMany(SigiKardexdepa::className(), ['unidad_id' => 'id']);
+    }
     /**
      * {@inheritdoc}
      * @return SigiUnidadesQuery the active query used by this AR class.
@@ -750,6 +762,18 @@ public function hasManyPropietarios(){
   return ($this->getSigiPropietarios()->andWhere(['activo'=>'1','tipo'=>self::TYP_PROPIETARIO])->count() > 1);
 }
 
+
+public function deuda(){
+    $deuda=$this->getKardexes()->select(['sum(monto)'])->
+            andWhere(['aprobado'=>'1'])->scalar();
+    $deuda=($deuda>0)?$deuda:0; 
+    return $deuda-$pagado;
+}
+
+private function pagado(){
+ $val=$this->getMovimientos()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar();  
+ return($val>0)?$val:0; 
+}
 
 
 

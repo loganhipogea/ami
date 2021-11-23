@@ -168,6 +168,7 @@ class DefaultController extends Controller
    
     
    public function actionPanelResidente(){
+       
        $this->layout='residentes';
        $user= h::user();
        $mail=h::user()->identity->email;
@@ -232,8 +233,8 @@ class DefaultController extends Controller
          // var_dump($idFile);die();
           $model= \frontend\modules\sigi\models\SigiKardexdepa::findOne($id);
           if(!is_null($model)){
-               $width=h::request()->get('width',700);
-        $height=h::request()->get('height',900);
+               $width=h::request()->get('width',900);
+        $height=h::request()->get('height',1000);
        return $this->renderPartial('@frontend/views/comunes/view_pdf', [
                         'urlFile' => $model->files[0]->urlTempWeb,
                          'width' => $width,
@@ -243,6 +244,8 @@ class DefaultController extends Controller
               echo 'no hay id para este archivo';
           }
        
+            }else{
+                echo "·bno es ajax "; die();
             }
    }  
    public function actionResiFactu(){
@@ -251,9 +254,35 @@ class DefaultController extends Controller
        $mail=h::user()->identity->email;
        $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->
        andWhere(['correo'=>$mail])->all();
+       //$searchModel = new \frontend\modules\sigi\models\SigiKardexdepaSearch();
+       // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
       if(count($propietarios)>0){ 
        return  $this->render('residentes/residente_facturacion',
-                    ['propietarios'=>$propietarios]);
+                    ['propietarios'=>$propietarios,
+                        // 'searchModel' =>$searchModel,
+                         'params'=>Yii::$app->request->queryParams,
+                        ]);
+      }else{
+          throw new ServerErrorHttpException(yii::t('base.errors','Residente no encontrado con el correo '.$mail));  
+      } 
+    }
+    
+    public function actionResiAgua(){
+       $this->layout='residentes';
+       $user= h::user();
+       $mail=h::user()->identity->email;
+       $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->
+       andWhere(['correo'=>$mail])->all();
+       //$searchModel = new \frontend\modules\sigi\models\SigiKardexdepaSearch();
+       // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+      if(count($propietarios)>0){ 
+       return  $this->render('residentes/residente_lecturas',
+                    ['propietarios'=>$propietarios,
+                        // 'searchModel' =>$searchModel,
+                         //'params'=>Yii::$app->request->queryParams,
+                        ]);
       }else{
           throw new ServerErrorHttpException(yii::t('base.errors','Residente no encontrado con el correo '.$mail));  
       } 
