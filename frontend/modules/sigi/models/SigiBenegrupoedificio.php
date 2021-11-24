@@ -15,7 +15,7 @@ use Yii;
  * @property SigiCargosedificio[] $sigiCargosedificios
  * @property SigiEdificios $edificio
  */
-class SigiCargosgrupoedificio extends \common\models\base\modelBase
+class SigiBenegrupoedificio extends \common\models\base\modelBase
 {
     
     public $booleanFields = ['egreso'];
@@ -85,12 +85,12 @@ class SigiCargosgrupoedificio extends \common\models\base\modelBase
      */
     public static function find()
     {
-        return new SigiCargosgrupoedificioQuery(get_called_class());
+        return new SigiBenegrupoedificioQuery(get_called_class());
     }
     
     public function beforeSave($insert) {
         if($insert){
-          $this->egreso=true;
+          $this->egreso=false;
             //$this->codgrupo=$this->correlativo('codgrupo');
         }
         RETURN parent::beforeSave($insert);

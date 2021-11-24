@@ -13,7 +13,7 @@ class ActiveQueryBeneficio extends ActiveQueryScope
     {
       //var_dump(SigiUserEdificios::filterEdificios());die();
        //$this->andWhere([ 'in', 'codfac',['FIM','FIP'] ]);
-      $this->alias('t')->andWhere(['esegreso'=>'0']);
+      $this->alias('t')->andWhere(['egreso'=>'0']);
         parent::init();
     }
     // HOLA MODIFICANDO
