@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'filterModel' => $searchModel,
         'columns' => [
-            
+           
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update}',
@@ -40,7 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ],
             
-            
+            'id',
+            [    'attribute'=>'fecult',
+               'value'=>function($model){
+                        return $model->fecult;
+               }
+            ],      
          [    'attribute'=>'edificio_id',
                'filter'=> frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
                'value'=>function($model){
