@@ -7,7 +7,7 @@ use frontend\modules\sigi\components\ActiveQueryBeneficio;
  *
  * @see SigiCargos
  */
-class SigiBeneficiosQuery extends ActiveQueryBeneficio
+class SigiBeneficiosQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {

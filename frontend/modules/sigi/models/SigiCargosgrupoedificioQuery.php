@@ -7,7 +7,7 @@ namespace frontend\modules\sigi\models;
  *
  * @see SigiCargosgrupoedificio
  */
-class SigiCargosgrupoedificioQuery extends \frontend\modules\sigi\components\ActiveQueryScope
+class SigiCargosgrupoedificioQuery extends \frontend\modules\sigi\components\ActiveQueryCargo
 {
     /*public function active()
     {

@@ -7,7 +7,7 @@ use frontend\modules\sigi\components\ActiveQueryCargo;
  *
  * @see SigiCargos
  */
-class SigiCargosQuery extends ActiveQueryCargo
+class SigiCargosQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {

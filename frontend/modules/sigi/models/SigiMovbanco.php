@@ -159,13 +159,14 @@ class SigiMovbanco extends \common\models\base\modelBase
                 $this->monto_conciliado=$signo*abs($this->montoConciliado());
                 //var_dump($this->monto_conciliado);die();
                 $this->diferencia=$signo*(abs($this->monto)-abs($this->monto_conciliado));
-                /*Update All para no despertar el disparador*/
+               
+                
+                /*OJO Update All para no despertar el disparador*/
                 $this->updateAll([
-                    'diferencia'=>$this->monto-$this->monto_conciliado,
+                    'diferencia'=>$this->diferencia,
                     'monto_conciliado'=>$this->monto_conciliado,
                         ],
-                ['id'=>$this->id]);
-         
+                ['id'=>$this->id]);  
        return true;
     }
     

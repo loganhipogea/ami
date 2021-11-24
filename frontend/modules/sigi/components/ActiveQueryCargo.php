@@ -1,11 +1,8 @@
 <?php
 namespace frontend\modules\sigi\components;
-use frontend\modules\sigi\models\SigiUserEdificios;
-use \frontend\modules\sigi\models\Edificios;
-use frontend\modules\sta\staModule;
-use common\helpers\h;
+use frontend\modules\sigi\components\ActiveQueryScope;
 
-class ActiveQueryCargo extends \yii\db\ActiveQuery 
+class ActiveQueryCargo extends ActiveQueryScope 
 {
     
   public function init()

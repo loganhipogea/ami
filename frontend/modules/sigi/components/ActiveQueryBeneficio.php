@@ -1,11 +1,12 @@
 <?php
 namespace frontend\modules\sigi\components;
-use frontend\modules\sigi\models\SigiUserEdificios;
-use \frontend\modules\sigi\models\Edificios;
-use frontend\modules\sta\staModule;
-use common\helpers\h;
+//use frontend\modules\sigi\models\SigiUserEdificios;
+//use frontend\modules\sigi\models\Edificios;
+use frontend\modules\sigi\components\ActiveQueryScope;
+//use frontend\modules\sta\staModule;
+//use common\helpers\h;
 
-class ActiveQueryBeneficio extends \yii\db\ActiveQuery 
+class ActiveQueryBeneficio extends ActiveQueryScope 
 {
     
   public function init()

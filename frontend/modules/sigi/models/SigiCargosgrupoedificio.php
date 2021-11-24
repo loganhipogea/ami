@@ -17,6 +17,9 @@ use Yii;
  */
 class SigiCargosgrupoedificio extends \common\models\base\modelBase
 {
+    
+    public $booleanFields = ['egreso'];
+
     /**
      * {@inheritdoc}
      */
@@ -33,6 +36,7 @@ class SigiCargosgrupoedificio extends \common\models\base\modelBase
         return [
             [['edificio_id','descripcion'], 'required'],
             [['edificio_id'], 'integer'],
+            [['egreso'], 'safe'],
             [['codgrupo'], 'string', 'max' => 3],
             [['descripcion'], 'string', 'max' => 40],
             [['activo'], 'string', 'max' => 1],
