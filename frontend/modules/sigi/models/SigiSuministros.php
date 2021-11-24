@@ -234,11 +234,11 @@ public function getEdificio()
     private function queryReadsForThisMonth($mes,$anio,$facturable=false){
         $valor=($facturable)?'1':['0','1'];
         //yii::error('----queryreas for this mont--');
-        /*yii::error(SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
-                andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio])->
-                createCommand()->getRawSql());*/
+        yii::error(SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
+                andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio,'suministros_id'=>$this->id])->
+                createCommand()->getRawSql());
         return SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
-                andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio]);
+                andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio,'suministro_id'=>$this->id]);
         
     }
     

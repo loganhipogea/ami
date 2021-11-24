@@ -14,6 +14,8 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+USE common\models\Profile;
+use common\helpers\h;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -40,6 +42,7 @@ class MessageController extends Controller
     public function behaviors()
     {
         return [
+           
             'access' => [
                 'class' => AccessControl::class,
                 'rules' => [
@@ -71,6 +74,7 @@ class MessageController extends Controller
      * This defaults to 3600 (once every hour). */
     public function actionCheckForNewMessages()
     {
+        $this->resolveLayout();
         Yii::$app->response->format = Response::FORMAT_RAW;
 
         $session = Yii::$app->session;
@@ -122,6 +126,7 @@ class MessageController extends Controller
      */
     public function actionInbox()
     {
+        $this->resolveLayout();
         $searchModel = new MessageSearch();
         $searchModel->to = Yii::$app->user->id;
         $searchModel->inbox = true;
@@ -143,6 +148,7 @@ class MessageController extends Controller
      */
     public function actionDrafts()
     {
+         $this->resolveLayout();
         $searchModel = new MessageSearch();
         $searchModel->from = Yii::$app->user->id;
         $searchModel->draft = true;
@@ -164,6 +170,8 @@ class MessageController extends Controller
      */
     public function actionTemplates()
     {
+         $this->resolveLayout();
+        
         $searchModel = new MessageSearch();
         $searchModel->from = Yii::$app->user->id;
         $searchModel->templates = true;
@@ -196,7 +204,7 @@ class MessageController extends Controller
     public function actionIgnorelist()
     {
         Yii::$app->user->setReturnUrl(['//message/message/ignorelist']);
-
+       $this->resolveLayout();
         if (Yii::$app->request->isPost) {
             IgnoreListEntry::deleteAll(['user_id' => Yii::$app->user->id]);
 
@@ -245,6 +253,7 @@ class MessageController extends Controller
      */
     public function actionSent()
     {
+         $this->resolveLayout();
         $searchModel = new MessageSearch();
         $searchModel->from = Yii::$app->user->id;
         $searchModel->sent = true;
@@ -267,6 +276,7 @@ class MessageController extends Controller
      */
     public function actionMarkAllAsRead()
     {
+         $this->resolveLayout();
         foreach (Message::find()->where([
             'to' => Yii::$app->user->id,
             'status' => Message::STATUS_UNREAD,
@@ -288,6 +298,7 @@ class MessageController extends Controller
      */
     public function actionView($hash)
     {
+         $this->resolveLayout();
         $message = $this->findModel($hash);
 
         if ($message->status == Message::STATUS_UNREAD && $message->to == Yii::$app->user->id)
@@ -354,6 +365,7 @@ class MessageController extends Controller
      */
     public function actionCompose($to = null, $answers = null, $context = null, $add_to_recipient_list = false)
     {
+        $this->resolveLayout();
         $this->trigger(self::EVENT_BEFORE_SEND);
 
         $draft_hash = Message::generateHash();
@@ -636,6 +648,7 @@ class MessageController extends Controller
      */
     public function actionSignature()
     {
+         $this->resolveLayout();
         $signature = Message::getSignature(Yii::$app->user->id);
 
         if (!$signature) {
@@ -667,6 +680,8 @@ class MessageController extends Controller
      */
     public function actionOutOfOffice()
     {
+        $this->resolveLayout();
+        
         $outOfOffice = Message::getOutOfOffice(Yii::$app->user->id);
 
         if (!$outOfOffice) {
@@ -722,7 +737,7 @@ class MessageController extends Controller
     public function actionManageDraft($hash = null)
     {
         $draft = null;
-
+         $this->resolveLayout();
         if ($hash) {
             $draft = Message::find()->where([
                 'status' => Message::STATUS_DRAFT,
@@ -779,6 +794,7 @@ class MessageController extends Controller
      */
     public function actionManageTemplate($hash = null)
     {
+         $this->resolveLayout();
         if ($hash) {
             $template = Message::find()->where([
                 'status' => Message::STATUS_TEMPLATE,
@@ -825,6 +841,7 @@ class MessageController extends Controller
      */
     public function actionDelete($hash)
     {
+       $this->resolveLayout();
         $model = $this->findModel($hash);
 
         if (in_array($model->status, [
@@ -848,5 +865,10 @@ class MessageController extends Controller
             'The message has been deleted.'));
 
         return $this->redirect(Yii::$app->request->referrer);
+    }
+    
+    private function resolveLayout(){
+        if($profile=h::user()->profile->tipo==Profile::PRF_RESIDENTE)
+        $this->layout='residentes';
     }
 }

@@ -13,7 +13,7 @@ $i=1;
 <div style="  
     margin: 0 auto;
      position:absolute; color:black; left:30px;
-     top:200px; width:500px; font-size:9px;  font-family:arial;
+     top:100px; width:500px; font-size:9px;  font-family:arial;
      font-weight:bold;  ">
        
      
@@ -27,9 +27,9 @@ $i=1;
                 ?> 
         <table style="">
            <tr>
-                <td ><b><?=$bloque[0]['desgrupo']?></b></td>
-                 <td ><b>Monto</b></td>
-                 <td ><b>Cuota</b></td>
+                <td style="text-align:center;" ><b><?=$bloque[0]['desgrupo']?></b></td>
+                 <td style="text-align:center;" ><b>Monto</b></td>
+                 <td style="text-align:center;" ><b>Cuota</b></td>
             </tr> 
             
         <?php
@@ -88,9 +88,9 @@ $i=1;
                 ?> 
         <table style="border-style:0px;">
            <tr>
-                <td ><b><?=$bloque[0]['desgrupo']?></b></td>
-                 <td ><b>Monto</b></td>
-                 <td ><b>Cuota</b></td>
+                <td style="text-align:center;" ><b><?=$bloque[0]['desgrupo']?></b></td>
+                 <td style="text-align:center;"><b>Monto</b></td>
+                 <td style="text-align:center;"><b>Cuota</b></td>
             </tr> 
             
         <?php
@@ -123,15 +123,15 @@ $i=1;
             </tr>
         </table>
        <?php } ?>
-       <div style="  
+       <div style="  text-align:right;
     margin: 0 auto;
      position:relative; color:black; 
-     width:500px; font-size:9px;  font-family:arial;
+     width:500px; font-size:14px;  font-family:arial;
      font-weight:bold; ">
-          Total Recibo : <?=$totalMes.'   '.
+          Total Recibo : <?=$simbolo.'  '.$totalMes ?><?PHP /*.'   '.
         //Yii::$app->formatter->asSpellout(round($totalMes,3));
         (new NumeroAletras)->toWords(              
-              round($totalMes,2)).'   '.$desmon ?>
+              round($totalMes,2)).'   '.$desmon */?>
     </div>  
   </div>    
     

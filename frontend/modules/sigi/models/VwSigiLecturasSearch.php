@@ -6,6 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\modules\sigi\models\VwSigiLecturas;
 
+
 /**
  * SigiUnidadesSearch represents the model behind the search form of `frontend\modules\sigi\models\SigiUnidades`.
  */
@@ -95,6 +96,7 @@ if(!empty($this->flectura) && !empty($this->flectura1)){
             'anio' => $this->anio,
             //'facturable' => $this->facturable,
             'edificio_id' => $this->edificio_id,
+            
            // 'area' => $this->area,
            // 'participacion' => $this->participacion,
            // 'parent_id' => $this->parent_id,
@@ -102,6 +104,7 @@ if(!empty($this->flectura) && !empty($this->flectura1)){
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'numero', $this->numero])
+                
             ->andFilterWhere(['like', 'codigo', $this->codigo]);
 if(!empty($this->flectura) && !empty($this->flectura1)){
          $query->andFilterWhere([

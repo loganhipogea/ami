@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  
                          'clip' => function($url, $model) { 
                              $modelKardex=$model->kardexDepa;
-                             if($model->aprobado && $modelKardex->hasAttachments() ){
+                             if($modelKardex->hasAttachments() ){
                                $url= Url::to([
                                    '/finder/renderpdf',
                                    'idFile'=>\yii\helpers\Json::encode($modelKardex->files[0]->id),

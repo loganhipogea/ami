@@ -32,7 +32,7 @@ $model=$detalle->facturacion;
   <!-- FIN DEL   LOGO DEL RECIBO    !--> 
     
     <!--NOMBRE DE COLOR NARANJA DEL DEPARATAMENTO   !--> 
-   <div style=" position:absolute;  left:25px;  top:70px;  font-size:9px;  font-family:arial;  font-weight:bold;  color:#F72; ">
+   <div  position:absolute;  left:25px;  top:70px;  font-size:9px;  font-family:arial;  font-weight:bold;  color:#F72; ">
      <?php  
      if(!$detalle->resumido){
         echo $detalle->unidad->nombre;  
@@ -47,7 +47,7 @@ $model=$detalle->facturacion;
   
   <!-- NOMBRE DEL EDIFICIO Y DIRECCION    !--> 
 
- <div style="position:absolute;  left:100px;  top:36px;  font-size:7;  font-family:cour;  font-weight:bold;  color:#000; ">
+ <div style="background-color: red;text-align:center;width:400px; position:absolute;  left:100px;  top:36px;  font-size:7;  font-family:cour;  font-weight:bold;  color:#000; ">
     <?=$model->edificio->nombre?>
  </div>
  <div style="position:absolute;   left:100px;  top:50px;  font-size:3;  font-family:arial;  font-weight:none;  color:#000; ">

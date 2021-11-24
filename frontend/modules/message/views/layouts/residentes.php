@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-   <body bgcolor="#ffffff"  style="height:auto;overflow: auto" class="wrapper">
+   <body bgcolor="#ffffff"  style="height:auto" class="wrapper">
        
     <?php $this->beginBody() ?>
   

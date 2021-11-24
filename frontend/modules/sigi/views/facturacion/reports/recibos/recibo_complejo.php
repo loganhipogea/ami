@@ -4,7 +4,10 @@ use yii\helpers\Url;
 use frontend\modules\sigi\models\VwSigiFacturecibo;
 use frontend\modules\sigi\models\SigiUnidades;
 use common\models\masters\Clipro;
+use frontend\modules\sigi\models\SigiSuministros;
+use common\helpers\timeHelper;
 $detalle=$kardex->detalleFactu[0];
+$unidad=$detalle->unidad;
 ?>
 <!DOCTYPE html>
     <html lang="es">
@@ -60,20 +63,20 @@ $detalle=$kardex->detalleFactu[0];
     
   
   <!--  NOMBRE Y DIRECCION  DEL EDIFICIO    !--> 
- <div style="position:absolute;  left:90x;  top:40px;  font-size:9px;  font-family:cour;  font-weight:bold;  color:#000; ">
+ <div style="text-align:center;width:300px; position:absolute;  left:90x;  top:40px;  font-size:9px;  font-family:cour;  font-weight:bold;  color:#000; ">
     <?=$model->edificio->nombre?>
  </div>
- <div style="position:absolute;   left:90px;  top:48px;  font-size:8px;  font-family:arial;  font-weight:none;  color:#000; ">
+ <div style="text-align:center;width:300px; position:absolute;   left:90px;  top:48px;  font-size:8px;  font-family:arial;  font-weight:none;  color:#000; ">
       <?=$model->edificio->direccion?>
  </div>
   <!-- FIN DEL  NOMBRE Y DIRECCION  DEL EDIFICIO    !--> 
 
   
 <!--  NOMBRE DEL DEPA    !--> 
-    <div style=" position:absolute;  left:35px;  top:75px;  font-size:9px;  font-family:arial;  font-weight:bold;  color:#F72; ">
+    <div style=" position:absolute;  left:35px;  top:65px;  font-size:9px;  font-family:arial;  font-weight:bold;  color:#F72; ">
      <?php  
      if(!$detalle->resumido){
-        echo $detalle->unidad->nombre;  
+        echo $unidad->nombre;  
      }else{
         /*Si es un recibo compacto */
          $nombre=Clipro::findOne($detalle->grupocobranza)->despro; 
@@ -85,7 +88,7 @@ $detalle=$kardex->detalleFactu[0];
 
 
        <!-- NOMBRE DEL PROPIESTARIO -->
-       <div style=" position:absolute;  left:35px;  top:105px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
+       <div style=" position:absolute;  left:35px;  top:80px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
             <div>
                
                 <div style="width: 420px;">
@@ -141,6 +144,36 @@ $detalle=$kardex->detalleFactu[0];
         }
      ?>
         
+       <!-- IMAGEN DE MEDIDORES     !--> 
+        <div style=" display:table; position:absolute; width:120px; left:580px;  top:540px; font-size:8;  font-family:arial;  font-weight:bold;  color:#000;">
+           <?php 
+               
+               $hayimagenmesanterior=false;
+              
+                if(!is_null($medidor=$unidad->firstMedidor(SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT))){
+                    if(!is_null($lectura=$medidor->readFacturableByMonth($kardex->mes,$kardex->anio))){
+                        if($lectura->hasAttachments()){
+                           echo 'Lectura actual (m3) '.round($lectura->lectura,2);
+                           echo Html::img($lectura->files[0]->urlTempWeb,['width'=>100,'height'=>100]); 
+                        }
+                    }
+                   if(!is_null($lecturaant=$medidor->readFacturableByMonth(timeHelper::previousMonth($kardex->mes),$kardex->anio))){
+                        if($lecturaant->hasAttachments()){
+                           $hayimagenmesanterior= Html::img($lecturaant->files[0]->urlTempWeb,['width'=>100,'height'=>100]); 
+                        }
+                    } 
+                    
+                }
+// $unidad->firstMedidor(SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT)->readFacturableByMonth(9,'2021')->files[0]->url
+           ?>
+            </div>
+        <div style="display:table; position:absolute; width:120px; left:800px;  top:540px;font-size:8;  font-family:arial;  font-weight:bold;  color:#000;">
+          <?php if($hayimagenmesanterior){
+                echo 'Lectura anterior (m3) '.round($lecturaant->lectura,2);
+                echo $hayimagenmesanterior;
+          }   ?>
+        </div>
+       <!-- FIN DE IMAGEN  !--> 
         
          <!-- TABLA DE RESUMEN DE AREAS     !--> 
         <div style="display:table; position:absolute; width:210px; left:580px;  top:658px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
@@ -189,7 +222,7 @@ $detalle=$kardex->detalleFactu[0];
                 </table>
               <!-- /.table-responsive -->
        </div>
-       <div style="display:table; position:absolute; width:210px; left:890px;  top:658px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
+       <div style="text-align:justify;  display:table; position:absolute; width:300px; left:800px;  top:658px;  font-size:8;  font-family:arial;  font-weight:bold;  color:#000; ">
         
          <?=$model->detalles?>
        </div>

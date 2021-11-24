@@ -513,7 +513,7 @@ class Edificios extends \common\models\base\modelBase
                                     yii::error('funco el sgunp o ',__FUNCTION__);
                                     $user->refresh();
                                     $profile=$user->profile;
-                                    $profile->tipo='40';
+                                    $profile->tipo= \common\models\Profile::PRF_RESIDENTE;
                                     $profile->save(); 
                                 SigiUserEdificios::insertUserEdificio($user->id, $this->id);
                                     $role=h::gsetting('sigi','roleResidente');

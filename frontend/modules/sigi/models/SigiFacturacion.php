@@ -1154,7 +1154,7 @@ class SigiFacturacion extends \common\models\base\modelBase
          $formato=$this->reporte->tamanopapel;
          $kardex=SigiKardexdepa::findOne($idKardex);
          
-       
+
          
            //$dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
            switch ($this->reporte_id) {

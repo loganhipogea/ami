@@ -128,7 +128,19 @@ class timeHelper {
          }
        return $semanas;
     }
-  
+    
+ public static function previousMonth($mes){
+     if(!is_int($mes))$mes=(Integer)$mes;
+     //if($mes==12)return 1;
+     if($mes==1)return 12;
+     return $mes-1;
+ } 
+ public static function nextMonth($mes){
+     if(!is_int($mes))$mes=(Integer)$mes;
+     if($mes==12)return 1;
+     //if($mes==1)return 12;
+     return $mes+1;
+ } 
 }  
   
    

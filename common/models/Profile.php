@@ -27,7 +27,7 @@ class Profile extends \common\models\base\modelBase implements \common\interface
             CONST PRF_TRABAJADOR='10';
             CONST PRF_ALUMNO='20';
             CONST PRF_COORDINADOR='30';
-            CONST PRF_PSICOLOGO='40';
+            CONST PRF_RESIDENTE='40'; 
             CONST PRF_ASSOCIAL='50';
             CONST PRF_ALUMNORIESGO='60';
             CONST PRF_ALUMNOTUTOR='70';
@@ -39,7 +39,7 @@ class Profile extends \common\models\base\modelBase implements \common\interface
            self::PRF_TRABAJADOR=>'common\models\masters\Trabajadores',
           self::PRF_ALUMNO=>'frontend\modules\sta\models\Alumnos',
           self::PRF_COORDINADOR=>'frontend\modules\sta\models\Coordinador',
-           self::PRF_PSICOLOGO=>'frontend\modules\sta\models\Psicologo',
+           //self::PRF_PSICOLOGO=>'frontend\modules\sta\models\Psicologo',
           self::PRF_ASSOCIAL=>'frontend\modules\sta\models\Social',
           self::PRF_ALUMNORIESGO=>'frontend\modules\sta\models\AlumnoRiesgo',
            self::PRF_ALUMNOTUTOR=>'frontend\modules\sta\models\AlumnoTutor',

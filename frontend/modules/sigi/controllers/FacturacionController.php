@@ -276,6 +276,9 @@ die();*/
             yii::error('que pasa');
                 h::response()->format = Response::FORMAT_JSON;
            $model=$this->findModel($id);
+           if($model->historico)
+                return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
             $errores=$model->generateFacturacionMes();
            //$model->shortFactu();
             if(count($errores)>0){
@@ -292,6 +295,9 @@ die();*/
             //$errores=[];
                 h::response()->format = Response::FORMAT_JSON;
            $model=$this->findModel($id);
+           if($model->historico)
+                return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
            if($model->resetFacturacion()){
                return ['success'=>yii::t('sigi.labels','Se ha reinicado la facturación')];
        
@@ -308,6 +314,9 @@ die();*/
               h::response()->format = Response::FORMAT_JSON;
            $model= \frontend\modules\sigi\models\SigiCuentaspor::findOne($id);
            if(!is_null($model)){
+               if($model->historico)
+                return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
                $model->creaRegistroLecturasTemp();
                return ['success'=>yii::t('sigi.labels','Se ha generado la plantilla de lecturas')];
            }else{
@@ -451,6 +460,9 @@ public function actionSendMassiveRecibo($id){
    if (h::request()->isAjax ) {
         h::response()->format = Response::FORMAT_JSON;
             $model= $this->findModel($id);
+            if($model->historico)
+                return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
            if(!is_null($model)){
               return  $model->sendMassiveRecibo();
                  }            
@@ -476,6 +488,9 @@ public function actionSendMassiveRecibo($id){
       if (h::request()->isAjax ) {
         h::response()->format = Response::FORMAT_JSON;
      $model= $this->findModel($id);
+     if($model->historico)
+                return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
      $model->generaRecibos();
       return ['success'=>yii::t('base.labels','Se han generado los recibos')];
               
@@ -484,9 +499,13 @@ public function actionSendMassiveRecibo($id){
   
 public function actionClearRecibos($id){
     if (h::request()->isAjax ) {
+        
         h::response()->format = Response::FORMAT_JSON;
             $model= $this->findModel($id);
            if(!is_null($model)){
+               if($model->historico)
+                   return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
                $model->purgeRecibos();
                return ['success'=>yii::t('base.labels','Se resetearon todos los recibos')];
                  }            
@@ -498,6 +517,9 @@ public function actionCompileRecibos($id){
         h::response()->format = Response::FORMAT_JSON;
             $model= $this->findModel($id);
            if(!is_null($model)){
+               if($model->historico)
+             return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
                $model->compileRecibos();
                return ['success'=>yii::t('base.labels','Se compilaron los recibos')];
                  }            
@@ -523,6 +545,8 @@ public function actionReciboByKardex($id){
         h::response()->format = Response::FORMAT_JSON; 
             $kardex= \frontend\modules\sigi\models\SigiKardexdepa::findOne($id);
             $facturacion=$kardex->facturacion;
+            if($facturacion->historico)
+             return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
             if(!$facturacion->hasNextFacturacionWithDetail()){
                $facturacion->recibo($kardex->id,true);
                 return ['success'=>yii::t('base.labels','Se generó el recibo para '.$kardex->unidad->nombre)];   
@@ -537,6 +561,13 @@ public function actionReciboByKardex($id){
 
 public function actionAprobe($id){
        $model= $this->findModel($id);
+       
+            if($model->historico){
+                 h::session()->setFlash('error',yii::t('base.labels','Hubo un problema '.$model->getFirstError()));
+                $this->redirect(['update','id'=>$model->id]); 
+            }
+                   
+           
       if($model->aprove()){
         /* return ['success'=>yii::t('base.labels','Se aprobó la facturación ')];   
          }else{
@@ -582,6 +613,9 @@ public function actionResumen($id){
      if(h::request()->isAjax){
          h::response()->format = \yii\web\Response::FORMAT_JSON;
         $model=$this->findModel($id);
+        if($model->historico)
+                return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
         $model->updateAllMontoKardex();
        return ['success'=>yii::t('base.labels','Se actualizaron los montos')];
             }
@@ -606,6 +640,9 @@ public function actionTestPdf(){
      if(h::request()->isAjax){
          h::response()->format = \yii\web\Response::FORMAT_JSON;
         $model=$this->findModel($id);
+        if($model->historico)
+                return ['error'=>yii::t('base.labels','Esta facturación corresponde a datos históricos, no aplica este proceso')];      
+           
         $ndocs=$model->rescueDocsFromEdificios();
         if($ndocs== 0){
             return ['warning'=>yii::t('base.labels','No se encontró ningún documento para anexar')];
