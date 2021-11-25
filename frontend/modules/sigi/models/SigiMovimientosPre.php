@@ -234,9 +234,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
    */
   
  
-  public function isKardex(){
-      return ($this->kardex_id >0);
-  }
+ 
   
     
   public function beforeSave($insert) {
@@ -364,5 +362,15 @@ public function validate_monto($attribute,$params){
      $this->addError($attribute,yii::t('base.labels','Este monto {monto}  es mayor al monto {monotb} del movimiento del banco',['monto'=>$this->monto,'montob'=>$this->movBanco->monto]));
     
    }
-
+   
+   private function isKardex(){
+      return ($this->kardex_id >0);
+  } 
+ private function isDocPago(){
+      return ($this->kardex_id >0);
+  } 
+  
+  private function isDocCobro(){
+      return ($this->kardex_id >0);
+  } 
 }
