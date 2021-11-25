@@ -5,31 +5,23 @@ use kartik\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
-use frontend\modules\sigi\models\SigiCargosgrupoedificioSearch;
+use frontend\modules\sigi\models\SigiBenegrupoedificioSearch;
+use frontend\modules\sigi\models\SigiBenegrupoedificio;
 ?>
 <div class="edificios-index_doycus">
 
      <div class="box-body">
          
 <?php
- $url= Url::to(['agrega-grupo','id'=>$model->id,'gridName'=>'grilla-grupocargos','idModal'=>'buscarvalor']);
+ $url= Url::to(['agrega-bene','id'=>$model->id,'gridName'=>'grilla-grupobene','idModal'=>'buscarvalor']);
    echo  Html::button(yii::t('base.verbs','Insertar'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Agrupacion'),'id'=>'btn_grupos_edi', 'class' => 'botonAbre btn btn-success']); 
 ?> 
-<?php
- //$url= Url::to(['replica-presupuesto','id'=>$model->id]);
-   echo  Html::button(yii::t('base.verbs','Partidas'), ['title' => yii::t('sta.labels','Generar Partidas'),'id'=>'btn_presupuesto', 'class' => 'btn btn-warning']); 
-?>
-         <div class="badge badge-info"><?=yii::t('base.labels','Monto planificado total : ').'       '.$model->montoTotalColectores()?></div>
 
-<?php
- //$url= Url::to(['replica-presupuesto','id'=>$model->id]);
-   echo  Html::button(yii::t('base.verbs','Partidas'), ['title' => yii::t('sta.labels','Generar Partidas'),'id'=>'btn_presupuesto', 'class' => 'btn btn-warning']); 
-?> 
-    <?php Pjax::begin(['id'=>'grilla-grupocargos']); ?>
-    
+    <?php Pjax::begin(['id'=>'grilla-grupobene']); ?>
+    <?php  //echo SigiBenegrupoedificio::find()->createCommand()->rawSql;  ?>
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
     <?= GridView::widget([
-        'dataProvider' =>(new SigiCargosgrupoedificioSearch())->searchByEdificio($model->id),
+        'dataProvider' =>(new SigiBenegrupoedificioSearch())->searchByEdificio($model->id),
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'columns' => [
@@ -39,7 +31,7 @@ use frontend\modules\sigi\models\SigiCargosgrupoedificioSearch;
             'template' => '{update}{delete}',
                'buttons' => [
                   'update' => function($url, $model) {   
-                        $url= \yii\helpers\Url::to(['edita-grupo','id'=>$model->id,'gridName'=>'grilla-grupocargos','idModal'=>'buscarvalor']);
+                        $url= \yii\helpers\Url::to(['edita-bene','id'=>$model->id,'gridName'=>'grilla-grupobene','idModal'=>'buscarvalor']);
                         $options = [
                             'title' => Yii::t('base.verbs', 'Editar'), 
                             'class'=>'botonAbre',
@@ -80,7 +72,7 @@ use frontend\modules\sigi\models\SigiCargosgrupoedificioSearch;
          <?php 
    echo linkAjaxGridWidget::widget([
            'id'=>'widgetgruidBancos',
-            'idGrilla'=>'grilla-grupocargos',
+            'idGrilla'=>'grilla-grupobene',
             'family'=>'holas',
           'type'=>'POST',
            'evento'=>'click',
@@ -88,46 +80,8 @@ use frontend\modules\sigi\models\SigiCargosgrupoedificioSearch;
         ]); 
    ?>
        
-     <?php    
-     $string="$('#btn_presupuesto').on( 'click', function(){ 
+   
      
-       $.ajax({
-              url: '".Url::to(['/sigi/edificios/replica-presupuesto','id'=>$model->id])."', 
-              type: 'get',
-              data:{id:".$model->id."  },
-              dataType: 'json', 
-              error:  function(xhr, textStatus, error){               
-                            var n = Noty('id');                      
-                              $.noty.setText(n.options.id, error);
-                              $.noty.setType(n.options.id, 'error');       
-                                }, 
-              success: function(json) {
-              var n = Noty('id');
-                      
-                       if ( !(typeof json['error']==='undefined') ) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
-                              $.noty.setType(n.options.id, 'error');  
-                          }    
-
-                             if ( !(typeof json['warning']==='undefined' )) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['warning']);
-                              $.noty.setType(n.options.id, 'warning');  
-                             } 
-                          if ( !(typeof json['success']==='undefined' )) {
-                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['success']);
-                              $.noty.setType(n.options.id, 'success');  
-                             }      
-                   
-                        }
-                        });
-
-
-             })";
-  
-   $this->registerJs($string, \yii\web\View::POS_END); ?>    
-         
-         
-         
          
     <?php Pjax::end(); ?>
 

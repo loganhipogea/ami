@@ -39,14 +39,14 @@ class SigiBenegrupoedificioSearch extends SigiBenegrupoedificio
     public function searchByEdificio($edificio_id)
     {
         $query = SigiBenegrupoedificio::find();
-
+        //echo $query->createCommand()->rawSql; DIE();
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $query->where([
+        $query->andWhere([
             'edificio_id' => $edificio_id,
            // 'npisos' => $this->npisos,
         ]);

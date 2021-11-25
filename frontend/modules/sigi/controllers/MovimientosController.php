@@ -392,7 +392,9 @@ public function actionAprobePago($id){
                 return ['error'=>yii::t('sta.labels','No se encontró el registro')];  
            }else{
                $model->activo=true;
-               $model->save();
+              // $transa=$model->getDb()->beginTransaction();                  
+                    $model->save();
+               //$transa->commit();
                return ['success'=>yii::t('sta.labels','Se aprobó el pago del recibo')];   
            }
         }
@@ -413,7 +415,12 @@ public function actionUnAprobePago($id){
                 */
                if(!$model->kardex->facturacion->hasNextFacturacionWithDetail()){
                     $model->activo=false;
-                    $model->save();
+                   // $transa=$model->getDb()->beginTransaction();                  
+                    if(!$model->save()){
+                         return ['error'=>yii::t('sta.labels','Hubo un error '.$model->getFirstError())];  
+              
+                    }
+                   // $transa->commit();
                     return ['warning'=>yii::t('sta.labels','Se desaprobó el pago del recibo')]; 
                }else{
                    return ['error'=>yii::t('sta.labels','Ya no puede deshacer este registro, existe una facturacion del mes siguiente que depende de este valor')];  

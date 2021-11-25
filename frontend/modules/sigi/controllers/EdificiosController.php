@@ -7,6 +7,7 @@ use frontend\modules\sigi\models\Edificios;
 use frontend\modules\sigi\models\EdificiosSearch;
 use frontend\modules\sigi\models\SigiUnidades;
 use frontend\modules\sigi\models\SigiCargosgrupoedificio as Grupos;
+use frontend\modules\sigi\models\SigiBenegrupoedificio as Benes;
 use frontend\modules\sigi\models\SigiCargosedificio as GrupoDetalle;
 use frontend\modules\sigi\models\SigiCargosedificioSearch;
 use frontend\modules\sigi\models\SigiSuministrosSearch;
@@ -565,7 +566,7 @@ public function actionEditaConceptoTree($id){
                   return ['success'=>1,'id'=>$model->edificio_id];
             }
         }else{
-           return $this->renderAjax('_modal_concepto_tree', [
+           return $this->renderAjax('_modal_bene_tree', [
                         'model' => $model,
                         'id' => $model->grupo_id,
                         'gridName'=>h::request()->get('gridName'),
@@ -794,6 +795,127 @@ public function actionReplicaPresupuesto($id){
     }
 
 
+ public function actionAgregaBene($id){        
+         $this->layout = "install";
+         
+        $modeledificio = $this->findModel($id);        
+       $model=New \frontend\modules\sigi\models\SigiBenegrupoedificio();
+       $model->edificio_id=$id;
+       
+       $datos=[];
+        if(h::request()->isPost){
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_grupocargo', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }
+    }
+public function actionAgregaBeneTree($id){
+    $this->layout = "install";
+        $modelGrupo = Benes::findOne($id);  
+       if(is_null($modelGrupo)){
+           throw new NotFoundHttpException(Yii::t('sigi.labels', 'Esta dirección no existe'));
+       }
+       $model=New \frontend\modules\sigi\models\SigiCargosedificio();
+       $model->edificio_id=$modelGrupo->edificio->id;
+       $model->grupo_id=$modelGrupo->id;       
+       $datos=[];
+        if(h::request()->isPost){
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_bene_tree', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+}
 
-
+   public function actionEditaBene($id){        
+         $this->layout = "install";
+         
+        //$modeledificio = $this->findModel($id);        
+       $model=\frontend\modules\sigi\models\SigiBenegrupoedificio::findOne($id);
+       
+       $datos=[];
+        if(h::request()->isPost){
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_grupocargo', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }
+    }
+public function actionEditaBeneTree($id){
+    $this->layout = "install";
+        $model= \frontend\modules\sigi\models\SigiBenegrupoedificio::findOne($id);
+       if(is_null($model)){
+           throw new NotFoundHttpException(Yii::t('sigi.labels', 'Esta dirección no existe'));
+       }
+      
+          
+       $datos=[];
+        if(h::request()->isPost){
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_bene_tree', [
+                        'model' => $model,
+                        'id' => $model->grupo_id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+}
 }

@@ -46,12 +46,12 @@ class SigiCargosgrupoedificioSearch extends SigiCargosgrupoedificio
             'query' => $query,
         ]);
 
-        $query->where([
+        $query->andWhere([
             'edificio_id' => $edificio_id,
            // 'npisos' => $this->npisos,
         ]);
         // grid filtering conditions
-        
+        //ECHO $query->createCommand()->rawSql; die();
         return $dataProvider;
     }
 }

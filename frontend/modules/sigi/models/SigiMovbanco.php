@@ -143,13 +143,9 @@ class SigiMovbanco extends \common\models\base\modelBase
      */
     public function montoConciliado(){
       // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
-        if($this->monto >=0){
+       
             return $this->getMovimientosDetalle()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar();
-        }elseif($this->monto < 0){
-           return abs($this->getMovimientosDetallePago()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar()); 
-        }else{
-            
-        }
+        
         
     }
     
@@ -161,13 +157,13 @@ class SigiMovbanco extends \common\models\base\modelBase
                 $this->diferencia=$signo*(abs($this->monto)-abs($this->monto_conciliado));
                
                 
-                /*OJO Update All para no despertar el disparador*/
-                $this->updateAll([
+               /*OJO Update All para no despertar el disparador*/
+                /* $this->updateAll([
                     'diferencia'=>$this->diferencia,
                     'monto_conciliado'=>$this->monto_conciliado,
                         ],
-                ['id'=>$this->id]);  
-       return true;
+                ['id'=>$this->id]);*/  
+       return $this->save();
     }
     
    
@@ -190,7 +186,7 @@ class SigiMovbanco extends \common\models\base\modelBase
       }else{
           if(in_array('monto', array_keys($changedAttributes))){
            $this->cuenta->updateSaldo($this->monto-$changedAttributes['monto'],$this->fopera);   
-          }      }      
+        }      }      
       return parent::afterSave($insert, $changedAttributes);
   }
   
@@ -202,4 +198,21 @@ class SigiMovbanco extends \common\models\base\modelBase
     */
    return true;
   } 
+
+ public function afterDelete() {
+     //var_dump($this->attributes);
+     
+     /*
+      * OJO OBSERVE QUE INVERTIMOS EL MONTO
+      * RECORDAR QUE ESTAMOS BORRANDO EL 
+      * REGISTRO Y LO QUE TENEMOS QUE HACER ES 
+      * DEJAR LAS COSAS COMO ESTABAN ANTES DE 
+      * QUE EXISTIERA, POR ESO SE INVIERTE EL SIGNO
+      * PARA QUE SE ACTUALIOXE EL SALDO CORRECTAMENTE 
+      */
+     $this->cuenta->updateSaldo(-$this->monto,
+             $this->CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate())
+             );
+     return parent::afterDelete();
+ }
 }

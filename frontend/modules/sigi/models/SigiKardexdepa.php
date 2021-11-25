@@ -259,7 +259,10 @@ class SigiKardexdepa extends \common\models\base\modelBase
       if($this->monto>0){
        $oldScenario=$this->getScenario();
         $this->setScenario(self::SCE_STATUS);
-        $this->cancelado=true;
+        $this->cancelado=$this->isCancelado(); //candelar puede ser falso para descancelar 
+        yii::error('es acncelado o no ',__FUNCTION__);
+        yii::error($this->cancelado,__FUNCTION__);
+        
         $grabo=$this->save();
         $this->setScenario($oldScenario);
         RETURN $grabo;
@@ -282,8 +285,11 @@ class SigiKardexdepa extends \common\models\base\modelBase
       return $this->monto-$this->montoPagado();
      //return VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar();
    }
+   
+   
   public function montoPagado(){
-      $valor=$this->getMovimientos()->select(['sum(monto)'])->scalar();
+      $valor=$this->getMovimientos()->select(['sum(monto)'])->
+      andWhere(['activo'=>'1'])->scalar();
      if($valor>0)return $valor;
     return 0;
      //return VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar();
@@ -446,5 +452,23 @@ class SigiKardexdepa extends \common\models\base\modelBase
      return (count($array_depas)>1);
       
   }
-    
+  /*
+   * Verifica si es un deudor,
+   * Solo verificando el monto
+   */
+  public function isCancelado(){
+     $tolerancia=h::gsetting('sigi', 'montominimo_deudor');
+     $montopagado=$this->montoPagado();
+     $diferencia=$this->monto-($tolerancia+$montopagado);
+     /*yii::error('monto pagado',__FUNCTION__);
+     yii::error( $montopagado,__FUNCTION__);
+     yii::error( 'operacion',__FUNCTION__);
+     yii::error( 'direfncia = '.$this->monto.'-('.$tolerancia.'-'.$montopagado.')',__FUNCTION__);
+     */return ($diferencia<=0)?true:false;
+  }
+  
+  
+
+  
+  
 }

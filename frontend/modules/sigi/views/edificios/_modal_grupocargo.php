@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\helpers\h;
 use frontend\modules\sigi\helpers\comboHelper;
+use frontend\modules\sigi\models\SigiBenegrupoedificio;
+use frontend\modules\sigi\models\SigiCargosgrupoedificio;
 use common\widgets\selectwidget\selectWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiUnidades */
@@ -20,10 +22,18 @@ use common\widgets\selectwidget\selectWidget;
           
         <div class="col-md-12">
             <div class="form-group no-margin">
+          <?PHP 
+          if($model instanceof SigiBenegrupoedificio){
+             $cadena='-bene' ;
+          }else{
+             $cadena='-grupo' ; 
+          }
+          
+          ?>
           <?= \common\widgets\buttonsubmitwidget\buttonSubmitWidget::widget(
                   ['idModal'=>$idModal,
                     'idForm'=>'myformulario',
-                      'url'=> \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/'.(($model->isNewRecord)?'agrega':'edita').'-grupo','id'=>$id]),
+                      'url'=> \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/'.(($model->isNewRecord)?'agrega':'edita').$cadena,'id'=>$id]),
                      'idGrilla'=>$gridName, 
                       ]
                   )?>

@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
+use frontend\modules\sigi\models\SigiCargosgrupoedificio;
 ?>
 
     
@@ -16,6 +17,14 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
     
     
 <?php
+//var_dump($model);
+if($model instanceof SigiCargosgrupoedificio ){
+     echo "Es un cargo ";
+     $cadena='concepto';
+ }else{
+      echo "Es un bendficio";
+    $cadena='bene'; 
+ }
 //var_dump($grupo_id);die();
 $idPjax="pjax_colector_".$grupo_id;
    
@@ -25,8 +34,9 @@ $gridColumns = [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update}{delete}',
                 'buttons' => [
-                    'update' => function($url, $model) use ($idPjax){   
-                        $url= \yii\helpers\Url::to(['edita-concepto-tree','id'=>$model->id,'gridName'=>$idPjax,'idModal'=>'buscarvalor']);
+                    'update' => function($url, $model) use ($idPjax){
+                        $cadena2=($cadena=='bene')?'bene':'concepto';
+                        $url= \yii\helpers\Url::to(['edita-'.$cadena2.'-tree','id'=>$model->id,'gridName'=>$idPjax,'idModal'=>'buscarvalor']);
                         $options = [
                             'title' => Yii::t('base.verbs', 'Editar'), 
                             'class'=>'botonAbre',
@@ -101,7 +111,8 @@ $gridColumns = [
         ]); 
    ?> 
  <?php
- $url= \yii\helpers\Url::to(['agrega-concepto-tree','id'=>$grupo_id,'gridName'=>$idPjax,'idModal'=>'buscarvalor']);
+ 
+ $url= \yii\helpers\Url::to(['agrega-'.$cadena.'-tree','id'=>$grupo_id,'gridName'=>$idPjax,'idModal'=>'buscarvalor']);
    echo \yii\helpers\Html::button(yii::t('base.verbs','Nuevo'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Agrupacion'),'id'=>'btn_grupos_edixr', 'class' => 'botonAbre btn btn-success']); 
  Pjax::end();
    

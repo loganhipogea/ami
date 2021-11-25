@@ -38,13 +38,13 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');
              'options' => ['id' => 'myveryownID4'],
         ],
         [
-          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Grup Gestión'), //$this->context->countDetail() obtiene el contador del detalle
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Gr Gestión'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_apoderados',[ 'model' => $model]),
             'active' => false,
              'options' => ['id' => 'dwnID4'],
         ],
        [
-          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Documentos'), //$this->context->countDetail() obtiene el contador del detalle
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Docs'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_docus',[ 'model' => $model]),
             'active' => false,
              'options' => ['id' => 'cnID4'],
@@ -56,10 +56,16 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');
              'options' => ['id' => 'cnID6'],
         ],
        [
-          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Grup Conceptos'), //$this->context->countDetail() obtiene el contador del detalle
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Cargos'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_grupocargos',[ 'model' => $model]),
             'active' => false,
              'options' => ['id' => 'cnID7'],
+        ],
+         [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Beneficios'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_grupobeneficios',[ 'model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'cnID7vtgr75'],
         ],
         [
           'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Usuarios'), //$this->context->countDetail() obtiene el contador del detalle

@@ -38,7 +38,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
      
      const MOV_COBROS='50';
    
-    public $booleanFields=['activo'];
+    public $booleanFields=['activo','ingreso'];
     public $dateorTimeFields = [
         'fechaop' => self::_FDATE,
         'fechaop1' => self::_FDATE,
@@ -176,8 +176,19 @@ class SigiMovimientosPre extends \common\models\base\modelBase
     
     public function getKardex()
     {
-        return $this->hasOne(SigiKardexdepa::className(), ['id' => 'kardex_id']);
-    }
+        if($this->isKardex()){
+           return $this->hasOne(SigiKardexdepa::className(), ['id' => 'kardex_id']);
+ 
+        }elseif($this->isDocPago()){
+            
+        }elseif($this->isDocCobro()){
+            
+        }else{
+            return null;
+        }
+            
+      
+     }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -221,36 +232,27 @@ class SigiMovimientosPre extends \common\models\base\modelBase
   /*
    * ESTA FUNCION SE ENCARGA DE SICRONIZAR
    */
-  private function sincronizeStatus($insert=false){
-    IF($this->kardex_id > 0) {
-         $kardex=$this->kardex;
-        IF($insert){
-            /*NO tiene sentido en registgros nuevos kardex */
-            
-            //$kardex->cancelado=$kardex::STATUS_CANCELADO_PREV;
-            //SigiKardexdepa::updateAll(['cancelado'=>$kardex::STATUS_CANCELADO_PREV], ['kardex_id'=>$this->kardex_id]);
-          
-        }else{
-          if($this->hasChanged('activo')){
-              SigiKardexdepa::updateAll(['cancelado'=>($this->activo)?'1':'0'], ['id'=>$this->kardex_id]);
-          
-          }
-           
-        }
-        //$kardex->save();
-     }      
+  
+ 
+  public function isKardex(){
+      return ($this->kardex_id >0);
   }
-    
+  
     
   public function beforeSave($insert) {
-      IF(empty($this->fechaop))$this->fechaop=
-      self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
-      $this->sincronizeStatus($insert);
+      if($insert){
+          $this->ingreso=true;
+          IF(empty($this->fechaop))$this->fechaop=
+            self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
+            if($this->isKardex()){
+                 $this->unidad_id=$this->kardex->unidad_id;
+               // $this->sincronizeKardex($insert); 
+            }
+           
+      }
       
-      /*
-       * Unidad id
-       */
-      $this->unidad_id=$this->kardex->unidad_id;
+      
+      
     //  var_dump($this->kardex_id,$this->kardex->monto);die();
       //Le sumamos el monto actual, porque aun no graba
      // $this->diferencia=$this->kardex->monto-($this->cancelado()+$this->monto);       
@@ -258,9 +260,16 @@ class SigiMovimientosPre extends \common\models\base\modelBase
   }  
   
   public function afterSave($insert, $changedAttributes) {
-      $this->movBanco->refreshMonto();
+      yii::error('after save ',__FUNCTION__);
       if($insert){
-          $this->refreshAttachment();
+         // $this->refreshAttachment();
+      }
+      
+      /*Sólo si se trata de una aprobación del movimiento*/
+      if(in_array('activo', array_keys($changedAttributes))){
+          yii::error('si s emodifico el esdtado ',__FUNCTION__);
+        $this->kardex->cancelar();
+        $this->movBanco->refreshMonto();   
       }
       return parent::afterSave($insert, $changedAttributes);
   }
@@ -273,26 +282,50 @@ class SigiMovimientosPre extends \common\models\base\modelBase
   
   
   public function validate_monto_fraccionado($attribute,$params){
-      if($this->isNewRecord){
-         if($this->monto > ($this->movBanco->monto-$this->movBanco->montoConciliado()))
-         $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento}',['monto_movimiento'=>$this->movBanco->monto,'monto'=>$this->monto]));
-                  
-      }else{
+      $movBanco=$this->movBanco;
+         $montoconciliado=$movBanco->montoConciliado();
+      $signo=($this->monto>0)?1:-1;
+      //if($this->isNewRecord){
+         
+         $diferencia=abs(abs($movBanco->monto)
+                -abs($montoconciliado));
+         if(abs($this->monto) > $diferencia)
+         $this->addError($attribute,
+          yii::t('base.labels',
+              ' Este monto {monto} sobrepasa el monto pendiente a conciliar:  {monto_movimiento}',
+                  ['monto_movimiento'=>$diferencia,'monto'=>$this->monto]));
+        
+        /*Aohra verificando los kardex*/
+         if($this->isKardex()){
+             $kardex=$this->kardex;
+            if($this->monto > $kardex->deuda()){
+              $this->addError($attribute, yii::t('base.labels',
+              ' Este monto {monto} sobrepasa el monto pendiente a conciliar en el Kardex:  {monto_movimiento}',
+                  ['monto_movimiento'=>$kardex->deuda(),'monto'=>$this->monto]));
+          
+            }
+             
+             
+         }
+         
+         
+      //}/*else{
           /*
            * Si ya hay registro , loque debemos hacer es 
            * restar al conciliado el valor del monto anterior y comparar recein
            */
-          if($this->monto > ($this->movBanco->monto-($this->movBanco->montoConciliado()-$this->getOldAttribute('monto'))))
-         $this->addError($attribute,yii::t('base.labels','{monto} Este monto no es consistente con  {monto_movimiento} '.$this->getOldAttribute('monto'),['monto_movimiento'=>$this->movBanco->monto,'monto'=>$this->monto]));
+          /*$montoconciliado=$montoconciliado-$this->getOldAttribute('monto');
           
-      }
-  }
+          $diferencia=abs(abs($movBanco->monto)-abs($montoconciliado));
+          if(abs($this->monto) > $diferencia)
+         $this->addError($attribute,yii::t('base.labels',
+              ' Este monto {monto} sobrepasa el monto pendiente a conciliar:  {monto_movimiento}',
+                  ['monto_movimiento'=>$diferencia,'monto'=>$this->monto]));
+         */      
+    }
+  
   /*
-   * Saca el monto acumulado para el kardex_id
-   */
- public function cancelado(){
-    return  self::find()->select(['sum(monto)'])->andWhere(['kardex_id'=>$this->kardex_id])->scalar();
- } 
+ 
   
  /*
   * Verifica que exista un voucher subido por
@@ -326,8 +359,10 @@ public function validate_monto($attribute,$params){
      ($this->movBanco->monto < 0 && $this->monto > 0) )
       $this->addError($attribute,yii::t('base.labels','{monto} Este monto no tiene el signo que corresponde al movimiento',['monto'=>$this->monto]));
     
-  }
-  
-
+    
+    if(abs($this->monto) > abs($this->movBanco->monto))
+     $this->addError($attribute,yii::t('base.labels','Este monto {monto}  es mayor al monto {monotb} del movimiento del banco',['monto'=>$this->monto,'montob'=>$this->movBanco->monto]));
+    
+   }
 
 }

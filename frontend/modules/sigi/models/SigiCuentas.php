@@ -145,6 +145,7 @@ class SigiCuentas extends \common\models\base\modelBase
        
            $this->saldo=$this->saldo+$monto; 
            $fecha_cruda=$fecha;
+           //var_dump($fecha_cruda);die();
            /*
             * Siempre que $fecha sea mayor que
             * el valor de la fecha actual $this->fecult
