@@ -5,6 +5,7 @@ namespace frontend\modules\sigi\controllers;
 use Yii;
 use frontend\modules\sigi\models\SigiPorpagar;
 use frontend\modules\sigi\models\SigiPorpagarSearch;
+use frontend\modules\sigi\models\SigiPorCobrarSearch;
 use frontend\modules\sigi\models\SigiSancionesSearch;
 use frontend\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
@@ -275,6 +276,62 @@ public function actionIndexMulta(){
         ]);
    }
 
+ /**
+     * Lists all SigiPorpagar models.
+     * @return mixed
+     */
+    public function actionIndexCobrar()
+    {
+        $searchModel = new SigiPorCobrarSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        return $this->render('index_cobrar', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
+     public function actionCrearCobro()
+    {
+        $model = new \frontend\modules\sigi\models\SigiPorCobrar();
+        $model->setScenario($model::SCE_IMPUTADO);
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view-cobrar', 'id' => $model->id]);
+        }else{
+          
+        }
+        return $this->render('create_cobrar', [
+            'model' => $model,
+        ]);
+    }
+    
+   public function actionUpdateCobrar($id)
+    {
+        $model = \frontend\modules\sigi\models\SigiPorCobrar::findOne($id);
+
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view-cobrar', 'id' => $model->id]);
+        }else{
+           // print_r($model->getErrors());die();
+        }
+
+        return $this->render('update_cobrar', [
+            'model' => $model,
+        ]);
+    }
+  public function actionViewCobrar($id)
+    {
+        return $this->render('view_cobrar', [
+            'model' => $this->findModel($id),
+        ]);
+    }
 }

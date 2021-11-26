@@ -6,14 +6,14 @@ use frontend\modules\sigi\components\ActiveQueryScope;
 //use frontend\modules\sta\staModule;
 //use common\helpers\h;
 
-class ActiveQueryBeneficio extends ActiveQueryScope 
+class ActiveQueryDocsPagos extends ActiveQueryScope 
 {
     
   public function init()
     {
       //var_dump(SigiUserEdificios::filterEdificios());die();
        //$this->andWhere([ 'in', 'codfac',['FIM','FIP'] ]);
-      $this->alias('t')->andWhere(['egreso'=>'0']);
+      $this->alias('t')->andWhere(['ingreso'=>'1']);
         parent::init();
     }
     // HOLA MODIFICANDO

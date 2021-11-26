@@ -3,11 +3,11 @@
 namespace frontend\modules\sigi\models;
 
 /**
- * This is the ActiveQuery class for [[Sigiporcobrar]].
+ * This is the ActiveQuery class for [[SigiPorpagar]].
  *
- * @see Sigiporcobrar
+ * @see SigiPorpagar
  */
-class SigiporcobrarQuery extends \yii\db\ActiveQuery
+class SigiPorCobrarQuery extends \frontend\modules\sigi\components\ActiveQueryScope
 {
     /*public function active()
     {
@@ -22,7 +22,7 @@ public function init()
     }
     /**
      * {@inheritdoc}
-     * @return Sigiporcobrar[]|array
+     * @return SigiPorpagar[]|array
      */
     public function all($db = null)
     {
@@ -31,7 +31,7 @@ public function init()
 
     /**
      * {@inheritdoc}
-     * @return Sigiporcobrar|array|null
+     * @return SigiPorpagar|array|null
      */
     public function one($db = null)
     {

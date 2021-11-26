@@ -231,11 +231,15 @@ class comboHelper extends Combito
      
         $idsChilds= \frontend\modules\sigi\models\SigiUnidades::find()->
                 select(['id'])->andWhere(['edificio_id'=>$id_edificio])->andWhere(['>','parent_id',0])->column();
-        
+        //VAR_DUMP($idsChilds);DIE();
+        /*ECHO  \frontend\modules\sigi\models\SigiUnidades::find()
+                  ->where(['edificio_id'=>$id_edificio])
+                  ->andWhere(['not in','id',$idsChilds])->createCommand()->rawSql;
+        die();*/
           return ArrayHelper::map(
                           \frontend\modules\sigi\models\SigiUnidades::find()
                   ->where(['edificio_id'=>$id_edificio])
-                  ->andWhere(['not',$idsChilds])->all(),
+                  ->andWhere(['not in','id',$idsChilds])->all(),
                 'id','numero'); 
       
        

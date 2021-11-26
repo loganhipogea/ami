@@ -367,10 +367,10 @@ public function validate_monto($attribute,$params){
       return ($this->kardex_id >0);
   } 
  private function isDocPago(){
-      return ($this->kardex_id >0);
+      return ($this->doc_id >0 && $this->ingreso =='0');
   } 
   
   private function isDocCobro(){
-      return ($this->kardex_id >0);
+      return ($this->doc_id >0 && $this->ingreso=='1');
   } 
 }
