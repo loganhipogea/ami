@@ -31,7 +31,17 @@ class SigiMovimientosPre extends \common\models\base\modelBase
 {
    const SCE_CREACION_BASICA='basico';
     const SCE_STATUS='status';
-    const SCE_CONCILIACION_PAGO='fraccion';
+    
+    /*ESCENARIOS PARA CONCILIACIO*/
+    const SCE_CONCILIACION_PAGO='fraccion';      
+    const SCE_CONCILIACION_PAGO_DOC_IMPUTADO='inputado';
+    const SCE_CONCILIACION_PAGO_DOC_GENERAL='general';
+    /********FIN DE ESCENARIOS CONCILAICION*********/
+    
+    
+    
+    
+    
     const G_GRUPO_INGRESOS='C';//Cobranzas
     const G_GRUPO_EGRESOS='P';//Pagos
     const MOV_PAGOS='10';
@@ -180,9 +190,11 @@ class SigiMovimientosPre extends \common\models\base\modelBase
            return $this->hasOne(SigiKardexdepa::className(), ['id' => 'kardex_id']);
  
         }elseif($this->isDocPago()){
-            
+            return $this->hasOne(SigiPorpagar::className(), ['id' => 'doc_id']);
+ 
         }elseif($this->isDocCobro()){
-            
+            return $this->hasOne(SigiPorCobrar::className(), ['id' => 'doc_id']);
+ 
         }else{
             return null;
         }
@@ -274,6 +286,12 @@ class SigiMovimientosPre extends \common\models\base\modelBase
   
   public function afterDelete() {
        $this->movBanco->refreshMonto();
+       /*
+        * Ya no se refrescan $this->kardex->cancelar();
+        * porque se supone que solo se pueden borrar 
+        * registros que aun no han tenido ningun efecto dobre 
+        * el kardex (activo=0)
+        */
       return parent::afterDelete();
   }
   
@@ -373,4 +391,15 @@ public function validate_monto($attribute,$params){
   private function isDocCobro(){
       return ($this->doc_id >0 && $this->ingreso=='1');
   } 
+  
+  /*
+   * ESTA FUNCION VERIFICA
+   * Si esta afectando el estado de cuenta de una unidad
+   * por ejemplo una multa, una sancion o un vale de credito
+   * o una devolución de dinero
+   */
+   private function isDocAfectaSaldoUnidad(){
+      return ($this->doc_id >0 && $this->unidad_id > 0);
+  } 
+  
 }

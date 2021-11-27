@@ -219,7 +219,7 @@ use common\widgets\selectwidget\selectWidget;
                              //'target'=>'_blank'
                         ];
                         //return Html::button('<span class="glyphicon glyphicon-pencil"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => ' btn btn-sm btn-success']);
-                        if(!$model->colector->isBudget() )
+                        if((!$model->colector->isBudget() and !$aprobado) or ($model->anexado && !$aprobado) )
                          return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>',$url,$options);
                      
                         
@@ -238,7 +238,7 @@ use common\widgets\selectwidget\selectWidget;
                             'data-method' => 'get',
                             //'data-pjax' => '0',
                         ];
-                        if(!$model->colector->isBudget() && !$aprobado)
+                        if((!$model->colector->isBudget() && !$aprobado) or ($model->anexado && !$aprobado) )
                         return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Adjunto', 'class' => 'botonAbre btn btn-success']);
                         //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
                      
@@ -260,7 +260,7 @@ use common\widgets\selectwidget\selectWidget;
                             'title' => Yii::t('base.verbs', 'Borrar'),                            
                         ];
 			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
-                            if(!$model->colector->isBudget() && !$aprobado )  
+                            if((!$model->colector->isBudget() && !$aprobado) or ($model->anexado && !$aprobado)    )  
                            return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                             },
                             

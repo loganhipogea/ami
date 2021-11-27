@@ -276,9 +276,35 @@ public function scenarios() {
         return $this->getProgramaPagos()->select(['sum(monto)'])->scalar();
     }
     
-     public function montoPagado(){
-      // echo  $this->getMovimientosDetalle()->select(['sum(monto)'])->createCommand()->rawSql;die();
-        return $this->getMovimientosPago()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar();
-    }
+    
+    
+   /* public function cancelar(){
+      if($this->monto>0){
+        $this->cancelado=$this->isCancelado(); //candelar puede ser falso para descancelar 
+                $grabo=$this->save();
+               RETURN $grabo;
+      } return false;
+  }*/
+   
+  public function isCancelado(){
+     $tolerancia=h::gsetting('sigi', 'montominimo_deudor');
+     $montopagado=$this->montoPagado();
+     $diferencia=$this->monto-($tolerancia+$montopagado);
+     return ($diferencia<=0)?true:false;
+  }
+  
+   
+  public function montoPagado(){
+      $valor=$this->getMovimientos()->select(['sum(monto)'])->
+      andWhere(['activo'=>'1'])->scalar();
+     if($valor>0)return $valor;
+    return 0;
+     //return VwKardexPagos::find()->select(['sum(deuda) as deuda'])->andWhere(['anio'=>$this->anio,'mes'=>$this->mes,'edificio_id'=>$this->edificio_id])->scalar();
+   }
+  
+  public function getMovimientos()
+    {
+        return $this->hasMany(SigiMovimientosPre::className(), ['doc_id' => 'id']);
+    } 
     
 }

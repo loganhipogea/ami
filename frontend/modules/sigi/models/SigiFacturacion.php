@@ -1487,48 +1487,64 @@ class SigiFacturacion extends \common\models\base\modelBase
                 
       $criteria=['edificio_id'=>$this->edificio_id,
                   'en_recibo'=>'1',
+                'facturacion_id'=>null,
                   ];
-      $datos=(new \yii\db\Query())->from('{{%sigi_porpagar}}')
+      /*$datos=(new \yii\db\Query())->from('{{%sigi_porpagar}}')
        ->andWhere(['>','fechadoc',$fechaLim])->where($criteria)->andWhere(['facturacion_id'=>null])->all();
-      
-     
+     */ 
+      $datos= SigiPorpagar::find()->andWhere($criteria)->all();
+     /* echo SigiPorpagar::find()->andWhere($criteria)->createCommand()->rawSql;
+      echo (count($datos));die();*/
+     $docsIngresados=0;
       foreach($datos as $fila){
-        $this->insertDocu($fila); 
+        if($this->insertDocu($fila)){
+           $docsIngresados++;  
+        } 
       }
-      return count($datos);
+      return $docsIngresados;
   }
   
   public function insertDocu($fila){
-      $scenario=(empty($fila['unidad_id']))?SigiCuentaspor::SCENARIO_RECIBO_EXTERNO_MASIVO:SigiCuentaspor::SCENARIO_RECIBO_INTERNO;
+       //yii::error('avagdgdgdnxando0',__FUNCTION__);
+      $scenario=(empty($fila['unidad_id']))?
+              SigiCuentaspor::SCENARIO_RECIBO_EXTERNO_MASIVO:
+              SigiCuentaspor::SCENARIO_RECIBO_INTERNO;
       $model= SigiCuentaspor::firstOrCreateStatic(
               ['facturacion_id'=>$this->id,
                   'edificio_id'=>$this->edificio_id,
-                'codocu'=>$fila['codocu'], 
-                'numerodoc'=>$fila['numdocu'], 
-                  'descripcion'=>$fila['glosa'], 
-                   'codpro'=>$fila['codpro'], 
-                  'fedoc'=>$fila['fechadoc'], 
-                   'colector_id'=>$fila['cargoedificio_id'],  
+                'codocu'=>$fila->codocu, 
+                'numerodoc'=>$fila->numdocu, 
+                  'descripcion'=>$fila->glosa, 
+                   'codpro'=>$fila->codpro, 
+                  'fedoc'=>$fila->fechadoc, 
+                   'colector_id'=>$fila->cargoedificio_id,  
                    'mes'=>$this->mes, 
                   'anio'=>$this->ejercicio, 
-                  'monto'=>$fila['monto'], 
-                  'codmon'=>$fila['codmon'], 
-                  'unidad_id'=>$fila['unidad_id'], 
+                  'monto'=>$fila->monto, 
+                  'codmon'=>$fila->codmon, 
+                  'unidad_id'=>$fila->unidad_id, 
                   'mesconsumo'=>$this->mes, 
+                  'anexado'=>true,
                   'consumo'=>0],
              $scenario,
               ['facturacion_id'=>$this->id,
-                'codocu'=>$model->codocu, 
-                'numerodoc'=>$model->numdocu,                 
-                   'codpro'=>$model->codpro,
+                'codocu'=>$fila->codocu, 
+                'numerodoc'=>$fila->numdocu,                
+                   'codpro'=>$fila->codpro, 
                    
                   ],true);
       if(!is_null($model)){
-          if(is_null($d= SigiPorpagar::findOne($fila['id'])))
-           $d= Sigiporcobrar::findOne($fila['id']);
-          if($d->hasAttachments())
-          $model->attachFromPath($d->files[0]->path);
+         //yii::error('avanxando0',__FUNCTION__);
+                 if($fila->hasAttachments())
+                    $model->attachFromPath($d->files[0]->path);  
+           $fila->facturacion_id=$this->id;
+           $fila->save();          
+          return true;
+      }else{
+           //yii::error('retrocer',__FUNCTION__);
+             return false;
       }
+      
   }
  
  private  function hashSesion(){

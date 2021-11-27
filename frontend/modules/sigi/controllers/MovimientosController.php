@@ -630,8 +630,76 @@ public function actionUpdateSaldo($id){
         ]);
       
  }
+/*
+ * Concilioacion de documetno imputado
+ */
+public function actionCreaConcDocInpu($id){
+    $this->layout = "install";
+    $modelMovBanco= \frontend\modules\sigi\models\SigiMovbanco::findOne($id);
+    if(is_null($modelMovBanco))
+     return ['success'=>2,'msg'=>'nada']; 
+          
+    $model= New \frontend\modules\sigi\models\SigiMovimientosPre([
+        'edificio_id'=>$modelMovBanco->edificio_id,
+         'cuenta_id'=>$modelMovBanco->cuenta_id,
+        'idop'=>$modelMovBanco->id,
+        'tipomov'=>'100',
+        'activo'=>false,
+        //'glosa'=>'PAGO DE CUOTA DE MANT'
+    ]);
+    $model->setScenario($model::SCE_CONCILIACION_PAGO);
+           
+      $datos=[];
+        if(h::request()->isPost){
+          $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_conciliacion', [
+               'id'=>$id,
+                        'model' => $model,
+                'modelMovBanco'=> $modelMovBanco,
+               'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        ]);  
+        } 
+} 
 
 
+public function actionEditConc($id){
+    $this->layout = "install";
+    $model= \frontend\modules\sigi\models\SigiMovimientosPre::findOne($id);
+    if(is_null($model))
+     return ['success'=>2,'msg'=>'nada']; 
+    $model->setScenario($model::SCE_CONCILIACION_PAGO);
+           
+      $datos=[];
+        if(h::request()->isPost){
+          $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_conciliacion', [
+               'id'=>$id,
+                        'model' => $model,
+                //'modelMovBanco'=> $modelMovBanco,
+               'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        ]);  
+        } 
+} 
 
    
 }

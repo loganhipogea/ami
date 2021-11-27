@@ -201,7 +201,7 @@ private static function findKeyArrayInPost(){
      $datos=[];
 	//$modelClass=unserialize(h::request()->get(static::NOMBRE_CLASE_PARAMETER));
        // $id=h::request()->get(static::ID_CLASE_PARAMETER);
-       // var_dump($modelClass,$id);
+       //var_dump($modelClass,$id);die();
         $model=$modelClass::findOne($id);
         //$model=$modelClass::find
         //var_dump($model,$model instanceof modeloBase);die();

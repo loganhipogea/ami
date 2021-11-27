@@ -18,7 +18,7 @@ class SigiCuentasporSearch extends SigiCuentaspor
     {
         return [
             [['id', 'edificio_id', 'mes'], 'integer'],
-            [['codocu','edificio_id','codocu', 'descripcion', 'fedoc', 'anio', 'detalle', 'fevenc', 'igv', 'codestado'], 'safe'],
+            [['codocu','edificio_id','codocu', 'descripcion', 'fedoc', 'anio', 'detalle', 'fevenc', 'igv', 'codestado','anexado'], 'safe'],
             [['monto'], 'number'],
         ];
     }

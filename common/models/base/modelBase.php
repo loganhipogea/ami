@@ -833,7 +833,8 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             //print_r($attributes);
             //$model=self::find()->where($attributes)->one();
             $myAttributesVerify=(is_null($verifyAttributes))?$attributes:$verifyAttributes;
-            //yii::error($myAttributesVerify); 
+           // yii::error($myAttributesVerify); 
+           //yii::error(self::find()->where($myAttributesVerify)->createCommand()->rawSql,__FUNCTION__);
             if(!self::find()->where($myAttributesVerify)->exists()){
                          //yii::error($myAttributesVerify);       
 

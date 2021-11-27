@@ -12,6 +12,7 @@ use common\helpers\ComboHelper as Combito;
 use frontend\modules\sigi\models\SigiUserEdificios;
 use frontend\modules\sigi\models\SigiSuministros;
 use yii\helpers\ArrayHelper;
+use common\helpers\h;
 use yii;
 class comboHelper extends Combito
 {
@@ -278,13 +279,30 @@ class comboHelper extends Combito
     
     
      public static function getCboKardexPagados($edificio_id){
+         $formateador=h::formato();
         $datos= \frontend\modules\sigi\models\VwSigiKardexPagos::find()
                  ->andWhere(['edificio_id'=>$edificio_id])->
-                 orderBy(['anio'=>SORT_ASC,'mes'=>SORT_ASC,'numero'=>SORT_ASC, 'monto'=>SORT_ASC])->
+                 orderBy([
+                     'anio'=>SORT_ASC,
+                     'mes'=>SORT_ASC,
+                     'monto'=>SORT_ASC,
+                     'numero'=>SORT_ASC
+                     ])->
                 asArray()->all();
          $combo=[];
+         $combo['']=str_pad('Deuda recibo', 20, "_", STR_PAD_LEFT).
+                 str_pad('Monto recibo', 20, "_", STR_PAD_LEFT).
+                   '  -  '.str_pad('Monto cancelado', 20, "_", STR_PAD_LEFT).
+                  '  -  '.str_pad("UNIDAD",12, "_", STR_PAD_LEFT).
+                   '  -  '."AÑO".'-'.
+                   str_pad("MES",3, "_", STR_PAD_LEFT);
          foreach($datos as $fila){
-             $combo[$fila['id']]=round($fila['monto']+0,2).'  -  '.round($fila['pagado']+0,2).' -   [['.$fila['numero'].']]   -'.$fila['anio'].'-'.$fila['mes'];
+             $combo[$fila['id']]=str_pad( $formateador->asDecimal(trim($fila['deuda'])+0,2), 20, "_", STR_PAD_LEFT).
+                     str_pad( $formateador->asDecimal(trim($fila['monto'])+0,2), 20, "_", STR_PAD_LEFT).
+                   '  -  '.str_pad($formateador->asDecimal(trim($fila['pagado'])+0,2), 20, "_", STR_PAD_LEFT).
+                   '  -  '.'[['.str_pad(trim($fila['numero']),12, "_", STR_PAD_LEFT).']]'.
+                   '  -  '.$fila['anio'].'-'.
+                   str_pad($fila['mes'],3, "_", STR_PAD_LEFT);
          }
          //array_combine(array_column($combo,'id'),array_column($combo,'id'));
        /* $idsFacturados= \frontend\modules\sigi\models\SigiKardexdepa::find()->

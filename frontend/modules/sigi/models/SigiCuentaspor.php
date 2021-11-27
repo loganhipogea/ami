@@ -35,7 +35,7 @@ class SigiCuentaspor extends \common\models\base\modelBase
     public $dateorTimeFields=['fedoc'=>self::_FDATE,
         'fevenc'=>SELF::_FDATE];
    protected $Mycolector;
-    
+    public $booleanFields = ['anexado'];
     
     /*public function __construct(colectoresInterface $colector) {
         $this->Mycolector=$Colector;
@@ -71,7 +71,7 @@ class SigiCuentaspor extends \common\models\base\modelBase
             [['edificio_id', 'mes'], 'integer'],
             [['detalle'], 'string'],
             [['consumo'], 'number'],
-             [['codpro','codmon'], 'safe'],
+             [['codpro','codmon','anexado'], 'safe'],
             /*ESCENARIO RECIBO INTERNO */
             [['edificio_id','unidad_id','colector_id',
                 'fedoc','descripcion',
@@ -600,6 +600,24 @@ public function creaRegistroLecturasTemp(){
  }
  
  
-
+public function afterDelete() {
+    /*Revertir algun documento relacionado 
+     * en la tabla DOCDPORPAGAR*/
+     if($this->anexado){
+    $criteria=['edificio_id'=>$this->edificio_id,
+                  'en_recibo'=>'1',
+                'facturacion_id'=>$this->facturacion->id,
+                'codocu'=>$this->codocu, 
+                'numdocu'=>$this->numerodoc,                
+                   'codpro'=>$this->codpro, 
+                  ];
+                  
+    if(!is_null($model=SigiPorpagar::find()->andWhere($criteria)->one())){
+        $model->facturacion_id=null;
+        $model->save();
+    }
+     }
+    return parent::afterDelete();
+}
  
  }
