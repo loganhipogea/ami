@@ -219,7 +219,12 @@ use common\widgets\selectwidget\selectWidget;
                              //'target'=>'_blank'
                         ];
                         //return Html::button('<span class="glyphicon glyphicon-pencil"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => ' btn btn-sm btn-success']);
-                        if((!$model->colector->isBudget() and !$aprobado) or ($model->anexado && !$aprobado) )
+                        //if($model->id==1100){
+                          // var_dump( (!$model->colector->isBudget() and !$aprobado) or ($model->anexado and !$aprobado));
+                         // die();  
+                        //}
+                        
+                         if((!$model->colector->isBudget() and !$aprobado) or ($model->anexado and !$aprobado) )
                          return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>',$url,$options);
                      
                         

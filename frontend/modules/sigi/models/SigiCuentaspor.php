@@ -76,13 +76,13 @@ class SigiCuentaspor extends \common\models\base\modelBase
             [['edificio_id','unidad_id','colector_id',
                 'fedoc','descripcion',
                 'mes','anio','monto','codmon',
-                'codpro','detalles','codocu'],
+                'codpro','detalles','codocu','anexado'],
               'safe','on'=>self::SCENARIO_RECIBO_INTERNO
              ],
             [['edificio_id','unidad_id','colector_id',
                 'fedoc','descripcion',
                 'mes','anio','monto','codmon',
-                'codpro','codocu'],
+                'codpro','codocu','anexado'],
               'required','on'=>self::SCENARIO_RECIBO_INTERNO
              ],
             
@@ -144,8 +144,8 @@ class SigiCuentaspor extends \common\models\base\modelBase
  public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_RECIBO_INTERNO] = ['facturacion_id','edificio_id','unidad_id','codpro','colector_id','fechadoc','descripcion','mes','anio','monto','codmon','codocu'];
-       $scenarios[self::SCENARIO_RECIBO_EXTERNO_MASIVO] = ['numerodoc','facturacion_id','edificio_id','codpro','colector_id','fedoc','descripcion','detalle','mes','anio','monto','codmon','codocu','mesconsumo','consumo'];
+        $scenarios[self::SCENARIO_RECIBO_INTERNO] = ['facturacion_id','edificio_id','unidad_id','codpro','colector_id','fechadoc','descripcion','mes','anio','monto','codmon','codocu','anexado'];
+       $scenarios[self::SCENARIO_RECIBO_EXTERNO_MASIVO] = ['numerodoc','facturacion_id','edificio_id','codpro','colector_id','fedoc','descripcion','detalle','mes','anio','monto','codmon','codocu','mesconsumo','consumo','anexado'];
         //$scenarios[self::SCENARIO_UPDATE_TABULAR] = ['codigo','coditem','tarifa'];
        // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];*/
         return $scenarios;

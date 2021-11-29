@@ -62,7 +62,7 @@ class SigiSanciones extends \common\models\base\modelBase
             [['edificio_id', 'unidad_id', 'unidad_id_ocurrencia', 'propietario_id'], 'integer'],
             [['monto'], 'number'],
             [['detalle'], 'string'],
-             [['fecha1','focurrencia1','monto1'], 'safe'],
+             [['fecha1','focurrencia1','monto1','detalle'], 'safe'],
             [['fecha'], 'string', 'max' => 10],
             [['focurrencia'], 'string', 'max' => 19],
             [['activo'], 'string', 'max' => 1],

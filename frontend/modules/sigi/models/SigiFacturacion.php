@@ -1538,7 +1538,9 @@ class SigiFacturacion extends \common\models\base\modelBase
                  if($fila->hasAttachments())
                     $model->attachFromPath($d->files[0]->path);  
            $fila->facturacion_id=$this->id;
-           $fila->save();          
+           //yii::error('VERIOFICANDO SI GRABA');
+           $fila->save();
+           
           return true;
       }else{
            //yii::error('retrocer',__FUNCTION__);

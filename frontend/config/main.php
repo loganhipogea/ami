@@ -153,6 +153,7 @@ return [
             'site/login-residente',
             'site/clear-cache/',
             'site/falta-pagos',
+            'site/mensaje',
             'site/envia-mail-cont',
              'site/request-password-reset',
             'site/reset-password', 

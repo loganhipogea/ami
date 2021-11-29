@@ -132,8 +132,17 @@ class SigiMovimientosPre extends \common\models\base\modelBase
              [['monto'], 'validate_monto'],
             [['monto_conciliado'], 'safe'],
             [['monto'], 'validate_monto_fraccionado','on'=>self::SCE_CONCILIACION_PAGO],
+           
+            /*CAMPOS REQUERIDOS SEGUN ESCENARIO*/
             [['kardex_id'], 'required','on'=>self::SCE_CONCILIACION_PAGO],
+            [['doc_id'], 'required',
+                'on'=>[
+                    self::SCE_CONCILIACION_PAGO_DOC_GENERAL,
+                    self::SCE_CONCILIACION_PAGO_DOC_IMPUTADO
+                    ]],
             
+            [['unidad_id'], 'required','on'=>self::SCE_CONCILIACION_PAGO_DOC_IMPUTADO],
+            /*FIN DE CAMPOS REQUERIDOS SEGUN ESCENARIO*/
             
             
             [['fechacre'], 'string', 'max' => 19],
@@ -141,7 +150,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
             [['glosa'], 'string', 'max' => 40],
             //[['activo'], 'string', 'max' => 1],
             [['cuenta_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCuentas::className(), 'targetAttribute' => ['cuenta_id' => 'id']],
-            [['tipomov'], 'exist', 'skipOnError' => true, 'targetClass' => SigiTipomov::className(), 'targetAttribute' => ['tipomov' => 'codigo']],
+            //[['tipomov'], 'exist', 'skipOnError' => true, 'targetClass' => SigiTipomov::className(), 'targetAttribute' => ['tipomov' => 'codigo']],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
         ];
     }

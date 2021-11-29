@@ -647,7 +647,7 @@ public function actionCreaConcDocInpu($id){
         'activo'=>false,
         //'glosa'=>'PAGO DE CUOTA DE MANT'
     ]);
-    $model->setScenario($model::SCE_CONCILIACION_PAGO);
+    $model->setScenario($model::SCE_CONCILIACION_PAGO_DOC_IMPUTADO);
            
       $datos=[];
         if(h::request()->isPost){
@@ -672,12 +672,12 @@ public function actionCreaConcDocInpu($id){
 } 
 
 
-public function actionEditConc($id){
+public function actionEditConcDocInp($id){
     $this->layout = "install";
     $model= \frontend\modules\sigi\models\SigiMovimientosPre::findOne($id);
     if(is_null($model))
      return ['success'=>2,'msg'=>'nada']; 
-    $model->setScenario($model::SCE_CONCILIACION_PAGO);
+    $model->setScenario($model::SCE_CONCILIACION_PAGO_DOC_IMPUTADO);
            
       $datos=[];
         if(h::request()->isPost){
