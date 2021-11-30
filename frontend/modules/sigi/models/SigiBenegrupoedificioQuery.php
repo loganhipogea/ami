@@ -7,7 +7,7 @@ namespace frontend\modules\sigi\models;
  *
  * @see SigiCargosgrupoedificio
  */
-class SigiBenegrupoedificioQuery extends \frontend\modules\sigi\components\ActiveQueryBeneficio
+class SigiBenegrupoedificioQuery extends \frontend\modules\sigi\components\ActiveQueryScope
 {
     /*public function active()
     {
@@ -20,6 +20,7 @@ class SigiBenegrupoedificioQuery extends \frontend\modules\sigi\components\Activ
      */
     public function all($db = null)
     {
+        $this->alias('t')->andWhere(['ingreso'=>'1']);
         return parent::all($db);
     }
 

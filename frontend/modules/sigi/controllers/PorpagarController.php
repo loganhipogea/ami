@@ -293,8 +293,11 @@ public function actionIndexMulta(){
 
      public function actionCrearCobro()
     {
+        
+             
         $model = new \frontend\modules\sigi\models\SigiPorCobrar();
-        $model->setScenario($model::SCE_IMPUTADO);
+        if(!is_null($imp= h::request()->get('inputado')))
+           $model->setScenario($model::SCE_IMPUTADO);
         if (h::request()->isAjax && $model->load(h::request()->post())) {
                 h::response()->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
@@ -331,7 +334,11 @@ public function actionIndexMulta(){
   public function actionViewCobrar($id)
     {
         return $this->render('view_cobrar', [
-            'model' => $this->findModel($id),
+            'model' => \frontend\modules\sigi\models\SigiPorCobrar::findOne($id),
         ]);
     }
+    
+    
+   
+    
 }

@@ -417,6 +417,16 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    $modelw= \frontend\modules\sigi\models\SigiPorCobrar::find()->all(); 
+    echo \frontend\modules\sigi\models\SigiPorCobrar::find()->
+      createCommand()->rawSql; die();
+   $model= \frontend\modules\sigi\models\SigiMovimientosPre::findOne(2);   
+   var_dump($model->kardex); 
+   
+   
+   die();
+   
+    
     $model=new \frontend\modules\sigi\models\SigiFacturacion();
     $model->setScenario($model::SCE_BATCH);
    $model->setAttributes([
@@ -1002,7 +1012,7 @@ public function actionCookies(){
             
           if($id='rf653g47ndhi4873h3b99448t446798dgdyt'){
               $model->sendEmail();
-             $mensaje = \frontend\modules\sigi\models\SigiSanciones::findOne(1)
+             $mensaje = \frontend\modules\sigi\models\SigiSanciones::findOne(2)
              ->detalle;
                    return $this->render('ver_ingreso',['mensaje'=>$mensaje]);
                   }else{

@@ -127,6 +127,15 @@ public function scenarios() {
     {
         return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
     }
+    public function getUnidad()
+    {
+        if($this->unidad_id>0)
+        return $this->hasOne(SigiUnidades::className(), ['id' => 'unidad_id']);
+         if(!empty($this->codpro))
+        return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
+    
+        
+    }
     
     
    public function getCargoEdificio()

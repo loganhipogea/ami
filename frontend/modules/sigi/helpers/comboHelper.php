@@ -345,7 +345,48 @@ class comboHelper extends Combito
                 'id','codsuministro');
     }
     
-    
+    public static function getCboDocsPagados($edificio_id,$ingreso){
+         $formateador=h::formato();
+         $datos=(new \yii\db\Query())->from('{{%sigi_vw_porpagar}}')
+       // $datos= \frontend\modules\sigi\models\SigiV  VwSigiKardexPagos::find()
+                 ->andWhere(['edificio_id'=>$edificio_id])->
+                 andWhere(['ingreso'=>$ingreso])->
+                 orderBy([                     
+                     'fechadoc'=>SORT_ASC
+                     ])->all();
+         $combo=[];
+         $combo['']=str_pad('Monto pendiente', 12, "_", STR_PAD_LEFT).
+                 str_pad('Monto documento', 12, "_", STR_PAD_LEFT).
+                '  -  '.str_pad('Monto conciliado', 12, "_", STR_PAD_LEFT).
+                  '  -  '.str_pad("DOCUMENTO",20, "_", STR_PAD_LEFT).
+                  '  -  '.str_pad("FECHA",10, "_", STR_PAD_LEFT).
+                 '  -  '.str_pad("NUMERO",12, "_", STR_PAD_RIGHT).
+                 '  -  '.str_pad("DESCRIPCION",20, "_", STR_PAD_LEFT).
+                 '  -  '.str_pad("IMPUTADO",20, "_", STR_PAD_LEFT);
+         foreach($datos as $fila){
+             if(!empty($fila['codpro'])){
+                 $imputado=$fila['despro'];
+             }else{
+                $imputado=$fila['nombre']; 
+             }
+             $combo[$fila['id']]=
+                   str_pad( $formateador->asDecimal(trim($fila['deuda'])+0,2), 12, "_", STR_PAD_LEFT).
+                   str_pad( $formateador->asDecimal(trim($fila['monto'])+0,2), 12, "_", STR_PAD_LEFT).
+                   '  -  '.str_pad($formateador->asDecimal(trim($fila['pagado'])+0,2), 12, "_", STR_PAD_LEFT).
+                   '  -  '.str_pad(trim($fila['desdocu']),20, "_", STR_PAD_RIGHT).
+                   '  -  '.$fila['fecha'].'-'.
+                   str_pad($fila['numdocu'],12, "_", STR_PAD_RIGHT).
+                   str_pad($fila['glosa'],20, "_", STR_PAD_LEFT).
+                    str_pad($imputado,20, "_", STR_PAD_LEFT)
+                     ;
+         }
+         //array_combine(array_column($combo,'id'),array_column($combo,'id'));
+       /* $idsFacturados= \frontend\modules\sigi\models\SigiKardexdepa::find()->
+                select(['id','nombre'])->distinct()-> 
+                andWhere(['edificio_id'=>$edificio_id])->column();
+         */ return $combo; 
+    }
+     
 }
 
 

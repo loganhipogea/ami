@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use common\helpers\timeHelper;
+use common\helpers\h;
 use miloschuman\highcharts\Highcharts;
 use miloschuman\highcharts\HighchartsAsset;
 use dosamigos\chartjs\ChartJs;
@@ -13,17 +14,24 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 <div class="box box-body">
     <h4>Pagos</h4>
     <?php //$clave= uniqid();
-    $grilla='grilla_'.$id;
+    $grilla='grilla_'.$id; 
     ?>
     <?php 
     $url= Url::to(['crea-conc','id'=>$id,'gridName'=>$grilla,'idModal'=>'buscarvalor']);
-     echo  Html::button(yii::t('base.verbs','Conciliar depósito'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Sesión'),'id'=>'btn_sesion', 'class' => 'botonAbre btn btn-warning']); 
+     echo  Html::button(yii::t('base.verbs','Conciliar Recibo'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Sesión'),'id'=>'btn_sesion', 'class' => 'botonAbre btn btn-warning']); 
 
     ?>
-    
+    <?php 
+    $url= Url::to(['crea-conc-doc-inpu','id'=>$id,'gridName'=>$grilla,'idModal'=>'buscarvalor']);
+     echo  Html::button(yii::t('base.verbs','Conciliar otro Ingreso'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Sesión'),'id'=>'btn_sesion', 'class' => 'botonAbre btn btn-warning']); 
+
+    ?>
+      <?= Html::a(Yii::t('sigi.labels', 'Crear documento inputado'), Url::to(['/sigi/porpagar/crear-cobro','inputado'=>'1']), ['target'=>'_blank','data-pjax'=>'0','class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('sigi.labels', 'Crear documento general'), ['/sigi/porpagar/crear-cobro'], ['target'=>'_blank','data-pjax'=>'0','class' => 'btn btn-success']) ?>
     
     
 <?php
+$formato=h::formato();
  Pjax::begin(['id'=>$grilla,'timeout'=>false]); ?>
     
    <?php 
@@ -113,24 +121,70 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                     'expandOneOnly' => true
                 ],*/
             //'fechaop',
-           
-             'glosa',
-             ['attribute'=>'nombre',
+            ['attribute'=>'Numero',
+                'value'=>function($model){
+                     $kardex=$model->kardex;
+                       if($model->isKardex()){
+                           return $kardex->numerorecibo;
+                       }else{ 
+                           return $kardex->numdocu;
+                           
+                       }  
+                    }  
+                  
+                  ],
+           ['attribute'=>'Doc',
+              'format'=>'raw',
+                'value'=>function($model){
+                     $kardex=$model->kardex;
+                       if($model->isKardex()){
+                          $url=Url::to(['/sigi/kardexdepa/update','id'=>$kardex->id]);
+                          $options=['data-pjax'=>'0','target'=>'_blank'];
+                           return Html::a('RECIBO DEL MES DE '.timeHelper::mes($kardex->mes).' - '.$kardex->anio,$url,$options);
+                       }else{ 
+                           $url=Url::to(['/sigi/porpagar/update-cobrar','id'=>$kardex->id]);
+                          $options=['data-pjax'=>'0','target'=>'_blank'];
+                           return Html::a($kardex->documento->desdocu,$url,$options);
+                           
+                       }  
+                    }  
+                  
+                  ],
+             
+              ['attribute'=>'glosa',
+                   'header'=>'Descrip',
+                  ],                       
+             ['attribute'=>'Emisor',
+                 
                'format'=>'raw',
                 'value'=>function($model){
-                        
-                     return $model->kardex->unidad->nombre;   
+                               $kardex=$model->kardex;
+                       if($model->isKardex()){
+                           return $kardex->unidad->nombre;
+                       }else{                         
+                           if(!empty($kardex->codpro)){
+                             return $model->kardex->clipro->despro;  
+                           }else{
+                              return $model->kardex->unidad->nombre; 
+                           }
+                          //return $model->kardex->unidad->nombre;
+                       }
+                           }  
+                  
+                  ],
+              ['attribute'=>'Monto',
+                'value'=>function($model) use($formato){
+                     return $formato->asDecimal($model->monto,3);   
                 }  
                   
                   ],
-              'monto',
-            ['attribute'=>'Monto Reci',
-                'value'=>function($model){
-                     return round($model->kardex->monto,3);   
-                }  
+            ['attribute'=>'Monto Doc',
+                'value'=>function($model) use($formato){
+                     return $formato->asDecimal($model->kardex->monto,3);   
+                   }  
                   
                   ],
-              'kardex.mes',
+              
             
         ],
     ]); ?>

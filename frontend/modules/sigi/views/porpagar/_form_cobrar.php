@@ -15,7 +15,10 @@ use common\helpers\h;
 
 <div class="sigi-porpagar-form">
     <br>
-    <?php $form = ActiveForm::begin([
+    <?php 
+    $tienehijos=$model->hasChilds();
+    
+    $form = ActiveForm::begin([
     'fieldClass'=>'\common\components\MyActiveField',
         'id'=>'miform',
     ]); ?>
@@ -88,13 +91,17 @@ use common\helpers\h;
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'codocu')->dropDownList(
  comboHelper::getCboDocuments(),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--'),
+                 'disabled'=>!$model->isNewRecord
+                 ]
              ) ?>
  </div>
  
              
  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-      <?= $form->field($model, 'numdocu')->textInput(['maxlength' => true]) ?> 
+      <?= $form->field($model, 'numdocu')->textInput(['maxlength' => true,
+          'disabled'=>$tienehijos,
+          ]) ?> 
 
  </div>
           
@@ -102,13 +109,15 @@ use common\helpers\h;
  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <?= $form->field($model, 'codmon')->dropDownList(
  comboHelper::getCboMonedas(),
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')
+                 ,'disabled'=>$tienehijos,]
              ) ?>
 
  </div>
   
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'monto')->textInput(['maxlength' => true,'disabled'=>$model->hasChilds()]) ?>
+     <?= $form->field($model, 'monto')->textInput(['maxlength' => true,
+          'disabled'=>$tienehijos]) ?>
 
   </div>
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
@@ -125,7 +134,8 @@ use common\helpers\h;
      ?>
      <?= $form->field($model, 'cargoedificio_id')->dropDownList(
              $dati,
-             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')]
+             ['prompt'=>yii::t('sigi.labels','--Escoja un valor--')
+                  ,'disabled'=>$tienehijos]
              ) ?>
  </div>
   
@@ -134,25 +144,34 @@ use common\helpers\h;
 
  </div>
    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"> 
-     <?php
- 
-     if($model->isNewRecord){
+    
+     <?php 
+     if($model->getScenario()==$model::SCE_IMPUTADO){
+      if($model->isNewRecord){
          $datix=[];
      }else{
          $datix= comboHelper::getCboUnitsNotChilds($model->edificio_id);
      }
-     ?>
-     
-     
-     
- 
-     <?php echo $form->field($model, 'unidad_id')->
+     echo $form->field($model, 'unidad_id')->
             dropDownList($datix,
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
                     // 'disabled'=>(!$aprobado)?false:true,
+                       'disabled'=>$tienehijos
                         ]
-                    ) ?>
+             );
+     }else{
+         echo selectWidget::widget([
+           // 'id'=>'mipapa',
+            'model'=>$model,
+            'form'=>$form,
+            'campo'=>'codpro',
+         'ordenCampo'=>1,
+         'addCampos'=>[2],
+           'inputOptions'=>[ 'options'=>['disabled'=>$tienehijos]]
+        ]); 
+     }   
+             ?>
  </div>            
           
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -169,7 +188,7 @@ use common\helpers\h;
                                ],
                            
                             //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control','disabled'=>$model->hasChilds()]
+                            'options'=>['class'=>'form-control' ,'disabled'=>$tienehijos]
                             ]) ?>
 </div>
           
@@ -187,7 +206,7 @@ use common\helpers\h;
                                ],
                            
                             //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control']
+                            'options'=>['class'=>'form-control','disabled'=>$tienehijos]
                             ]) ?>
 </div>
   

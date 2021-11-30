@@ -51,8 +51,14 @@ class ActionSearchSelect extends \yii\base\Action
                   $query=$query->select([$firstField." as id",$secondField.' as text'])->where(['like',$secondField,$filter]);
               }
               
-              IF(count($filterWhere)>0)
-                  $query->andWhere($filterWhere);
+              IF(count($filterWhere)>0){
+                  foreach($filterWhere as $key=>$filtro){
+                      $query->andWhere($filtro); 
+                  }
+                 
+                  
+              }
+                  
               yii::error($query->createCommand()->getRawSql());
              $resultados= $query->asArray()->all();            
          }         

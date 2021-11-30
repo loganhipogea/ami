@@ -2,6 +2,7 @@
 use kartik\datetime\DateTimePicker;
 use kartik\date\DatePicker;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 
@@ -30,7 +31,8 @@ use common\helpers\h;
         <?= Html::submitButton("<span class='fa fa-search'></span>     ".Yii::t('sta.labels', 'buscar'), ['class' => 'btn btn-primary']) ?>
          <?php // Html::resetButton("<span class='fa fa-eye'></span>     ".Yii::t('sta.labels', 'Limpiar'), ['class' => 'btn btn-success']) ?>
        <?php // Html::button("<span class='fa fa-eye'></span>     ".Yii::t('sta.labels', 'Ver'), ['onClick'=>"$('#buscador').toggle()",  'class' => 'btn btn-success']) ?>
-         <?= Html::a(Yii::t('sigi.labels', 'Crear documento'), ['crear-cobro'], ['data-pjax'=>'0','class' => 'btn btn-success']) ?>
+         <?= Html::a(Yii::t('sigi.labels', 'Crear documento inputado'), Url::to(['crear-cobro','inputado'=>'1']), ['data-pjax'=>'0','class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('sigi.labels', 'Crear documento general'), ['crear-cobro'], ['data-pjax'=>'0','class' => 'btn btn-success']) ?>
     
     </div>
      </div>

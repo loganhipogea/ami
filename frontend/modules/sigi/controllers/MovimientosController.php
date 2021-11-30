@@ -409,11 +409,12 @@ public function actionUnAprobePago($id){
            if(is_null($model)){
                 return ['error'=>yii::t('sta.labels','No se encontró el registro')];  
            }else{
+               IF($model->isKardex()){
                /*
                 * Verificando primero que no tenga registros facturaciones 
                 * en el siguiente mes. Si los tiene ya no se podría dar marcha atras
                 */
-               if(!$model->kardex->facturacion->hasNextFacturacionWithDetail()){
+               if($model->isKardex() && !$model->kardex->facturacion->hasNextFacturacionWithDetail()){
                     $model->activo=false;
                    // $transa=$model->getDb()->beginTransaction();                  
                     if(!$model->save()){
@@ -421,11 +422,18 @@ public function actionUnAprobePago($id){
               
                     }
                    // $transa->commit();
-                    return ['warning'=>yii::t('sta.labels','Se desaprobó el pago del recibo')]; 
-               }else{
-                   return ['error'=>yii::t('sta.labels','Ya no puede deshacer este registro, existe una facturacion del mes siguiente que depende de este valor')];  
-               }
-                
+                            return ['warning'=>yii::t('sta.labels','Se desaprobó el pago del recibo')]; 
+                    }else{
+                        return ['error'=>yii::t('sta.labels','Ya no puede deshacer este registro, existe una facturacion del mes siguiente que depende de este valor')];  
+                        }
+                }else{
+                    $model->activo=false;
+                    if(!$model->save()){
+                         return ['error'=>yii::t('sta.labels','Hubo un error '.$model->getFirstError())];  
+                      return ['warning'=>yii::t('sta.labels','Se desaprobó el pago del recibo')]; 
+                  
+                    }
+               }  
            }
         }
    }
@@ -633,7 +641,7 @@ public function actionUpdateSaldo($id){
 /*
  * Concilioacion de documetno imputado
  */
-public function actionCreaConcDocInpu($id){
+public function actionCreaConcDocInpu($id){ 
     $this->layout = "install";
     $modelMovBanco= \frontend\modules\sigi\models\SigiMovbanco::findOne($id);
     if(is_null($modelMovBanco))
@@ -661,7 +669,7 @@ public function actionCreaConcDocInpu($id){
                 return ['success'=>1,'id'=>$model->edificio_id];
             }
         }else{
-           return $this->renderAjax('_modal_conciliacion', [
+           return $this->renderAjax('_modal_conciliacion_cobro', [
                'id'=>$id,
                         'model' => $model,
                 'modelMovBanco'=> $modelMovBanco,
@@ -691,7 +699,7 @@ public function actionEditConcDocInp($id){
                 return ['success'=>1,'id'=>$model->edificio_id];
             }
         }else{
-           return $this->renderAjax('_modal_conciliacion', [
+           return $this->renderAjax('_modal_conciliacion_cobro', [
                'id'=>$id,
                         'model' => $model,
                 //'modelMovBanco'=> $modelMovBanco,

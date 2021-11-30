@@ -131,7 +131,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
          
              [['monto'], 'validate_monto'],
             [['monto_conciliado'], 'safe'],
-            [['monto'], 'validate_monto_fraccionado','on'=>self::SCE_CONCILIACION_PAGO],
+            [['monto'], 'validate_monto_fraccionado',/*'on'=>self::SCE_CONCILIACION_PAGO*/],
            
             /*CAMPOS REQUERIDOS SEGUN ESCENARIO*/
             [['kardex_id'], 'required','on'=>self::SCE_CONCILIACION_PAGO],
@@ -141,7 +141,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
                     self::SCE_CONCILIACION_PAGO_DOC_IMPUTADO
                     ]],
             
-            [['unidad_id'], 'required','on'=>self::SCE_CONCILIACION_PAGO_DOC_IMPUTADO],
+            //[['unidad_id'], 'required','on'=>self::SCE_CONCILIACION_PAGO_DOC_IMPUTADO],
             /*FIN DE CAMPOS REQUERIDOS SEGUN ESCENARIO*/
             
             
@@ -202,6 +202,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
             return $this->hasOne(SigiPorpagar::className(), ['id' => 'doc_id']);
  
         }elseif($this->isDocCobro()){
+            //yii::error('ES UN COBRO ',__FUNCTION__);
             return $this->hasOne(SigiPorCobrar::className(), ['id' => 'doc_id']);
  
         }else{
@@ -285,9 +286,10 @@ class SigiMovimientosPre extends \common\models\base\modelBase
       }
       
       /*Sólo si se trata de una aprobación del movimiento*/
-      if(in_array('activo', array_keys($changedAttributes))){
+      if( !$insert && in_array('activo', array_keys($changedAttributes))){
           yii::error('si s emodifico el esdtado ',__FUNCTION__);
-        $this->kardex->cancelar();
+        if($this->isKardex())$this->kardex->cancelar();
+        
         $this->movBanco->refreshMonto();   
       }
       return parent::afterSave($insert, $changedAttributes);
@@ -386,18 +388,18 @@ public function validate_monto($attribute,$params){
     
     
     if(abs($this->monto) > abs($this->movBanco->monto))
-     $this->addError($attribute,yii::t('base.labels','Este monto {monto}  es mayor al monto {monotb} del movimiento del banco',['monto'=>$this->monto,'montob'=>$this->movBanco->monto]));
+     $this->addError($attribute,yii::t('base.labels','Este monto {monto}  es mayor al monto {montob} del movimiento del banco',['monto'=>$this->monto,'montob'=>$this->movBanco->monto]));
     
    }
    
-   private function isKardex(){
+   public function isKardex(){ 
       return ($this->kardex_id >0);
   } 
- private function isDocPago(){
+ public function isDocPago(){
       return ($this->doc_id >0 && $this->ingreso =='0');
   } 
   
-  private function isDocCobro(){
+  public function isDocCobro(){
       return ($this->doc_id >0 && $this->ingreso=='1');
   } 
   

@@ -6,7 +6,7 @@ use frontend\modules\sigi\components\ActiveQueryScope;
 //use frontend\modules\sta\staModule;
 //use common\helpers\h;
 
-class ActiveQueryDocsPagos extends ActiveQueryScope 
+class ActiveQueryBeneficio extends ActiveQueryScope 
 {
     
   public function init()
