@@ -386,7 +386,16 @@ class comboHelper extends Combito
                 andWhere(['edificio_id'=>$edificio_id])->column();
          */ return $combo; 
     }
-     
+    
+  public static function getCboGruposBene($id_edificio){
+        $apode= \frontend\modules\sigi\models\SigiBenegrupoedificio::find()
+                ->where(['edificio_id'=>$id_edificio])
+                ->all();
+ 
+        return ArrayHelper::map($apode,
+                'codgrupo','descripcion');
+        
+    }     
 }
 
 

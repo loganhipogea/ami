@@ -61,6 +61,17 @@ use common\widgets\selectsimplewidget\selectSimpleWidget;
            ?> 
           
    </div>
+   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"> 
+      
+           <?php echo $form->field($model, 'tipomov')->
+            dropDownList(\frontend\modules\sigi\helpers\comboHelper::getCboGruposBene($model->edificio_id),
+                  ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
+                    // 'class'=>'probandoSelect2',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]
+                    ) ?>
+      
+ </div>        
    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
          <?php 
          echo $form->field($model, 'id')->textInput(['disabled'=>true,'value'=>$model->cuenta->nombre]);

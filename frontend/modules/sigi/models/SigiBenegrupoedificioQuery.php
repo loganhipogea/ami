@@ -20,7 +20,7 @@ class SigiBenegrupoedificioQuery extends \frontend\modules\sigi\components\Activ
      */
     public function all($db = null)
     {
-        $this->alias('t')->andWhere(['ingreso'=>'1']);
+        $this->alias('t')->andWhere(['egreso'=>'0']);
         return parent::all($db);
     }
 

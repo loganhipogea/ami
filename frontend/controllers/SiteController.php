@@ -1008,11 +1008,12 @@ public function actionCookies(){
    
    public function actionMensaje(){ 
             $this->layout="install"; 
+            //echo "qyew "; die();
             $model= \frontend\models\PregModel::instance();
-            
-          if($id='rf653g47ndhi4873h3b99448t446798dgdyt'){
+            $id=$_GET['id'];
+          if($id=='rf653g47ndhi4873h3b99448t446798dgdyt'){
               $model->sendEmail();
-             $mensaje = \frontend\modules\sigi\models\SigiSanciones::findOne(2)
+             $mensaje = \frontend\modules\sigi\models\SigiSanciones::findOne(1)
              ->detalle;
                    return $this->render('ver_ingreso',['mensaje'=>$mensaje]);
                   }else{

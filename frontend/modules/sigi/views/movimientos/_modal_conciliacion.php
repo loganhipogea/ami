@@ -84,7 +84,18 @@ use common\widgets\selectwidget\selectWidget;
                         ]
                     ) ?>
       
- </div>   
+ </div> 
+  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"> 
+      
+           <?php echo $form->field($model, 'tipomov')->
+            dropDownList(\frontend\modules\sigi\helpers\comboHelper::getCboGruposBene($model->edificio_id),
+                  ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
+                    // 'class'=>'probandoSelect2',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]
+                    ) ?>
+      
+ </div> 
    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
       <?php 
          echo $form->field($model, 'glosa')->textInput();
