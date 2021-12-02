@@ -302,6 +302,7 @@ public function actionIndexMulta(){
                 h::response()->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
         }
+        //VAR_DUMP($model->load(Yii::$app->request->post()),$model->save(),$model->getErrors());DIE();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view-cobrar', 'id' => $model->id]);
         }else{
@@ -339,6 +340,50 @@ public function actionIndexMulta(){
     }
     
     
-   
+  public function actionCrearPago()
+    {  $model = new \frontend\modules\sigi\models\SigiPorpagar();
+        if(!is_null($imp= h::request()->get('inputado')))
+           $model->setScenario($model::SCE_IMPUTADO);
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view-pagar', 'id' => $model->id]);
+        }else{
+          //PRINT_R($model->getErrors());die();
+        }
+        return $this->render('create_cobrar', [
+            'model' => $model,
+        ]);
+    }
+    
+   public function actionUpdatePagar($id)
+    {
+        $model = \frontend\modules\sigi\models\SigiPorpagar::findOne($id);
+         if($model->unidad_id>0)
+             $model->setScenario($model::SCE_IMPUTADO);
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view-pagar', 'id' => $model->id]);
+        }else{
+           // print_r($model->getErrors());die();
+        }
+
+        return $this->render('update_pagar', [
+            'model' => $model,
+        ]);
+    } 
+    
+    public function actionViewPagar($id)
+    {
+        return $this->render('view_pagar', [
+            'model' => \frontend\modules\sigi\models\SigiPorpagar::findOne($id),
+        ]);
+    }
     
 }

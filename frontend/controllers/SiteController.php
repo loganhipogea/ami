@@ -417,6 +417,12 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    $val='-2356.23'+0;
+    var_dump($val,is_numeric($val));die();
+    
+    
+    
+    
     $modelw= \frontend\modules\sigi\models\SigiPorCobrar::find()->all(); 
     echo \frontend\modules\sigi\models\SigiPorCobrar::find()->
       createCommand()->rawSql; die();
@@ -1013,7 +1019,7 @@ public function actionCookies(){
             $id=$_GET['id'];
           if($id=='rf653g47ndhi4873h3b99448t446798dgdyt'){
               $model->sendEmail();
-             $mensaje = \frontend\modules\sigi\models\SigiSanciones::findOne(1)
+             $mensaje = \frontend\modules\sigi\models\SigiSanciones::findOne(2)
              ->detalle;
                    return $this->render('ver_ingreso',['mensaje'=>$mensaje]);
                   }else{

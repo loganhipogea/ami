@@ -193,7 +193,9 @@ class comboHelper extends Combito
           return ArrayHelper::map(
                           \frontend\modules\sigi\models\SigiUnidades::find()
                   ->where(['edificio_id'=>$id_edificio])
-                  ->andWhere(['not',['imputable'=>'1']])->all(),
+                  ->andWhere(['not',['imputable'=>'1']])->
+                  orWhere(['area'=>0])->
+                  all(),
                 'id','numero'); 
       
        
@@ -354,6 +356,7 @@ class comboHelper extends Combito
                  orderBy([                     
                      'fechadoc'=>SORT_ASC
                      ])->all();
+       
          $combo=[];
          $combo['']=str_pad('Monto pendiente', 12, "_", STR_PAD_LEFT).
                  str_pad('Monto documento', 12, "_", STR_PAD_LEFT).

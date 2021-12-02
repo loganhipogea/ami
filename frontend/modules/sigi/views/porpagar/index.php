@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
   use common\widgets\spinnerWidget\spinnerWidget;
@@ -31,14 +32,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update}{view}',
                 'buttons' => [
-                    'update' => function($url, $model) {                        
+                    'update' => function($url, $model) { 
+                        $url= Url::to(['/sigi/porpagar/update-pagar','id'=>$model->id]);
                         $options = [
                               'data-pjax'=>'0',
                             'title' => Yii::t('base.verbs', 'Update'),                            
                         ];
                         return Html::a('<span class="btn btn-info btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);
                          },
-                          'view' => function($url, $model) {                        
+                         
+                          'view' => function($url, $model) { 
+                              $url= Url::to(['/sigi/porpagar/view-pagar','id'=>$model->id]);
+                       
                         $options = [
                             'title' => Yii::t('base.verbs', 'View'),                            
                         ];

@@ -3,6 +3,7 @@
 namespace frontend\modules\sigi\models;
 use common\models\masters\Bancos;
 use common\models\masters\Monedas;
+use common\helpers\timeHelper;
 use common\models\masters\Clipro;
 use frontend\modules\sigi\models\SigiMovbanco;
 use Yii;
@@ -168,5 +169,26 @@ class SigiCuentas extends \common\models\base\modelBase
          return $consulta->scalar();
     }*/
     
-    
+    /*
+     * CALVULA EL SALDO, UNA VEZ EFECTUADA LA
+     * ULTIMA OPERACION DEL MES
+     * ES DECIR SE PUEDE USAR PARA OBTENER 
+     * EL DE CIERRE SALDO DEL MES 
+     */
+  public function saldoMes($mes,$anio){
+      //Creando la fecha limite, o el primer dia del mes
+      $mesSiguiente= str_pad(timeHelper::nextMonth($mes), 2, '0', STR_PAD_LEFT);
+      if($mesSiguiente=='01'){
+          $anio=($anio+1).'';
+      }
+      $fechalimit=$anio.'-'.$mesSiguiente.'-01';
+      $montoPosterior=$this->getSigiMovBancos()->
+         select('sum(monto)')->
+        andWhere(['>=','fopera',$fechalimit])      
+          ->scalar();
+      if($montoPosterior===false)$montoPosterior=0;
+      if(is_null($montoPosterior))$montoPosterior=0;
+      return $this->saldo- $montoPosterior;      
+      
+  }  
 }

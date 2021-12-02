@@ -34,6 +34,7 @@ class SigiPorpagar extends \common\models\base\modelBase
     const ESTADO_ANULADO='99';
     const ESTADO_PROGRAMADO='20';
     const SCE_ESTADO='estado';
+    const SCE_IMPUTADO='inputado';
      public $booleanFields = ['ingreso','en_recibo'];
     public $dateorTimeFields=[
         'fechaprog'=>self::_FDATE,
@@ -62,11 +63,13 @@ class SigiPorpagar extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codocu', 'edificio_id','codpro',  'monto','cargoedificio_id',   'glosa', 'fechadoc','codmon','fechaprog'], 'required'],
+            [['codocu', 'edificio_id',  'monto','cargoedificio_id',   'glosa', 'fechadoc','codmon','fechaprog'], 'required'],
             [['edificio_id', 'unidad_id','facturacion_id'], 'integer'],
             [['monto', 'igv', 'monto_usd'], 'number'],
             [['detalle'], 'string'],
             // [['numdocu'], 'safe'],
+            [['unidad_id'], 'required','on'=>self::SCE_IMPUTADO],
+            [['codpro'], 'required','except'=>self::SCE_IMPUTADO],
             [['fechaprog'], 'validate_fechas'],
              [['fechaprog'], 'validate_programacion'],
             [['codmon','codpro','fechaprog','cuenta_id','numdocu','ingreso','nivel','en_recibo'], 'safe'],
@@ -151,7 +154,7 @@ public function scenarios() {
     
   public function getMovimientosPago()
     {
-        return $this->hasMany(SigiMovimientospago::className(), ['pago_id' => 'id']);
+        return $this->hasMany(SigiMovimientosPre::className(), ['doc_id' => 'id']);
     }
     /**
      * {@inheritdoc}

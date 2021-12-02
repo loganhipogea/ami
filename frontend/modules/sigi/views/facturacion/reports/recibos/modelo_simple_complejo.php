@@ -33,7 +33,7 @@ $i=1;
             </tr> 
             
         <?php
-        
+        $formato=\common\helpers\h::formato();
         foreach($bloque as $clave=>$fila){
             if($fila['monto']!=0){
              $suministro=(empty(trim($fila['codsuministro'])))?'':'  Cod Suministro : '.(trim($fila['codsuministro']));
@@ -49,8 +49,8 @@ $i=1;
             ?>
             <tr>
                 <td width="70%" style="padding: 1px;"> <?=$descripcion?></td>
-                 <td width="20%"  align="right" style="padding: 1px;"><?=$simbolo.'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
-                  <td width="20%"   align="right" style="padding: 1px;"><?=$simbolo.'  '.Yii::$app->formatter->asDecimal($fila['monto'],3)?></td>
+                 <td width="20%"  align="right" style="padding: 1px;"><?=$simbolo.'  '.$formato->asDecimal($fila['montototal'],3)?></td>
+                  <td width="20%"   align="right" style="padding: 1px;"><?=$simbolo.'  '.$formato->asDecimal($fila['monto'],3)?></td>
             </tr>
         <?php }
         }
@@ -83,8 +83,8 @@ $i=1;
        //quitando el primer elemento de los datos , porque ya se renderesixo arriba
        array_shift($datos);
        foreach($datos as $keydato=>$bloque){   ?>
-            <?php   $subtotalCuota=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'monto')),3);
-                    $subtotalTotal=Yii::$app->formatter->asDecimal(array_sum(array_column($bloque,'montototal')),3);
+            <?php   $subtotalCuota=$formato->asDecimal(array_sum(array_column($bloque,'monto')),2);
+                    $subtotalTotal=$formato->asDecimal(array_sum(array_column($bloque,'montototal')),2);
                 ?> 
         <table style="border-style:0px;">
            <tr>
@@ -100,9 +100,9 @@ $i=1;
              $suministro=(empty(trim($fila['codsuministro'])))?'':'  Cod Suministro : '.(trim($fila['codsuministro']));
              $suministroAACC=($fila['aacc']=='1')?' => [AACC] ':' ';
              $unidades=(empty(trim($fila['unidades'])))?'':' ( '.(trim($fila['unidades'])).' )  ';
-     $lanterior=(empty(trim($fila['lanterior'])))?'':' L. Ant. : '.trim(round($fila['lanterior'],3));
-    $lactual=(empty(trim($fila['lectura'])))?'':' L. Act. : '.trim(round($fila['lectura'],3));
-     $consumo=(empty(trim($fila['delta'])))?'':'  Consumo: '.trim(round($fila['delta'],3));
+     $lanterior=(empty(trim($fila['lanterior'])))?'':' L. Ant. : '.trim(round($fila['lanterior'],2));
+    $lactual=(empty(trim($fila['lectura'])))?'':' L. Act. : '.trim(round($fila['lectura'],2));
+     $consumo=(empty(trim($fila['delta'])))?'':'  Consumo: '.trim(round($fila['delta'],2));
          $descripcion= $fila['descargo'].$suministro.$suministroAACC.$lanterior.$lactual.$consumo.$unidades;
         
        
@@ -110,8 +110,8 @@ $i=1;
             ?>
             <tr>
                 <td width="70%" style="padding: 1px;"> <?=$descripcion?></td>
-                 <td width="20%"  align="right" style="padding: 1px;"><?=$simbolo.'  '.Yii::$app->formatter->asDecimal($fila['montototal'],3)?></td>
-                  <td width="20%"   align="right" style="padding: 1px;"><?=$simbolo.'  '.Yii::$app->formatter->asDecimal($fila['monto'],3)?></td>
+                 <td width="20%"  align="right" style="padding: 1px;"><?=$simbolo.'  '.$formato->asDecimal($fila['montototal'],2)?></td>
+                  <td width="20%"   align="right" style="padding: 1px;"><?=$simbolo.'  '.$formato->asDecimal($fila['monto'],2)?></td>
             </tr>
         <?php }
         }

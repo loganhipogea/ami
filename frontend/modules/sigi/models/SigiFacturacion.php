@@ -779,15 +779,15 @@ class SigiFacturacion extends \common\models\base\modelBase
         /*************************************
          *   Recorriendo las cuentas por  (SigiCuentaspor Detalle de facturacion)
          *************************************/ 
-         //yii::error('******Recorreindo los conceptos ***********');
+         yii::error('******Recorreindo los conceptos ***********');
         foreach($this->sigiCuentaspor as $cuenta){
            
             $colector=$cuenta->colector;
-             //yii::error(' Recorriendo cuentas -> '.$colector->cargo->descargo);
+             yii::error(' Recorriendo cuentas -> '.$colector->cargo->descargo);
             //yii::error(' Recorriendo cuentas  '.$colector->cargo->descargo);
            /*Verificando primero si es un cobro individual para un departamento*/
            if($colector->isMassive()){  
-                //yii::error(' Es masivo');           
+                yii::error(' Es masivo');           
              /*Verificando luego si es un medidor*/
              if($colector->isMedidor()){
                  
@@ -799,11 +799,11 @@ class SigiFacturacion extends \common\models\base\modelBase
                      /*Se obtiene el factor de AACC si no tiene medidores en AACC =0 
                     * esto es el factor del consumo de todos las areas comunes
                         */
-                     // yii::error('Participacion Aacc medidor->porcConsumoAaCc() :'.$medidor->porcConsumoAaCc($cuenta->mes,$cuenta->anio));
+                      yii::error('Participacion Aacc medidor->porcConsumoAaCc() :'.$medidor->porcConsumoAaCc($cuenta->mes,$cuenta->anio));
                         $participacionAACC=$medidor->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
                         $participacionImputados=1-$participacionAACC;
-                      //yii::error('Participacion medidor->participacionRead() :'.$medidor->participacionRead($cuenta->mes,$cuenta->anio));
-                      //yii::error('Participacion imputados :'.$participacionImputados);
+                       yii::error('Participacion imputados :'.$participacionImputados);
+                     yii::error('Participacion medidor->participacionRead() :'.$medidor->participacionRead($cuenta->mes,$cuenta->anio));
                          
                      $participacion=$medidor->participacionRead($cuenta->mes,$cuenta->anio);
                    
@@ -826,7 +826,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                       * Recordar que estos medidores se anclan o se registran
                       * dentro de una unidad que es imputable=0
                       */
-                     //yii::error(' recorriendo los medidores aacc  ');
+                     yii::error(' recorriendo los medidores aacc  ');
                        $nMedidoresAACC=$this->edificio->nMedidoresAaCc();
                          foreach($this->edificio->medidoresAaCc() as $medidorAACC){
                             if($medidorAACC->hasUnitAfiliado($unidad->id)){
@@ -848,9 +848,9 @@ class SigiFacturacion extends \common\models\base\modelBase
                                  * $medidorAACC->participacionRead() este si es para cada meiddor
                                  */
                              $participacionAACC=$medidorAACC->porcConsumoAaCc($cuenta->mes,$cuenta->anio);
-                             //yii::error('paraticipacion de este medidor :'.$participacionAACC);
+                             yii::error('paraticipacion de este medidor :'.$participacionAACC);
                              if($medidorAACC->plano){  
-                                // yii::error('Este mdidor es plano');
+                                yii::error('Este mdidor es plano');
                                   
                                   
                                 $ndepasafiliados=$medidorAACC->ndepasRepartoPadres(); 
@@ -1135,10 +1135,10 @@ class SigiFacturacion extends \common\models\base\modelBase
       }
      
       
-     yii::error(SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
+     /*yii::error(SigiUnidades::find()->andWhere(['edificio_id'=>$this->edificio_id])->andWhere([
              'imputable'=>'1',
                 ])->andWhere(['parent_id'=>null])->andWhere(['not in','unidad_id',$idsFacturados])
-             ->createCommand()->rawSql,__FUNCTION__);
+             ->createCommand()->rawSql,__FUNCTION__);*/
   
      
       
@@ -1241,6 +1241,7 @@ class SigiFacturacion extends \common\models\base\modelBase
       $contador=0;
       $kardexes= SigiDetfacturacion::find()-> 
        select(['kardex_id'])->distinct()->andWhere(['facturacion_id'=>$this->id])->
+       orderBy(['grupounidad'=>SORT_ASC])->
           asArray()->all();
        //yii::error('KARDEXES');
      // yii::error($kardexes);

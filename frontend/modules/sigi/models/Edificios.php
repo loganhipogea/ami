@@ -191,8 +191,9 @@ class Edificios extends \common\models\base\modelBase
      */
     public function unidadesImputablesPadres(){
         return $this->queryUnidades()->andWhere([
-             'imputable'=>'1',
-                ])->andWhere(['parent_id'=>null])->all(); 
+             'imputable'=>'1'
+                ])->andWhere(['parent_id'=>null])->
+                andWhere(['>','area',0])->all(); 
          
     }
       

@@ -277,7 +277,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
            $validacion=false;
             
            }
-           if($carga->isNumeric($tipo)&& (!is_numeric($valor)) && $requerida){
+           if($carga->isNumeric($tipo)&& (!is_numeric($valor+0)) && $requerida){
                 yii::error('numerico : NO es el tipo',__METHOD__);
             $this->addError('activo',Yii::t('import.errors', 'Columna  "{columna}" es un valor numérico y  "{valor}" no lo es '.$msgAdicional,['valor'=>$valor,'columna'=>$nombrecampo]));   
            

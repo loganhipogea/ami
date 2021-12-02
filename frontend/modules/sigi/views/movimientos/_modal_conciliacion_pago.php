@@ -26,9 +26,9 @@ use common\widgets\selectsimplewidget\selectSimpleWidget;
         <div class="col-md-12">
             <div class="form-group no-margin">
           <?php if($model->isNewRecord){
-              $url= \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/crea-pago','id'=>$id]);
+              $url= \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/crea-conc-doc-pago','id'=>$id]);
           }else{
-             $url= \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/edit-pago','id'=>$id]); 
+             $url= \yii\helpers\Url::to(['/sigi/'.$this->context->id.'/edit-conc-doc-pago','id'=>$id]); 
           } ?>
           <?= \common\widgets\buttonsubmitwidget\buttonSubmitWidget::widget(
                   ['idModal'=>$idModal,
@@ -41,8 +41,7 @@ use common\widgets\selectsimplewidget\selectSimpleWidget;
         </div>
     </div>
      
-  
-      <div class="box-body">
+       <div class="box-body">
    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
          <?php         
             echo  $form->field($model, 'cuenta_id')->textInput(['disabled'=>true,'value'=>$model->cuenta->nombre]);
@@ -61,6 +60,17 @@ use common\widgets\selectsimplewidget\selectSimpleWidget;
            ?> 
           
    </div>
+   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"> 
+      
+           <?php echo $form->field($model, 'tipomov')->
+            dropDownList(\frontend\modules\sigi\helpers\comboHelper::getCboGrupos($model->edificio_id),
+                  ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
+                    // 'class'=>'probandoSelect2',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]
+                    ) ?>
+      
+ </div>        
    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
          <?php 
          echo $form->field($model, 'id')->textInput(['disabled'=>true,'value'=>$model->cuenta->nombre]);
@@ -74,20 +84,37 @@ use common\widgets\selectsimplewidget\selectSimpleWidget;
          ?> 
           
    </div>
- <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"> 
+ <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
       <?php 
-  // $necesi=new Parametros;
-    echo selectSimpleWidget::widget([
+ /* echo selectSimpleWidget::widget([
            // 'id'=>'mipapa',
             'model'=>$model,
             'modeloForeign'=>New frontend\modules\sigi\models\VwSigiPorPagar(),
           'foreignField'=>'id',//El campo enlace del modelo forane , en este caso  VwSigiPorPagar(
             'form'=>$form,
-            'campo'=>'pago_id',
-           'filterWhere'=>['<>','deuda',0],
+            'campo'=>'doc_id',
+           'filterWhere'=>[
+               ['<>','deuda',0],
+               ['edificio_id'=>$model->edificio_id],
+               ['ingreso'=>'1'],
+               ],
          'ordenCampo'=>1,
          'addCampos'=>[4,5,8],
-        ]);  ?>
+        ]); */
+     
+      
+            echo $form->field($model, 'doc_id')->
+            dropDownList(\frontend\modules\sigi\helpers\comboHelper::getCboDocsPagados($model->edificio_id,'0'),
+                  ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
+                    // 'class'=>'probandoSelect2',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]
+                    ) 
+      
+
+      
+      
+      ?>
       
  </div>   
    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
@@ -119,30 +146,3 @@ use common\widgets\selectsimplewidget\selectSimpleWidget;
   <?php Pjax::end(); ?>      
 </div>
     </div></div>
-<?php 
-  $string="$('#boton_refrescar').on( 'click', function(){ 
-      
-       var Vurl='".Url::to(['/sigi/movimientos/attach-voucher','id'=>$model->id])."';
-       $.ajax({
-              url:Vurl, 
-              type: 'get',
-              data:{},
-              //dataType: 'json', 
-              error:  function(xhr, textStatus, error){               
-                            var n = Noty('id');                      
-                              $.noty.setText(n.options.id, error);
-                              $.noty.setType(n.options.id, 'error');       
-                                }, 
-              success: function(data) {
-               $.pjax.reload({container: '#adjuntos_23E".$model->id."', async: false});
-             
-                           
-                   
-                        }
-                        });
-
-
-             })";
-  
-  $this->registerJs($string, \yii\web\View::POS_END);
-       ?>   

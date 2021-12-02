@@ -145,7 +145,7 @@ $unidad=$detalle->unidad;
      ?>
         
        <!-- IMAGEN DE MEDIDORES     !--> 
-        <div style=" display:table; position:absolute; width:120px; left:580px;  top:540px; font-size:8;  font-family:arial;  font-weight:bold;  color:#000;">
+        <div style=" display:table; position:absolute; width:120px; left:700px;  top:540px; font-size:8;  font-family:arial;  font-weight:bold;  color:#000;">
            <?php 
                
                $hayimagenmesanterior=false;
@@ -167,7 +167,7 @@ $unidad=$detalle->unidad;
 // $unidad->firstMedidor(SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT)->readFacturableByMonth(9,'2021')->files[0]->url
            ?>
             </div>
-        <div style="display:table; position:absolute; width:120px; left:800px;  top:540px;font-size:8;  font-family:arial;  font-weight:bold;  color:#000;">
+        <div style="display:table; position:absolute; width:120px; left:580px;  top:540px;font-size:8;  font-family:arial;  font-weight:bold;  color:#000;">
           <?php if($hayimagenmesanterior){
                 echo 'Lectura anterior (m3) '.round($lecturaant->lectura,2);
                 echo $hayimagenmesanterior;
@@ -201,10 +201,10 @@ $unidad=$detalle->unidad;
                      echo $registroArea['nombre'];
                       echo"</td>\n";
                     echo"<td>\n";
-                    echo round($registroArea['area']+0,3);
+                    echo round($registroArea['area']+0,4);
                     echo"</td>\n";
                      echo"<td>\n";
-                    echo 100*round($registroArea['participacion']+0,4);
+                    echo 100*round($registroArea['participacion']+0,6);
                     echo"</td>\n";
                    echo"</tr>\n";
                      } ?>
@@ -212,10 +212,10 @@ $unidad=$detalle->unidad;
                     <td style="font-weight: bold;">Total:</td>
                     <td style="font-weight: bold;">
                      
-                    <?=round($area,3)?>
+                    <?=round($area,4)?>
                     </td>
                     <td style="font-weight: bold;">
-                    <?=100*round($parti,4)?>
+                    <?=100*round($parti,6)?>
                     </td>
                   </tr>
                   </tbody>

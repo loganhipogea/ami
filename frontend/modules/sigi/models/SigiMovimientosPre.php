@@ -125,7 +125,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
             [['idop', 'edificio_id', 'cuenta_id', 'user_id'], 'integer'],
             [['edificio_id', 'cuenta_id', /*'fechaop',*/  'tipomov', 'glosa',  /*'igv',*/  'activo'], 'required'],
            // [['monto'],'required', 'except'=>self::SCE_CONCILIACION_PAGO],
-            [['monto', 'igv', 'monto_usd'], 'number'],
+            [['monto', 'igv', 'monto_usd'], 'double'],
            // [['fechaop'], 'string', 'max' => 10],
             [['kardex_id','monto','diferencia','ingreso','unidad_id'], 'safe'],
          
@@ -261,7 +261,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
     
   public function beforeSave($insert) {
       if($insert){
-          $this->ingreso=true;
+          $this->ingreso=($this->monto>=0)?true:false;
           IF(empty($this->fechaop))$this->fechaop=
             self::SwichtFormatDate (self::CarbonNow()->format(\common\helpers\timeHelper::formatMysqlDate()),'date',true);
             if($this->isKardex()){
@@ -271,7 +271,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
            
       }
       
-      
+    
       
     //  var_dump($this->kardex_id,$this->kardex->monto);die();
       //Le sumamos el monto actual, porque aun no graba
@@ -396,11 +396,11 @@ public function validate_monto($attribute,$params){
       return ($this->kardex_id >0);
   } 
  public function isDocPago(){
-      return ($this->doc_id >0 && $this->ingreso =='0');
+      return ($this->doc_id >0 && $this->monto < 0);
   } 
   
   public function isDocCobro(){
-      return ($this->doc_id >0 && $this->ingreso=='1');
+      return ($this->doc_id >0 && $this->monto >=0);
   } 
   
   /*

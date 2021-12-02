@@ -18,7 +18,7 @@ class SigiMovbancoSearch extends SigiMovbanco
     {
         return [
             [['id',  'edificio_id', 'cuenta_id', ], 'integer'],
-            [['fopera','fopera1','fval1', 'fval',  'descripcion', 'monto','diferencia','monto_conciliado'], 'safe'],
+            [['fopera','fopera1','fval1', 'fval',  'descripcion', 'monto','diferencia','monto_conciliado','monto1'], 'safe'],
             [['monto'], 'number'],
         ];
     }
@@ -68,22 +68,42 @@ class SigiMovbancoSearch extends SigiMovbanco
            // 'monto_usd' => $this->monto_usd,
            // 'user_id' => $this->user_id,
         ]);
-
-        $query->andFilterWhere(['like', 'monto', $this->monto])
-            //->andFilterWhere(['like', 'fechacre', $this->fechacre])
-            ->andFilterWhere(['like', 'monto_conciliado', $this->monto_conciliado])
+       
+       
+        $query->andFilterWhere(['like', 'monto_conciliado', $this->monto_conciliado])
             ->andFilterWhere(['like', 'diferencia', $this->diferencia])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion]);
 
+        if(!empty($this->fopera) && empty($this->fopera1))
+          $query->andFilterWhere([
+            'fopera' => $this->swichtDate ('fopera', false),
+             ]);
         if(!empty($this->fopera) && !empty($this->fopera1)){
          $query->andFilterWhere([
              'between',
              'fopera',
-             $this->openBorder('fopera',false),
-             $this->openBorder('fopera1',true)
+              $this->swichtDate ('fopera', false),
+              $this->swichtDate ('fopera1', false),
+             //$this->openBorder('fopera',false),
+            // $this->openBorder('fopera1',true)
                         ]);  
      }   
-      //\yii::error($query->createCommand()->rawSql,__FUNCTION__);
+     
+     if(!empty($this->monto) && empty($this->monto1))
+          $query->andFilterWhere([
+            'monto' => 'like', 'diferencia', $this->monto
+                  ]);
+        if(!empty($this->monto) && !empty($this->monto1)){
+         $query->andFilterWhere([
+             'between',
+             'monto',
+              $this->monto,
+              $this->monto1,
+             //$this->openBorder('fopera',false),
+            // $this->openBorder('fopera1',true)
+                        ]);  
+     }   
+     
         return $dataProvider;
     
    }

@@ -30,7 +30,8 @@ use common\helpers\h;
         <?= Html::submitButton("<span class='fa fa-search'></span>     ".Yii::t('sta.labels', 'buscar'), ['class' => 'btn btn-primary']) ?>
          <?php // Html::resetButton("<span class='fa fa-eye'></span>     ".Yii::t('sta.labels', 'Limpiar'), ['class' => 'btn btn-success']) ?>
        <?php // Html::button("<span class='fa fa-eye'></span>     ".Yii::t('sta.labels', 'Ver'), ['onClick'=>"$('#buscador').toggle()",  'class' => 'btn btn-success']) ?>
-         <?= Html::a(Yii::t('sigi.labels', 'Crear documento'), ['create'], ['data-pjax'=>'0','class' => 'btn btn-success']) ?>
+         <?= Html::a(Yii::t('sigi.labels', 'Crear documento'), ['crear-pago'], ['data-pjax'=>'0','class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('sigi.labels', 'Crear documento inputadp'), ['crear-pago','inputado'=>'1'], ['data-pjax'=>'0','class' => 'btn btn-success']) ?>
     
     </div>
      </div>

@@ -105,7 +105,7 @@ use frontend\modules\sigi\models\SigiSuministros;
   </div> 
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <?= 
-            $form->field($model, 'monto_conciliado')->textInput()
+            $form->field($model, 'monto1')->textInput()
            ?>
      <?php //echo cboperiodos::widget(['model'=>$model,'attribute'=>'codperiodo', 'form'=>$form]) ?>
   </div> 

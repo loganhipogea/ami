@@ -24,6 +24,7 @@ class SigiMovbanco extends \common\models\base\modelBase
     const SCE_CORTE='corte';
      
     public $fopera1=null;
+     public $monto1=null;
         public $fval1=null;
      public $dateorTimeFields = [
         'fopera' => self::_FDATE,
@@ -48,7 +49,7 @@ class SigiMovbanco extends \common\models\base\modelBase
         return [
             [['cuenta_id', 'edificio_id', 'fopera', 'monto'], 'required'],
             [['cuenta_id', 'edificio_id', 'noper'], 'integer'],
-            [['monto'], 'number'],
+            [['monto','monto1'], 'double'],
              [['monto'],'validate_monto'],
             ['monto', 'unique', 'targetAttribute' => 
                  ['cuenta_id','edificio_id', 'fopera','monto'],
@@ -63,7 +64,7 @@ class SigiMovbanco extends \common\models\base\modelBase
                 ],
              [['cuenta_id','monto','descripcion','monto_conciliado','diferencia','detalle'], 'safe'],
             //[['fopera', 'fval'], 'string', 'max' => 10],
-            [['descripcion'], 'string', 'max' => 30],
+            [['descripcion'], 'string', 'max' => 50],
             [['cuenta_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCuentas::className(), 'targetAttribute' => ['cuenta_id' => 'id']],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
              //[['tipomov'], 'exist', 'skipOnError' => true, 'targetClass' => SigiTipomov::className(), 'targetAttribute' => ['tipomov' => 'codigo']],
@@ -192,6 +193,11 @@ class SigiMovbanco extends \common\models\base\modelBase
   
   
   public function validate_monto($attribute,$params){
+      if(is_string($this->monto) && (strpos($this->monto,',') or strpos($this->monto,"'"))){
+          $this->addError($attribute,
+                 yii::t('base.errors','Monto tiene un formato inválido, elimine las comas o apostrofes en serpador de miles o millones')
+                  );
+      }
     /*if(($this->monto > 0 && $this->monto < 0) or
      ($this->tipoMov->signo < 0 && $this->monto > 0) )
       $this->addError('monto',yii::t('base.labels','{monto} Este monto no tiene el signo que corresponde al movimiento',['monto'=>$this->monto]));
@@ -215,4 +221,6 @@ class SigiMovbanco extends \common\models\base\modelBase
              );
      return parent::afterDelete();
  }
+ 
+ 
 }

@@ -234,11 +234,11 @@ public function getEdificio()
     private function queryReadsForThisMonth($mes,$anio,$facturable=false){
         $valor=($facturable)?'1':['0','1'];
         //yii::error('----queryreas for this mont--');
-        yii::error(SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
-                andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio,'suministros_id'=>$this->id])->
-                createCommand()->getRawSql());
+        /*yii::error(SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
+                andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio,'suministro_id'=>$this->id])->
+                createCommand()->getRawSql());*/
         return SigiLecturas::find()->where(['edificio_id' => $this->edificio_id])->
-                andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio,'suministro_id'=>$this->id]);
+                andwhere(['facturable'=>$valor,'mes' => $mes,'anio'=>$anio]);
         
     }
     
@@ -260,6 +260,7 @@ public function getEdificio()
        
        
         if($query->count()>0)
+            //yii::error($query->select('sum(delta)')->createCommand ()->rawSql);
          return  $query->select('sum(delta)')->scalar();
         return 0;
     }
@@ -453,7 +454,7 @@ public function isAACC(){
 }
 
 public function afterSave($insert, $changedAttributes) {
-    if(!$this->unidad->imputable){
+    if(!$this->unidad->imputable && $this->unidad->area >0){
         $this->fillDepas();
     }
     
@@ -465,7 +466,7 @@ public function afterSave($insert, $changedAttributes) {
  */
 public function fillDepas(){
     foreach($this->edificio->unidadesImputablesPadres() as $unidad){
-        //yii::error('recorriendo '.$unidad->numero);
+        yii::error('recorriendo '.$unidad->numero);
         $attributes=[
             'edificio_id'=>$this->edificio_id,
              'unidad_id'=>$unidad->id,
@@ -530,6 +531,9 @@ public function consumoAreasComunes($mes,$anio,$facturable=true){
 
 public function porcConsumoAaCc($mes,$anio,$porcentaje=false){
     $consumototal=$this->consumoTotal($mes, $anio);
+    yii::error('consumo de areas comunes '.$this->consumoAreasComunes($mes, $anio),__FUNCTION__);
+    yii::error('consumo total '.$consumototal,__FUNCTION__);
+    
     if($consumototal>0)
          return  $this->consumoAreasComunes($mes, $anio)/$consumototal;
     return 0;

@@ -5,25 +5,31 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use common\helpers\timeHelper;
+use common\helpers\h;
 use miloschuman\highcharts\Highcharts;
 use miloschuman\highcharts\HighchartsAsset;
 use dosamigos\chartjs\ChartJs;
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 ?>
-<div class="box box-body">
-    <h4>Cobros</h4>
-    <?php //$clave= uniqid();
-    $grilla='grilla_'.$id;
-    ?>
-    <?php 
-    $url= Url::to(['crea-pago','id'=>$id,'gridName'=>$grilla,'idModal'=>'buscarvalor']);
-     echo  Html::button(yii::t('base.verbs','Conciliar depósito'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Sesión'),'id'=>'btn_sesion', 'class' => 'botonAbre btn btn-warning']); 
 
+
+<div class="box box-body">
+    <h4>Documentos de </h4>
+    <?php //$clave= uniqid();
+    $grilla='grilla_'.$id; 
     ?>
     
+    <?php 
+    $url= Url::to(['crea-conc-doc-pago','id'=>$id,'gridName'=>$grilla,'idModal'=>'buscarvalor']);
+     echo  Html::button(yii::t('base.verbs','Conciliar'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Sesión'),'id'=>'btn_sesion', 'class' => 'botonAbre btn btn-warning']); 
+
+    ?>
+      <?= Html::a(Yii::t('sigi.labels', 'Crear documento inputado'), Url::to(['/sigi/porpagar/crear-pago','inputado'=>'1']), ['target'=>'_blank','data-pjax'=>'0','class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('sigi.labels', 'Crear documento general'), ['/sigi/porpagar/crear-pago'], ['target'=>'_blank','data-pjax'=>'0','class' => 'btn btn-success']) ?>
     
     
 <?php
+$formato=h::formato();
  Pjax::begin(['id'=>$grilla,'timeout'=>false]); ?>
     
    <?php 
@@ -34,7 +40,7 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
     <?= GridView::widget([
         'dataProvider' =>new \yii\data\ActiveDataProvider([
-            'query'=> frontend\modules\sigi\models\SigiMovimientospago::find()->andWhere(['idop'=>$id])
+            'query'=> frontend\modules\sigi\models\SigiMovimientosPre::find()->andWhere(['idop'=>$id])
         ]),
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
@@ -42,9 +48,9 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                   [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{check}{edit}{uncheck}{delete}',
+            'template' => '{attach}{check}{edit}{uncheck}{delete}',
                'buttons' => [
-                  /*'attach' => function($url, $model) {  
+                  'attach' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,
                              'idModal'=>'imagemodal',
                              'modelid'=>$model->id,
@@ -56,7 +62,8 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                             //'data-pjax' => '0',
                         ];
                         return Html::button('<span class="fa fa-upload"></span>', ['href' => $url, 'title' => 'Adjuntar Voucher de pago', 'class' => 'botonAbre btn btn-danger']);
-                          },*/
+                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
+                        },
                         'delete' => function ($url,$model) {
 			   $url = \yii\helpers\Url::toRoute($this->context->id.'/deletemodel-for-ajax');
                               if(!$model->activo)
@@ -66,7 +73,7 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                              } ,
                                      
                        'edit' => function($url, $model) use($grilla) {  
-                         $url=\yii\helpers\Url::toRoute(['/sigi/movimientos/edit-pago','id'=>$model->id,'isImage'=>false,'idModal'=>'buscarvalor','gridName'=>$grilla,'nombreclase'=> str_replace('\\','_',get_class($model))]);
+                         $url=\yii\helpers\Url::toRoute(['/sigi/movimientos/edit-conc','id'=>$model->id,'isImage'=>false,'idModal'=>'buscarvalor','gridName'=>$grilla,'nombreclase'=> str_replace('\\','_',get_class($model))]);
                         $options = [
                             'title' => Yii::t('sta.labels', 'Editar'),
                             //'aria-label' => Yii::t('rbac-admin', 'Activate'),
@@ -82,13 +89,13 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                         },              
                         
                         'check' => function ($url,$model) {
-			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/aprobe-pago-si','id'=>$model->id,'gridName'=>'grilla_m']);
+			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/aprobe-pago','id'=>$model->id,'gridName'=>'grilla_m']);
                               if(!$model->activo)
                               return \yii\helpers\Html::a('<span class="btn btn-success fa fa-check"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                                return '<i style="color:#60a917; font-size:18px;"><span class="fa fa-check"></span></i>';
                              }, 
                         'uncheck'=>function ($url,$model) {
-			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/un-aprobe-pago-si','id'=>$model->id,'gridName'=>'grilla_m']);
+			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/un-aprobe-pago','id'=>$model->id,'gridName'=>'grilla_m']);
                               if($model->activo)
                               return \yii\helpers\Html::a('<span class="btn btn-danger fa fa-undo"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                                return '';
@@ -112,30 +119,61 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
                     'expandOneOnly' => true
                 ],*/
             //'fechaop',
-           ['attribute'=>'Cargo',
+            ['attribute'=>'Numero',
                 'value'=>function($model){
-                     return $model->porPagar->cargoEdificio->cargo->descargo;   
-                }  
+                     $kardex=$model->kardex;
+                     //var_dump($kardex);
+                     return $kardex->numdocu;
+                       //var_dump($model->isDocCobro(),$kardex);
+                    }  
                   
                   ],
-             'glosa',
-             ['attribute'=>'nombre',
-               'format'=>'raw',
+           ['attribute'=>'Doc',
+              'format'=>'raw',
                 'value'=>function($model){
-                     $url= Url::toRoute(['/sigi/porpagar/update','id'=>$model->pago_id]); 
-                     return Html::a($model->porPagar->clipro->despro,$url,['data-pjax'=>0,'target'=>'_blank']);
-                     //return ;   
-                }  
-                  
-                  ],
-              'monto',
-            ['attribute'=>'Monto total',
-                'value'=>function($model){
-                     return round($model->porPagar->monto,3);   
-                }  
+                     $kardex=$model->kardex;
+                       
+                           $url=Url::to(['/sigi/porpagar/update-cobrar','id'=>$kardex->id]);
+                          $options=['data-pjax'=>'0','target'=>'_blank'];
+                           return Html::a($kardex->documento->desdocu,$url,$options);
+                           
+                       
+                    }  
                   
                   ],
              
+              ['attribute'=>'glosa',
+                   'header'=>'Descrip',
+                  ],                       
+             ['attribute'=>'Emisor',
+                 
+               'format'=>'raw',
+                'value'=>function($model){
+                               $kardex=$model->kardex;
+                                              
+                           if(!empty($kardex->codpro)){
+                             return $model->kardex->clipro->despro;  
+                           }else{
+                              return $model->kardex->unidad->nombre; 
+                           }
+                          //return $model->kardex->unidad->nombre;
+                       
+                           }  
+                  
+                  ],
+              ['attribute'=>'Monto',
+                'value'=>function($model) use($formato){
+                     return $formato->asDecimal($model->monto,3);   
+                }  
+                  
+                  ],
+            ['attribute'=>'Monto Doc',
+                'value'=>function($model) use($formato){
+                     return $formato->asDecimal($model->kardex->monto,3);   
+                   }  
+                  
+                  ],
+              
             
         ],
     ]); ?>
@@ -160,3 +198,4 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
     <?php Pjax::end(); ?>
 
 </div>
+

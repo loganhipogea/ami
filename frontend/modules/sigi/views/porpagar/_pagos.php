@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 
 ?>
 
-   <div class="box body">
+   <div class="box box-body">
       <div class="col-md-12">
             <div class="form-group no-margin">                
               <?php  
@@ -77,7 +77,7 @@ use yii\widgets\Pjax;
          
          
          
-         
+         'glosa',
 
            [    'attribute'=>'Oper',
                'value'=>function($model){
