@@ -413,4 +413,10 @@ public function validate_monto($attribute,$params){
       return ($this->doc_id >0 && $this->unidad_id > 0);
   } 
   
+  
+  
+  
+  
+  
+  
 }

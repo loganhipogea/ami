@@ -53,7 +53,7 @@ class m211202_163303_sigi_estados_cuenta extends baseMigration
      */
     public function safeDown()
     {
-if ($this->existsTable(static::TABLE)) {
+        if ($this->existsTable(static::TABLE)) {
             $this->dropTable(static::TABLE);
         }
     }

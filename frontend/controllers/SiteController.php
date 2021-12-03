@@ -417,6 +417,14 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    VAR_DUMP(\common\helpers\timeHelper::bordersDay('11','2021'));DIE();
+    
+    
+    
+    
+    
+    
+    
     $val='-2356.23'+0;
     var_dump($val,is_numeric($val));die();
     

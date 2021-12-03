@@ -140,7 +140,43 @@ class timeHelper {
      if($mes==12)return 1;
      //if($mes==1)return 12;
      return $mes+1;
- } 
+ }
+ 
+ private static function mesesdias($anio){
+     $dfebrero=(($anio+0)%4==0)?29:28;
+     return [
+         1=>31,
+         2=>$dfebrero,
+         3=>31,
+         4=>30,
+         5=>31,        
+         6=>30,
+         7=>31,
+         8=>31,
+         9=>30,
+         10=>31,        
+         11=>30,
+         12=>31,
+     ];
+ }
+     
+ public static function maxDayMes($mes,$anio){
+     return self::mesesdias($anio)[$mes];
+ }
+
+/*
+ * RETORNA UNA MATRIZ CON DOS FECHAS
+ * LA FECHA INCIO Y LA FECHA FINAL DEL
+ * PERIOD MENSUAL
+ * $show: meustr el foramto de salida 
+ */
+ public static function bordersDay($mes,$anio){
+     //$mesSiguiente= str_pad(timeHelper::nextMonth($mes), 2, '0', STR_PAD_LEFT);
+      
+      $fechaini=$anio.'-'.$mes.'-01';
+      $fechafin=$anio.'-'.$mes.'-'.str_pad(self::maxDayMes($mes,$anio), 2, '0', STR_PAD_LEFT);
+      return [$fechaini,$fechafin];
+ }
 }  
   
    
