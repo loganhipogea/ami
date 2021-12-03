@@ -89,7 +89,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
         $scenarios[self::SCE_CREACION_BASICA] = [
             'edificio_id', 'cuenta_id',
             'tipomov', 'glosa', 'monto',
-             'activo','kardex_id','diferencia'
+             'activo','kardex_id','diferencia','resumen_id'
             ];
          $scenarios[self::SCE_STATUS] = ['activo'];
          
@@ -98,7 +98,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
               'monto_fraccionado',
               'edificio_id', 'cuenta_id',
             'tipomov', 'glosa', 'monto',
-             'activo','kardex_id','diferencia'
+             'activo','kardex_id','diferencia','resumen_id'
               
               ];
           
@@ -106,7 +106,7 @@ class SigiMovimientosPre extends \common\models\base\modelBase
               'monto_fraccionado',
               'edificio_id', 'cuenta_id',
             'tipomov', 'glosa', 'monto',
-             'activo','kardex_id','diferencia'
+             'activo','kardex_id','diferencia','resumen_id'
               
               ];
        /* $scenarios[self::SCENARIO_ASISTIO] = ['asistio'];
@@ -122,14 +122,15 @@ class SigiMovimientosPre extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['idop', 'edificio_id', 'cuenta_id', 'user_id'], 'integer'],
+            [['idop', 'edificio_id', 'cuenta_id', 'user_id','resumen_id'], 'integer'],
             [['edificio_id', 'cuenta_id', /*'fechaop',*/  'tipomov', 'glosa',  /*'igv',*/  'activo'], 'required'],
            // [['monto'],'required', 'except'=>self::SCE_CONCILIACION_PAGO],
             [['monto', 'igv', 'monto_usd'], 'double'],
            // [['fechaop'], 'string', 'max' => 10],
-            [['kardex_id','monto','diferencia','ingreso','unidad_id'], 'safe'],
+            [['kardex_id','monto','diferencia','ingreso','unidad_id','resumen_id'], 'safe'],
          
              [['monto'], 'validate_monto'],
+           // [['resumen_id'], 'validate_resumen'],
             [['monto_conciliado'], 'safe'],
             [['monto'], 'validate_monto_fraccionado',/*'on'=>self::SCE_CONCILIACION_PAGO*/],
            
@@ -412,11 +413,5 @@ public function validate_monto($attribute,$params){
    private function isDocAfectaSaldoUnidad(){
       return ($this->doc_id >0 && $this->unidad_id > 0);
   } 
-  
-  
-  
-  
-  
-  
   
 }
