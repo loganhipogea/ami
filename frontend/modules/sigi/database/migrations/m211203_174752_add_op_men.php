@@ -1,6 +1,7 @@
 <?php
 namespace frontend\modules\sigi\database\migrations;
 //use yii\db\Migration;
+use console\migrations\migrationMenu;
 use console\migrations\baseMigration;
 class m211203_174752_add_op_men extends baseMigration
  
