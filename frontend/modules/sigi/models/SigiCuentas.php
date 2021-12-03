@@ -6,6 +6,7 @@ use common\models\masters\Monedas;
 use common\helpers\timeHelper;
 use common\models\masters\Clipro;
 use frontend\modules\sigi\models\SigiMovbanco;
+
 use Yii;
 
 /**
@@ -141,6 +142,8 @@ class SigiCuentas extends \common\models\base\modelBase
         return new SigiCuentasQuery(get_called_class());
     }
     
+   
+    
     
     public function updateSaldo($monto,$fecha){
        
@@ -175,7 +178,7 @@ class SigiCuentas extends \common\models\base\modelBase
      * ES DECIR SE PUEDE USAR PARA OBTENER 
      * EL DE CIERRE SALDO DEL MES 
      */
-  public function saldoMes($mes,$anio){
+  public function ultimoSaldoMes($mes,$anio){
       //Creando la fecha limite, o el primer dia del mes
       $mesSiguiente= str_pad(timeHelper::nextMonth($mes), 2, '0', STR_PAD_LEFT);
       if($mesSiguiente=='01'){

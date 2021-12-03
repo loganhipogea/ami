@@ -42,7 +42,8 @@ class timeHelper {
    }
  
    
-    public static  function cboMeses(){
+    public static  function cboMeses($textos=false){
+        if(!$textos)
        return [
            '1'=>yii::t('base.names','ENERO'),
            '2'=>yii::t('base.names','FEBRERO'),
@@ -57,6 +58,20 @@ class timeHelper {
            '11'=>yii::t('base.names','NOVIEMBRE'),
            '12'=>yii::t('base.names','DICIEMBRE'),
        ];
+       return [
+           '01'=>yii::t('base.names','ENERO'),
+           '02'=>yii::t('base.names','FEBRERO'),
+           '03'=>yii::t('base.names','MARZO'),
+           '04'=>yii::t('base.names','ABRIL'),
+           '05'=>yii::t('base.names','MAYO'),
+           '06'=>yii::t('base.names','JUNIO'),
+           '07'=>yii::t('base.names','JULIO'),
+           '08'=>yii::t('base.names','AGOSTO'),
+           '09'=>yii::t('base.names','SETIEMBRE'),
+           '10'=>yii::t('base.names','OCTUBRE'),
+           '11'=>yii::t('base.names','NOVIEMBRE'),
+           '12'=>yii::t('base.names','DICIEMBRE'),
+       ]; 
    }
    
    public static function mapMonths($arrayIntegers){
@@ -172,9 +187,9 @@ class timeHelper {
  */
  public static function bordersDay($mes,$anio){
      //$mesSiguiente= str_pad(timeHelper::nextMonth($mes), 2, '0', STR_PAD_LEFT);
-      
+      $mes=str_pad(($mes+0).'', 2, '0', STR_PAD_LEFT);
       $fechaini=$anio.'-'.$mes.'-01';
-      $fechafin=$anio.'-'.$mes.'-'.str_pad(self::maxDayMes($mes,$anio), 2, '0', STR_PAD_LEFT);
+      $fechafin=$anio.'-'.$mes.'-'.str_pad(self::maxDayMes($mes+0,$anio), 2, '0', STR_PAD_LEFT);
       return [$fechaini,$fechafin];
  }
 }  

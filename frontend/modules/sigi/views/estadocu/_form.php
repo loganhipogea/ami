@@ -3,6 +3,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 use frontend\modules\sigi\helpers\comboHelper;
 use common\helpers\timeHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use common\widgets\co
 /* @var $this yii\web\View */
@@ -12,7 +13,10 @@ use common\widgets\co
 
 <div class="sigi-estadocuentas-form">
     <br>
-    <?php $form = ActiveForm::begin([
+    <?php 
+    $tieneMov=($model->isNewRecord)?false:$model->hasMovimientos();
+    $form = ActiveForm::begin([
+       'id'=>'misu','enableAjaxValidation'=>true,
     'fieldClass'=>'\common\components\MyActiveField'
     ]); ?>
       <div class="box-header">
@@ -20,7 +24,8 @@ use common\widgets\co
             <div class="form-group no-margin">
                 
         <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-            
+          <?=Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Refrescar'), ['id'=>'boton_refrescar','class' => 'btn btn-warning'])?>      
+           
 
             </div>
         </div>
@@ -30,7 +35,7 @@ use common\widgets\co
    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> 
     <?= ComboDep::widget([
                'model'=>$model, 
-             'inputOptions'=>['disabled'=>$model->hasChilds()],
+             'inputOptions'=>['disabled'=>$tieneMov],
                'form'=>$form,
                'data'=> ComboHelper::getCboEdificios(),
                'campo'=>'edificio_id',
@@ -85,7 +90,7 @@ use common\widgets\co
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>(!$nuevo)?'disabled':null,
                       //'disabled'=>(!$nuevo)?'disabled':null,
-                      'disabled'=>$model->hasChilds()
+                      'disabled'=>$tieneMov
                         ]
                     ) ?>
   
@@ -116,10 +121,10 @@ use common\widgets\co
  </div>
   <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
      <?php echo $form->field($model, 'mes')->
-            dropDownList(timeHelper::cboMeses(),
+            dropDownList(timeHelper::cboMeses(true),
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
-                     'disabled'=>(!$aprobado)?false:true,
+                    'disabled'=>$tieneMov
                         ]
                     ) ?>
  </div>
@@ -129,12 +134,53 @@ use common\widgets\co
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                         'disabled'=>(!$aprobado)?false:true,
+                        'disabled'=>$tieneMov
                       ]
                     ) ?>
  </div>
-     
+     <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'estado')->textInput(['style'=>"color:red;font-size:14px;font-weight:800;",'disabled' => true,'maxlength' => true]) ?>
+
+ </div>  
     <?php ActiveForm::end(); ?>
 
 </div>
     </div>
+<?php 
+  $string="$('#boton_refrescar').on( 'click', function(){      
+       $.ajax({
+              url: '".Url::to(['/sigi/estadocu/ajax-refresh','id'=>$model->id])."', 
+              type: 'get',
+              data:{},
+              dataType: 'json', 
+              error:  function(xhr, textStatus, error){               
+                            var n = Noty('id');                      
+                              $.noty.setText(n.options.id, error);
+                              $.noty.setType(n.options.id, 'error');       
+                                }, 
+              success: function(json) {
+              var n = Noty('id');
+                      
+                       if ( !(typeof json['error']==='undefined') ) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
+                              $.noty.setType(n.options.id, 'error');  
+                          }    
+
+                             if ( !(typeof json['warning']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['warning']);
+                              $.noty.setType(n.options.id, 'warning');  
+                             } 
+                          if ( !(typeof json['success']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['success']);
+                              $.noty.setType(n.options.id, 'success');  
+                             }      
+                              $.pjax.reload({container: '#letrero', async: false});
+                        }
+                        });
+
+
+             })";
+  
+  $this->registerJs($string, \yii\web\View::POS_END);
+?> 
+      

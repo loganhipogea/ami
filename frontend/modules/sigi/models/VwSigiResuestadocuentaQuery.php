@@ -1,13 +1,13 @@
 <?php
 
 namespace frontend\modules\sigi\models;
-use frontend\modules\sigi\models\VwSigiResuestadocuentaQuery;
+
 /**
- * This is the ActiveQuery class for [[SigiEstadocuentas]].
+ * This is the ActiveQuery class for [[VwSigiResuestadocuenta]].
  *
- * @see SigiEstadocuentas
+ * @see VwSigiResuestadocuenta
  */
-class SigiEstadocuentasQuery extends \yii\db\ActiveQuery
+class VwSigiResuestadocuentaQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class SigiEstadocuentasQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return SigiEstadocuentas[]|array
+     * @return VwSigiResuestadocuenta[]|array
      */
     public function all($db = null)
     {
@@ -25,14 +25,10 @@ class SigiEstadocuentasQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return SigiEstadocuentas|array|null
+     * @return VwSigiResuestadocuenta|array|null
      */
     public function one($db = null)
     {
         return parent::one($db);
-    }
-    
-    public function resumenMes(){
-       
     }
 }

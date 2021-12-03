@@ -3,26 +3,9 @@
 namespace frontend\modules\sigi\models;
 use frontend\modules\sigi\models\Edificios;
 use common\helpers\timeHelper;
+use frontend\modules\sigi\models\VwSigiResuestadocuenta;
+use frontend\modules\sigi\models\VwSigiResuestadocuentaQuery;
 use Yii;
-
-/**
- * This is the model class for table "{{%sigi_estadocuentas}}".
- *
- * @property int $id
- * @property int $edificio_id
- * @property int $cuenta_id
- * @property string $saldmesant
- * @property string $ingresos
- * @property string $egresos
- * @property string $saldfinal
- * @property string $saldecuenta
- * @property string $salddif
- * @property string $mes
- * @property string $anio
- *
- * @property SigiEdificios $edificio
- * @property SigiCuentas $cuenta
- */
 class SigiEstadocuentas extends \common\models\base\modelBase
 {
    const ESTADO_CREADO='CREA';
@@ -46,7 +29,7 @@ class SigiEstadocuentas extends \common\models\base\modelBase
             [['saldmesant', 'ingresos', 'egresos', 'saldfinal', 'saldecuenta', 'salddif'], 'number'],
             [['mes'], 'string', 'max' => 2],
             [['anio'], 'string', 'max' => 4],
-            [['anio','mes'], 'unique', 'targetAttribute' => ['anio','mes']],
+            [['anio'], 'unique', 'targetAttribute' => ['anio','mes','edificio_id']],
            
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
             [['cuenta_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCuentas::className(), 'targetAttribute' => ['cuenta_id' => 'id']],
@@ -97,17 +80,60 @@ class SigiEstadocuentas extends \common\models\base\modelBase
     {
         return new SigiEstadocuentasQuery(get_called_class());
     }
-    
+     public static function findResumen()
+    {
+       return   new  VwSigiResuestadocuentaQuery(
+                VwSigiResuestadocuenta::className()
+                );
+    }
     public function beforeSave($insert) {
-        if($insert)$this->estado=$this::ESTADO_CREADO;
-        $this->codigo=$this->anio.$this->mes;
+        if($insert){
+            $this->estado=$this::ESTADO_CREADO;
+            //$this->mes= str_pad($this->mes,2,'0',STR_PAD_LEFT);
+           $this->codigo=$this->anio.$this->mes;
+        }
         return parent::beforeSave($insert);
     }
     /*
      * Coloca un where para fiktrar las fechas del periodo*/
      
-    public function whereFechas(){
+    public function whereFechas($campo){
         $limits=timeHelper::bordersDay($this->mes, $this->anio);
-        return ['between',$limits[0],$limits[1]];
+        return ['between',$campo,$limits[0],$limits[1]];
+    }
+    
+    public function hasMovimientos(){
+      /*echo $this->cuenta->getSigiMovBancos()
+             ->andWhere($this->whereFechas('fopera'))
+            ->createCommand()->rawSql;  */
+       return $this->cuenta->getSigiMovBancos()
+             ->andWhere($this->whereFechas('fopera'))->exists();
+    }
+    
+    public function refreshMontos(){
+        $cuenta=$this->cuenta;
+        $this->saldmesant=$cuenta->ultimoSaldoMes($this->mes,$this->anio);
+        $this->saldecuenta=$cuenta->saldo;
+        $this->ingresos=$this->totalIngresos();
+        $this->egresos=$this->totalEgresos();
+        if($this->save()){
+            return ['success',yii::t('base.errors','Se actualizaron las cifras')];
+        }else{
+            return ['error',yii::t('base.errors',$model->getFirstError())];
+        }
+    }
+    
+    public function totalIngresos(){
+        $this->findResumen()->select('sum(monto)')->
+               andWhere($this->whereFechas('fopera'))->
+               andWhere(['ingreso'=>'1'])
+             ->scalar();
+    }
+    
+    public function totalEgresos(){
+        $this->findResumen()->select('sum(monto)')->
+               andWhere($this->whereFechas('fopera'))->
+               andWhere(['ingreso'=>'0'])
+             ->scalar();
     }
 }
