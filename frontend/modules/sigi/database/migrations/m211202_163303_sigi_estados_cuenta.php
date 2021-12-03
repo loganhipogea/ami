@@ -34,7 +34,7 @@ class m211202_163303_sigi_estados_cuenta extends baseMigration
             'mes' =>  $this->char(2)->append($this->collateColumn())->notNull(),
            'anio' =>  $this->char(4)->append($this->collateColumn())->notNull(),
            'codigo' =>  $this->char(4),
-           'estado' =>  $this->char(4)->append($this->collateColumn())->notNull(),
+           'estado' =>  $this->char(6)->append($this->collateColumn())->notNull(),
             ],
            $this->collateTable());
        

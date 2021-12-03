@@ -41,9 +41,9 @@ class SigiEstadocuentas extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['edificio_id',  'mes','anio','unidad_id'], 'required'],
+            [['edificio_id',  'mes','anio','cuenta_id'], 'required'],
             [['edificio_id', 'cuenta_id'], 'integer'],
-            [['saldmesant', 'ingresos', 'egresos', 'saldfinal', 'saldecuenta', 'salddif'], 'float'],
+            [['saldmesant', 'ingresos', 'egresos', 'saldfinal', 'saldecuenta', 'salddif'], 'number'],
             [['mes'], 'string', 'max' => 2],
             [['anio'], 'string', 'max' => 4],
             [['anio','mes'], 'unique', 'targetAttribute' => ['anio','mes']],
@@ -99,6 +99,7 @@ class SigiEstadocuentas extends \common\models\base\modelBase
     }
     
     public function beforeSave($insert) {
+        if($insert)$this->estado=$this::ESTADO_CREADO;
         $this->codigo=$this->anio.$this->mes;
         return parent::beforeSave($insert);
     }
