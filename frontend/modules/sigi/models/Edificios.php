@@ -637,8 +637,28 @@ public function unitsForUsers(){
          
     
 }
- 
- 
+ public function getEstadoscuentas(){
+     return $this->hasMany(SigiEstadocuentas::className(), ['edificio_id' => 'id']);
+    
+ }
+     
+ public function isInPeriodo(\Carbon\Carbon $fecha){
+     $fecha1='1969-12-31';    
+    $primer= $this->getEstadoscuentas()
+       ->andWhere(['estado'=> SigiEstadocuentas::ESTADO_CREADO])
+      ->orderBy(['codigo'=>SORT_ASC])     
+       ->one();
+    
+    if(!is_null($primer)){
+        $borders=\common\helpers\timeHelper::bordersDay($primer->mes, $primer->anio);
+        $fecha1=$borders[0] ;
+        $carbon1=\Carbon\Carbon::createFromFormat(\common\helpers\timeHelper::formatMysqlDate(), $fecha1);
+        return $fecha->greaterThanOrEqualTo($carbon1);
+    }else{
+       return false ;
+    }
+    
+ }
  
 }
  
