@@ -19,7 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box box-success">
      <div class="box-body">
     <?php Pjax::begin(['id'=>'gridCargos']); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php 
+    
+      ?>
 
      <div class="btn-group">  
          <?PHP 

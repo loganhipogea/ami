@@ -31,4 +31,20 @@ class VwKardexPagosQuery extends \yii\db\ActiveQuery
     {
         return parent::one($db);
     }
+    
+    public function resumenDeudasByEdificio(){
+       return  $this->select([
+           'sum(deuda) as deuda',
+           'codigo'
+       ])->groupBy(['codigo'])
+               ->orderBy(['codigo'=>SORT_DESC]);
+    }
+    
+    public function resumenMontosACobrarByEdificio(){
+       return  $this->select([
+           'sum(monto) as facturado',
+           'codigo'
+       ])->groupBy(['codigo'])
+               ->orderBy(['codigo'=>SORT_DESC]);
+    }
 }

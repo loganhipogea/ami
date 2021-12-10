@@ -2,14 +2,14 @@
 namespace frontend\modules\sigi\components;
 use frontend\modules\sigi\components\ActiveQueryScope;
 
-class ActiveQueryCargo extends ActiveQueryScope 
+class ActiveQueryCargo extends \yii\db\ActiveQuery
 {
     
   public function init()
     {
       //var_dump(SigiUserEdificios::filterEdificios());die();
        //$this->andWhere([ 'in', 'codfac',['FIM','FIP'] ]);
-      $this->alias('t')->andWhere(['egreso'=>'1']);
+      $this->alias('t')->andWhere(['esegreso'=>'1']);
         parent::init();
     }
     // HOLA MODIFICANDO

@@ -108,6 +108,7 @@ class SiteController extends \frontend\controllers\base\baseController
              $this->redirect(Url::to([$url]));
                       
                      //return h::user()->resolveUrlAfterLogin();
+                     
                      return $this->render('index');
                 }
                
@@ -417,7 +418,11 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
-    VAR_DUMP(\common\helpers\timeHelper::bordersDay('11','2021'));DIE();
+   $model= \frontend\modules\sigi\models\SigiMovbanco::findOne(6);
+   echo $model->toCarbon('fopera')->year.'<br>';
+   echo $model->toCarbon('fopera')->month.'<br>';
+   die();
+  
     
     
     

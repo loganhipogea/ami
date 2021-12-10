@@ -45,14 +45,14 @@ class SigiEstadocuentas extends \common\models\base\modelBase
             'id' => Yii::t('app', 'ID'),
             'edificio_id' => Yii::t('app', 'Edificio ID'),
             'cuenta_id' => Yii::t('app', 'Cuenta ID'),
-            'saldmesant' => Yii::t('app', 'Saldmesant'),
+            'saldmesant' => Yii::t('app', 'S Mes ant'),
             'ingresos' => Yii::t('app', 'Ingresos'),
             'egresos' => Yii::t('app', 'Egresos'),
-            'saldfinal' => Yii::t('app', 'Saldfinal'),
-            'saldecuenta' => Yii::t('app', 'Saldecuenta'),
-            'salddif' => Yii::t('app', 'Salddif'),
+            'saldfinal' => Yii::t('app', 'S Final'),
+            'saldecuenta' => Yii::t('app', 'S Cuenta'),
+            'salddif' => Yii::t('app', 'S Dif'),
             'mes' => Yii::t('app', 'Mes'),
-            'anio' => Yii::t('app', 'Anio'),
+            'anio' => Yii::t('app', 'Año'),
         ];
     }
 
@@ -116,6 +116,9 @@ class SigiEstadocuentas extends \common\models\base\modelBase
         $this->saldecuenta=$cuenta->saldo;
         $this->ingresos=$this->totalIngresos();
         $this->egresos=$this->totalEgresos();
+        $this->saldfinal=$this->saldmesant+$this->ingresos+$this->egresos;
+        $this->salddif=$this->saldfinal-$this->saldecuenta;
+        
         if($this->save()){
             return ['success',yii::t('base.errors','Se actualizaron las cifras')];
         }else{
@@ -124,16 +127,45 @@ class SigiEstadocuentas extends \common\models\base\modelBase
     }
     
     public function totalIngresos(){
-        $this->findResumen()->select('sum(monto)')->
+        return $this->getMovimientos()->select('sum(monto)')
+                 ->andWhere(['ingreso'=>'1'])
+                ->scalar();
+        /*return $this->findResumen()->select('sum(monto)')->
                andWhere($this->whereFechas('fopera'))->
                andWhere(['ingreso'=>'1'])
-             ->scalar();
+             ->scalar();*/
     }
     
     public function totalEgresos(){
-        $this->findResumen()->select('sum(monto)')->
+      return $this->getMovimientos()->select('sum(monto)')
+                 ->andWhere(['ingreso'=>'0'])
+                ->scalar();
+       /*return  $this->findResumen()->select('sum(monto)')->
                andWhere($this->whereFechas('fopera'))->
                andWhere(['ingreso'=>'0'])
-             ->scalar();
+             ->scalar();*/
+    }
+    
+     public function getMovimientos()
+    {
+        return $this->hasMany(SigiMovimientosPre::className(), ['resumen_id' => 'id']);
+    }
+    
+    public function egresosArray(){
+         return $this->find()->movimientosAgrupado()->
+            andWhere(['ingreso'=>'0'])->asArray()->all();
+    }
+    
+    public function ingresosArray(){
+        return $this->find()->movimientosAgrupado()->
+            andWhere(['ingreso'=>'1'])->asArray()->all();
+    }
+    
+    public function lastOperacion(){
+       return $this->getMovimientos()->select(
+                [
+                   'max(fechaop) as fecha'
+                ])->scalar();
+        
     }
 }

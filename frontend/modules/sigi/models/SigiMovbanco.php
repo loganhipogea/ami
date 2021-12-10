@@ -47,10 +47,13 @@ class SigiMovbanco extends \common\models\base\modelBase
     public function rules()
     {
         return [
+            [['cuenta_id'], 'validate_resumen'],
             [['cuenta_id', 'edificio_id', 'fopera', 'monto'], 'required'],
             [['cuenta_id', 'edificio_id', 'noper'], 'integer'],
             [['monto','monto1'], 'double'],
              [['monto'],'validate_monto'],
+           
+            
             ['monto', 'unique', 'targetAttribute' => 
                  ['cuenta_id','edificio_id', 'fopera','monto'],
               'message'=>yii::t('sta.errors',
@@ -221,6 +224,41 @@ class SigiMovbanco extends \common\models\base\modelBase
              );
      return parent::afterDelete();
  }
+ /*
+  * Determina a que periodo pertenece
+  */
+ private function determinePeriod(){
+   $carbon=$this->toCarbon('fopera');
+    $mes= str_pad($carbon->month,2,'0',STR_PAD_LEFT);
+    $anio=$carbon->year;
+    
+     
+    if(!is_null($period=SigiEstadocuentas::find()->
+            andWhere([
+                'mes'=>$mes,
+                'anio'=>$anio,
+                'edificio_id'=>$this->edificio_id
+                    ])->one())){
+       return $period->id;
+                    }else{
+        return null;
+                    }
+    
+ }
  
+ public function validate_resumen($attribute,$params){
+    
+     $resumen_id=$this->determinePeriod();
+     if(is_null($resumen_id)){
+        $this->adderror('fopera',yii::t('base.errors','La fecha de este mov no pertenece a ningún periodo válido'));
+        //return; 
+     }     
+     $this->resumen_id=$resumen_id;
+     
+ }
+ /*public function beforeValidate() {
+     $this->resumen_id=$this->determinePeriod();
+     return parent::beforeValidate();
+ }*/
  
 }

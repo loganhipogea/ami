@@ -51,7 +51,19 @@ use common\widgets\selectwidget\selectWidget;
   
       <div class="box-body">
     
- 
+  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">    
+  <?php 
+  // $necesi=new Parametros;
+    echo selectWidget::widget([
+           // 'id'=>'mipapa',
+            'model'=>$model,
+            'form'=>$form,
+            'campo'=>'cargo_id',
+         'ordenCampo'=>2,
+         'filterWhere'=>[['esegreso'=>'0']]
+         //'addCampos'=>[2,3],
+        ]);  ?>
+ </div>
           
  <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12">    
  <?= $form->field($model, 'tasamora')->textInput([]) ?>

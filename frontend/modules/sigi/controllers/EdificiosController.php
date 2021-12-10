@@ -566,7 +566,7 @@ public function actionEditaConceptoTree($id){
                   return ['success'=>1,'id'=>$model->edificio_id];
             }
         }else{
-           return $this->renderAjax('_modal_bene_tree', [
+           return $this->renderAjax('_modal_concepto_tree', [
                         'model' => $model,
                         'id' => $model->grupo_id,
                         'gridName'=>h::request()->get('gridName'),
@@ -862,7 +862,7 @@ public function actionAgregaBeneTree($id){
          $this->layout = "install";
          
         //$modeledificio = $this->findModel($id);        
-       $model=\frontend\modules\sigi\models\SigiBenegrupoedificio::findOne($id);
+       $model= \frontend\modules\sigi\models\SigiCargosedificio::findOne($id);
        
        $datos=[];
         if(h::request()->isPost){
@@ -889,7 +889,7 @@ public function actionAgregaBeneTree($id){
     }
 public function actionEditaBeneTree($id){
     $this->layout = "install";
-        $model= \frontend\modules\sigi\models\SigiBenegrupoedificio::findOne($id);
+        $model= \frontend\modules\sigi\models\SigiBeneficios::findOne($id);
        if(is_null($model)){
            throw new NotFoundHttpException(Yii::t('sigi.labels', 'Esta dirección no existe'));
        }

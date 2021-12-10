@@ -3,11 +3,12 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use common\helpers\h;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\modules\sigi\models\SigiEstadocuentasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Sigi Estadocuentas');
+$this->title = Yii::t('app', 'Estado de cuentas');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sigi-estadocuentas-index">
@@ -16,10 +17,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box box-success">
      <div class="box-body">
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php
+    $formato=h::formato();
+// echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Sigi Estadocuentas'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Crear registro'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div style='overflow:auto;'>
     <?= GridView::widget([
@@ -32,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
          
          [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{delete}{view}',
+                'template' => '{update}{view}',
                 'buttons' => [
                     'update' => function($url, $model) {                        
                         $options = [
@@ -46,13 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                         return Html::a('<span class="btn btn-warning btn-sm glyphicon glyphicon-search"></span>', $url, $options/*$options*/);
                          },
-                         'delete' => function($url, $model) {                        
-                        $options = [
-                            'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            'title' => Yii::t('base.verbs', 'Delete'),                            
-                        ];
-                        return Html::a('<span class="btn btn-danger btn-sm glyphicon glyphicon-remove"></span>', $url, $options/*$options*/);
-                         }
+                         
                     ]
                 ],
          
@@ -61,15 +58,57 @@ $this->params['breadcrumbs'][] = $this->title;
          
          
 
-            'id',
-            'edificio_id',
-            'cuenta_id',
-            'saldmesant',
-            'ingresos',
-            //'egresos',
-            //'saldfinal',
-            //'saldecuenta',
-            //'salddif',
+           
+              ['attribute'=>'edificio_id',
+                  'filter'=> \frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
+                  'value'=>function($model){
+                              return  $model->edificio->codigo;
+                           }  
+                  ],           
+           ['attribute'=>'mes',
+                  'filter'=> common\helpers\timeHelper::cboMeses(),                          
+                  'value'=>function($model){
+                              return  common\helpers\timeHelper::mes($model->mes+0);
+                           }  
+                  ],
+            'anio',
+            ['attribute'=>'saldmesant',
+                'contentOptions'=>['style'=>'text-align:right;'],
+                  'value'=>function($model) use($formato){
+                              return $formato->asDecimal($model->saldmesant);
+                           }  
+                  ],
+            ['attribute'=>'ingresos',
+                'contentOptions'=>['style'=>'text-align:right;'],
+                  'value'=>function($model) use($formato){
+                              return $formato->asDecimal($model->ingresos);
+                           }  
+                  ],
+            ['attribute'=>'egresos',
+                'contentOptions'=>['style'=>'text-align:right;'],
+                  'value'=>function($model) use($formato){
+                              return $formato->asDecimal($model->egresos);
+                           }  
+                  ],
+            ['attribute'=>'saldfinal',
+                'contentOptions'=>['style'=>'text-align:right;'],
+                  'value'=>function($model) use($formato){
+                              return $formato->asDecimal($model->saldfinal);
+                           }  
+                  ],
+           ['attribute'=>'saldecuenta',
+                'contentOptions'=>['style'=>'text-align:right;'],
+                  'value'=>function($model) use($formato){
+                              return $formato->asDecimal($model->saldecuenta);
+                           }  
+                  ],
+           
+            ['attribute'=>'salddif',
+                'contentOptions'=>['style'=>'text-align:right;'],
+                  'value'=>function($model) use($formato){
+                              return $formato->asDecimal($model->salddif);
+                           }  
+                  ],
             //'mes',
             //'anio',
 

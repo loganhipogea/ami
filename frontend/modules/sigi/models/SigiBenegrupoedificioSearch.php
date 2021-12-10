@@ -54,4 +54,24 @@ class SigiBenegrupoedificioSearch extends SigiBenegrupoedificio
         
         return $dataProvider;
     }
+    
+     public function searchByGrupo($idgrupo)
+    {
+        $query = SigiBeneficios::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination'=>['pageSize'=>30],
+        ]);
+
+       
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'grupo_id' => $idgrupo
+        ]);
+
+        return $dataProvider;
+    }
 }

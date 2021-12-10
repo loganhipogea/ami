@@ -353,7 +353,7 @@ public function actionIndexMulta(){
         }else{
           //PRINT_R($model->getErrors());die();
         }
-        return $this->render('create_cobrar', [
+        return $this->render('create_pagar', [
             'model' => $model,
         ]);
     }

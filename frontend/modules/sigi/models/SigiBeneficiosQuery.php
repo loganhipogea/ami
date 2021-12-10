@@ -7,7 +7,7 @@ use frontend\modules\sigi\components\ActiveQueryBeneficio;
  *
  * @see SigiCargos
  */
-class SigiBeneficiosQuery extends \yii\db\ActiveQuery
+class SigiBeneficiosQuery extends ActiveQueryBeneficio
 {
     /*public function active()
     {
@@ -20,6 +20,7 @@ class SigiBeneficiosQuery extends \yii\db\ActiveQuery
      */
     public function all($db = null)
     {
+         
         return parent::all($db);
     }
 

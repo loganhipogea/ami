@@ -72,7 +72,7 @@ class SigiCargosedificio extends \common\models\base\modelBase implements
             //[['regular', 'montofijo'], 'string', 'max' => 1],
             [['edificio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Edificios::className(), 'targetAttribute' => ['edificio_id' => 'id']],
             //[['codgrupo'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCargosgrupoedificio::className(), 'targetAttribute' => ['grupo_id' => 'id']],
-            [['cargo_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCargos::className(), 'targetAttribute' => ['cargo_id' => 'id']],
+            //[['cargo_id'], 'exist', 'skipOnError' => true, 'targetClass' => SigiCargos::className(), 'targetAttribute' => ['cargo_id' => 'id']],
         ];
     }
 
@@ -117,6 +117,10 @@ class SigiCargosedificio extends \common\models\base\modelBase implements
     public function getCargo()
     {
         return $this->hasOne(SigiCargos::className(), ['id' => 'cargo_id']);
+    }
+    public function getBeneficio()
+    {
+        return $this->hasOne(SigiBeneficios::className(), ['id' => 'cargo_id']);
     }
  public function getCuentaspor()
     {

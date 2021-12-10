@@ -19,9 +19,11 @@ use frontend\modules\sigi\models\SigiCargosgrupoedificio;
 <?php
 //var_dump($model);
 if($model instanceof SigiCargosgrupoedificio ){
+    $cargo=true;
      echo "Es un cargo ";
      $cadena='concepto';
  }else{
+      $cargo=false;
       echo "Es un bendficio";
     $cadena='bene'; 
  }
@@ -53,8 +55,17 @@ $gridColumns = [
                 ],
                
                 
-                'cargo.codcargo',
-                'cargo.descargo',
+               [
+                          'attribute' => 'Desc',
+                         'format' => 'raw',
+                            'value' => function ($model) use($cargo){
+                                    if($cargo){
+                                       return $model->cargo->descargo;
+                                    }else{
+                                        return $model->beneficio->descargo;
+                                    }
+                                   },
+                      ],
                 ['attribute' => 'tasamora',],
                      [
                           'attribute' => 'regular',
@@ -87,11 +98,14 @@ $gridColumns = [
   ?>
    <div> 
   <?php
+  
+      $dataprovider= (new frontend\modules\sigi\models\SigiCargosedificioSearch())->searchByGrupo($grupo_id);
+  
    Pjax::begin(['id'=>$idPjax]);
  echo GridView::widget([
     'id' => 'mygrilla',
       'showPageSummary' => true,
-    'dataProvider' => (new frontend\modules\sigi\models\SigiCargosedificioSearch())->searchByGrupo($grupo_id),
+    'dataProvider' =>$dataprovider,
    'columns' => $gridColumns, // check the configuration for grid columns by clicking button above
     
     'pjax' => true, // pjax is set to always true for this demo

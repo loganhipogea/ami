@@ -1,13 +1,13 @@
 <?php
 
 namespace frontend\modules\sigi\models;
-use frontend\modules\sigi\components\ActiveQueryCargo;
+
 /**
- * This is the ActiveQuery class for [[SigiCargos]].
+ * This is the ActiveQuery class for [[VwSigiColectores]].
  *
- * @see SigiCargos
+ * @see VwSigiColectores
  */
-class SigiCargosQuery extends ActiveQueryCargo
+class VwSigiBeneficiosQuery extends \frontend\modules\sigi\components\ActiveQueryScope
 {
     /*public function active()
     {
@@ -16,17 +16,16 @@ class SigiCargosQuery extends ActiveQueryCargo
 
     /**
      * {@inheritdoc}
-     * @return SigiCargos[]|array
+     * @return VwSigiColectores[]|array
      */
     public function all($db = null)
     {
-         
         return parent::all($db);
     }
 
     /**
      * {@inheritdoc}
-     * @return SigiCargos|array|null
+     * @return VwSigiColectores|array|null
      */
     public function one($db = null)
     {

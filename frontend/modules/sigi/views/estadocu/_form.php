@@ -2,10 +2,11 @@
 use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 use frontend\modules\sigi\helpers\comboHelper;
 use common\helpers\timeHelper;
+use common\helpers\h;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use common\widgets\co
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiEstadocuentas */
 /* @var $form yii\widgets\ActiveForm */
@@ -14,6 +15,7 @@ use common\widgets\co
 <div class="sigi-estadocuentas-form">
     <br>
     <?php 
+    $formato=h::formato();
     $tieneMov=($model->isNewRecord)?false:$model->hasMovimientos();
     $form = ActiveForm::begin([
        'id'=>'misu','enableAjaxValidation'=>true,
@@ -31,7 +33,7 @@ use common\widgets\co
         </div>
     </div>
       <div class="box-body">
- 
+ <?php Pjax::begin(['id'=>'letrero']);  ?>
    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> 
     <?= ComboDep::widget([
                'model'=>$model, 
@@ -94,31 +96,7 @@ use common\widgets\co
                         ]
                     ) ?>
   
-     </div>  
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'saldmesant')->textInput(['disabled' => true,'maxlength' => true]) ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'ingresos')->textInput(['disabled' => true,'maxlength' => true]) ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'egresos')->textInput(['disabled' => true,'maxlength' => true]) ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'saldfinal')->textInput(['disabled' => true,'maxlength' => true]) ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'saldecuenta')->textInput(['disabled' => true,'maxlength' => true]) ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'salddif')->textInput(['disabled' => true,'maxlength' => true]) ?>
-
- </div>
+     </div> 
   <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
      <?php echo $form->field($model, 'mes')->
             dropDownList(timeHelper::cboMeses(true),
@@ -140,8 +118,40 @@ use common\widgets\co
  </div>
      <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'estado')->textInput(['style'=>"color:red;font-size:14px;font-weight:800;",'disabled' => true,'maxlength' => true]) ?>
+ 
+ </div> 
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+     <?= $form->field($model, 'saldmesant')->textInput(['value'=>$formato->asDecimal($model->saldmesant,2),'disabled' => true,'maxlength' => true,'style'=>'text-align:right;']) ?>
 
- </div>  
+ </div>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'ingresos')->textInput(['value'=>$formato->asDecimal($model->ingresos,2),'disabled' => true,'maxlength' => true,'style'=>'text-align:right;']) ?>
+      <?php 
+      echo $this->render('egresos',['datos'=>$model->ingresosArray()]);
+      ?>
+ </div>
+  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'egresos')->textInput(['value'=>$formato->asDecimal($model->egresos,2),'disabled' => true,'maxlength' => true,'style'=>'text-align:right;']) ?>
+      <?php 
+      echo $this->render('egresos',['datos'=>$model->egresosArray()]);
+      ?>
+ </div>
+  </div>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+     <?= $form->field($model, 'saldfinal')->textInput(['value'=>$formato->asDecimal($model->saldfinal,2),'disabled' => true,'maxlength' => true,'style'=>'text-align:right;']) ?>
+
+ </div>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+     <?= $form->field($model, 'saldecuenta')->textInput(['value'=>$formato->asDecimal($model->saldecuenta,2),'disabled' => true,'maxlength' => true,'style'=>'text-align:right;']) ?>
+
+ </div>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+     <?= $form->field($model, 'salddif')->textInput(['value'=>$formato->asDecimal($model->salddif,2),'disabled' => true,'maxlength' => true,'style'=>'text-align:right;']) ?>
+
+ </div>
+  
+     <?php Pjax::end();  ?>
     <?php ActiveForm::end(); ?>
 
 </div>
@@ -183,4 +193,8 @@ use common\widgets\co
   
   $this->registerJs($string, \yii\web\View::POS_END);
 ?> 
-      
+    
+<?php 
+/*print_r($model->find()->movimientosAgrupado()->
+            andWhere(['ingreso'=>'0'])->asArray()->all());*/
+?>

@@ -13,6 +13,7 @@ use yii\helpers\Url;
 use frontend\controllers\base\baseController;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use frontend\modules\report\Module as ModuleReporte;
 /**
  * EstadocuController implements the CRUD actions for SigiEstadocuentas model.
  */
@@ -153,4 +154,13 @@ class EstadocuController extends baseController
             return $mensaje;
         } 
     }
+    
+    public function actionReporte($id){
+        $this->layout="install";
+       $model = $this->findModel($id);
+        $contenido=$this->render('reporte',['model'=>$model]);
+        $pdf=ModuleReporte::getPdf([]);
+        $pdf->WriteHTML($contenido);
+            return  $pdf->output(/*$ruta, \Mpdf\Output\Destination::FILE*/);
+  }  
 }

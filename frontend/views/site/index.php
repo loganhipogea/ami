@@ -1,5 +1,19 @@
 <?php
 use dosamigos\chartjs\ChartJs;
+use frontend\modules\sigi\models\VwKardexPagos;
+use frontend\modules\sigi\models\SigiEstadocuentas;
+use common\helpers\h;
+
+$formato=h::formato();
+$deudas=VwKardexPagos::find()->resumenDeudasByEdificio()->asArray()->all();
+$facturado=VwKardexPagos::find()->resumenMontosACobrarByEdificio()->asArray()->all();
+$edificios= array_column($deudas, 'codigo');
+$deudas= array_column($deudas, 'deuda');
+$facturados= array_column($facturado, 'facturado');
+$cobrado=[];
+foreach($facturados as $clave=>$facturado){
+    $cobrado[]=$facturado-$deudas[$clave];
+}
 if (Yii::$app->session->hasFlash('info')): ?>
     <div class="alert alert-warning">
          
@@ -20,102 +34,24 @@ if (Yii::$app->session->hasFlash('info')): ?>
 <?php endif; ?>
 
 
-<div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-yellow">
-                <i class="fa fa-gear"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Conf.</span>
-              <span class="info-box-number">90<small>%</small></span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-red">
-                <i class="fa fa-book"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Param</span>
-              <span class="info-box-number">52</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-
-        <!-- fix for small devices only -->
-        <div class="clearfix visible-sm-block"></div>
-
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-green">
-                <i class="fa fa-user"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">RBAC</span>
-              <span class="info-box-number">760</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-aqua ">
-                <i class="fa fa-desktop"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">App</span>
-              <span class="info-box-number">2,000</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-      
- <div class="box box-success">
-    <br>
-    <br>
-     
-               
-          
-      <br>
-<br>
-     
-               
-          
-      <br>
 
     
-
- </div>     
       
-       <div class="row">
-          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               
-            <div class="card">
+            
               <div class="card-header">
-                  <h4>Indice de morosidad</h4>
+                  <h4>Cobranzas</h4>
                 
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
+           
                   
                  
                    
 
-                    <div class="chart">
+          
                       <!-- Sales Chart Canvas -->
                       
                     <?= ChartJs::widget([
@@ -125,70 +61,42 @@ if (Yii::$app->session->hasFlash('info')): ?>
         'width' => 400
     ],
     'data' => [
-        'labels' => ["MAGIC", "PLAT", "ACA", "VIS", "FIC", "FIQ", "FII"],
+        'labels' => $edificios,
         'datasets' => [
             [
-                'label' => yii::t('sta.labels',"Del mes"),
+                'label' => yii::t('sta.labels',"Cobrado"),
                 'backgroundColor' => "rgba(255,157,64,0.9)",
                 'borderColor' => "rgba(60,117,9,1)",
                 'pointBackgroundColor' => "rgba(179,181,198,1)",
                 'pointBorderColor' => "#fff",
                 'pointHoverBackgroundColor' => "#fff",
                 'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                'data' => [65, 59, 90, 81, 56, 55, 40]
+                'data' => $cobrado
             ],
             [
-                'label' =>  yii::t('sta.labels',"Anual"),
+                'label' =>  yii::t('sta.labels',"Facturado"),
                 'backgroundColor' => "rgba(232,18,171,1)",
                 'borderColor' => "rgba(255,99,132,1)",
                 'pointBackgroundColor' => "rgba(255,99,132,1)",
                 'pointBorderColor' => "#fff",
                 'pointHoverBackgroundColor' => "#fff",
                 'pointHoverBorderColor' => "rgba(255,99,132,1)",
-                'data' => [28, 48, 40, 19, 96, 27, 100]
+                'data' => $facturados
             ]
         ]
     ]
 ]);
 ?>
-                    </div>
+                   
                     <!-- /.chart-responsive -->
                
+                  
                   <!-- /.col -->
-                  </div>
-                  <!-- /.col -->
-            </div>
+           
                 <!-- /.row -->
               </div>
               <!-- ./card-body -->
-             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <!-- Info Boxes Style 2 -->
-            <h4>Los mayores deudores</h4>
-            <div class="info-box mb-3 bg-yellow">
-              <span class="info-box-icon"><i class="fa fa-money"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Magic 104</span>
-                <span class="info-box-number">S/. 1,234</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <div class="info-box mb-3 bg-purple-active">
-              <span class="info-box-icon"><i class="fa fa-users"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Platino-214</span>
-                <span class="info-box-number">s/. 3.140</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-           
-    
-    
-    
-</div>
-</div>
       
       
       
@@ -203,18 +111,70 @@ if (Yii::$app->session->hasFlash('info')): ?>
       
       
       
+      <br>
+              <br><br>
+              <br><br>
+              <br>.<br>
+              <br>.
+              <br>
+              <br>
       
-      
-      
-      
+     <h4>Estado de cuentas</h4> 
 
       <div class="row">
-          <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               
+             <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  
+                  <tr>
+                      <th>Contrato</th> 
+                      <th>Mes</th> 
+                      <th>Sald mes ant.</th> 
+                     <th>Ingresos</th> 
+                      <th>Egresos</th> 
+                      <th>Sald actual</th> 
+                      <th>Saldo en cuenta</th> 
+                     <th>Diferencia</th>                      
+                  </tr>
+                  </thead>
+                  <tbody>
+                 <?php 
+                 
+                 $data= SigiEstadocuentas::find()->resumenByEdificios()->all();  ?>
+                  <?php foreach($data as $fila) { 
+                       $model=SigiEstadocuentas::findOne($fila->id);
+                       $model->refreshMontos();
+                      ?>     
+                <tr>                   
+                  <td "style"="font-size:0.5em"><?=$fila->codigo?><i style="color:#ccc;"><span class="fa fa-check"></span></i>
+                  </td>
+                  <td "style"="font-size:0.5em"><?=$fila->mes?><i style="color:#ccc;"><span class="fa fa-check"></span></i>
+                  </td>
+                  <td "style"="font-size:0.5em"><?=$formato->asDecimal($fila->saldmesant,2)?><i style="color:#ccc;"><span class="fa fa-check"></span></i>
+                  </td>
+                   <td "style"="font-size:0.5em"><?=$formato->asDecimal($fila->ingresos)?><i style="color:#ccc;"><span class="fa fa-check"></span></i>
+                  </td>
+                   <td "style"="font-size:0.5em"><?=$formato->asDecimal($fila->egresos)?><i style="color:#ccc;"><span class="fa fa-check"></span></i>
+                  </td>
+                   <td "style"="font-size:0.5em"><?=$formato->asDecimal($fila->saldfinal)?><i style="color:#ccc;"><span class="fa fa-check"></span></i>
+                  </td>
+                   <td "style"="font-size:0.5em"><?=$formato->asDecimal($fila->saldecuenta)?><i style="color:#ccc;"><span class="fa fa-check"></span></i>
+                  </td>
+                  <td "style"="font-size:0.5em"><?=$formato->asDecimal($fila->salddif)?><i style="color:#ccc;"><span class="fa fa-check"></span></i>
+                  </td>
+                 
+                </tr> 
+                 <?php } ?>      
+                         
+                        
+                  
+                  </tbody>
+                </table>
+              </div>
           </div>  
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-              
-          </div>  
+           
           
           
       </div>

@@ -39,12 +39,12 @@ class Module extends \yii\base\Module
     'fontDir' => array_merge($fontDirs,[
        Yii::getAlias('@fonts')
     ]),
-    'fontdata' => $fontData /*+ [
+    'fontdata' => $fontData + [
         'cour' => [
             'R' => 'cour.ttf',
             'I' => 'CourierITALIC.ttf',
         ]
-    ]*/,];
+    ],];
   foreach($config as $key=>$value){
       if(array_key_exists($key, $configInicial)){
          $configInicial[$key]=$value;

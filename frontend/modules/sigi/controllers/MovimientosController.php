@@ -304,7 +304,8 @@ class MovimientosController extends baseController {
             'edificio_id' => $modelMovBanco->edificio_id,
             'cuenta_id' => $modelMovBanco->cuenta_id,
             'idop' => $modelMovBanco->id,
-            'tipomov' => '100',
+           // 'tipomov' => '100',
+            'resumen_id'=>$modelMovBanco->resumen_id,
             'activo' => false,
                 //'glosa'=>'PAGO DE CUOTA DE MANT'
         ]);
@@ -619,8 +620,9 @@ class MovimientosController extends baseController {
         $model = New \frontend\modules\sigi\models\SigiMovimientosPre([
             'edificio_id' => $modelMovBanco->edificio_id,
             'cuenta_id' => $modelMovBanco->cuenta_id,
+            'resumen_id'=>$modelMovBanco->resumen_id,
             'idop' => $modelMovBanco->id,
-            'tipomov' => '100',
+             'resumen_id'=>$modelMovBanco->resumen_id,
             'activo' => false,
                 //'glosa'=>'PAGO DE CUOTA DE MANT'
         ]);
@@ -688,6 +690,7 @@ class MovimientosController extends baseController {
             'edificio_id' => $modelMovBanco->edificio_id,
             'cuenta_id' => $modelMovBanco->cuenta_id,
             'idop' => $modelMovBanco->id,
+            'resumen_id'=>$modelMovBanco->resumen_id,
             'tipomov' => '100',
             'activo' => false,
                 //'glosa'=>'PAGO DE CUOTA DE MANT'

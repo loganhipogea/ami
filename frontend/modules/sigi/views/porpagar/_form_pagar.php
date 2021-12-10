@@ -63,8 +63,8 @@ use common\helpers\h;
                         
                          ]*/
                     'source'=>[
-                       'sigiporcobrar-cargoedificio_id'=>[ 
-                                            \frontend\modules\sigi\models\VwSigiBeneficios::className()=>
+                       'sigiporpagar-cargoedificio_id'=>[ 
+                                            \frontend\modules\sigi\models\VwSigiColectores::className()=>
                                                     [
                                                         'campoclave'=>'idcolector' , //columna clave del modelo ; se almacena en el value del option del select 
                                                         'camporef'=>'descargo',//columna a mostrar 
@@ -72,7 +72,7 @@ use common\helpers\h;
                                                     ]
                                                     ],
                             
-                            'sigiporcobrar-unidad_id'=>[ 
+                            'sigiporpagar-unidad_id'=>[ 
                                 \frontend\modules\sigi\models\SigiUnidades::className()=>
                                                     [
                                                         'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 

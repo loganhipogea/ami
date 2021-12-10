@@ -51,6 +51,7 @@ use common\widgets\selectwidget\selectWidget;
             'form'=>$form,
             'campo'=>'cargo_id',
          'ordenCampo'=>2,
+        'filterWhere'=>[['esegreso'=>'1']]
          //'addCampos'=>[2,3],
         ]);  ?>
  </div>

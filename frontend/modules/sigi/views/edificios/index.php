@@ -78,9 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
     <?php Pjax::end(); ?>
-        <?php
-        echo \onmotion\telegram\Telegram::widget();
-        ?>
+       
 </div>
     </div>
 </div>

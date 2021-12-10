@@ -18,7 +18,7 @@ class SigiCargosSearch extends SigiCargos
     {
         return [
             [['id'], 'integer'],
-            [['codcargo', 'descargo', 'esegreso', 'regular'], 'safe'],
+            [['codcargo', 'descargo', 'esegreso', 'regular','esegreso'], 'safe'],
         ];
     }
 
@@ -62,9 +62,9 @@ class SigiCargosSearch extends SigiCargos
         ]);
 
         $query->andFilterWhere(['like', 'codcargo', $this->codcargo])
-            ->andFilterWhere(['like', 'descargo', $this->descargo])
-            ->andFilterWhere(['like', 'esegreso', $this->esegreso])
-            ->andFilterWhere(['like', 'regular', $this->regular]);
+            ->andFilterWhere(['like', 'descargo', $this->descargo]);
+            //->andFilterWhere(['like', 'esegreso', $this->esegreso])
+           // ->andFilterWhere(['like', 'regular', $this->regular]);
 
         return $dataProvider;
     }
