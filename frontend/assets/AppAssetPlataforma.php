@@ -21,13 +21,13 @@ class AppAssetPlataforma extends AssetBundle
         'js/plataforma/jquery.lightSlider.js'
          /*'js/jquery-ui.js',
          'js/modal.js',
-          'js/select2.js',*/
+          'js/select2.js',*/ 
         
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
-         'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        //'yii\web\JqueryAsset',
+        // 'yii\web\YiiAsset',
+        //'yii\bootstrap\BootstrapAsset',
        // '\rmrevin\yii\fontawesome\AssetBundle'
     ];
 }

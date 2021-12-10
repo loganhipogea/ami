@@ -29,7 +29,7 @@ use common\models\LoginForm;
         
 	</div>
 </div>
-      <?php \shifrin\noty\NotyWidget::widget([
+      <?php /*\shifrin\noty\NotyWidget::widget([
     'options' => [ // you can add js options here, see noty plugin page for available options
         'dismissQueue' => true,
         'layout' => 'center',
@@ -46,7 +46,7 @@ use common\models\LoginForm;
     'registerAnimateCss' => true,
     'registerButtonsCss' => true,
     'registerFontAwesomeCss' => true,
-]); ?>
+]);*/ ?>
 <?php 
 $cadena="$(document).ready(function() {
     $('#btn_enviar').on('click',function(){
