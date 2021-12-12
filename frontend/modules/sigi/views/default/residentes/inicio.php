@@ -13,7 +13,7 @@ $this->registerjsFile("@web/js/residentes/jquery.carousel.min.js",['position'=>V
 $this->registerjsFile("@web/js/residentes/jquery.lightSlider.js",['position'=>View::POS_END]);
 ?>
 <?PHP
-        $this->render('header');
+        echo $this->render('header',['useredificio'=>$useredificio]);
 ?>
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->

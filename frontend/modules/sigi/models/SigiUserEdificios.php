@@ -36,6 +36,7 @@ class SigiUserEdificios extends \common\models\base\modelBase
     {
         return [
             [['user_id'], 'integer'],
+            [['unidad_id'], 'safe'],
             [['edificio_id'], 'integer'],
               [['edificio_id','user_id' ], 'unique','targetAttribute'=>['edificio_id','user_id']],
            // [['activa'], 'string', 'max' => 1],
@@ -113,11 +114,12 @@ class SigiUserEdificios extends \common\models\base\modelBase
      * segun se hayan agregado faultades 
      * o falte algun registro 
      */
-    public static function insertUserEdificio($iduser,$edificio_id){
+    public static function insertUserEdificio($iduser,$edificio_id,$unidad_id){
      
           static::firstOrCreateStatic([
                     'user_id'=>$iduser,
                      'edificio_id'=>$edificio_id,
+                     'unidad_id'=>$unidad_id
                      //rr'activa'=>'0',
                     ]);
         $model= self::find()->andWhere([

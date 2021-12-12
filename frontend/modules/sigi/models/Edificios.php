@@ -555,7 +555,7 @@ class Edificios extends \common\models\base\modelBase
     } else{
         yii::error('Ya tiene usuario hay que isnertarlo en la tabla ',__FUNCTION__); 
                 if(!is_null($user=$unidad->obtenerUsuario())){              
-                    SigiUserEdificios::insertUserEdificio($user->id, $this->id);
+                    SigiUserEdificios::insertUserEdificio($user->id, $this->id,$unidad->id);
                 }
     }   
    }

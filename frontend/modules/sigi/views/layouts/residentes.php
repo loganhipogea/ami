@@ -50,27 +50,7 @@ use yii\widgets\ActiveForm;
        
     <?php $this->beginBody() ?>
   
-       <div style="text-align: left;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div style=""  class="col-lg-4 col-md-4 col-sm-4 col-xs-12"> 
-             <img src="/frontend/web/img/residentes/bnpslogo.jpg">
-            </div>
-            <div style=""  class="col-lg-8 col-md-8 col-sm-8 col-xs-12 nombreedificio"> 
-                  <?PHP echo $edificio->nombre;   ?>
-            </div>
-               
-      </div>
-      
-        <div  style="clear:right;height:auto;" class=" rayagris col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div style="text-align: left; clear:right;" class="col-lg-8 col-md-8 col-sm-12 col-xs-12"> 
-                <i style="font-size:2em"><span class="fa fa-user"></span></i>
-                JULIAN RAMIREZ TENORIO/JESSENIA ESPINOZA RIVERA
-            </div>
-            <div style="clear:right; text-align: center" class="col-lg-4 col-md-4 col-sm-12 col-xs-12"> 
-              <?= Html::a('Salir', ['create'], ['class' => 'btn btn-danger']) ?>
-               <?= Html::a('Cambiar clave', ['create'], ['class' => 'btn btn-warning']) ?>
-            </div>
-           
-       </div>
+       
        
    
        

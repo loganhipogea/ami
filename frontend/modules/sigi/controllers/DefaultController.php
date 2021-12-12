@@ -167,19 +167,27 @@ class DefaultController extends Controller
      */
    
     
-   public function actionPanelResidente(){
-       
+   public function actionPanelResidente(){       
        $this->layout='residentes';
        $user= h::user();
-       if(!is_null($useredificio=SigiUserEdificios::findOne(h::userId()))){
+      
+       if($user->profile->tipo==\common\models\Profile::PRF_RESIDENTE){
+           //var_dump(h::userId(),SigiUserEdificios::findOne(['user_id'=>h::userId()]));die();
+          if(!is_null($useredificio=SigiUserEdificios::findOne(['user_id'=>h::userId()]))){
+             return  $this->render('residentes/inicio',
+                    ['useredificio'=>$useredificio]); 
            
-           
-       }else{
-         throw new ServerErrorHttpException(yii::t('base.errors',
+            }else{
+                    throw new ServerErrorHttpException(yii::t('base.errors',
               'Residente no encontrado en el registro  '));  
             
+                }           
+           
+       }else{//Si no es residente 
+           
        }
-       $mail=h::user()->identity->email;
+       
+       /*$mail=h::user()->identity->email;
        $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->
        andWhere(['correo'=>$mail])->all();
       if(count($propietarios)>0){ 
@@ -196,7 +204,7 @@ class DefaultController extends Controller
       }else{
           throw new ServerErrorHttpException(yii::t('base.errors','Residente no encontrado con el correo '.$mail));  
          
-      } 
+      } */
    }
    
   public function actionPanelResidenteInfo(){
