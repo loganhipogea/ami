@@ -47,9 +47,9 @@ class Edificios extends \common\models\base\modelBase
          {
                 return [
 		
-		/*'fileBehavior' => [
-			'class' => '\frontend\modules\attachments\behaviors\FileBehaviorAdvanced' 
-                               ],*/
+		'fileBehavior' => [
+			'class' => '\common\behaviors\FileBehavior' 
+                               ],
                     'auditoriaBehavior' => [
 			'class' => '\common\behaviors\AuditBehavior' ,
                                ],
@@ -485,6 +485,7 @@ class Edificios extends \common\models\base\modelBase
  } 
  
  public function generateUsers(){
+   
      
      $unidades=$this->unitsForUsers();
      yii::error(count($unidades),__FUNCTION__);
@@ -492,20 +493,20 @@ class Edificios extends \common\models\base\modelBase
         YII::ERROR('***************** '.$unidad->nombre.' **********',__FUNCTION__);
          YII::ERROR($unidad->nombre,__FUNCTION__);
          YII::ERROR($unidad->hasUser(),__FUNCTION__);
-        $currentProp=$unidad->currentPropietario();
-      if(!is_null($currentProp)){
-          YII::ERROR(' tiene propietario',__FUNCTION__);
-          $correo=$currentProp->correo;
-            YII::ERROR($correo,__FUNCTION__);
+        //$currentProp=$unidad->currentPropietario();
+      //if(!is_null($currentProp)){
+          //YII::ERROR(' tiene propietario',__FUNCTION__);
+          //$correo=$currentProp->correo;
+            //YII::ERROR($correo,__FUNCTION__);
        if(!$unidad->hasUser()){
            YII::ERROR('no tiene usuario aun ',__FUNCTION__);
-            yii::error($correo);
-           if(!empty($correo)){
-               yii::error('tiene correo ',__FUNCTION__);           
-               $userHallado=\common\helpers\h::user()->identity->findByEmail($correo);
-               if(is_null($userHallado)){
+            //yii::error($correo);
+          // if(!empty($correo)){
+              // yii::error('tiene correo ',__FUNCTION__);           
+              // $userHallado=\common\helpers\h::user()->identity->findByEmail($correo);
+               //if(is_null($userHallado)){
                    $usuario= new \frontend\modules\sigi\models\users\SignupForm();    
-                $usuario->email=$correo;
+                $usuario->email= uniqid().'@hotmail.com';
                 $usuario->username=$unidad->generateUsername();
                 $usuario->password=$unidad->generatePwd();
                     try {          
@@ -528,30 +529,36 @@ class Edificios extends \common\models\base\modelBase
                                             //yii::error('Rol nulo');
                                                     }
                                           }
-                                                    } catch (\yii\db\IntegrityException $ex) {           
+                             } catch (\yii\db\IntegrityException $ex) {           
                                                         yii::error('NO funco el sgunp o '.$ex->getMessage(),__FUNCTION__);
-                                                } 
+                            } 
       
-                                            unset($usuario);
-               }else{
+                      unset($usuario);
+               /*}else{
                   yii::error('Ya existia un usuario con este correo ',__FUNCTION__);                             
                     SigiUserEdificios::insertUserEdificio($userHallado->id, $this->id);
                    
-               } 
+               } */
                 
-                    } 
-        }else{//si ya tiene usuario
+                    //} 
+        /*}else{//si ya tiene usuario
                 yii::error('Ya tiene usuario ',__FUNCTION__); 
                 if(!is_null($user=$unidad->obtenerUsuario())){              
                     SigiUserEdificios::insertUserEdificio($user->id, $this->id);
-                } 
-        }
-       }else{
+                }*/ 
+        //}
+       /*}else{
            
            
-       }  
+       }  */
        //die();
-    }    
+    } else{
+        yii::error('Ya tiene usuario hay que isnertarlo en la tabla ',__FUNCTION__); 
+                if(!is_null($user=$unidad->obtenerUsuario())){              
+                    SigiUserEdificios::insertUserEdificio($user->id, $this->id);
+                }
+    }   
+   }
  }
  /*
   * Esta funcion se encargs de 
@@ -660,6 +667,12 @@ public function unitsForUsers(){
        return false ;
     }
     
+ }
+ 
+ public function idCargoAgua(){
+     return $this->getColectores()->select(['id'])->
+     andWhere(['tipomedidor'=>
+         SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT])->scalar();
  }
  
 }

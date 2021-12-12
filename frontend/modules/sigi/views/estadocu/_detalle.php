@@ -100,7 +100,7 @@ $dataProvider=new \yii\data\ActiveDataProvider([
         ]);
 echo ExportMenu::widget([
     'dataProvider' => $dataProvider,
-    'columns' => $gridColumns,
+    'columns' => $columns,
     'dropdownOptions' => [
         'label' => yii::t('sta.labels','Exportar'),
         'class' => 'btn btn-success'

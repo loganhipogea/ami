@@ -9,6 +9,7 @@ use frontend\modules\sigi\models\SigiDetfacturacion;
 use frontend\modules\sigi\models\SigiDetFacturacionSearch;
 use frontend\modules\sigi\models\SigiKardexdepa;
 use frontend\modules\sigi\models\VwSigiFacturecibo;
+use frontend\modules\sigi\models\VwSigiLecturas;
 use Yii;
 use  yii\web\ServerErrorHttpException;
 use yii\base\Exception;
@@ -684,7 +685,7 @@ class SigiFacturacion extends \common\models\base\modelBase
      
      $unidadesTransferidas=array_combine(array_column($this->transfEsteMes(),'unidad_id'),array_column($this->transfEsteMes(),'fecha'));
      //YII::ERROR('UNIDADES TRANSFERIDAS');
-       // YII::ERROR($unidadesTransferidas);
+     //YII::ERROR($unidadesTransferidas);
      //var_dump(date('j',strtotime($unidadesTransferidas[6795])));die();
      //$medidorAACC=$this->edificio->firstMedidorAACC();
      
@@ -968,7 +969,7 @@ class SigiFacturacion extends \common\models\base\modelBase
              'fecha',
              $bordes[0],
              $bordes[1],
-                        ])->asArray()->all();
+                        ])->andWhere(['activo'=>'1'])->asArray()->all();
     
   }
   
@@ -1286,7 +1287,7 @@ class SigiFacturacion extends \common\models\base\modelBase
      $tamano=h::gsetting('sigi','nRecibosBloque');    
      $arch=[];
      $i=1;
-     foreach($this->getKardexDepa()->batch($tamano) as $kardexes ){
+     foreach($this->getKardexDepa()->orderBy(['unidad_id'=>SORT_ASC])->batch($tamano) as $kardexes ){
          
           $mpdf = new \Mpdf\Mpdf(['format'=>$this->reporte->tamanopapel]);
         
@@ -1561,5 +1562,47 @@ private function resolveBatch(){
                  //yii::error($this->descripcion);
     
 }
-  
+ /*
+  * FUNCION QUE DEVUELVE UN ARRAY 
+  * CON EL RESUMEN DE CONSUMOS DE AGUA
+  * [
+  *   'AACC'=>['CONSUMO'=>23,45M3,'MONTO'=>12.345],
+  *   'INPUTADOS'=>['CONSUMO'=>23,45M3,'MONTO'=>12.345],
+  * ]
+  */
+public function arrayConsumos(){
+    $ids=$this->edificio->idsUnidadesNoImputables();
+    $monto=$this->montoRecibo();
+    //echo $monto; die();
+    $resumen=[];
+    $query=VwSigiLecturas::find()->select(['sum(delta)'])->
+       andWhere([
+           'edificio_id'=>$this->edificio_id,
+           'mes'=>$this->mes,
+           'anio'=>$this->ejercicio,
+           'facturable'=>'1'
+           ]);
+    $imputados=(clone $query)->andWhere(['not in','unidad_id',$ids])->scalar();
+    $aac=$query->andWhere(['unidad_id'=>$ids])->scalar();
+   if(($imputados+0)>0 and ($aac+0)>0 ){
+     $resumen['AACC'] =['CONSUMO'=>$aac,'MONTO'=>round(($aac/($aac+$imputados))*$monto,3)]; 
+      $resumen['IMPUTADOS'] =['CONSUMO'=>$imputados,'MONTO'=>round(($imputados/($aac+$imputados))*$monto,3)];            
+     return $resumen;
+   }else{
+       return [];
+   }
+    
+    
+}
+
+public function montoRecibo(){
+    $idColector=$this->edificio->idCargoAgua();
+   if(!is_null($cargo=$this->getSigiCuentaspor()->
+         andWhere(['colector_id'=>$idColector])->one())){
+       return $cargo->monto;
+   }else{
+       return 0;
+   }
+}
+
 }

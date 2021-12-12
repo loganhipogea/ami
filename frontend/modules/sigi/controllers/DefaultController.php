@@ -171,12 +171,23 @@ class DefaultController extends Controller
        
        $this->layout='residentes';
        $user= h::user();
+       if(!is_null($useredificio=SigiUserEdificios::findOne(h::userId()))){
+           
+           
+       }else{
+         throw new ServerErrorHttpException(yii::t('base.errors',
+              'Residente no encontrado en el registro  '));  
+            
+       }
        $mail=h::user()->identity->email;
        $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->
        andWhere(['correo'=>$mail])->all();
       if(count($propietarios)>0){ 
        return  $this->render('residentes/inicio',
-                    ['propietarios'=>$propietarios]);  
+                    ['propietarios'=>$propietarios]); 
+       
+       
+       
        $unidad=$propietario->unidad;       
            $medidor=$unidad->firstMedidor(\frontend\modules\sigi\models\SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT);
             return  $this->render('panel_residente',
@@ -249,14 +260,15 @@ class DefaultController extends Controller
             }
    }  
    public function actionResiFactu(){
-       $this->layout='residentes';
+      
+       $this->layout='residentes'; 
        $user= h::user();
        $mail=h::user()->identity->email;
        $propietarios= \frontend\modules\sigi\models\SigiPropietarios::find()->
        andWhere(['correo'=>$mail])->all();
        //$searchModel = new \frontend\modules\sigi\models\SigiKardexdepaSearch();
        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+  //PRINT_R( $propietarios);DIE();
       if(count($propietarios)>0){ 
        return  $this->render('residentes/residente_facturacion',
                     ['propietarios'=>$propietarios,

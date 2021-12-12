@@ -456,8 +456,14 @@ public function insertaRegistro($identidad,$unidad,$medidor,$monto,$aacc,$partic
 
 private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$participacion,$dias,$factor,$nuevoProp,$esResumido){
     if($factor==1){
+        /* YII::ERROR('facrtoier 1');
+        YII::ERROR('UNIDAD-CORANZA INDINVUKAU');
+        YII::ERROR($unidad->miApoderado()->cobranzaindividual,__FUNCTION__);
+         YII::ERROR($unidad->codpro,__FUNCTION__);
+          YII::ERROR($unidad->numero,__FUNCTION__);*/
         $grupocobranza=(!$unidad->miApoderado()->cobranzaindividual)?$unidad->codpro:$unidad->numero;
     }else{
+        
        if($nuevoProp=='0') { 
        /////Si es registro con propietario antiguo
        // es necesario obtener el apoderado antiguo  
@@ -469,6 +475,11 @@ private function insertaRegistroRaw($identidad,$unidad,$medidor,$monto,$aacc,$pa
                where(['edificio_id'=>$this->edificio_id,'codpro'=>$codproant])
                     ->one();
             // yii::error('apoderado anterior  '.$apoderadoant->codpro);
+           /* YII::ERROR('facrtoier 0');
+        YII::ERROR('apoderado factu induiv ');
+        YII::ERROR($unidad->miApoderado()->cobranzaindividual,__FUNCTION__);
+         YII::ERROR($unidad->numero,__FUNCTION__);
+          YII::ERROR($codproant,__FUNCTION__);*/
            $grupocobranza=($apoderadoant->facturindividual)?$unidad->numero:$codproant;  
            //yii::error('GRUPO DE COBRANZA :  '.$grupocobranza);
        }else{ ///si es registro con propiestario nuevo , puede haber cambiado de apoderado pero no importa 

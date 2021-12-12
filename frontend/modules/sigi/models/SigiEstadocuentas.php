@@ -153,12 +153,12 @@ class SigiEstadocuentas extends \common\models\base\modelBase
     
     public function egresosArray(){
          return $this->find()->movimientosAgrupado()->
-            andWhere(['ingreso'=>'0'])->asArray()->all();
+            andWhere(['ingreso'=>'0','resumen_id'=>$this->id])->asArray()->all();
     }
     
     public function ingresosArray(){
         return $this->find()->movimientosAgrupado()->
-            andWhere(['ingreso'=>'1'])->asArray()->all();
+            andWhere(['ingreso'=>'1','resumen_id'=>$this->id])->asArray()->all();
     }
     
     public function lastOperacion(){

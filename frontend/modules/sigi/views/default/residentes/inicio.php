@@ -12,6 +12,9 @@ $this->registerjsFile("@web/js/residentes/jquery.innerfade.js",['position'=>View
 $this->registerjsFile("@web/js/residentes/jquery.carousel.min.js",['position'=>View::POS_END]);
 $this->registerjsFile("@web/js/residentes/jquery.lightSlider.js",['position'=>View::POS_END]);
 ?>
+<?PHP
+        $this->render('header');
+?>
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">

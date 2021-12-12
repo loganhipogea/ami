@@ -24,8 +24,14 @@ use common\widgets\selectwidget\selectWidget;
             <?=(!$model->isNewRecord)?Html::button('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Verificar datos'), ['href' => $url, 'title' => yii::t('sta.labels','Verificar Datos'),'id'=>'btn-add-test','class' => 'botonAbre btn btn-warning']):''?>
             <?=(!$model->isNewRecord)?Html::button('<span class="fa fa-users"></span>   '.Yii::t('sta.labels', 'Generar Usuarios'), ['class' => 'btn btn-success','href' => '#','id'=>'btn-add-usuarios']):''?>
            <?=(!$model->isNewRecord)?common\widgets\auditwidget\auditWidget::widget(['model'=>$model]):''?>
-           
-             
+           <?php    $url=\yii\helpers\Url::toRoute(['/finder/selectimage',
+               'isImage'=>false,
+               'idModal'=>'imagemodal',
+               'modelid'=>$model->id,
+                'extension'=> \yii\helpers\Json::encode(['jpg']),
+               'nombreclase'=> str_replace('\\','_',get_class($model))
+               ]); ?>
+            <?=(!$model->isNewRecord)?Html::button('<span class="fa fa-clip"></span>   '.Yii::t('sta.labels', 'Adjuntar imagen'), ['class' => 'botonAbre btn btn-success','href' => $url,'id'=>'btn-add-usuarios']):''?> 
 
             </div>
         </div>

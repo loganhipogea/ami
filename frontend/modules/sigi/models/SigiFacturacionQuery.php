@@ -1,5 +1,5 @@
 <?php
-
+use frontend\modules\sigi\models\VwSigiLecturas;
 namespace frontend\modules\sigi\models;
 
 /**
@@ -31,4 +31,6 @@ class SigiFacturacionQuery extends \frontend\modules\sigi\components\ActiveQuery
     {
         return parent::one($db);
     }
+    
+    
 }

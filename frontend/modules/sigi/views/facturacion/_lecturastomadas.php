@@ -12,21 +12,66 @@ use frontend\modules\sigi\helpers\comboHelper;
 $this->title = Yii::t('sigi.labels', 'Partidas');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
- <div  CLASS="alert alert-info">
-     <?php $medidor=New frontend\modules\sigi\models\SigiSuministros();
-         $medidor->edificio_id=$model->edificio_id;
-         ?>
-          <?=yii::t('sigi.labels','Consumo total de agua (M3)').' : '.$medidor->consumoTotal($model->mes,$model->ejercicio,true)?>
-        
-         
-         </DIV> 
+
 <div class="sigi-base-presupuesto-index">
     
          
         
      <div class="box-body">
-         
-         
+       <?php
+  $consumos=$model->arrayConsumos();
+  $costom3= round(($consumos['AACC']['MONTO']+$consumos['IMPUTADOS']['MONTO'])/
+          ($consumos['AACC']['CONSUMO']+$consumos['IMPUTADOS']['CONSUMO']),4);
+  ?>
+
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+           <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr >
+                      <th colspan="2"><p class="text-green"><span class="fa fa-chart-line"></span>
+                             Costo unitario  <?=$costom3?>(S/./m3) </p></th> 
+                    
+                  </tr>
+                  <tr>
+                     <th>Area</th> 
+                     <th>Consumo(M3)</th> 
+                     <th>Monto</th> 
+                  </tr>
+                  </thead>
+                  <tbody>
+                      
+                                
+              
+                 <tr>
+                     <td>AREAS COMUNES</td> 
+                   <td><?=$consumos['AACC']['CONSUMO']?> </td>
+                    <td>
+                      <div class="sparkbar" data-color="#00a65a" data-height="20"><?=$consumos['AACC']['MONTO']?></div>
+                    </td>
+                 </tr> 
+                  <tr>
+                     <td>UNIDADES </td> 
+                   <td><?=$consumos['IMPUTADOS']['CONSUMO']?> </td>
+                    <td>
+                      <div class="sparkbar" data-color="#00a65a" data-height="20"><?=$consumos['IMPUTADOS']['MONTO']?></div>
+                    </td>
+                 </tr> 
+                  <tr>
+                     <td>TOTAL EDIFICIO </td> 
+                   <td><?=$consumos['IMPUTADOS']['CONSUMO']+$consumos['AACC']['CONSUMO']?> </td>
+                    <td>
+                      <div class="sparkbar" data-color="#00a65a" data-height="20"><?=$consumos['IMPUTADOS']['MONTO']+$consumos['AACC']['MONTO']?></div>
+                    </td>
+                 </tr>     
+               
+                  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+    </div>   
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">      
          
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -63,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <?php Pjax::end(); ?>
 </div>
-    </div>
-</div>
-
-       
+ </div>  
+  
+   </div>
+     </div>

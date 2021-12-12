@@ -318,6 +318,7 @@ public function getEdificio()
     
  public function beforeSave($insert) {
       if($insert){
+          $this->activo=true;
           $this->resolveIds();
           if(empty($this->liminf))
               $this->liminf=0;
