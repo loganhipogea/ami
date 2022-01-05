@@ -386,9 +386,11 @@ public function lastReads($forGraphical=false){
         $lecturas[$lectura->mes]=$lectura->delta;
     }
     */
+   // $nlecturas=100;
     $lecturas= SigiLecturas::find()->select(['mes','sum(delta) as consumo'])
      ->andWhere(['suministro_id'=>$this->id])->groupBy(['mes','anio'])->limit($nlecturas)->
      asArray()->all();
+
     $lecturas=array_combine(array_column($lecturas,'mes'),array_column($lecturas,'consumo'));
     
     
@@ -398,7 +400,7 @@ public function lastReads($forGraphical=false){
         array_shift($lecturas);
         return $lecturas;
     }else{
-         array_shift($lecturas);
+        array_shift($lecturas);
           return $lecturas;
     }
     

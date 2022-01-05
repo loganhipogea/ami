@@ -77,7 +77,7 @@ return [
         
          'assetManager'=>[
                'bundles'=>[
-                   'dmstr\web\AdminLteAsset'=>['skin'=>'skin-green'],
+                   'dmstr\web\AdminLteAsset'=>['skin'=>'skin-yellow'],
                    /*'yii\web\JqueryAsset' => [
                                         'js' => [YII_DEBUG ? 'https://code.jquery.com/jquery-3.2.1.js' : 'https://code.jquery.com/jquery-3.2.1.min.js'],
                                         'jsOptions' => ['type' => 'text/javascript'],

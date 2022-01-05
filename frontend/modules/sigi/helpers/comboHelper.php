@@ -189,13 +189,18 @@ class comboHelper extends Combito
     
     
     public static function getCboUnitsNotImputables($id_edificio){
-     
+     /*ECHO  \frontend\modules\sigi\models\SigiUnidades::find()
+                  ->andWhere(['edificio_id'=>$id_edificio])
+                  ->andWhere(                            
+                              ['or',"imputable='0'",'area=0']                          
+                          )->createCommand()->rawSql;                  
+              DIE();  */  
           return ArrayHelper::map(
                           \frontend\modules\sigi\models\SigiUnidades::find()
-                  ->where(['edificio_id'=>$id_edificio])
-                  ->andWhere(['not',['imputable'=>'1']])->
-                  orWhere(['area'=>0])->
-                  all(),
+                  ->andWhere(['edificio_id'=>$id_edificio])
+                  ->andWhere(                            
+                              ['or',"imputable='0'",'area=0']                          
+                          )->all(),
                 'id','numero'); 
       
        

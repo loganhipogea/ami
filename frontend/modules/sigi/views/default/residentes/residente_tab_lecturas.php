@@ -11,7 +11,6 @@ use dosamigos\chartjs\ChartJs;
 ?>
 <div class="box box-body">
   
-
    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> 
        <BR>
     <?php 
@@ -199,7 +198,7 @@ Pjax::begin(['id'=>'grilla-deudasvfg']);
 
  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> 
  <?php 
-  
+
    if(!is_null($medidor)){
    $lecturas=$medidor->lastReads(true);
         echo  ChartJs::widget([

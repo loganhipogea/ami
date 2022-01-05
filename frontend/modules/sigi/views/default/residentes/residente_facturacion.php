@@ -17,14 +17,15 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');*/
     
    
    <div class="box box-success">
+    <?php echo $this->render('header',['useredificio'=>$useredificio]);  ?>
     <?php 
     $items=[];
     $deudatotal=0;
     $deuda=0;
-    foreach($propietarios as $propietario){
-        $unidad=$propietario->unidad; 
-        $deuda=$unidad->deuda();
-        $deudatotal+=$deuda;
+    //foreach($propietarios as $propietario){
+        $unidad=$useredificio->unidad; 
+        $deudatotal=$unidad->deuda();
+        //$deudatotal+=$deuda;
         if(empty($unidad->parent_id)){
            $medidor=$unidad->firstMedidor(\frontend\modules\sigi\models\SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT);
            
@@ -33,18 +34,18 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');*/
             'content'=> $this->render(
                     'residente_tab_facturacion',
                     [
-                            'searchModel' =>$searchModel,
-                            'dataProvider'=> $dataProvider,
+                            //'searchModel' =>$searchModel,
+                            //'dataProvider'=> $dataProvider,
                             'unidad' => $unidad,
                         'medidor'=>$medidor,
                         'params'=>$params,
-                        'deuda'=>$deuda
+                        'deuda'=>$deudatotal
                     ]),
             //'active' => true,
              'options' => ['id' => uniqid()],
             ];
         }
-    }
+    //}
     echo TabsX::widget([
     'position' => TabsX::POS_ABOVE,
      'bordered'=>true,

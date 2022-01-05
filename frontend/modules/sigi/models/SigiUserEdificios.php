@@ -85,6 +85,10 @@ class SigiUserEdificios extends \common\models\base\modelBase
     public function getEdificio(){
        return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
    }
+   
+    public function getUnidad(){
+       return $this->hasOne(SigiUnidades::className(), ['id' => 'unidad_id']);
+   }
     
     /*Refresca los valores de la tabla 
      * segun se hayan agregado faultades 

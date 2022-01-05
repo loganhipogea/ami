@@ -418,6 +418,15 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+   return print_r( \frontend\modules\sigi\models\SigiApoderados::findOne(35)->
+           resumenUnidadesImputablesPadresPorTipo());
+    
+    die();
+    
+    
+    
+    print_r(\frontend\modules\sigi\models\Edificios::findOne(58)->mapa_depa());
+    die();
    $model= \frontend\modules\sigi\models\SigiMovbanco::findOne(6);
    echo $model->toCarbon('fopera')->year.'<br>';
    echo $model->toCarbon('fopera')->month.'<br>';

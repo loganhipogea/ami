@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('sigi.labels', 'Movimientos'
   <?php 
   $gridColumns=[
             
-         
+          ['class' => 'yii\grid\SerialColumn'],
          [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{edit}{delete}',

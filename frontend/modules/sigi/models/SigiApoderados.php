@@ -83,6 +83,10 @@ class SigiApoderados extends \common\models\base\modelBase
     {
         return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
     }
+    
+    public function getUnidades(){
+        return $this->hasOne(SigiUnidades::className(), ['edificio_id' => 'edificio_id','codpro'=>'codpro']);
+    }
 
     /**
      * {@inheritdoc}
@@ -100,4 +104,33 @@ class SigiApoderados extends \common\models\base\modelBase
              'imputable'=>'1',
             ])->exists();
     }
+    
+    
+    public function nUnidadesImputablesPadres(){
+       return  $this->getUnidades()->andWhere(['parent_id'=>null,'imputable'=>'1'])->count();
+    }
+    
+    public function nUnidadesImputablesHijas(){
+       return  $this->getUnidades()->
+               andWhere(['>','parent_id',0])->
+               andWhere(['imputable'=>'1'])->count();
+    }
+    
+    public function areaUnidadesImputablesPadres(){
+        return  $this->getUnidades()->select(['suma(area)'])->
+               andWhere(['parent_id'=>null,'imputable'=>'1'])->scalar();
+    }
+    public function areaUnidadesImputablesHijas(){
+       return  $this->getUnidades()->select(['sum(area)'])->
+               andWhere(['>','parent_id',0])->
+               andWhere(['imputable'=>'1'])->scalar();
+    }
+    public function resumenUnidadesImputablesPadresPorTipo(){
+       return $this->getUnidades()->select(['count(*) as cantidad','b.desunidad','sum(t.area) as area','b.codtipo'])->
+       innerJoin('{{%sigi_tipounidad}} b','t.codtipo=b.codtipo')
+               ->andWhere(['parent_id'=>null,'imputable'=>'1'])->
+               groupBy(['b.desunidad','b.codtipo'])->asArray()->all();
+       //var_dump($t[0]);die();
+    }
+    
 }

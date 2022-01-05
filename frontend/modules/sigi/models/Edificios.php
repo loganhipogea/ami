@@ -517,7 +517,7 @@ class Edificios extends \common\models\base\modelBase
                                     $profile=$user->profile;
                                     $profile->tipo= \common\models\Profile::PRF_RESIDENTE;
                                     $profile->save(); 
-                                SigiUserEdificios::insertUserEdificio($user->id, $this->id);
+                                SigiUserEdificios::insertUserEdificio($user->id, $this->id,$unidad->id);
                                     $role=h::gsetting('sigi','roleResidente');
                                     $rol=\Yii::$app->authManager->getRole($role);
                                             /****LE ASIGNA EL ROL */
@@ -673,6 +673,44 @@ public function unitsForUsers(){
      return $this->getColectores()->select(['id'])->
      andWhere(['tipomedidor'=>
          SigiSuministros::COD_TYPE_SUMINISTRO_DEFAULT])->scalar();
+ }
+ 
+ /*
+  * Array con conteo de departamentos 
+  * padres de la inmobiliaria y la junta 
+  * directiva, util para ver cuantos 
+  * recibos se van a emitir
+  */
+ public function mapa_depa(){
+     //$this->find()->innerJoin('{{%}}', $on)
+    $aray=(new \yii\db\Query)->select(
+            ['COUNT(*) AS cantidad','a.codtipo',
+ 'a.codpro','b.desunidad','despro'])->from('{{%sigi_unidades}} a')->
+ innerJoin('{{%sigi_tipounidad}} b','b.codtipo=a.codtipo' )->
+ innerJoin('{{%clipro}} c','a.codpro=c.codpro' )->
+ where(['a.edificio_id'=>$this->id,'a.imputable'=>'1'])->
+ andWhere(['a.parent_id'=>null])->groupBy([
+    'a.codtipo',
+ 'a.codpro','b.desunidad','despro' 
+ ])->all();
+    
+   $array_resu=[];
+    /*Sacando los codpros unicos*/
+    $codpros=[array_unique(array_column($aray,'codpro'))];
+    if(count($codpros)>0)
+    $codpros=$codpros[0];
+    foreach($codpros as $key=>$codpro){
+        $array_filtrado=array_filter($aray,function($v)use($codpro){
+           return  $v['codpro']==$codpro;
+        });
+        print_r( $array_filtrado);
+       /*$array_resu[$codpro]=$array_filtrado;
+       $array_resu[$codpro]['despro']=$array_filtrado[0]['despro'];
+       $array_resu[$codpro]['total']=array_sum(array_column($array_filtrado,'cantidad'));
+        */
+        
+    }
+   //return $array_resu;
  }
  
 }

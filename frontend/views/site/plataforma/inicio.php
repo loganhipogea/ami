@@ -16,13 +16,17 @@ use yii\bootstrap\Carousel;
 	<div id="gamesHolder">
 		<div id="games">
 <a href="#">
-    <img src="/frontend/web/img/plataforma/bnpsite02.jpg" width="1026" height="364"/>
+     <img src=" <?= yii\helpers\Url::to("@web/img/plataforma/bnpsite02.jpg")?> " width="1026" height="364"  />
+        
+   
 </a>
 <a href="#">
-<img src="/frontend/web/img/plataforma/bnpsite03.jpg" width="1026" height="364"/> 
+ <img src=" <?= yii\helpers\Url::to("@web/img/plataforma/bnpsite03.jpg")?> " width="1026" height="364"  />
+     
 </a>
 <a href="#">
- <img src="/frontend/web/img/plataforma/bnpsite04.jpg" width="1026" height="364"/> 
+  <img src=" <?= yii\helpers\Url::to("@web/img/plataforma/bnpsite04.jpg")?> " width="1026" height="364"  />
+     
 </a>
 
                 </div>

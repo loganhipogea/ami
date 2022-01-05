@@ -17,6 +17,7 @@ class AppAssetResidentes extends AssetBundle
         
     ];
     public $js = [
+        'js/plataforma/jquery.lightSlider.js'
          /*'js/jquery-ui.js',
          'js/modal.js',
           'js/select2.js',*/
@@ -28,6 +29,6 @@ class AppAssetResidentes extends AssetBundle
         'yii\web\JqueryAsset',
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-        '\rmrevin\yii\fontawesome\AssetBundle'
+       '\rmrevin\yii\fontawesome\AssetBundle'
     ];
 }

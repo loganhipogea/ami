@@ -122,6 +122,34 @@ $gridColumns = [
 ]) ?>
  
  <hr>
+ <?php  
+ /*$distribucion_unidades=$model->mapa_depa();
+
+   foreach($distribucion_unidades as $codpro=>$unidades){ ?>
+        <table>
+            <thead>
+            <th colspan="2">
+                <?php if(count($unidades)>0){echo $unidades[0]['despro'];}else{} ?>
+            </th>
+             <th>Cant</th> <th>Unidad</th>
+            </thead>
+             <?php foreach($unidades as $fila){ ?>
+            <tr>  
+               <td><?=$fila['desunidad']?></td>
+              <td><?=$fila['cantidad']?></td>             
+            </tr>
+            
+             <?php } ?>
+            <tr>  
+               <td>Total:</td>
+              <td><?=$distribucion_unidades[$codpro]['total']?></td>             
+            </tr>
+        </table>
+ <?php   }*/
+ ?>
+ 
+ 
+ 
    <?php
    Pjax::begin(['id'=>'grilla-unidades']);
   echo GridView::widget([

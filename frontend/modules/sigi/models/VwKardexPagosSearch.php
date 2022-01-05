@@ -122,9 +122,9 @@ class VwKardexPagosSearch extends VwKardexPagos
                         ]);
    }
   /*var_dump($this->deudor,$params);
-echo $query->createCommand()->rawSql; die();*/
+echo $query->createCommand()->rawSql; die();
          // \yii::error($params,__FUNCTION__);
-        //\yii::error($query->createCommand()->rawSql,__FUNCTION__);
+        //\yii::error($query->createCommand()->rawSql,__FUNCTION__);*/
         return $dataProvider;
     }
      

@@ -9,6 +9,7 @@
 # phpstorm project files
 /frontend/web/assets
 /frontend/runtime
+/frontend/tests
 # netbeans project files
 nbproject
 

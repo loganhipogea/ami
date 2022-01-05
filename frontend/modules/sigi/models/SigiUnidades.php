@@ -694,8 +694,8 @@ public function generateUsername(){
    return  $this->edificio->codigo.'.'.$this->numero;
 }
 public  function generatePwd(){
-   return $this->numero;
-   return random_int(1000, 9999).'';
+   return TRIM($this->numero);
+   //return random_int(1000, 9999).'';
 }
 
 public function hasFacturacion($mes,$annio){

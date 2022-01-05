@@ -20,8 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
      <div class="box-body">
        <?php
   $consumos=$model->arrayConsumos();
-  $costom3= round(($consumos['AACC']['MONTO']+$consumos['IMPUTADOS']['MONTO'])/
-          ($consumos['AACC']['CONSUMO']+$consumos['IMPUTADOS']['CONSUMO']),4);
+  $denominador=($consumos['AACC']['CONSUMO']+$consumos['IMPUTADOS']['CONSUMO']);
+  if($denominador>0){
+      $costom3= round(($consumos['AACC']['MONTO']+$consumos['IMPUTADOS']['MONTO'])/
+         $denominador ,4);
+  }else{
+    $costom3=0;  
+  }
+  
   ?>
 
    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

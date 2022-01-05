@@ -364,7 +364,6 @@ class MovimientosController extends baseController {
 
     public function actionAprobePago($id) {
 
-
         if (h::request()->isAjax) {
 
             h::response()->format = \yii\web\Response::FORMAT_JSON;
@@ -375,6 +374,8 @@ class MovimientosController extends baseController {
                 $model->activo = true;
                 // $transa=$model->getDb()->beginTransaction();                  
                 $model->save();
+                //$grilla=h::request()->get('gridName');
+                 //echo Html::script("  $.pjax.reload({container: '#".$grilla."', async: false});");   
                 //$transa->commit();
                 return ['success' => yii::t('sta.labels', 'Se aprobó el pago del recibo')];
             }
@@ -396,7 +397,9 @@ class MovimientosController extends baseController {
                      * Verificando primero que no tenga registros facturaciones 
                      * en el siguiente mes. Si los tiene ya no se podría dar marcha atras
                      */
-                    if ($model->isKardex() && !$model->kardex->facturacion->hasNextFacturacionWithDetail()) {
+                    if ($model->isKardex() && 
+                       !$model->kardex->facturacion->hasNextFacturacionWithDetail())
+                       {
                         $model->activo = false;
                         // $transa=$model->getDb()->beginTransaction();                  
                         if (!$model->save()) {
@@ -404,15 +407,16 @@ class MovimientosController extends baseController {
                         }
                         // $transa->commit();
                         return ['warning' => yii::t('sta.labels', 'Se desaprobó el pago del recibo')];
-                    } else {
+                       } else {
                         return ['error' => yii::t('sta.labels', 'Ya no puede deshacer este registro, existe una facturacion del mes siguiente que depende de este valor')];
-                    }
+                       }
                 } else {
+                    
                     $model->activo = false;
-                    if (!$model->save()) {
+                    if (!$model->save()) 
                         return ['error' => yii::t('sta.labels', 'Hubo un error ' . $model->getFirstError())];
                         return ['warning' => yii::t('sta.labels', 'Se desaprobó el pago del recibo')];
-                    }
+                    
                 }
             }
         }

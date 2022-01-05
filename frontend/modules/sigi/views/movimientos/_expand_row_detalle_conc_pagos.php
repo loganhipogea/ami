@@ -89,15 +89,15 @@ $formato=h::formato();
                         },              
                         
                         'check' => function ($url,$model) {
-			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/aprobe-pago','id'=>$model->id,'gridName'=>'grilla_m']);
+			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/aprobe-pago','id'=>$model->id,'gridName'=>$grilla]);
                               if(!$model->activo)
-                              return \yii\helpers\Html::a('<span class="btn btn-success fa fa-check"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
+                              return \yii\helpers\Html::a('<span class="btn btn-success fa fa-check"></span>', 'javascript:void();', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                                return '<i style="color:#60a917; font-size:18px;"><span class="fa fa-check"></span></i>';
                              }, 
                         'uncheck'=>function ($url,$model) {
-			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/un-aprobe-pago','id'=>$model->id,'gridName'=>'grilla_m']);
+			   $url = \yii\helpers\Url::toRoute(['/sigi/movimientos/un-aprobe-pago','id'=>$model->id,'gridName'=>$grilla]);
                               if($model->activo)
-                              return \yii\helpers\Html::a('<span class="btn btn-danger fa fa-undo"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
+                              return \yii\helpers\Html::a('<span class="btn btn-danger fa fa-undo"></span>', 'javascript:void();', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                                return '';
                              },
                     ]
@@ -187,8 +187,9 @@ $formato=h::formato();
    echo linkAjaxGridWidget::widget([
            'id'=>'widgetgruidBancos',
             'idGrilla'=>'grilla_m',
+            //'refrescar'=>false,
             'family'=>'holas',
-          'type'=>'POST',
+          'type'=>'GET',
            'evento'=>'click',
        'posicion'=>\yii\web\View::POS_END,
             //'foreignskeys'=>[1,2,3],

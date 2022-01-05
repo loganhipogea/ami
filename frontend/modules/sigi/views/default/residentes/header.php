@@ -9,23 +9,27 @@
              
             </div>
             <div style=""  class="col-lg-8 col-md-8 col-sm-8 col-xs-12 nombreedificio"> 
-                  EDIFICIO
+                  <?=$useredificio->edificio->nombre?>
             </div>
                
       </div>
-      
+       <?php echo Html::beginForm(Url::toRoute(['/site/logout']));  ?>
         <div  style="clear:right;height:auto;" class=" rayagris col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div style="text-align: left; clear:right;" class="col-lg-8 col-md-8 col-sm-12 col-xs-12"> 
                 <i style="font-size:2em"><span class="fa fa-user"></span></i>
-                JULIAN RAMIREZ TENORIO/JESSENIA ESPINOZA RIVERA
+                <?=$useredificio->unidad->currentPropietario()->nombre?>
             </div>
             <div style="clear:right; text-align: center" class="col-lg-4 col-md-4 col-sm-12 col-xs-12"> 
-             
-            <?= Html::a('Salir', ['create'], ['class' => 'btn btn-danger']) ?>
+              
+               <?= Html::submitButton('Salir',['class' => 'btn btn-danger']) ?> 
+               <?PHP //ECHO  Html::a('Salir', Url::toRoute(['/site/logout']), [  'class' => 'btn btn-danger']); ?>
+              
                <?= Html::a('Cambiar clave', ['create'], ['class' => 'btn btn-warning']) ?>
+               
             </div>
-            <A HREF="SDSDD" STYLE="COLOR:BLACK;">HOLA</A>
+           
        </div>
+ <?php echo Html::endForm();  ?>
 <div  class="rayagris col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
        <div id="div_fndmnu">                
                 <ul id='nav' class='dropdown'>
@@ -43,9 +47,8 @@
                                     
                                 </li>
                                 <li>
-                                    <a href='/frontend/web/sigi/default/resi-agua'>
-                                        Consumo de agua
-                                    </a>
+                                     <?=Html::a('Consumo de agua',Url::to(['/sigi/default/resi-agua']))?>
+                                    
                                 </li>
                                 <li>
                                      <?=Html::a('Deudores',Url::to(['/sigi/default/resi-factu']))?>

@@ -36,6 +36,7 @@ use yii\widgets\ActiveForm;
          <?php $this->registerCssFile("@web/css/residentes/blanco/default.ultimate.css"); ?>
          <?php $this->registerCssFile("@web/css/residentes/blanco/dropdown.css"); ?>
          <?php $this->registerCssFile("@web/css/residentes/blanco/jcstyle.css"); ?>
+        <?php $this->registerCssFile("@web/css/plataforma/lightSlider.css"); ?>
              <?php //$this->registerjsFile("@web/js/residentes/jquery.js",['position'=>View::POS_END]); ?>
           <?php //$this->registerjsFile("@web/js/residentes/vendors/@popperjs/popper.min.js",['position'=>View::POS_END]); ?>
           <?php //$this->registerjsFile("@web/js/residentes/is/is.min.js",['position'=>View::POS_END]); ?>
