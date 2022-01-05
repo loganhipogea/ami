@@ -3,7 +3,7 @@ namespace frontend\modules\sigi\database\migrations;
 use console\migrations\baseMigration;
 class m220105_224607_alter_kardex extends baseMigration
 {
-   const NAME_TABLE='{{%sigi_kardex}}';
+   const NAME_TABLE='{{%sigi_kardexdepa}}';
    
     /**
      * {@inheritdoc}
