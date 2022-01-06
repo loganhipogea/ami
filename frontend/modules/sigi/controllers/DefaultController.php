@@ -7,6 +7,7 @@ use yii;
 use frontend\modules\sigi\Module;
 use common\helpers\h;
 USE frontend\modules\sigi\models\SigiUserEdificios;
+use frontend\modules\sigi\models\SigiKardexdepa;
 use mdm\admin\models\searchs\User as UserSearch;
 class DefaultController extends Controller
 {
@@ -274,7 +275,14 @@ class DefaultController extends Controller
        if($user->profile->tipo==\common\models\Profile::PRF_RESIDENTE){
            //var_dump(h::userId(),SigiUserEdificios::findOne(['user_id'=>h::userId()]));die();
           if(!is_null($useredificio=SigiUserEdificios::findOne(['user_id'=>h::userId()]))){
-             return  $this->render('residentes/residente_facturacion',
+             $sesion=h::session();
+             $nombresesion='recibo'.h::userId();
+               
+                   $sesion->set ($nombresesion, []);
+              
+                
+               
+              return  $this->render('residentes/residente_facturacion',
                     ['useredificio'=>$useredificio,
                         // 'searchModel' =>$searchModel,
                          'params'=>Yii::$app->request->queryParams,
@@ -314,4 +322,32 @@ class DefaultController extends Controller
     }
    }
 
+   public function actionAgregaSesion($id){
+       if(h::request()->isAjax){
+           $flag=h::request()->get('activado');
+           $valores=[];
+           if(!is_null($model=SigiKardexdepa::findone($id))){
+               $nombresesion='recibo'.h::userId();
+               $sesion=h::session();
+               //$sesion->set($nombresesion,[]);
+               if($sesion->has($nombresesion)){
+                   $valores=$sesion->get($nombresesion);
+                   if($flag==='true'){
+                       if(!in_array($id, $valores))
+                       $valores[]=$id;
+                   }else{
+                       if(in_array($id, $valores)){
+                            $valores= array_diff($valores,[$id]);
+                       }                      
+                   }
+                   $sesion->set($nombresesion,$valores);
+                   h::response()->format = \yii\web\Response::FORMAT_JSON;
+                   return ['sesion'=>$sesion->get($nombresesion)];  
+                 }
+                 
+           }
+       }
+   }
+   
+   
 }

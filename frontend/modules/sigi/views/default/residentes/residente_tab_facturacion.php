@@ -10,6 +10,7 @@ use miloschuman\highcharts\Highcharts;
 use miloschuman\highcharts\HighchartsAsset;
 use dosamigos\chartjs\ChartJs;
 use lo\widgets\modal\ModalAjax;
+use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 ?>
 <div class="box box-body">
     <h4>Usted tiene una deuda de :  <?=h::formato()->asDecimal($deuda, 2)   ?></h4>
@@ -105,6 +106,16 @@ echo ModalAjax::widget([
                     //'headerOptions' => ['class' => 'kartik-sheet-style'], 
                     'expandOneOnly' => true
                 ],
+              [
+                    'class' => 'yii\grid\CheckboxColumn',
+                     'checkboxOptions' => function($model) {
+                    return [
+                        'value' => $model->id,
+                        'family'=>'hols',
+                        'title'=>Url::to(['default/agrega-sesion','id'=>$model->id])
+                        ];
+                     }
+                ],                         
               ['attribute'=>'cancelado',
                 'format' => 'raw',
                 'filter'=> ['1'=>'Cancelado','0'=>'Pendiente'],
@@ -148,8 +159,58 @@ echo ModalAjax::widget([
              },
           ],*/
         ],
-    ]); 
+    ])?>
              
+     
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+         <?php $url=Url::to(['/sigi/'.$this->context->id.'/adj-voucher','id'=>$model->id]);  ?>       
+          <?=Html::a('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Adjuntar Voucher'),$url, [
+              'id'=>'btn-add-test',
+              'class'=> 'btn btn-warning', 'style'=>'display:none'])?>
+            
+            </div>
+        </div>
+    <br>
+    <br>
+    .
+    <br>
+    <br>
+     <br>
+    <br>
+    .
+    <br>
+    <br>
+    <?php        
+        $string1="$('div[id=\"grilla-recibos\"] [family=\"hols\"]').on( 'click', function() { 
+       
+    
+    if(true){  
+       $.ajax({
+              url: this.title,
+              
+              type: 'GET',
+              data:{activado:this.checked} ,
+              dataType: 'json', 
+               error:  function(xhr, textStatus, error){               
+                               
+                                }, 
+              
+              success: function(json) {              
+                   if ( !(typeof json['sesion']==='undefined' )) {
+                         if(json['sesion'].length>0){
+                         $('#btn-add-test').show();
+                         }else{
+                         $('#btn-add-test').hide();
+                         }
+                             } 
+                            }         
+                        });
+                     }      
+                        })";
+  $this->registerJs($string1, \yii\web\View::POS_END);
+  
+   
     Pjax::end();         ?>
 
 

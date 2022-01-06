@@ -418,6 +418,15 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+                $nombresesion='recibo'.h::userId();
+                $sesion=h::session();
+               if($sesion->has($nombresesion)){
+                   print_r($sesion->get($nombresesion));
+                   
+               }
+    die();
+    
+    
    return print_r( \frontend\modules\sigi\models\SigiApoderados::findOne(35)->
            resumenUnidadesImputablesPadresPorTipo());
     

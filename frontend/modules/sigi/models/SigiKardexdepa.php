@@ -96,7 +96,7 @@ class SigiKardexdepa extends \common\models\base\modelBase
            // [['facturacion_id', 'operacion_id', 'edificio_id', 'unidad_id', 'mes'], 'integer'],
             [['monto', 'igv'], 'number'],
             [['detalles'], 'string'],
-             [['cancelado','monto','enviado','aprobado','historico'], 'safe'],
+             [['cancelado','monto','enviado','aprobado','historico','voucher_id'], 'safe'],
             
             [['codepa'], 'validate_batch','on'=>self::SCE_BATCH],
             [['unidad_id','edificio_id'], 'required','on'=>self::SCE_BATCH,'message'=>yii::t('sigi.errors','El número de la unidad no es el correcto')],
