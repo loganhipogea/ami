@@ -1,11 +1,7 @@
 <?php
-
-use yii\db\Migration;
-
-/**
- * Class m220106_190303_table_voucher
- */
-class m220106_190303_table_voucher extends Migration
+namespace frontend\modules\sigi\database\migrations;
+use console\migrations\baseMigration;
+class m220106_190303_table_voucher extends baseMigration
 {
     /**
      * {@inheritdoc}

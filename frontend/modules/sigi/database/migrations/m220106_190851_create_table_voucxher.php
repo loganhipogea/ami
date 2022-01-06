@@ -1,10 +1,6 @@
 <?php
-
-use yii\db\Migration;
-
-/**
- * Class m220106_190851_create_table_voucxher
- */
+namespace frontend\modules\sigi\database\migrations;
+use console\migrations\baseMigration;
 class m220106_190851_create_table_voucxher  extends baseMigration
 {
     /**
