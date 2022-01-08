@@ -91,7 +91,7 @@ use yii\widgets\Pjax;
   
      </div> 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
-    <div class="alert alert-warning"><?= yii::t('sta.labels','Propietario')?>:<div id="propi"><?php echo $model->unidad->oldPropietario($model->unidad::TYP_PROPIETARIO);   ?></div></div>
+    <div class="alert alert-warning"><?= yii::t('sta.labels','Propietario')?>:<div id="propi"><?php echo $model->unidad->oldPropietario($model->unidad::TYP_PROPIETARIO)->nombre;   ?></div></div>
 </div>
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
       <?= $form->field($model, 'fecha')->widget(DatePicker::class, [
