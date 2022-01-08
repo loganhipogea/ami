@@ -795,13 +795,22 @@ public function acopla($unidad_id){
         'parent_id'=>$this->id,        
     ]);
     $modelHijo->save();
-    $modelHijo->deletePropietarios();
+   $modelHijo->deactivatePropietarios();
     $modelHijo->copyPropietarios();
     return $modelHijo; 
 }
 
 private function deletePropietarios(){
     SigiPropietarios::deleteAll(['unidad_id'=>$this->id]);
+}
+
+private function deactivatePropietarios(){
+    SigiPropietarios::updateAll(
+            [
+        'activo'=>'0'
+            ],
+            ['unidad_id'=>$this->id]
+            );
 }
 
 }
