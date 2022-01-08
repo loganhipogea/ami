@@ -28,7 +28,7 @@ use yii\widgets\Pjax;
         <div class="col-md-12">
             <div class="form-group no-margin">
                 
-        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('sigi.labels', 'Grabar'), ['class' => 'btn btn-success']) ?>
          <?= Html::buttonInput(Yii::t('sigi.labels', 'Anular'), ['id'=>'btn-anular','class' => 'btn btn-danger']) ?>    
 
             </div>
@@ -91,7 +91,12 @@ use yii\widgets\Pjax;
   
      </div> 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
-    <div class="alert alert-warning"><?= yii::t('sta.labels','Propietario')?>:<div id="propi"><?php echo $model->unidad->oldPropietario($model->unidad::TYP_PROPIETARIO)->nombre;   ?></div></div>
+    <?php if($model->isNewRecord){    ?>
+    <div class="alert alert-warning"><?= yii::t('sta.labels','Propietario')?>:<div id="propi"></div></div>
+     <?php  }else{  ?>
+    <div class="alert alert-warning"><?= yii::t('sta.labels','Propietario Anterior')?>:<div id="propi"><?php echo $model->unidad->oldPropietario($model->unidad::TYP_PROPIETARIO)->nombre;   ?></div></div>
+    
+    <?php  }  ?>
 </div>
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
       <?= $form->field($model, 'fecha')->widget(DatePicker::class, [
