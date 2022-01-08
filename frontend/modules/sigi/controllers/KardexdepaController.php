@@ -101,20 +101,22 @@ class KardexdepaController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+         if(!$model->hasVoucher()) {
+            $modVou= \frontend\modules\sigi\models\SigiVouchers::instance(); 
+            $modVou->setAttributes(['user_id'=>h::userId()]);$modVou->save();
+            $modVou->refresh();
+            SigiKardexdepa::updateAll(['voucher_id'=>$modVou->id],['id'=>$model->id]);
+          }       
         if (h::request()->isAjax && $model->load(h::request()->post())) {
                 h::response()->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
-        }
-        
+        }        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
         return $this->render('update', [
             'model' => $model,
-        ]);
-       
+        ]);       
     }
 
     /**

@@ -54,7 +54,9 @@ class VwKardexPagosSearch extends VwKardexPagos
             [  
                 // [['fecha', 'anio', 'codmon', 'numrecibo', 'detalles','numero','nombre','codtipo','desunidad','fecha1' ,'cancelado'], 'safe'],
                  [['facturacion_id',  'edificio_id', 'unidad_id'], 'integer'],
-                [['mes','anio','monto','nombre','edificio_id','unidad_id','numero','pagado','fecha','fecha1','deudor' ,'deuda'], 'safe'],
+                [['mes','anio','monto','nombre','edificio_id',
+                    'unidad_id','numero','pagado','fecha','fecha1',
+                    'deudor' ,'deuda','aprobado','voucher_id'], 'safe'],
                
             ];
     }
@@ -95,6 +97,7 @@ class VwKardexPagosSearch extends VwKardexPagos
 
         $query->andFilterWhere(['mes'=> $this->mes])     
              ->andFilterWhere(['anio'=> $this->anio])  
+            // ->andFilterWhere(['aprobado'=> '1'])  
                   ->andFilterWhere(['like','numero', $this->numero])  
                // ->andFilterWhere(['like', 'deuda', $this->deuda])
             ->andFilterWhere(['like', 'pagado', $this->pagado])

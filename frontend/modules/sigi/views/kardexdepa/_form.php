@@ -20,10 +20,13 @@ use common\widgets\buttonajaxwidget\buttonAjaxWidget;
       <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
-                
-        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-          
-
+        <?php if($model->aprobado) { ?>        
+        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Grabar'), ['class' => 'btn btn-success']) ?>
+            <?php $url=Url::to(['/sigi/default/adj-voucher-user','id'=>$model->id, 'idModal'=>'buscarvalor']);  ?>       
+          <?=Html::a('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Adjuntar Voucher'),$url, [
+              'id'=>'btn-add-test',
+              'class'=> 'botonAbre btn btn-warning',])?>
+        <?php } ?> 
             </div>
         </div>
     </div>
@@ -93,10 +96,7 @@ use common\widgets\buttonajaxwidget\buttonAjaxWidget;
           
     
  
-<?=(!$model->isNewRecord)? \nemmo\attachments\components\AttachmentsTable::widget([
-	'model' => $model,
-	//'showDeleteButton' => false, // Optional. Default value is true
-]):''?>      
+     
           
           
   

@@ -468,7 +468,17 @@ class SigiKardexdepa extends \common\models\base\modelBase
   }
   
   
+public function hasVoucher(){
+    return ($this->voucher_id >0);
+}
 
+public function getVoucher(){
+    if($this->hasVoucher()){
+       return  SigiVouchers::findOne($this->voucher_id+0);
+    }else{
+        return null;
+    }
+}
   
   
 }

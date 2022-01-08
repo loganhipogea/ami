@@ -129,9 +129,16 @@ echo ModalAjax::widget([
                  'format'=>'raw',
                 'filter'=> timeHelper::cboMeses(),
                 'value'=>function($model){
-                     if($model->hasAttachments())
-                       return Html::a(timeHelper::mes($model->mes),$model->files[0]->url,['data-pjax'=>'0']); 
-                        return timeHelper::mes($model->mes); 
+                             if($model->hasVoucher()) 
+                             $link=Html::a("         <i style='color:red;'><span class='fa fa-sticky-note'></span></i>",$model->getVoucher()->files[0]->url,['data-pjax'=>'0']);
+                               
+                     if($model->hasAttachments()){
+                       return Html::a("<i style='color:#3c2f81;'>".timeHelper::mes($model->mes),$model->files[0]->url."</i>",['data-pjax'=>'0']).$link; 
+                         
+                     }else{
+                        return timeHelper::mes($model->mes).$link;  
+                     }
+                        
                 } 
              ],   
               // 'nombre',   
@@ -164,10 +171,12 @@ echo ModalAjax::widget([
      
         <div class="col-md-12">
             <div class="form-group no-margin">
-         <?php $url=Url::to(['/sigi/'.$this->context->id.'/adj-voucher','id'=>$model->id]);  ?>       
+       
+                               
+         <?php $url=Url::to(['/sigi/'.$this->context->id.'/adj-voucher','idModal'=>'buscarvalor']);  ?>       
           <?=Html::a('<span class="fa fa-book-reader"></span>   '.Yii::t('sta.labels', 'Adjuntar Voucher'),$url, [
               'id'=>'btn-add-test',
-              'class'=> 'btn btn-warning', 'style'=>'display:none'])?>
+              'class'=> 'botonAbre btn btn-warning', 'style'=>'display:none'])?>
             
             </div>
         </div>

@@ -21,7 +21,24 @@ use yii\grid\GridView;
           </div>
   </div>
 
+  <div "id"="mi_voucher" class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+       <?php if($model->hasVoucher()){  ?>
+         <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3>Voucher</h3>
 
+              <p>Hay un Voucher adjunto</p>
+            </div>
+            <div class="icon">
+              <?php 
+                $cad='<span style="color:white;opacity:0.5;"><i class="fa fa-sticky-note"></i></span>';
+                echo Html::a($cad,$model->getVoucher()->files[0]->url);
+               ?>
+              </div>
+            
+          </div>
+       <?php  } ?>
+  </div>
     <?php Pjax::begin(['id'=>'searchKardex','timeout'=>false]); ?>
 
     <?php 

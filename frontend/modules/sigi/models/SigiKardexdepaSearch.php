@@ -82,13 +82,9 @@ class SigiKardexdepaSearch extends SigiKardexdepa
     public function searchByResi($unidad_id,$params)
     {
         $query = SigiKardexdepa::find();
-
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-        //var_dump($params);
         $this->load($params);
         
         if (!$this->validate()) {

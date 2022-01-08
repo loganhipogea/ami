@@ -142,16 +142,22 @@ private static function findKeyArrayInPost(){
          \yii::error('1 cerrando el modal',__METHOD__);
          echo Html::script(" $('#".$nombremodal."').modal('hide');"); 
          foreach($grillas as $v=>$grilla){
-           echo Html::script("window.parent.$.pjax({container: '#".$grilla."'});");   
+           echo Html::script("window.parent.$.pjax({container: '#".$grilla."'});");
+            echo Html::script("window.parent.$.pjax.reload({container: '#".$grilla."', async: false});");
+                         
          }
      
      }elseif(is_null($grillas)){
          \yii::error('2 cerrando el modal',__METHOD__);
-        echo Html::script(" $('#".$nombremodal."').modal('hide');");   
+        echo Html::script(" $('#".$nombremodal."').modal('hide');"); 
+        
      }else{
          \yii::error('3 cerrando el modal',__METHOD__);
         echo Html::script(" $('#".$nombremodal."').modal('hide'); "
-             . "window.parent.$.pjax({container: '#".$grillas."'})"); die();
+             . "window.parent.$.pjax({container: '#".$grillas."'})"); 
+        echo Html::script("window.parent.$.pjax.reload({container: '#".$grillas."', async: false});");
+            
+        die();
      }
   
  }

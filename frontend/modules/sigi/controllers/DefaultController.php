@@ -9,7 +9,7 @@ use common\helpers\h;
 USE frontend\modules\sigi\models\SigiUserEdificios;
 use frontend\modules\sigi\models\SigiKardexdepa;
 use mdm\admin\models\searchs\User as UserSearch;
-class DefaultController extends Controller
+class DefaultController extends \frontend\controllers\base\baseController
 {
     /**
      * Renders the index view for the module
@@ -321,7 +321,10 @@ class DefaultController extends Controller
       } 
     }
    }
-
+   
+/*
+ * AJAX 
+ */
    public function actionAgregaSesion($id){
        if(h::request()->isAjax){
            $flag=h::request()->get('activado');
@@ -347,6 +350,100 @@ class DefaultController extends Controller
                  
            }
        }
+   }
+  
+   public function actionAdjVoucher(){
+       $this->layout='residentes';
+       $user= h::user();      
+       if($user->profile->tipo==\common\models\Profile::PRF_RESIDENTE){
+           //var_dump(h::userId(),SigiUserEdificios::findOne(['user_id'=>h::userId()]));die();
+          if(!is_null($useredificio=SigiUserEdificios::findOne(['user_id'=>h::userId()]))){
+             $modelVoucher= \frontend\modules\sigi\models\SigiVouchers::instance();
+              $modelVoucher->setAttributes(['user_id'=>h::userId()]);
+              //$modelVoucher->save();
+           $ext=h::request()->get('extension');   
+          if (h::request()->isPost && $modelVoucher->save()) {            
+               $this->closeModal('buscarvalor');
+                DIE();
+            } else {
+            
+          if(!is_null($ext)){
+              $allowedExtensions=json_decode($ext);
+              if(!is_null($allowedExtensions) && is_array($allowedExtensions) ){
+                  foreach($allowedExtensions as $index=>$ext){
+                      $allowedExtensions[$index]=str_replace('.','',$ext);
+                  }
+                 
+              }else{
+                 $allowedExtensions=[str_replace('.','',$ext)];   
+              }
+            
+          }else{
+            $allowedExtensions=['jpg','png','gif','jpeg','pdf'];  
+          }
+           
+            return $this->render('@frontend/views/comunes/attachFile', [
+                        'model' => $modelVoucher,
+                 'allowedExtensions' => $allowedExtensions,
+                        //'vendorsForCombo' => $vendorsForCombo,
+            ]);
+       }
+     }   
+    }
+   }
+   
+   
+   public function actionAdjVoucherUser($id){
+       $this->layout='residentes';
+       if(is_null($modelKardex=SigiKardexdepa::findOne($id))){
+           throw new NotFoundHttpException(Yii::t('sigi.errors', 'No existe este kardex id'));
+   
+        }
+       $user= h::user();      
+       
+       /*
+        * Te preguntaras ; porque usar sesion aqui
+        * recuerda que el evento trigerupload del modelo SIGIvOICHERS
+        * TRABAJA CON SESIONES y no hay manera de pasarle parametros
+        * por que es un disparador AFTER UPLOAD
+        */
+                $sesion=h::session();
+                 $nombresesion='recibo'.h::userId();
+                 $sesion->set($nombresesion,$id);
+                 
+           //var_dump(h::userId(),SigiUserEdificios::findOne(['user_id'=>h::userId()]));die();
+             $modelVoucher= \frontend\modules\sigi\models\SigiVouchers::instance();
+              $modelVoucher->setAttributes(['user_id'=>h::userId()]);
+              //$modelVoucher->save();
+           $ext=h::request()->get('extension');   
+          if (h::request()->isPost && $modelVoucher->save()) {            
+               $this->closeModal('buscarvalor','mi_voucher');
+                DIE();
+            } else {
+            
+          if(!is_null($ext)){
+              $allowedExtensions=json_decode($ext);
+              if(!is_null($allowedExtensions) && is_array($allowedExtensions) ){
+                  foreach($allowedExtensions as $index=>$ext){
+                      $allowedExtensions[$index]=str_replace('.','',$ext);
+                  }
+                 
+              }else{
+                 $allowedExtensions=[str_replace('.','',$ext)];   
+              }
+            
+          }else{
+            $allowedExtensions=['jpg','png','gif','jpeg','pdf'];  
+          }
+           
+            return $this->render('@frontend/views/comunes/attachFile', [
+                        'model' => $modelVoucher,
+                 'allowedExtensions' => $allowedExtensions,
+                        //'vendorsForCombo' => $vendorsForCombo,
+            ]);
+       }
+       
+   
    }
    
    

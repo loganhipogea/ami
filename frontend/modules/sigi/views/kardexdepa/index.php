@@ -90,6 +90,16 @@ $this->params['breadcrumbs'][] = $this->title;
                }
                  
                  ],
+             ['attribute'=>'voucher_id',
+                 'header'=>'Voucher',
+                 'format'=>'raw',
+               //'filter'=> \frontend\modules\sigi\helpers\comboHelper::getCboEdificios(),
+               'value'=>function($model){
+                       return \yii\helpers\Html::checkbox('voucher_id[]',($model->voucher_id>0)?'1':'0', [ 'disabled' => true]);
+
+               }
+                 
+                 ],
             //'numero',
             ['attribute'=>'mes',
                'filter'=> \common\helpers\timeHelper::cboMeses(),
