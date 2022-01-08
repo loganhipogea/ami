@@ -11,6 +11,7 @@ namespace frontend\modules\sigi\helpers;
 use common\helpers\ComboHelper as Combito;
 use frontend\modules\sigi\models\SigiUserEdificios;
 use frontend\modules\sigi\models\SigiSuministros;
+use frontend\modules\sigi\models\SigiUnidades;
 use yii\helpers\ArrayHelper;
 use common\helpers\h;
 use yii;
@@ -403,7 +404,36 @@ class comboHelper extends Combito
         return ArrayHelper::map($apode,
                 'codgrupo','descripcion');
         
-    }     
+    }   
+  
+   public static function getCboUnidadesPosiblesHijas($unidad_id_padre){
+        $model=Sigiunidades::findOne($unidad_id_padre);
+        $idsUnidadesConHijos=Sigiunidades::find()->
+                select(['parent_id'])->andWhere([
+                  'edificio_id'=>$model->edificio_id,                   
+                ])
+                ->andWhere([
+                  '>','parent_id',0                 
+                ])->
+                column();
+        $idsUnidadesAfiliadas=Sigiunidades::find()->
+                select(['id'])->andWhere([
+                  'edificio_id'=>$model->edificio_id,                   
+                ])
+                ->andWhere([
+                  '>','parent_id',0                 
+                ])->
+                column();
+        $filtro=array_unique(array_merge($idsUnidadesConHijos, $idsUnidadesAfiliadas));
+       $apode= SigiUnidades::find()
+                ->andWhere(['edificio_id'=>$model->edificio_id])
+                ->andWhere(['not in','id',$filtro])
+                ->all();
+ 
+        return ArrayHelper::map($apode,
+                'id','nombre'); 
+    }   
+    
 }
 
 

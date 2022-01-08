@@ -7,15 +7,26 @@ use yii\widgets\Pjax;
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 use frontend\modules\sigi\models\SigiPropietariosSearch;
 use frontend\modules\sigi\models\SigiUnidadesSearch;
+USE frontend\modules\sigi\helpers\comboHelper;
 ?>
 <div class="edificios-index_docus">
 
      <div class="box-body">
-         
-<?php
- $url= Url::to(['agrega-hijo','id'=>$model->id,'gridName'=>'grilla-hijos','idModal'=>'buscarvalor']);
-   echo  Html::button(yii::t('base.verbs','Insertar Adjunto'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Adjunto'),'id'=>'btn_hijos_edi', 'class' => 'botonAbre btn btn-success']); 
-?> 
+  
+          <div class="col-md-12">
+            <div class="form-group no-margin">
+            <div class="btn-group">   
+                <?php
+                    $url= Url::to(['agrega-hijo','id'=>$model->id,'gridName'=>'grilla-hijos','idModal'=>'buscarvalor']);
+                    echo  Html::button(yii::t('base.verbs','Insertar Nuevo'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Adjunto'),'id'=>'btn_hijos_edi', 'class' => 'botonAbre btn btn-success']); 
+                    ?>
+                
+                <br>
+            </div>
+          </div>
+        </div> 
+        
+
          
     <?php Pjax::begin(['id'=>'grilla-hijos']); ?>
     
@@ -85,5 +96,72 @@ use frontend\modules\sigi\models\SigiUnidadesSearch;
          
     <?php Pjax::end(); ?>
 
+   <div class="col-md-12">
+            <div class="form-group no-margin">
+            <div class="btn-group">   
+                <?php
+                echo Html::dropDownList('mycombo',null, 
+                            comboHelper::getCboUnidadesPosiblesHijas($model->id),
+                        [
+                          'id'=>'mycombito' , 
+                            'prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
+                     'class'=>'form-control',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]);
+                    echo  Html::button(yii::t('base.verbs','Insertar  Existente'),
+                            ['href' => $url, 
+                                'title' => yii::t('sta.labels','Agregar Adjunto'),
+                                'id'=>'mybotoncito', 
+                                'class' => ' btn btn-success']); 
+                        
+                    ?> 
+                <br>
+            </div>
+          </div>
+        </div>      
+         
     </div>
       </div>
+<?php 
+
+  $string="$('#mybotoncito').on( 'click', function(){ 
+     var valor_combo;
+     valor_combo=$('#mycombito').val();
+     alert( valor_combo);
+       $.ajax({
+              url: '".Url::to(['/sigi/unidades/acoplar-unidad','id'=>$model->id])."', 
+              type: 'get',
+              data:{idhija:valor_combo},
+              dataType: 'json', 
+              error:  function(xhr, textStatus, error){               
+                            var n = Noty('id');                      
+                              $.noty.setText(n.options.id, error);
+                              $.noty.setType(n.options.id, 'error');       
+                                }, 
+              success: function(json) {
+              var n = Noty('id');
+                      
+                       if ( !(typeof json['error']==='undefined') ) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
+                              $.noty.setType(n.options.id, 'error');  
+                          }    
+
+                             if ( !(typeof json['warning']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['warning']);
+                              $.noty.setType(n.options.id, 'warning');  
+                             } 
+                          if ( !(typeof json['success']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['success']);
+                              $.noty.setType(n.options.id, 'success');  
+                               $.pjax.reload({container: '#grilla-hijos', async: false});
+                             }      
+                   
+                        }
+                        });
+
+
+             })";
+  
+   $this->registerJs($string, \yii\web\View::POS_END);
+ 
+  ?>

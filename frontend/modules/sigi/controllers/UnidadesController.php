@@ -521,6 +521,38 @@ public function actionAjaxMainRecibo($id){
         }
     }
 
-
+public function actionAcoplarUnidad($id){
+    if(h::request()->isAjax){
+    $idHija=h::request()->get('idhija',null);
+    if(is_null($idHija)){
+        $cat='error';$message=yii::t('base.labels','No pasó el id para la unidad hija a acoplar');
+        return [$cat=>$message];
+    }
+    if(is_null(SigiUnidades::findOne($idHija+0))){
+        $cat='error';$message=yii::t('base.labels','No se encontró el id para la unidad hija a acoplar');
+        return [$cat=>$message];
+    }
+     $model=  SigiUnidades::findOne($id); 
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+    $cat='';$message='';
+    if(!is_null($model)){
+        $modelHija=$model->acopla($idHija);
+        // YII::ERROR( 'errores');
+        //YII::ERROR( $modelHija->getErrors());
+        if(!$modelHija->hasErrors()){
+            //YII::ERROR( 'no tiene errores');
+            $cat='success';$message=yii::t('base.labels','Se ha acoplado la unidad');
+        }else{
+             //YII::ERROR( 'Si  tiene errores');
+           $cat='error';$message=$modelHija->getFirstError(); 
+            //YII::ERROR( 'El primer error es ');
+           //YII::ERROR( $modelHija->getFirstError());
+        }
+    }else{
+        $cat='error';$message=yii::t('base.labels','No se encontró el id para esta unidad');
+    }
+        return [$cat=>$message];
+    }
+}
  
 }

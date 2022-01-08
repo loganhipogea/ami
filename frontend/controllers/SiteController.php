@@ -418,7 +418,25 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
-                $nombresesion='recibo'.h::userId();
+   ECHO  \frontend\modules\sigi\models\SigiPropietarios::find()->
+         where(['and',
+                    'recibo=:recibo',
+                    'unidad_id=:unidad_id',
+                    'id<>:pare'
+                   ],
+                   [':unidad_id'=>568,':recibo'=>'0',':pare'=>345])->
+                   createCommand()->rawSql;
+    
+    
+    
+    
+    
+    die();
+    echo "hola";
+    var_dump(\frontend\modules\sigi\models\SigiCargosedificio::findOne(527)->cargo);
+        //->descargo;
+         die();      
+    $nombresesion='recibo'.h::userId();
                 $sesion=h::session();
                if($sesion->has($nombresesion)){
                    print_r($sesion->get($nombresesion));

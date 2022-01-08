@@ -32,7 +32,7 @@ use frontend\modules\sigi\models\SigiUnidades;
             dropDownList($data,
                   ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
-                     // 'disabled'=>true
+                     'disabled'=>true
                         ]
                     ) ?>
   

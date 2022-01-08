@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use frontend\modules\sigi\models\SigiUnidadesSearch;
+
     use kartik\export\ExportMenu;
 
 $gridColumns = [
@@ -100,9 +101,13 @@ $gridColumns = [
                  
 
 ];
- $url= Url::to(['agrega-unidad','id'=>$model->id,'gridName'=>'grilla-unidades','idModal'=>'buscarvalor']);
-   echo  Html::button(yii::t('base.verbs','Agregar Unidad'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Unidad'),'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-success']); 
-
+ 
+         
+         $url= Url::to(['agrega-unidad','id'=>$model->id,'gridName'=>'grilla-unidades','idModal'=>'buscarvalor']);
+       echo  Html::button(yii::t('base.verbs','Agregasr Unidad'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Unidad'),'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-success']); 
+      
+  
+   
  echo ExportMenu::widget([
     'dataProvider' => $dataProvider,
      'filename'=>'unidades',

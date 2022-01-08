@@ -20,11 +20,11 @@ use frontend\modules\sigi\models\SigiCargosgrupoedificio;
 //var_dump($model);
 if($model instanceof SigiCargosgrupoedificio ){
     $cargo=true;
-     echo "Es un cargo ";
+     //echo "Es un cargo  el grupo id ".$grupo_id; 
      $cadena='concepto';
  }else{
       $cargo=false;
-      echo "Es un bendficio";
+      //echo "Es un bendficio";
     $cadena='bene'; 
  }
 //var_dump($grupo_id);die();
@@ -52,10 +52,8 @@ $gridColumns = [
                             }
                         
                     ]
-                ],
-               
-                
-               [
+                ], 
+                       [
                           'attribute' => 'Desc',
                          'format' => 'raw',
                             'value' => function ($model) use($cargo){
@@ -65,7 +63,7 @@ $gridColumns = [
                                         return $model->beneficio->descargo;
                                     }
                                    },
-                      ],
+                       ],
                 ['attribute' => 'tasamora',],
                      [
                           'attribute' => 'regular',

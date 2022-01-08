@@ -774,7 +774,34 @@ private function pagado(){
  $val=$this->getMovimientos()->select(['sum(monto)'])->andWhere(['activo'=>'1'])->scalar();  
  return($val>0)?$val:0; 
 }
+/*
+ * Acopla una unidad en la unidad actual,
+ * devuelve el modelo insertado, 
+ * con los errores correspondientes si los hubiera
+ */
+public function acopla($unidad_id){
+    $modelHijo=$this->findOne($unidad_id);
+   if($modelHijo->hasChildunits()){
+     $modelHijo->addError ('id',yii::t('sta.errors','La unidad que intenta acoplar tiene hijos'));
+     return $modelHijo;  
+    }
+   if($modelHijo->isChild()){
+     $modelHijo->addError ('id',yii::t('sta.errors','La unidad a acoplar pertenece a otra unidad, desacóple´la primero '));
+      return $modelHijo;  
+    }
+    
+   $modelHijo->setAttributes([
+        'codpro'=>$this->codpro,
+        'parent_id'=>$this->id,        
+    ]);
+    $modelHijo->save();
+    $modelHijo->deletePropietarios();
+    $modelHijo->copyPropietarios();
+    return $modelHijo; 
+}
 
-
+private function deletePropietarios(){
+    SigiPropietarios::deleteAll(['unidad_id'=>$this->id]);
+}
 
 }

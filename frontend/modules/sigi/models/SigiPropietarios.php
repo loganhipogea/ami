@@ -117,7 +117,14 @@ class SigiPropietarios extends \common\models\base\modelBase
         
         IF(in_array('recibo',array_keys($changedAttributes)) && $this->recibo
                 && $this->activo){
-           self::updateAll(['recibo'=>'0'],['unidad_id'=>$this->unidad_id,['<>','id',$this->id]]);
+           self::updateAll(
+                   ['recibo'=>'0'],
+                   ['and',                   
+                    'unidad_id=:unidad_id',
+                    ['<>','id',$this->id],  
+                   ],
+                   [':unidad_id'=>$this->unidad_id]
+                   );
         }
         /*
          * Si está registrado como usuario en el edificio
