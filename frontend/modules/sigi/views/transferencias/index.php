@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel frontend\modules\sigi\models\SigiTransferenciasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('sigi.labels', 'Sigi Transferencias');
+$this->title = Yii::t('sigi.labels', 'Transferencias');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sigi-transferencias-index">
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('sigi.labels', 'Create Sigi Transferencias'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('sigi.labels', 'Crear Transferencia'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div style='overflow:auto;'>
     <?= GridView::widget([

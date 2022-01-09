@@ -175,7 +175,11 @@ class DefaultController extends \frontend\controllers\base\baseController
        if($user->profile->tipo==\common\models\Profile::PRF_RESIDENTE){
            //var_dump(h::userId(),SigiUserEdificios::findOne(['user_id'=>h::userId()]));die();
           if(!is_null($useredificio=SigiUserEdificios::findOne(['user_id'=>h::userId()]))){
-             return  $this->render('residentes/inicio',
+              IF(is_null($useredificio->unidad_id))
+               throw new ServerErrorHttpException(yii::t('base.errors',
+              'Este usuario no tiene asociada ninguna unidad en el edificio '));  
+              
+              return  $this->render('residentes/inicio',
                     ['useredificio'=>$useredificio]); 
            
             }else{

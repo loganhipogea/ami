@@ -418,6 +418,9 @@ Datos de caché de configuración se han actualizado');
         ]);
     }
 public function actionRutas(){
+    
+    //phpinfo();
+    die();
    ECHO  \frontend\modules\sigi\models\SigiPropietarios::find()->
          where(['and',
                     'recibo=:recibo',

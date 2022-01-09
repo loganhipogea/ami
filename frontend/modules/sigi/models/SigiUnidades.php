@@ -813,4 +813,7 @@ private function deactivatePropietarios(){
             );
 }
 
+
+
+
 }

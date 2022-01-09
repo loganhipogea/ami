@@ -553,10 +553,16 @@ class Edificios extends \common\models\base\modelBase
        }  */
        //die();
     } else{
-        yii::error('Ya tiene usuario hay que isnertarlo en la tabla ',__FUNCTION__); 
-                if(!is_null($user=$unidad->obtenerUsuario())){              
+         $user=$unidad->obtenerUsuario();
+         if(!is_null($user)){
+           SigiUserEdificios::updateAll(['unidad_id'=>$unidad->id],[
+               'user_id'=>$user->id, 'edificio_id'=>$unidad->edificio_id
+           ]);
+         }
+      //  yii::error('Ya tiene usuario hay que isnertarlo en la tabla ',__FUNCTION__); 
+                /*if(!is_null($user=$unidad->obtenerUsuario())){              
                     SigiUserEdificios::insertUserEdificio($user->id, $this->id,$unidad->id);
-                }
+                }*/
     }   
    }
  }

@@ -42,6 +42,7 @@ class SigiPropietarios extends \common\models\base\modelBase
             [['detalle'], 'string'],
              [['codepa','edificio_id','activo','dni','correo','recibo'], 'safe'],
             [['dni'], 'valida_dni'],
+            [['tipo'], 'validate_change_prop'],
              //[['activo'], 'safe'],
            // [['correo', 'dni'], 'unique', 'targetAttribute' => ['correo', 'dni']],
             [['codepa'], 'valida_codepa'],
@@ -209,6 +210,36 @@ class SigiPropietarios extends \common\models\base\modelBase
   
 public function correos(){
    return  SigiMailsprop::find()->select(['correo'])->andWhere(['propietario_id'=>$this->id])->column();
-}  
+} 
+
+/*Se asegura que no se pueda 
+ * insertar un prpoietario manualmente 
+ * los propietarios (tipo I) sólo
+ * se deben de manejar por medio 
+ * de TRANSFERENCIAS,
+ * Solo valida para escenario default 
+ * en batch lo deja psar 
+ */
+public function validate_change_prop(){
+   $escenario=$this->getScenario();
+   if(!in_array($escenario,[self::SCENARIO_EMPRESA,
+       self::SCENARIO_TELEFONO])){
+        if($this->isNewRecord){
+            if($this->tipo==SigiUnidades::TYP_PROPIETARIO){
+               $this->addError('tipo',
+                  yii::t('sigi.errors','No puede insertar un propietario manualmente, debe usar la función transferencias'));
+    
+            }
+        }else{
+            if($this->hasChanged('tipo') &&
+                $this->tipo==SigiUnidades::TYP_PROPIETARIO){
+                $this->addError('tipo',
+                  yii::t('sigi.errors','No puede asignar un propietario manualmente, debe usar la función transferencias'));
+    
+            }
+        }
+   }
+    
+}
      
 }
