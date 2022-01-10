@@ -719,6 +719,19 @@ public function unitsForUsers(){
    //return $array_resu;
  }
  
+ 
+ public function imagenes(){
+     $imagenes=SigiImgedificio::find()->andWhere(['edificio_id'=>$this->id])->all();
+     $aima=[];
+     foreach($imagenes as $imagen){
+       if($imagen->hasAttachments()){
+           $aima[]=$imagen->files[0]->url;
+       }
+     }
+     return $aima;
+ }
+ 
+ 
 }
  
  

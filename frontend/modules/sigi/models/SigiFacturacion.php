@@ -1,5 +1,4 @@
 <?php
-
 namespace frontend\modules\sigi\models;
 use common\helpers\h;
 use common\helpers\FileHelper;
@@ -1172,7 +1171,7 @@ class SigiFacturacion extends \common\models\base\modelBase
                  
                  case 3:
                             $dataProvider=(New SigiDetFacturacionSearch())->searchByIdentidad($idKardex);
-                       $contenido= h::currentController()->render('reports/recibos/recibo_complejo',['dataProvider'=>$dataProvider,'compacto'=>true]);
+                       $contenido= h::currentController()->render('reports/recibos/recibo',['dataProvider'=>$dataProvider,'compacto'=>true]);
           
                     break;
                 case 4:

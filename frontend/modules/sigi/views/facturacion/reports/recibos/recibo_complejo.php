@@ -98,6 +98,7 @@ $unidad=$detalle->unidad;
                  //una trnasferencia de un pepoeario viejo
                    $propietario=$detalle->unidad->propietarioRecibo();   
                  }else{//si no es transferencia normal
+                     //var_dump($detalle);die();
                     $propietario=$detalle->unidad->oldPropietario(SigiUnidades::TYP_PROPIETARIO); 
                  }
                      

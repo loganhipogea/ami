@@ -5,39 +5,40 @@ use yii\helpers\Url;
 
 ?>
 <?php
- //$this->registerCssFile("@web/css/residentes/carousel.css");
-       
-//$this->registerjsFile("@web/js/residentes/jquery.inf.js",['position'=>View::POS_END]);
-//$this->registerjsFile("@web/js/residentes/jquery.innerfade.js",['position'=>View::POS_END]);
-//$this->registerjsFile("@web/js/residentes/jquery.jcarousel.min.js",['position'=>View::POS_END]);
-//$this->registerjsFile("@web/js/residentes/jquery.lightSlider.js",['position'=>View::POS_END]);
+ $this->registerCssFile("@web/css/plataforma/lightSlider.css");
+ 
+  $this->registerjsFile("@web/js/plataforma/jquery.lightSlider.js",[
+      'depends'=> 'yii\web\JqueryAsset',
+      'position'=>View::POS_HEAD]);     
+ //$this->registerjsFile("@web/js/residentes/jquery_carrusel.js",['position'=>View::POS_HEAD]);      
+ //$this->registerjsFile("@web/js/residentes/slick.js",['position'=>View::POS_HEAD]);      
+
+//$this->registerjsFile("@web/js/residentes/jquery.inf.js",['position'=>View::POS_HEAD]);
+//$this->registerjsFile("@web/js/residentes/jquery.innerfade.js",['position'=>View::POS_HEAD]);
+//$this->registerjsFile("@web/js/residentes/jquery.jcarousel.min.js",['position'=>View::POS_HEAD]);
+//$this->registerjsFile("@web/js/residentes/jquery.lightSlider.js",['position'=>View::POS_HEAD]);
 ?>
 <?PHP
         echo $this->render('header',['useredificio'=>$useredificio]);
+        $edificio=$useredificio->edificio;
+        $imagenes=$edificio->imagenes();
+        //print_r($edificio->imagenes());die();
 ?>
-<div id="gamesHolder">
+<table>   
+    <tr>
+        <td>
+	<div id="gamesHolder">
 		<div id="games">
-<a href="#">
-     <img src=" <?= yii\helpers\Url::to("@web/img/plataforma/bnpsite02.jpg")?> " width="1026" height="364"  />
-        
-   
-</a>
-<a href="#">
- <img src=" <?= yii\helpers\Url::to("@web/img/plataforma/bnpsite03.jpg")?> " width="1026" height="364"  />
-     
-</a>
-<a href="#">
-  <img src=" <?= yii\helpers\Url::to("@web/img/plataforma/bnpsite04.jpg")?> " width="1026" height="364"  />
-     
-</a>
-
+                    <?php foreach($imagenes as $ruta){  ?>
+                    <a href="#">
+                    <img src="<?=$ruta?>" width="1026" height="364"  /> 
+                    </a>
+                     <?php }  ?>
                 </div>
         </DIV>
-
-
-
-
-
+        </td>
+  </tr>
+</table> 			
  <script>
 $(document).ready(function() {
 	$('#games').coinslider({ hoverPause: false });

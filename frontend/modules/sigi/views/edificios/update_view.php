@@ -62,6 +62,12 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');
             'active' => false,
              'options' => ['id' => 'cnID7'],
         ],
+        [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','imagenes'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_tab_imagenes',[ 'model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'cnRTID7'],
+        ],
     ],
 ]);  ?>
 

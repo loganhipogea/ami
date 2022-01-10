@@ -12,6 +12,7 @@ use frontend\modules\sigi\models\SigiCargosedificio as GrupoDetalle;
 use frontend\modules\sigi\models\SigiCargosedificioSearch;
 use frontend\modules\sigi\models\SigiSuministrosSearch;
 use frontend\controllers\base\baseController;
+use frontend\modules\sigi\models\SigiImgedificio;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\helpers\h;
@@ -918,4 +919,21 @@ public function actionEditaBeneTree($id){
             ]);  
         } 
 }
+
+public function actionCreaImagen($id){
+    if(h::request()->isAjax){
+        h::response()->format = \yii\web\Response::FORMAT_JSON;
+         $model=$this->findModel($id);
+         $modelIm=SigiImgedificio::instance();
+         $modelIm->edificio_id=$model->id;
+            if($modelIm->save()){
+              return ['success'=>yii::t('sta.errors','Se creó el registro')];
+    
+            }else{
+               return ['error'=>yii::t('sta.errors',$modelIm->getFirstError())];
+   
+            }
+        }
+}
+
 }

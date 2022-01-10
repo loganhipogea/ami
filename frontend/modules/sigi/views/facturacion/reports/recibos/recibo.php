@@ -16,7 +16,7 @@ $model=$detalle->facturacion;
         <?php $this->registerCssFile('@web/css/reporte.css') ?>
     </head>
    <body style="overflow-y: scroll;">
-   <!--  LOGO DEL RECIBO    !--> 
+           
    <div style="position:absolute;
             width:180px;height:80px;
             padding:0px; top:4px;
@@ -29,9 +29,7 @@ $model=$detalle->facturacion;
 
         </div>
     </div>
-  <!-- FIN DEL   LOGO DEL RECIBO    !--> 
-  
-  
+
 <div style=" position:absolute;  left:551px;  top:41px;  font-size:12;  font-family:cour;  color:#000; ">
     Fecha :
 </div>
