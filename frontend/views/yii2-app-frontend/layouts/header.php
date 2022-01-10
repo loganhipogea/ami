@@ -11,8 +11,8 @@ use common\helpers\h;
 <!-- Script -->
 <?php 
  //var_dump(yii::$app->user);die();
- $image=Html::img('@web/img/atenea.svg', ['alt' => 'Logo','width'=>80,'height'=>80]); ?>  
-    <?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg"> '.$image . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
+ $image=Html::img('@web/img/logo_diar.png', ['alt' => 'Logo','width'=>180,'height'=>100]); ?>  
+    <?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg"> '.$image . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
     <nav class="navbar navbar-static-top" role="navigation">
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
