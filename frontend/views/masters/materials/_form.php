@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use common\helpers\ComboHelper;
 use yii\widgets\ActiveForm;
+use common\behaviors\FileBehavior;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\masters\Maestrocompo */
@@ -22,7 +23,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'marca')->textInput(['maxlength' => true]) ?>
 </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <?= \common\widgets\imagewidget\ImageWidget::widget(['name'=>'imagenrep','model'=>$model]); ?>
+    <?= \common\widgets\imagewidget\ImageWidget::widget(['name'=>'imagenrep','model'=>$model,'ancho'=>200,'alto'=>200]); ?>
    </div>
     
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -51,7 +52,7 @@ use yii\widgets\ActiveForm;
     
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'codtipo')->
-            dropDownList(ComboHelper::getTablesValues('maestrocompo.tipo') ,
+            dropDownList(ComboHelper::getTablesValues('maestrocompo.codtipo') ,
                     ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
                     // 'class'=>'probandoSelect2',
                         ]

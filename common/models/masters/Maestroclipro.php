@@ -33,6 +33,20 @@ class Maestroclipro extends \common\models\base\modelBase
     {
         return '{{%maestroclipro}}';
     }
+    
+     public function behaviors()
+         {
+                return [
+		
+		'fileBehavior' => [
+			'class' => '\common\behaviors\FileBehavior' 
+                               ],
+                    'auditoriaBehavior' => [
+			'class' => '\common\behaviors\AuditBehavior' ,
+                               ],
+		
+                    ];
+        }
 
     /**
      * {@inheritdoc}

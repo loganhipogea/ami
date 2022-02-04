@@ -12,7 +12,7 @@ $this->title = Yii::t('base.names', 'Clipros');
 
 ?>
 <div class="box box-success">
-<div class="clipro-index">
+<div class="clipro-index"> 
 
     <h4><?= Html::encode($this->title) ?></h4>
     <?php Pjax::begin(['id'=>'clipropj']); ?>
@@ -69,7 +69,12 @@ $this->title = Yii::t('base.names', 'Clipros');
             'codpro',
             'despro',
             'rucpro',
-           
+           ['attribute'=>'deslarga',
+               'value'=>function ($model) {
+                     return $model->deslarga;
+			     }
+               
+               ]
             //'deslarga:ntext',
 
               

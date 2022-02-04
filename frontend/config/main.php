@@ -17,7 +17,7 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     
     'modules' => [
-	 'telegram' => [
+	/* 'telegram' => [
         'class' => 'onmotion\telegram\Module',
         'API_KEY' => '1989528761:AAFAosVxQS447NVDEXHit3Xr9ACUsk1oaoI',
         'BOT_NAME' => 'vikocaricia',
@@ -26,7 +26,7 @@ return [
         // 'db' => 'db2', //db file name from config dir
         // 'userCommandsPath' => '@app/modules/telegram/UserCommands',
         // 'timeBeforeResetChatHandler' => 60
-    ],
+    ],*/
 	'attachments' => [
 		'class' => nemmo\attachments\Module::className(),
 		'tempPath' => '@app/uploads/temp',

@@ -203,8 +203,10 @@ class CliproController extends baseController {
           }
           }
          */
-        if ($this->is_editable())
+        if ($this->is_editable()){
+            h::response()->format = \yii\web\Response::FORMAT_JSON;
             return $this->editField();
+           } 
 
         $model = $this->findModel($id);
         if (h::request()->isAjax && $model->load(h::request()->post())) {

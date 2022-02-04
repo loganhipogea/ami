@@ -1,0 +1,2 @@
+[02-Feb-2022 03:32:40 UTC] PHP Warning:  Class 'Doctrine\Persistence\Mapping\ClassMetadata' not found in /home/bov/public_html/vendor/fakerphp/faker/src/Faker/ORM/Doctrine/backward-compatibility.php on line 6
+[02-Feb-2022 03:32:40 UTC] PHP Warning:  Class 'Doctrine\Persistence\ObjectManager' not found in /home/bov/public_html/vendor/fakerphp/faker/src/Faker/ORM/Doctrine/backward-compatibility.php on line 10

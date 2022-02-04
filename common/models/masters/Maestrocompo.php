@@ -90,11 +90,10 @@ class Maestrocompo extends \common\models\base\modelBase
     
     public function beforeSave($insert) {
         //var_dump($insert);die();
+        
         if($insert){
-            $this->codart=$this->correlativo('codart',
-                h::settings()->get('tables','sizecodigomaterial'),  
-                 'codtipo'
-                    );
+            //$this->prefijo=$this->codtipo;
+            $this->codart=$this->correlativo('codart',10,'codtipo');
         }
         return parent::beforeSave($insert);
     }
