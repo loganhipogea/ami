@@ -71,10 +71,12 @@ echo ModalAjax::widget([
    // 'url' => $url, // Ajax view with form to load
     'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
     //para que no se esconda la ventana cuando presionas una tecla fuera del marco
-    'clientOptions' => ['tabindex'=>'','backdrop' => 'static', 'keyboard' => FALSE]
+    'clientOptions' => ['tabindex' => false,'backdrop' => 'static', 'keyboard' => FALSE]
     // ... any other yii2 bootstrap modal option you need
 ]);
  ?>  
+     
+        
          <?php \shifrin\noty\NotyWidget::widget([
     'options' => [ // you can add js options here, see noty plugin page for available options
         'dismissQueue' => true,

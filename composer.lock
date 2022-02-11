@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a83358b3d38099de6cf8e16c40bb181",
+    "content-hash": "c26bd03abcd829467633c957f0b3e473",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -3539,16 +3539,16 @@
         },
         {
             "name": "kartik-v/yii2-widget-select2",
-            "version": "v2.2.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "5b3c91df7908193981033cb7ca52e83303197753"
+                "reference": "b3c74af0612d47928d64e04efaae242d7611dda2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/5b3c91df7908193981033cb7ca52e83303197753",
-                "reference": "5b3c91df7908193981033cb7ca52e83303197753",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/b3c74af0612d47928d64e04efaae242d7611dda2",
+                "reference": "b3c74af0612d47928d64e04efaae242d7611dda2",
                 "shasum": ""
             },
             "require": {
@@ -3595,7 +3595,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-09-02T14:24:31+00:00"
+            "time": "2021-10-06T11:17:54+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-sidenav",
@@ -10205,7 +10205,8 @@
         "buttflattery/yii2-formwizard": 20,
         "kartik-v/yii2-editors": 20,
         "kartik-v/yii2-krajee-base": 20,
-        "franciscomaya/yii2-sceditor": 20
+        "franciscomaya/yii2-sceditor": 20,
+        "kartik-v/yii2-widget-select2": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -18,8 +18,8 @@ class AppAsset extends AssetBundle
         'css/font-awesome.min_1.css',       
         'css/ionicons.min.css',
         'css/akaunting-green.css',
-         'css/bootstrap.min.css',
-         'css/bootstrap.min.css',
+         //'css/bootstrap.min.css',
+         //'css/bootstrap.min.css',
         'css/install.css',
          'css/select2.css',
     ];
@@ -30,9 +30,9 @@ class AppAsset extends AssetBundle
         
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
-        '\rmrevin\yii\fontawesome\AssetBundle'
+       // 'yii\web\JqueryAsset',
+       // 'yii\web\YiiAsset',
+       // 'yii\bootstrap\BootstrapAsset',
+       // '\rmrevin\yii\fontawesome\AssetBundle'
     ];
 }

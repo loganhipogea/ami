@@ -57,10 +57,10 @@ class MaestrocompoSearch extends Maestrocompo
 
         // grid filtering conditions
         $query->andFilterWhere(['like', 'codart', $this->codart])
-            ->andFilterWhere(['like', 'descripcion', $this->descripcion])
+            ->andFilterWhere(['like', 'descripcion', explode ('%',$this->descripcion)])
             ->andFilterWhere(['like', 'marca', $this->marca])
             ->andFilterWhere(['like', 'numeroparte', $this->numeroparte])     
-            ->andFilterWhere(['like', 'modelo',$this->modelo]);
+            ->andFilterWhere(['like', 'modelo',$this->modelo]);  
         
            
 

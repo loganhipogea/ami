@@ -6,7 +6,7 @@ use yii\db\Expression;
 use frontend\modules\sigi\models\SigiMovimientosPre;
 class m210409_183521_create_vw_porpagar extends viewMigration
 {
-    const NAME_VIEW='{{%sigi_vw_porpagar}}';
+    const NAME_VIEW='{{%mat_vw_vale}}';
     /**
      * {@inheritdoc}
      */
@@ -17,7 +17,7 @@ class m210409_183521_create_vw_porpagar extends viewMigration
         $this->dropView($vista);
         }
         $comando= $this->db->createCommand(); 
-        $subquery=(new Query())->select(['porpagar_id'])->from(['{{%sigi_propago}}'])->andWhere(['activo'=>'1']) ;
+       
         $comando->createView($vista,
                 (new \yii\db\Query())
     ->select([
@@ -33,18 +33,7 @@ class m210409_183521_create_vw_porpagar extends viewMigration
     // andWhere(['b.ingreso'=> SigiMovimientosPre::G_GRUPO_EGRESOS])->
      groupBy(['a.edificio_id', 'a.cargoedificio_id','a.glosa','a.fechadoc',
          'e.despro','a.codpro','d.descargo'])
-        ->union(
-            (new \yii\db\Query())
-                ->select([
-                    'a.edificio_id', 'a.cargoedificio_id','a.glosa','a.fechadoc',
-                    'e.despro','a.codpro',new Expression('0 as pagado'),'a.monto as deuda', 'd.descargo'
-                    ])->from(['a'=>'{{%sigi_porpagar}}'])->                 
-     innerJoin('{{%sigi_cargosedificio}} c', 'c.id=a.cargoedificio_id')->          
-      innerJoin('{{%sigi_cargos}} d', 'd.id=c.cargo_id')->
-     innerJoin('{{%clipro}} e', 'e.codpro=a.codpro')->
-                //andWhere(['b.ingreso'=> SigiMovimientosPre::G_GRUPO_EGRESOS])->
-                andWhere(['not in','a.id',$subquery])->createCommand()->rawSql
-                 )
+        
                 )->execute();
     }
 

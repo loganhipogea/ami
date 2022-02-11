@@ -122,6 +122,7 @@ class selectWidget extends \yii\base\Widget
    type: 'post',
    dataType: 'json',
    delay: 250,
+   width: 'resolve',
  data: function (params) {
       var query = {      
         searchTerm: params.term,
@@ -145,9 +146,17 @@ class selectWidget extends \yii\base\Widget
   }
  }
 );
-     
+ 
     
-});",\yii\web\View::POS_END);
+});
+
+
+
+
+",\yii\web\View::POS_END);
+  
+   
+
                         }     
         
      private function getModelForeign(){

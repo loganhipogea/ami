@@ -1,0 +1,114 @@
+<?php
+
+namespace frontend\modules\mat\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "{{%mat_detreq}}".
+ *
+ * @property int $id
+ * @property int $req_id
+ * @property string $codart
+ * @property string $descripcion
+ * @property string $cant
+ * @property string $um
+ * @property string $imptacion
+ * @property string $tipim
+ * @property string $texto
+ *
+ * @property MatReq $req
+ */
+class MatDetreq extends \common\models\base\modelBase
+{
+   public $boolean_fields=['activo'];
+    
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return '{{%mat_detreq}}';
+    }
+   
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+             [['cant','req_id','cant','item',
+                 'um','activo','descripcion','texto'], 'safe'],
+            [['req_id'], 'integer'],
+            [['cant'], 'number'],
+            [['texto'], 'string'],
+            [['codart', 'imptacion'], 'string', 'max' => 14],
+            [['descripcion'], 'string', 'max' => 40],
+            [['um'], 'string', 'max' => 4],
+            [['tipim'], 'string', 'max' => 1],
+            [['req_id'], 'exist', 'skipOnError' => true, 'targetClass' => MatReq::className(), 'targetAttribute' => ['req_id' => 'id']],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('app', 'ID'),
+            'req_id' => Yii::t('app', 'Req ID'),
+            'codart' => Yii::t('app', 'Codart'),
+            'descripcion' => Yii::t('app', 'Descripcion'),
+            'cant' => Yii::t('app', 'Cant'),
+            'um' => Yii::t('app', 'Um'),
+            'imptacion' => Yii::t('app', 'Imptacion'),
+            'tipim' => Yii::t('app', 'Tipim'),
+            'texto' => Yii::t('app', 'Texto'),
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReq()
+    {
+        return $this->hasOne(MatReq::className(), ['id' => 'req_id']);
+    }
+    
+     public function getMaterial()
+    {
+        return $this->hasOne(\common\models\masters\Maestrocompo::className(), ['codart' => 'codart']);
+    }
+
+    
+     public function getStock()
+    {
+        return $this->hasOne(MatStock::className(), ['codart' => 'codart']);
+    }
+    /**
+     * {@inheritdoc}
+     * @return MatDetreqQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new MatDetreqQuery(get_called_class());
+    }
+    
+    public function desactiva($desactiva=true){
+        $this->activo=!$desactiva;
+        $this->save();
+    }
+    
+    public function beforeSave($insert) {
+        if($insert){
+            $this->activo=true;            
+            $this->item='1'.str_pad($this->req->getDetalles()->count()+1,3,'0',STR_PAD_LEFT);
+        }
+        if($this->hasChanged('codart'))
+          $this->descripcion=$this->material->descripcion;
+        return parent::beforeSave($insert);
+    }
+    
+   
+}

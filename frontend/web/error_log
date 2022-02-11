@@ -32545,3 +32545,484 @@ $_SERVER = [
     ],
     'argc' => 1,
 ]
+[03-Feb-2022 23:23:17 America/Lima] An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/bov/public_html/vendor/yiisoft/yii2/base/ErrorHandler.php(135): yii\web\ErrorHandler->renderException(Object(yii\web\HeadersAlreadySentException))
+#3 [internal function]: yii\base\ErrorHandler->handleException(Object(yii\web\HeadersAlreadySentException))
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/base/Application.php(390): yii\web\Response->send()
+#2 /home/bov/public_html/frontend/web/index.php(18): yii\base\Application->run()
+#3 {main}
+$_SERVER = [
+    'CONTENT_LENGTH' => '496',
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundaryHfc4fNAh4XBQOOiN',
+    'CONTEXT_DOCUMENT_ROOT' => '/home/bov/public_html',
+    'CONTEXT_PREFIX' => '/~bov',
+    'DOCUMENT_ROOT' => '/var/www/html',
+    'GATEWAY_INTERFACE' => 'CGI/1.1',
+    'HTTP_ACCEPT' => '*/*',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'es-ES,es;q=0.9',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'advanced-frontend=65b4de230e4a5d21606ba416208cf1aa; _csrf-frontend=5420185b194362eaca324c9a9d41322f337ff2976bbcbe38afb9c34091023d5ea%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22e2ZaOJafLPQmRGGoX4gMXUGiR8NT63tg%22%3B%7D',
+    'HTTP_HOST' => '209.126.81.193',
+    'HTTP_ORIGIN' => 'http://209.126.81.193',
+    'HTTP_REFERER' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/update?id=46',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+    'HTTP_X_CSRF_TOKEN' => 'PAcNIP1NdndYgNEmiB9BgsPCOxfJKLE92ZKU9F7VG5VZNVdBsgcXERTQgEvaWAbtm_ZcWpF99lSLqtqgaOZv8g==',
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+    'PATH' => '/bin:/usr/bin',
+    'PHP_INI_SCAN_DIR' => '/opt/cpanel/ea-php74/root/etc:/opt/cpanel/ea-php74/root/etc/php.d:.',
+    'QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=46&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=46&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_STATUS' => '200',
+    'REDIRECT_UNIQUE_ID' => 'YfyqNZhvmEhIpOfO7obAMAAAAIo',
+    'REDIRECT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REMOTE_ADDR' => '179.6.27.223',
+    'REMOTE_PORT' => '57861',
+    'REQUEST_METHOD' => 'POST',
+    'REQUEST_SCHEME' => 'http',
+    'REQUEST_URI' => '/~bov/frontend/web/finder/selectimage?isImage=1&idModal=imagemodal&modelid=46&nombreclase=common_models_masters_Maestrocompo',
+    'SCRIPT_FILENAME' => '/home/bov/public_html/frontend/web/index.php',
+    'SCRIPT_NAME' => '/~bov/frontend/web/index.php',
+    'SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'SERVER_ADDR' => '209.126.81.193',
+    'SERVER_ADMIN' => 'server-admin@contabo.de',
+    'SERVER_NAME' => '209.126.81.193',
+    'SERVER_PORT' => '80',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SIGNATURE' => '',
+    'SERVER_SOFTWARE' => 'Apache',
+    'TZ' => 'America/Chicago',
+    'UNIQUE_ID' => 'YfyqNZhvmEhIpOfO7obAMAAAAIo',
+    'PHP_SELF' => '/~bov/frontend/web/index.php',
+    'REQUEST_TIME_FLOAT' => 1643948597.49370098114013671875,
+    'REQUEST_TIME' => 1643948597,
+    'argv' => [
+        'isImage=1&idModal=imagemodal&modelid=46&nombreclase=common_models_masters_Maestrocompo',
+    ],
+    'argc' => 1,
+]
+[03-Feb-2022 23:25:18 America/Lima] An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/bov/public_html/vendor/yiisoft/yii2/base/ErrorHandler.php(135): yii\web\ErrorHandler->renderException(Object(yii\web\HeadersAlreadySentException))
+#3 [internal function]: yii\base\ErrorHandler->handleException(Object(yii\web\HeadersAlreadySentException))
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/base/Application.php(390): yii\web\Response->send()
+#2 /home/bov/public_html/frontend/web/index.php(18): yii\base\Application->run()
+#3 {main}
+$_SERVER = [
+    'CONTENT_LENGTH' => '496',
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundarypmvQ82XqjztzlACA',
+    'CONTEXT_DOCUMENT_ROOT' => '/home/bov/public_html',
+    'CONTEXT_PREFIX' => '/~bov',
+    'DOCUMENT_ROOT' => '/var/www/html',
+    'GATEWAY_INTERFACE' => 'CGI/1.1',
+    'HTTP_ACCEPT' => '*/*',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'es-ES,es;q=0.9',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'advanced-frontend=65b4de230e4a5d21606ba416208cf1aa; _csrf-frontend=5420185b194362eaca324c9a9d41322f337ff2976bbcbe38afb9c34091023d5ea%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22e2ZaOJafLPQmRGGoX4gMXUGiR8NT63tg%22%3B%7D',
+    'HTTP_HOST' => '209.126.81.193',
+    'HTTP_ORIGIN' => 'http://209.126.81.193',
+    'HTTP_REFERER' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/update?id=48',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+    'HTTP_X_CSRF_TOKEN' => 'jxI6ZLGo-eWpzkyj8jZ2bTeKZdRseQIZDt3a90RQjEnqIGAF_uKYg-WeHc6gcTECb74CmTQsRXBc5ZSjcmP4Lg==',
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+    'PATH' => '/bin:/usr/bin',
+    'PHP_INI_SCAN_DIR' => '/opt/cpanel/ea-php74/root/etc:/opt/cpanel/ea-php74/root/etc/php.d:.',
+    'QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=48&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=48&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_STATUS' => '200',
+    'REDIRECT_UNIQUE_ID' => 'YfyqreWAwvdesdFtH9stLgAAAE8',
+    'REDIRECT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REMOTE_ADDR' => '179.6.27.223',
+    'REMOTE_PORT' => '59577',
+    'REQUEST_METHOD' => 'POST',
+    'REQUEST_SCHEME' => 'http',
+    'REQUEST_URI' => '/~bov/frontend/web/finder/selectimage?isImage=1&idModal=imagemodal&modelid=48&nombreclase=common_models_masters_Maestrocompo',
+    'SCRIPT_FILENAME' => '/home/bov/public_html/frontend/web/index.php',
+    'SCRIPT_NAME' => '/~bov/frontend/web/index.php',
+    'SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'SERVER_ADDR' => '209.126.81.193',
+    'SERVER_ADMIN' => 'server-admin@contabo.de',
+    'SERVER_NAME' => '209.126.81.193',
+    'SERVER_PORT' => '80',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SIGNATURE' => '',
+    'SERVER_SOFTWARE' => 'Apache',
+    'TZ' => 'America/Chicago',
+    'UNIQUE_ID' => 'YfyqreWAwvdesdFtH9stLgAAAE8',
+    'PHP_SELF' => '/~bov/frontend/web/index.php',
+    'REQUEST_TIME_FLOAT' => 1643948717.936212062835693359375,
+    'REQUEST_TIME' => 1643948717,
+    'argv' => [
+        'isImage=1&idModal=imagemodal&modelid=48&nombreclase=common_models_masters_Maestrocompo',
+    ],
+    'argc' => 1,
+]
+[03-Feb-2022 23:27:51 America/Lima] An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 120. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/bov/public_html/vendor/yiisoft/yii2/base/ErrorHandler.php(135): yii\web\ErrorHandler->renderException(Object(yii\web\HeadersAlreadySentException))
+#3 [internal function]: yii\base\ErrorHandler->handleException(Object(yii\web\HeadersAlreadySentException))
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 120. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/base/Application.php(390): yii\web\Response->send()
+#2 /home/bov/public_html/frontend/web/index.php(18): yii\base\Application->run()
+#3 {main}
+$_SERVER = [
+    'CONTENT_LENGTH' => '786',
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundarySFAgObYumN9IfMtr',
+    'CONTEXT_DOCUMENT_ROOT' => '/home/bov/public_html',
+    'CONTEXT_PREFIX' => '/~bov',
+    'DOCUMENT_ROOT' => '/var/www/html',
+    'GATEWAY_INTERFACE' => 'CGI/1.1',
+    'HTTP_ACCEPT' => '*/*',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'es-ES,es;q=0.9',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'advanced-frontend=65b4de230e4a5d21606ba416208cf1aa; _csrf-frontend=5420185b194362eaca324c9a9d41322f337ff2976bbcbe38afb9c34091023d5ea%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22e2ZaOJafLPQmRGGoX4gMXUGiR8NT63tg%22%3B%7D',
+    'HTTP_HOST' => '209.126.81.193',
+    'HTTP_ORIGIN' => 'http://209.126.81.193',
+    'HTTP_REFERER' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/update?id=42',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+    'HTTP_X_CSRF_TOKEN' => 'lNvUi_vKQq4fXv-JcUwb_3wYAMihgoMfAZC_BIuWoxbx6Y7qtIAjyFMOruQjC1yQJCxnhfnXxHZTqPFQvaXXcQ==',
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+    'PATH' => '/bin:/usr/bin',
+    'PHP_INI_SCAN_DIR' => '/opt/cpanel/ea-php74/root/etc:/opt/cpanel/ea-php74/root/etc/php.d:.',
+    'QUERY_STRING' => 'id=1000000042&gridName=holas&idModal=modal-conversiones',
+    'REDIRECT_QUERY_STRING' => 'id=1000000042&gridName=holas&idModal=modal-conversiones',
+    'REDIRECT_SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/creaconversion',
+    'REDIRECT_SCRIPT_URL' => '/~bov/frontend/web/masters/materials/creaconversion',
+    'REDIRECT_STATUS' => '200',
+    'REDIRECT_UNIQUE_ID' => 'YfyrRuXBKhGKD0DrsKgKzgAAAAw',
+    'REDIRECT_URL' => '/~bov/frontend/web/masters/materials/creaconversion',
+    'REMOTE_ADDR' => '179.6.27.223',
+    'REMOTE_PORT' => '61841',
+    'REQUEST_METHOD' => 'POST',
+    'REQUEST_SCHEME' => 'http',
+    'REQUEST_URI' => '/~bov/frontend/web/masters/materials/creaconversion?id=1000000042&gridName=holas&idModal=modal-conversiones',
+    'SCRIPT_FILENAME' => '/home/bov/public_html/frontend/web/index.php',
+    'SCRIPT_NAME' => '/~bov/frontend/web/index.php',
+    'SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/creaconversion',
+    'SCRIPT_URL' => '/~bov/frontend/web/masters/materials/creaconversion',
+    'SERVER_ADDR' => '209.126.81.193',
+    'SERVER_ADMIN' => 'server-admin@contabo.de',
+    'SERVER_NAME' => '209.126.81.193',
+    'SERVER_PORT' => '80',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SIGNATURE' => '',
+    'SERVER_SOFTWARE' => 'Apache',
+    'TZ' => 'America/Chicago',
+    'UNIQUE_ID' => 'YfyrRuXBKhGKD0DrsKgKzgAAAAw',
+    'PHP_SELF' => '/~bov/frontend/web/index.php',
+    'REQUEST_TIME_FLOAT' => 1643948870.9942429065704345703125,
+    'REQUEST_TIME' => 1643948870,
+    'argv' => [
+        'id=1000000042&gridName=holas&idModal=modal-conversiones',
+    ],
+    'argc' => 1,
+]
+[03-Feb-2022 23:35:27 America/Lima] An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/bov/public_html/vendor/yiisoft/yii2/base/ErrorHandler.php(135): yii\web\ErrorHandler->renderException(Object(yii\web\HeadersAlreadySentException))
+#3 [internal function]: yii\base\ErrorHandler->handleException(Object(yii\web\HeadersAlreadySentException))
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/base/Application.php(390): yii\web\Response->send()
+#2 /home/bov/public_html/frontend/web/index.php(18): yii\base\Application->run()
+#3 {main}
+$_SERVER = [
+    'CONTENT_LENGTH' => '496',
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundaryLYYu3A0OGosbQtBh',
+    'CONTEXT_DOCUMENT_ROOT' => '/home/bov/public_html',
+    'CONTEXT_PREFIX' => '/~bov',
+    'DOCUMENT_ROOT' => '/var/www/html',
+    'GATEWAY_INTERFACE' => 'CGI/1.1',
+    'HTTP_ACCEPT' => '*/*',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'es-ES,es;q=0.9',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'advanced-frontend=65b4de230e4a5d21606ba416208cf1aa; _csrf-frontend=5420185b194362eaca324c9a9d41322f337ff2976bbcbe38afb9c34091023d5ea%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22e2ZaOJafLPQmRGGoX4gMXUGiR8NT63tg%22%3B%7D',
+    'HTTP_HOST' => '209.126.81.193',
+    'HTTP_ORIGIN' => 'http://209.126.81.193',
+    'HTTP_REFERER' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/update?id=22',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+    'HTTP_X_CSRF_TOKEN' => 'bbX1N25LLeEcKU_l0YDZHX7UWR9aVsUYiYjxAApcXjAIh69WIQFMh1B5HoiDx55yJuA-UgIDgnHbsL9UPG8qVw==',
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+    'PATH' => '/bin:/usr/bin',
+    'PHP_INI_SCAN_DIR' => '/opt/cpanel/ea-php74/root/etc:/opt/cpanel/ea-php74/root/etc/php.d:.',
+    'QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=22&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=22&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_STATUS' => '200',
+    'REDIRECT_UNIQUE_ID' => 'YfytDkbga19alIhNE-dPKQAAAM8',
+    'REDIRECT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REMOTE_ADDR' => '179.6.27.223',
+    'REMOTE_PORT' => '4336',
+    'REQUEST_METHOD' => 'POST',
+    'REQUEST_SCHEME' => 'http',
+    'REQUEST_URI' => '/~bov/frontend/web/finder/selectimage?isImage=1&idModal=imagemodal&modelid=22&nombreclase=common_models_masters_Maestrocompo',
+    'SCRIPT_FILENAME' => '/home/bov/public_html/frontend/web/index.php',
+    'SCRIPT_NAME' => '/~bov/frontend/web/index.php',
+    'SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'SERVER_ADDR' => '209.126.81.193',
+    'SERVER_ADMIN' => 'server-admin@contabo.de',
+    'SERVER_NAME' => '209.126.81.193',
+    'SERVER_PORT' => '80',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SIGNATURE' => '',
+    'SERVER_SOFTWARE' => 'Apache',
+    'TZ' => 'America/Chicago',
+    'UNIQUE_ID' => 'YfytDkbga19alIhNE-dPKQAAAM8',
+    'PHP_SELF' => '/~bov/frontend/web/index.php',
+    'REQUEST_TIME_FLOAT' => 1643949326.9932720661163330078125,
+    'REQUEST_TIME' => 1643949326,
+    'argv' => [
+        'isImage=1&idModal=imagemodal&modelid=22&nombreclase=common_models_masters_Maestrocompo',
+    ],
+    'argc' => 1,
+]
+[03-Feb-2022 23:38:55 America/Lima] An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/bov/public_html/vendor/yiisoft/yii2/base/ErrorHandler.php(135): yii\web\ErrorHandler->renderException(Object(yii\web\HeadersAlreadySentException))
+#3 [internal function]: yii\base\ErrorHandler->handleException(Object(yii\web\HeadersAlreadySentException))
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/base/Application.php(390): yii\web\Response->send()
+#2 /home/bov/public_html/frontend/web/index.php(18): yii\base\Application->run()
+#3 {main}
+$_SERVER = [
+    'CONTENT_LENGTH' => '496',
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundaryDVVZU6djbEmEtcSg',
+    'CONTEXT_DOCUMENT_ROOT' => '/home/bov/public_html',
+    'CONTEXT_PREFIX' => '/~bov',
+    'DOCUMENT_ROOT' => '/var/www/html',
+    'GATEWAY_INTERFACE' => 'CGI/1.1',
+    'HTTP_ACCEPT' => '*/*',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'es-ES,es;q=0.9',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'advanced-frontend=65b4de230e4a5d21606ba416208cf1aa; _csrf-frontend=5420185b194362eaca324c9a9d41322f337ff2976bbcbe38afb9c34091023d5ea%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22e2ZaOJafLPQmRGGoX4gMXUGiR8NT63tg%22%3B%7D',
+    'HTTP_HOST' => '209.126.81.193',
+    'HTTP_ORIGIN' => 'http://209.126.81.193',
+    'HTTP_REFERER' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/update?id=49',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+    'HTTP_X_CSRF_TOKEN' => 'ovNOgWr5qC86bsm__ibe3_-0q4b3xSNH5jaqNOCKXyDHwRTgJbPJSXY-mNKsYZmwp4DMy6-QZC60DuRg1rkrRw==',
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+    'PATH' => '/bin:/usr/bin',
+    'PHP_INI_SCAN_DIR' => '/opt/cpanel/ea-php74/root/etc:/opt/cpanel/ea-php74/root/etc/php.d:.',
+    'QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=49&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=49&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_STATUS' => '200',
+    'REDIRECT_UNIQUE_ID' => 'Yfyt3-XBKhGKD0DrsKgK4AAAABU',
+    'REDIRECT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REMOTE_ADDR' => '179.6.27.223',
+    'REMOTE_PORT' => '7589',
+    'REQUEST_METHOD' => 'POST',
+    'REQUEST_SCHEME' => 'http',
+    'REQUEST_URI' => '/~bov/frontend/web/finder/selectimage?isImage=1&idModal=imagemodal&modelid=49&nombreclase=common_models_masters_Maestrocompo',
+    'SCRIPT_FILENAME' => '/home/bov/public_html/frontend/web/index.php',
+    'SCRIPT_NAME' => '/~bov/frontend/web/index.php',
+    'SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'SERVER_ADDR' => '209.126.81.193',
+    'SERVER_ADMIN' => 'server-admin@contabo.de',
+    'SERVER_NAME' => '209.126.81.193',
+    'SERVER_PORT' => '80',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SIGNATURE' => '',
+    'SERVER_SOFTWARE' => 'Apache',
+    'TZ' => 'America/Chicago',
+    'UNIQUE_ID' => 'Yfyt3-XBKhGKD0DrsKgK4AAAABU',
+    'PHP_SELF' => '/~bov/frontend/web/index.php',
+    'REQUEST_TIME_FLOAT' => 1643949535.5588910579681396484375,
+    'REQUEST_TIME' => 1643949535,
+    'argv' => [
+        'isImage=1&idModal=imagemodal&modelid=49&nombreclase=common_models_masters_Maestrocompo',
+    ],
+    'argc' => 1,
+]
+[03-Feb-2022 23:44:44 America/Lima] An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/bov/public_html/vendor/yiisoft/yii2/base/ErrorHandler.php(135): yii\web\ErrorHandler->renderException(Object(yii\web\HeadersAlreadySentException))
+#3 [internal function]: yii\base\ErrorHandler->handleException(Object(yii\web\HeadersAlreadySentException))
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/base/Application.php(390): yii\web\Response->send()
+#2 /home/bov/public_html/frontend/web/index.php(18): yii\base\Application->run()
+#3 {main}
+$_SERVER = [
+    'CONTENT_LENGTH' => '496',
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundary1AtvWxWbcnpiTtmA',
+    'CONTEXT_DOCUMENT_ROOT' => '/home/bov/public_html',
+    'CONTEXT_PREFIX' => '/~bov',
+    'DOCUMENT_ROOT' => '/var/www/html',
+    'GATEWAY_INTERFACE' => 'CGI/1.1',
+    'HTTP_ACCEPT' => '*/*',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'es-ES,es;q=0.9',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'advanced-frontend=65b4de230e4a5d21606ba416208cf1aa; _csrf-frontend=5420185b194362eaca324c9a9d41322f337ff2976bbcbe38afb9c34091023d5ea%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22e2ZaOJafLPQmRGGoX4gMXUGiR8NT63tg%22%3B%7D',
+    'HTTP_HOST' => '209.126.81.193',
+    'HTTP_ORIGIN' => 'http://209.126.81.193',
+    'HTTP_REFERER' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/update?id=18',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+    'HTTP_X_CSRF_TOKEN' => 'PeTWwvk_4jqfv-6ZhqI0EBTYWDqm71gXkdMLtH5mFnhY1oyjtnWDXNPvv_TU5XN_TOw_d_66H37D60XgSFViHw==',
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+    'PATH' => '/bin:/usr/bin',
+    'PHP_INI_SCAN_DIR' => '/opt/cpanel/ea-php74/root/etc:/opt/cpanel/ea-php74/root/etc/php.d:.',
+    'QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=18&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=18&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_STATUS' => '200',
+    'REDIRECT_UNIQUE_ID' => 'YfyvPJhvmEhIpOfO7obAUQAAAJc',
+    'REDIRECT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REMOTE_ADDR' => '179.6.27.223',
+    'REMOTE_PORT' => '13859',
+    'REQUEST_METHOD' => 'POST',
+    'REQUEST_SCHEME' => 'http',
+    'REQUEST_URI' => '/~bov/frontend/web/finder/selectimage?isImage=1&idModal=imagemodal&modelid=18&nombreclase=common_models_masters_Maestrocompo',
+    'SCRIPT_FILENAME' => '/home/bov/public_html/frontend/web/index.php',
+    'SCRIPT_NAME' => '/~bov/frontend/web/index.php',
+    'SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'SERVER_ADDR' => '209.126.81.193',
+    'SERVER_ADMIN' => 'server-admin@contabo.de',
+    'SERVER_NAME' => '209.126.81.193',
+    'SERVER_PORT' => '80',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SIGNATURE' => '',
+    'SERVER_SOFTWARE' => 'Apache',
+    'TZ' => 'America/Chicago',
+    'UNIQUE_ID' => 'YfyvPJhvmEhIpOfO7obAUQAAAJc',
+    'PHP_SELF' => '/~bov/frontend/web/index.php',
+    'REQUEST_TIME_FLOAT' => 1643949884.7811129093170166015625,
+    'REQUEST_TIME' => 1643949884,
+    'argv' => [
+        'isImage=1&idModal=imagemodal&modelid=18&nombreclase=common_models_masters_Maestrocompo',
+    ],
+    'argc' => 1,
+]
+[03-Feb-2022 23:48:13 America/Lima] An Error occurred while handling another error:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/web/ErrorHandler.php(136): yii\web\Response->send()
+#2 /home/bov/public_html/vendor/yiisoft/yii2/base/ErrorHandler.php(135): yii\web\ErrorHandler->renderException(Object(yii\web\HeadersAlreadySentException))
+#3 [internal function]: yii\base\ErrorHandler->handleException(Object(yii\web\HeadersAlreadySentException))
+#4 {main}
+Previous exception:
+yii\web\HeadersAlreadySentException: Headers already sent in /home/bov/public_html/common/controllers/base/baseController.php on line 116. in /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php:368
+Stack trace:
+#0 /home/bov/public_html/vendor/yiisoft/yii2/web/Response.php(341): yii\web\Response->sendHeaders()
+#1 /home/bov/public_html/vendor/yiisoft/yii2/base/Application.php(390): yii\web\Response->send()
+#2 /home/bov/public_html/frontend/web/index.php(18): yii\base\Application->run()
+#3 {main}
+$_SERVER = [
+    'CONTENT_LENGTH' => '496',
+    'CONTENT_TYPE' => 'multipart/form-data; boundary=----WebKitFormBoundaryRxbsFi96kOfkesqX',
+    'CONTEXT_DOCUMENT_ROOT' => '/home/bov/public_html',
+    'CONTEXT_PREFIX' => '/~bov',
+    'DOCUMENT_ROOT' => '/var/www/html',
+    'GATEWAY_INTERFACE' => 'CGI/1.1',
+    'HTTP_ACCEPT' => '*/*',
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+    'HTTP_ACCEPT_LANGUAGE' => 'es-ES,es;q=0.9',
+    'HTTP_CONNECTION' => 'keep-alive',
+    'HTTP_COOKIE' => 'advanced-frontend=65b4de230e4a5d21606ba416208cf1aa; _csrf-frontend=5420185b194362eaca324c9a9d41322f337ff2976bbcbe38afb9c34091023d5ea%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22e2ZaOJafLPQmRGGoX4gMXUGiR8NT63tg%22%3B%7D',
+    'HTTP_HOST' => '209.126.81.193',
+    'HTTP_ORIGIN' => 'http://209.126.81.193',
+    'HTTP_REFERER' => 'http://209.126.81.193/~bov/frontend/web/masters/materials/update?id=52',
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+    'HTTP_X_CSRF_TOKEN' => '471VxWvBcCzcXqpr1mO6RHfGt6T9x5avxpyApkIQF0OGjw-kJIsRSpAO-waEJP0rL_LQ6aWS0caUpM7ydCNjJA==',
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+    'PATH' => '/bin:/usr/bin',
+    'PHP_INI_SCAN_DIR' => '/opt/cpanel/ea-php74/root/etc:/opt/cpanel/ea-php74/root/etc/php.d:.',
+    'QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=52&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_QUERY_STRING' => 'isImage=1&idModal=imagemodal&modelid=52&nombreclase=common_models_masters_Maestrocompo',
+    'REDIRECT_SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REDIRECT_STATUS' => '200',
+    'REDIRECT_UNIQUE_ID' => 'YfywDUbga19alIhNE-dPOgAAANI',
+    'REDIRECT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'REMOTE_ADDR' => '179.6.27.223',
+    'REMOTE_PORT' => '16778',
+    'REQUEST_METHOD' => 'POST',
+    'REQUEST_SCHEME' => 'http',
+    'REQUEST_URI' => '/~bov/frontend/web/finder/selectimage?isImage=1&idModal=imagemodal&modelid=52&nombreclase=common_models_masters_Maestrocompo',
+    'SCRIPT_FILENAME' => '/home/bov/public_html/frontend/web/index.php',
+    'SCRIPT_NAME' => '/~bov/frontend/web/index.php',
+    'SCRIPT_URI' => 'http://209.126.81.193/~bov/frontend/web/finder/selectimage',
+    'SCRIPT_URL' => '/~bov/frontend/web/finder/selectimage',
+    'SERVER_ADDR' => '209.126.81.193',
+    'SERVER_ADMIN' => 'server-admin@contabo.de',
+    'SERVER_NAME' => '209.126.81.193',
+    'SERVER_PORT' => '80',
+    'SERVER_PROTOCOL' => 'HTTP/1.1',
+    'SERVER_SIGNATURE' => '',
+    'SERVER_SOFTWARE' => 'Apache',
+    'TZ' => 'America/Chicago',
+    'UNIQUE_ID' => 'YfywDUbga19alIhNE-dPOgAAANI',
+    'PHP_SELF' => '/~bov/frontend/web/index.php',
+    'REQUEST_TIME_FLOAT' => 1643950093.6996319293975830078125,
+    'REQUEST_TIME' => 1643950093,
+    'argv' => [
+        'isImage=1&idModal=imagemodal&modelid=52&nombreclase=common_models_masters_Maestrocompo',
+    ],
+    'argc' => 1,
+]
+[05-Feb-2022 15:16:15 America/Lima] PHP Fatal error:  Cannot use frontend\controllers\base\baseController as baseController because the name is already in use in /home/bov/public_html/frontend/modules/mat/controllers/MatController.php on line 13
+[05-Feb-2022 16:27:45 America/Lima] PHP Fatal error:  Cannot use common\helpers\ComboHelper as ComboHelper because the name is already in use in /home/bov/public_html/frontend/modules/mat/views/mat/_modal_crea_item_req.php on line 9
+[06-Feb-2022 18:38:53 UTC] PHP Warning:  require(/home/bov/public_html/frontend/web/../../vendor/autoload.php): failed to open stream: No such file or directory in /home/bov/public_html/frontend/web/index.php on line 6
+[06-Feb-2022 18:38:53 UTC] PHP Fatal error:  require(): Failed opening required '/home/bov/public_html/frontend/web/../../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home/bov/public_html/frontend/web/index.php on line 6
+[08-Feb-2022 16:26:00 UTC] PHP Parse error:  syntax error, unexpected ';', expecting ']' in /home/bov/public_html/frontend/config/main.php on line 172

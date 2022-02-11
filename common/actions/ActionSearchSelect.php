@@ -31,7 +31,7 @@ class ActionSearchSelect extends \yii\base\Action
                $query=$modelo::find()->where(['like',$secondField,$filter]);
                
                       
-              // ECHO $query->createCommand()->rawSql;die();
+               //ECHO $query->createCommand()->rawSql;die();
                $camposegundo="";
               if(is_array($adicionales) && count($adicionales)){   
                  /* if(!isset($adicionales[$secondField]))

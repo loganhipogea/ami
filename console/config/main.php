@@ -103,6 +103,8 @@ return [
                 'frontend\modules\sigi\database\migrations',
                 'frontend\modules\import\database\migrations',
                 'frontend\modules\report\database\migrations',
+                 'frontend\modules\mat\database\migrations',
+                'frontend\modules\op\database\migrations',
                 //'frontend\modules\regacad\database\migrations',
                // 'frontend\modules\repositorio\database\migrations',
                 //'frontend\modules\acad\database\migrations',
