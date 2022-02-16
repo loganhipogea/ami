@@ -23,9 +23,10 @@ use common\widgets\selectwidget\selectWidget;
         <div class="col-md-12">
             <div class="form-group no-margin">
            <?PHP 
+           $operacion=($model->isNewRecord)?'mod-agrega-mat':'mod-edit-mat';
              IF($model->isNewRecord){
                $url=\yii\helpers\Url::to(['/mat/mat/mod-agrega-mat'.$operacion,'id'=>$id]);  
-                 //$operacion=($model->isNewRecord)?'mod-agrega-mat':'mod-edit-mat';
+                 
              }else{
                 $url=\yii\helpers\Url::to(['/mat/mat/mod-edit-mat'.$operacion,'id'=>$id]);  
              }

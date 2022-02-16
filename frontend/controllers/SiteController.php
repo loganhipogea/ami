@@ -86,7 +86,7 @@ class SiteController extends \frontend\controllers\base\baseController
                 
                 if(yii::$app->user->isGuest){
                     $this->layout="plataforma"; 
-                   return $this->render('plataforma/inicio');
+                   //return $this->render('plataforma/inicio');
                    // echo "holsa"; die();
                   return  $this->redirect(['site/login']);
                     

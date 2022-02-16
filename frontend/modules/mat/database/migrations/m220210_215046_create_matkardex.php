@@ -7,6 +7,7 @@ class m220210_215046_create_matkardex extends baseMigration
     
     const TABLE='{{%mat_kardex}}';
    const TABLE_DETREQ='{{%mat_detreq}}';
+    const TABLE_DETVALE='{{%mat_detvale}}';
     // const TABLE_MOVIMIENTOS_BANCO='{{%sigi_movbanco}}';
     // const TABLE_TIPOMOV='{{%sigi_tipomov}}';
     //const TABLE_CARRERAS='{{%carreras}}';
@@ -18,7 +19,8 @@ class m220210_215046_create_matkardex extends baseMigration
    if(!$this->existsTable($table)) {
        $this->createTable($table, [
             'id'=>$this->primaryKey(),
-            'detreq_id'=>$this->integer(11)->notNull(),
+            'detreq_id'=>$this->integer(11),
+             'detvale_id'=>$this->integer(11)->notNull(),
             'fecha' =>$this->char(10)->append($this->collateColumn()),
             'cant' =>$this->decimal(8,3),
            // 'valor' =>$this->decimal(10,3),
@@ -35,7 +37,7 @@ class m220210_215046_create_matkardex extends baseMigration
            $this->collateTable());
        
        $this->addForeignKey($this->generateNameFk($table),
-                    $table,'detreq_id', static::TABLE_DETREQ,'id');
+                    $table,'detvale_id', static::TABLE_DETVALE,'id');
        /*$this->addForeignKey($this->generateNameFk($table),
                     $table,'pago_id', static::TABLE_PORPAGAR,'id');
        $this->addForeignKey($this->generateNameFk($table),

@@ -958,7 +958,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             $maximus=1;
              return $this->prefijo.str_pad($maximus,$tamano,'0',STR_PAD_LEFT);
              }else{
-                 
+                //VAR_DUMP($maximus);DIE(); 
            $maximus=$maximus+1; 
            //aqui sin el prefijo porque ya esta calculado
             return str_pad($maximus,$tamano,'0',STR_PAD_LEFT);

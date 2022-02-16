@@ -97,4 +97,33 @@ class Maestrocompo extends \common\models\base\modelBase
         }
         return parent::beforeSave($insert);
     }
-}
+    
+    public function getConversiones(){
+         return $this->hasMany(Conversiones::className(), ['codart' => 'codart']);
+    }
+    
+    public function existsUm($codum,$returnModel=true){
+       $reg=$this->getConversiones()->andWhere(['codum2'=>$codum])->one();
+       if(!is_null($reg)){
+          return ($returnModel)?$reg:true;
+       }else{
+          return false; 
+       }
+    }
+    
+    public function factorConversion($codum){
+       // $reg=$this->getConversiones()->andWhere(['codum2'=>$codum])->one();
+        if($reg=$this->existsUm($codum)){
+            if(!empty($reg->valor1) && !empty($reg->valor1) && $reg->valor2 >0){
+                return $reg->valor1/$reg->valor2;
+            }else{
+               return 1; 
+            }            
+        }else{
+            return 1;
+        }
+    }
+    
+    
+ }
+

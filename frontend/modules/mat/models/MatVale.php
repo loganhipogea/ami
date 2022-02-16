@@ -24,6 +24,24 @@ class MatVale extends \common\models\base\modelBase
      * {@inheritdoc}
      */
     public $prefijo='67';
+     public $dateorTimeFields = [
+        'fecha' => self::_FDATE,       
+    ];
+    public static function movimientos(){
+        return [    
+            '100'=>['SALIDA PARA CONSUMO',-1],
+            '101'=>['DEVOLUCION',-1],
+            '900'=>['INGRESO POR COMPRA',1],
+             '901'=>['REINGRESO',1],
+            ];
+        
+    }
+    
+    public function signo(){
+       $movimientos= $this->movimientos();
+       return $movimientos[$this->codmov][1];
+    }
+    
     public static function tableName()
     {
         return '{{%mat_vale}}';

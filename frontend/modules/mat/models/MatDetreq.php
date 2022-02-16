@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\modules\mat\models;
-
+use frontend\modules\mat\interfaces\ReqInterface;
 use Yii;
 
 /**
@@ -19,10 +19,11 @@ use Yii;
  *
  * @property MatReq $req
  */
-class MatDetreq extends \common\models\base\modelBase
+class MatDetreq extends \common\models\base\modelBase 
+implements ReqInterface
 {
    public $boolean_fields=['activo'];
-    
+   private $_cantreal=null;
     /**
      * {@inheritdoc}
      */
@@ -110,5 +111,23 @@ class MatDetreq extends \common\models\base\modelBase
         return parent::beforeSave($insert);
     }
     
+  public function getCantReal(){
+        if(is_null($this->_cantreal)){
+           if(is_null($this->um)){
+            
+              }else
+          $this->cant=$this->cant*$this->material->factorConversion($this->um);
+        }
+        return $this;       
+    }
+    
    
+  public function verify_um() {
+     if(!$this->material->existsUm($this->um,false)){
+          $this->addError('um',yii::t('base.errors','La unidad de medida no está registrada'));
+       }
+  }
+  
+  
+    
 }

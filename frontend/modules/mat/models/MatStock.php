@@ -36,9 +36,10 @@ class MatStock extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codart'], 'required'],
+            [['codart','um','cant'], 'required'],
             [['cant', 'cantres', 'valor'], 'number'],
             [['codart', 'ubicacion'], 'string', 'max' => 14],
+             [['um'], 'valida_um_base'],
             [['um', 'codal'], 'string', 'max' => 4],
             [['lastmov'], 'string', 'max' => 10],
             [['codart'], 'unique'],
@@ -63,10 +64,7 @@ class MatStock extends \common\models\base\modelBase
             'lastmov' => Yii::t('app', 'Lastmov'),
         ];
     }
- public function getDetreq()
-    {
-        return $this->hasOne(MatDetreq::className(), ['codart' => 'codart']);
-    }
+ 
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -75,6 +73,13 @@ class MatStock extends \common\models\base\modelBase
         return $this->hasOne(Maestrocompo::className(), ['codart' => 'codart']);
     }
 
+    public function geStock()
+    {
+        return $this->hasMany(MatStock::className(), ['codart' => 'codart']);
+   }
+     /*public function getKardex() {
+        return $this->hasMany(MatKardex::className(), ['stock_id' => 'id']);
+    }*/
     /**
      * {@inheritdoc}
      * @return MatStockQuery the active query used by this AR class.
@@ -84,7 +89,13 @@ class MatStock extends \common\models\base\modelBase
         return new MatStockQuery(get_called_class());
     }
     
-    public function actualiza(MatKardex $kardex){
-        
-       }
+    
+    /*No se puede registrar un stock con la unidad de medida
+     * difrente a la unidad  base
+     */
+    
+    public function valida_um_base(){
+        if(!$this->material->codum ==$this->um)
+        $this->addError('um',yii::t('base.errors','Esta unidad de medida no es la base'));
+    }
 }
