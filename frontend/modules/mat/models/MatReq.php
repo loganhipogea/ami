@@ -9,7 +9,7 @@ class MatReq extends \common\models\base\modelBase
     const EST_APRO='1001';
     const EST_ANU='9999';
     
-    public $prefijo='R';
+    public $prefijo='37';
     /**
      * {@inheritdoc}
      */
