@@ -30,7 +30,7 @@ $fieldOptions2 = [
                 <div class="box py-6 px-6">
                     <div class="logo pb-4 pt-2">
                         <?=Html::img('@web/img/logo_uni.png',['width'=>"30%"])?>
-                        <p class="letras-uni">TUTORÍA PSICOLÓGICA UNI</div>  
+                        <p class="letras-uni">BOV INGENIEROS SAC</div>  
        <?php //Html::img('@web/img/media_providers.png',['height'=>100,'width'=>100])?>
                 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
