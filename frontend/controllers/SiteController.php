@@ -133,7 +133,7 @@ class SiteController extends \frontend\controllers\base\baseController
     public function actionLogin()
     {
     
-        $this->layout="install";
+       // $this->layout="install";
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

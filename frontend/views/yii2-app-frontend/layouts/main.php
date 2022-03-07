@@ -13,6 +13,19 @@ use yii\helpers\Html;
         app\assets\AppAsset::register($this);
     }
 
+    $accion=Yii::$app->controller->action->id ;
+
+if ($accion=== 'login') { 
+
+    echo $this->render(
+        'main-login-bov',
+        ['content' => $content]
+    );
+    die();
+}
+    
+    
+    
     dmstr\web\AdminLteAsset::register($this);
 
     $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');

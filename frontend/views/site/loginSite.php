@@ -1,90 +1,99 @@
-  <?php use yii\helpers\Html;
-  use yii\widgets\ActiveForm;
-  ?>
+<?php
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
-<div class="install-image"></div>
-<?php if( Yii::$app->session->has('success')){ ?>
-    <div class="alert alert-success alert-dismissable">
-         <h4><i class="icon fa fa-check"></i>!</h4>
-         
-         <?= Yii::$app->session->getFlash('success') ?>
-    </div>
-<?php } ?>
-        <div class="install-content">
-            <div class="install-logo">
-                <img src=" <?= yii\helpers\Url::to("@web/img/atenea.svg") ?> " width="120"  height="120"  alt="Atenea" />
-            </div>
+ // echo $model::className();
+    
+$this->title = yii::t('base.labels','Ingreso');
 
-            <div class="box box-success box-solid">
-                <div class="box-header">
-                    <div class="col-md-12">
-                        <h3 class="box-title">
-                            <div style="display:table">
-  
-  
-</div>
-                            
-                            
-                            
-                            <div class="row">
-                                <div style="float:left;font-size:14px !important; width:210px; color:white !important;">
-                           <i class="fa fa-question" aria-hidden="true"></i>
-                            <?= Html::a(yii::t('base.actions','¿Olvidaste tu password?'), ['site/request-password-reset']) ?> <?='      '?>  
-                          </diV><div style="float:right;font-size:14px !important; color:white !important;">
-                          <i class="fa fa-address-book" aria-hidden="true"></i>
-                            <?= Html::a(yii::t('base.actions','Registrarse'), ['site/signup']) ?>
-                          
-                         </div>
-                            </div>
-                          
-                           </h3>
-                    </div>
-                </div>
-                <!-- /.box-header -->
+$fieldOptions1 = [
+    'options' => ['class' => 'input is-medium input-login is-size-6'],
+   // 'inputTemplate' => "{input}<span class='glyphicon glyphicon-user form-control-feedback'></span>"
+];
 
-                <div id="install-form">
-                    
-                    
-                       <?php $form = ActiveForm::begin(['id' => 'form-database']); ?>
-                   
-                    
-                    <div class="col-md-12">
-                      
-           <?= $form->field($model, 'username')->textInput()->label(yii::t('base.names','Usuario'))  ?>
-                    </div>
-                     <div class="col-md-12">
-                        
-               <?= $form->field($model, 'password')->passwordInput() ?>
-                         </Div>
-                    <div class="col-md-12">
-                    <?= $form->field($model, 'rememberMe')->checkbox(['label'=>null])->label(yii::t('base.names','Recordar'))  ?>
-                       </diV>
-                        <div class="row">
-                      
-                   <div class="box-footer">
-                      
-                            <div class="col-md-4 col-md-offset-8 text-right">
-                                 <?= Html::submitButton(Yii::t('base.verbs', 'Ingresar'), ['id' => 'next-button','class' => 'btn btn-success']) ?>
-                                
-                            </div>
-                       
-                    </div>
-                      </div> 
-            <?php ActiveForm::end(); ?>
-                    
-                   
-                    
-                    
-                    
-                </div>
+$fieldOptions2 = [
+    'options' => ['class' => 'input is-medium input-login is-size-6'],
+    //'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
+];
+?>
 
-                <script type="text/javascript">
-                    $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
 
-                    $('#next-button').on('click', function() {
-                        $('#install-loading').html('<span class="install-loading-bar"><span class="install-loading-spin"><i class="fa fa-spinner fa-spin"></i></span></span>');
-                        $('.install-loading-bar').css({"height": $('#install-form').height() - 12});
-                    });
-                </script>
-            </div>
         
+        <?php //echo Yii::$app->geoip->ip()->isoCode; */  ?> 
+    
+    <!-- /.login-logo -->
+  <div class="hero is-fullheight bg-login">
+        <div class="hero-body">
+          <div class="container has-text-centered">
+            <div class="column is-offset-1 is-4-widescreen is-5-desktop  is-6-tablet is-offset-0-mobile is-12-mobile">
+                <div class="box py-6 px-6">
+                    <div class="logo pb-4 pt-2">
+                        <?=Html::img('@web/img/logo_uni.png',['width'=>"30%"])?>
+                        <p class="letras-uni">TUTORÍA PSICOLÓGICA UNI</div>  
+       <?php //Html::img('@web/img/media_providers.png',['height'=>100,'width'=>100])?>
+                
+        <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
+        <div class="field">
+          <div class="control">
+        <?= $form
+            ->field($model, 'username', [])
+            ->label(false)
+            ->textInput(['class'=>'input is-medium input-login is-size-6','placeholder' => 'Nombre usuario']) ?>
+         <p class="help-block help-block-error"></p>
+          </div>
+         </div>
+        <div class="field">
+          <div class="control">
+        <?= $form
+            ->field($model, 'password', [])
+            ->label(false)
+            ->passwordInput(['class'=>'input is-medium input-login is-size-6','placeholder' => 'Contraseña']) ?>
+          <p class="help-block help-block-error"></p>
+          </div>
+         </div>
+        <div class="botones">
+           
+            
+                <?= Html::submitButton(yii::t('base.labels','Autenticar'), ['class' => 'button is-block is-fullwidth is-normal btn-ingresa is-uppercase', 'name' => 'login-button']) ?>
+           
+            <hr class="m-3">
+                <?= Html::a(yii::t('base.labels','Olvidé mi contraseña'),Url::to(['request-password-reset']) ,['class' => 'button is-block is-fullwidth is-normal btn-recupera is-uppercase']) ?>
+            
+            <!-- /.col -->
+        </div>
+
+
+        <?php ActiveForm::end(); ?>
+                    
+            <!-- #dialog is the id of a DIV defined in the code below -->
+           <button type="button" id="formButton">Acerca de</button>
+            <div id="divcreditos">
+                <ul>
+                    <li>Nombre:<b> Sistema informatizado de tutoría psicológica de riesgo académico</b></li>
+                    <li>Desarrollado para:<b>  Universidad Nacional de Ingeniería</b></li>
+                    <li>Inicio del proyecto:<b> Setiembre 2019</b></li>
+                    <li>Fecha de lanzamiento:<b>  Lunes 02 de Marzo 2020</b></li>
+                    <br><li>Autores:</li>
+                    <b>Dr. Gilberto Becerra Arévalo-Vice Rector Académico UNI</b><br>
+                    <b>Dra. Elizabeth Dany Araujo Robles-Coordinadora general de profesionales psicólogos UNI</b><br>
+                    <br><li>Coordinación y Desarrollo:</li>
+                    <b>Ing: Luis Barrientos Marca</b><br>
+                    <b>Ing: Julián Ramírez Tenorio</b><br>
+                </ul>
+            </div>
+        <?php //echo Html::a(yii::t('base.labels','Register'),Url::to(['/inter/default/base-auth']))?>
+         <div class="logo p-5 pt-6 is-hidden-mobile"></div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  
+<?PHP 
+$this->registerJs(" $('#formButton').click(function(){
+        $('#divcreditos').toggle('slow');
+    }); ", \yii\web\View::POS_END);    
+    ?>
+    <!-- /.login-box-body -->
