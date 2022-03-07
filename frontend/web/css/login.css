@@ -1,0 +1,183 @@
+/* PERSONALIZADO */
+.bg-login {
+  background-image: url(../img/LOGIN_UNI.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+.botones {
+  padding: 20px 20px;
+}
+.btn-ingresa {
+  clip-path: polygon(100% 0, 100% 50%, 100% 100%, 0% 100%, 0 49%, 0% 0%);
+  background-color: #c93135ed;
+  color: #ffffff;
+  border-radius: 0px;
+  transition: all 0.5s ease;
+
+}
+.btn-ingresa:hover {
+  background-color: #670011;
+  color: #ffffff;
+   clip-path:  polygon(88% 0, 100% 50%, 87% 100%, 0% 100%, 11% 50%, 0% 0%);
+}
+.txt-ingresa::after {
+  content: "";
+  border-bottom: 1px solid rgb(209, 134, 134);
+  width: 70%;
+  display: block;
+  margin: 0% 15%;
+}
+
+.btn-recupera {
+  background-color: #ffffff;
+  border: 2px solid #910029;
+  color: #606060;
+  border-radius: 0px;
+}
+.btn-recupera:hover {
+  color: #910029;
+  border: 2px solid #910029;
+}
+.txt-recupera::after {
+  content: "";
+  border-bottom: 1px solid rgb(158, 158, 158);
+  width: 80%;
+  display: block;
+  margin: 0% 10%;
+}
+.letras-uni{
+    color: #c93135ed;
+}
+.input-login {
+  width: 100%;
+  background-color: #f4f5f5;
+  /* color: white; */
+  border-radius: 4px;
+  padding: 22px 10px;
+  border-color: #aaaaaa;
+}
+.box {
+  border-radius: 0px;
+  clip-path: polygon(
+    0 0,
+    60% 0,
+    100% 12%,
+    100% 70%,
+    100% 100%,
+    34% 100%,
+    0 88%,
+    0% 30%
+  );
+  -webkit-clip-path:polygon(
+    0 0,
+    60% 0,
+    100% 12%,
+    100% 70%,
+    100% 100%,
+    34% 100%,
+    0 88%,
+    0% 30%
+  );
+  transition: all 2s ease;
+
+  /*background-image: url(../images/lineas.svg);*/
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-position-y: 84%;
+  background-size: 90%;
+  width: 100%;
+  max-width: 420px;
+  opacity:0.42;
+}
+.box:hover{
+   
+  opacity:0.85;
+   -webkit-clip-path:polygon(
+    0 0,
+    100% 0,
+    100% 12%,
+    100% 70%,
+    100% 100%,
+    0% 100%,
+    0 88%,
+    0% 30%
+  );
+}
+
+#divcreditos {
+    
+    /**/
+
+display:none;
+margin-top: 5px;
+padding:3px;
+font-size:10px !important;
+text-align:left !important;
+border-style:dashed;
+border-width: 1px;
+boder-color:#524e4eed;
+
+}
+
+#formButton {
+  /* Para <button> */
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  background: #524e4eed;
+  color: white;
+  cursor: pointer;
+  padding-top: 5px;
+
+  /* Para <a> */
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: inline-block;
+  text-decoration: none;
+
+  /* Otros */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+
+
+
+@media (min-width: 321px) and (max-width: 480px) {
+  .botones {
+    padding: 20px 0px;
+  }
+  .txt-ingresa::after {
+    width: 70%;
+    margin: 0% 15%;
+  }
+  .txt-recupera::after {
+    width: 80%;
+    margin: 0% 10%;
+  }
+}
+@media (min-width: 240px) and (max-width: 320px) {
+  .box {
+    width: 98% !important;
+  }
+  .px-6 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  
+  
+  
+  
+}
+
