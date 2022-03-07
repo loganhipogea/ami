@@ -67,19 +67,10 @@ $fieldOptions2 = [
         <?php ActiveForm::end(); ?>
                     
             <!-- #dialog is the id of a DIV defined in the code below -->
-           <button type="button" id="formButton">Acerca de</button>
+          
             <div id="divcreditos">
                 <ul>
-                    <li>Nombre:<b> Sistema informatizado de tutoría psicológica de riesgo académico</b></li>
-                    <li>Desarrollado para:<b>  Universidad Nacional de Ingeniería</b></li>
-                    <li>Inicio del proyecto:<b> Setiembre 2019</b></li>
-                    <li>Fecha de lanzamiento:<b>  Lunes 02 de Marzo 2020</b></li>
-                    <br><li>Autores:</li>
-                    <b>Dr. Gilberto Becerra Arévalo-Vice Rector Académico UNI</b><br>
-                    <b>Dra. Elizabeth Dany Araujo Robles-Coordinadora general de profesionales psicólogos UNI</b><br>
-                    <br><li>Coordinación y Desarrollo:</li>
-                    <b>Ing: Luis Barrientos Marca</b><br>
-                    <b>Ing: Julián Ramírez Tenorio</b><br>
+                   
                 </ul>
             </div>
         <?php //echo Html::a(yii::t('base.labels','Register'),Url::to(['/inter/default/base-auth']))?>
