@@ -29,8 +29,8 @@ $fieldOptions2 = [
             <div class="column is-offset-1 is-4-widescreen is-5-desktop  is-6-tablet is-offset-0-mobile is-12-mobile">
                 <div class="box py-6 px-6">
                     <div class="logo pb-4 pt-2">
-                        <?=Html::img('@web/img/logo.png',['width'=>"30%"])?>
-                        <p class="letras-uni">BOV INGENIEROS SAC</div>  
+                        <?=Html::img('@web/img/logo.png',['width'=>"80%"])?>
+                     </div>  
        <?php //Html::img('@web/img/media_providers.png',['height'=>100,'width'=>100])?>
                 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
