@@ -7,7 +7,7 @@
 .idea
 
 # phpstorm project files
-
+/frontend/web/assets/
 /frontend/runtime/
 /frontend/tests/
 # netbeans project files
@@ -39,7 +39,12 @@ phpunit.phar
 /.vagrant
 
 # ignore generated files
-
+/frontend/web/index.php
+/frontend/web/index-test.php
+/frontend/web/robots.txt
+/backend/web/index.php
+/backend/web/index-test.php
+/backend/web/robots.txt
 
 #ignorando archivos no deseados
 *.bmp*
