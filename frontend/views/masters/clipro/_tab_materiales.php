@@ -42,7 +42,11 @@ use common\models\masters\Direcciones;
         ],
     ]); ?>
     <?php Pjax::end(); ?> 
- <?php $ruta=Url::toRoute(['masters/clipro/createcontact','id'=>$model->codpro]);   ?>
+   
+  <?php $url=Url::toRoute(['masters/clipro/create-material','id'=>$model->codpro]);   ?>
+   <?php  echo  Html::button(yii::t('base.verbs','Create Material'), ['href' => $url, 'title' => 'Crear material','id'=>'btn_addresses', 'class' => 'botonAbre btn btn-success']); ?>
+  
+
     <?php /*$this->registerJs("var vjs_url=".json_encode($ruta).";"
             . "var vjs_random=".json_encode(rand()).";",View::POS_HEAD); */ ?>
      

@@ -68,6 +68,7 @@ $this->title = Yii::t('base.names', 'Clipros');
            
             'codpro',
             'despro',
+            'alias',
             'rucpro',
            ['attribute'=>'deslarga',
                'value'=>function ($model) {

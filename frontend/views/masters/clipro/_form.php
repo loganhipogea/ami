@@ -48,6 +48,10 @@ use common\models\masters\Direcciones;
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                     <?= $form->field($model, 'cuenta')->textInput(['maxlength' => true]) ?>
          </div>
+        
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <?= $form->field($model, 'alias')->textInput(['maxlength' => true]) ?>
+         </div>
          <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                     <?= $form->field($model, 'codmon')->textInput(['maxlength' => true]) ?>
          </div>

@@ -523,4 +523,31 @@ class CliproController extends baseController {
 
         
     }
+    
+    
+    public function actionCreateMaterial($id){       
+
+        $this->layout = "install";
+        $modelClipro = $this->findModel($id);
+        $model = new \common\models\masters\Maestroclipro();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+         $this->closeModal('buscarvalor', 'grilla-objetos');
+        } elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('modal_material', [
+                        'modelClipro' => $modelClipro,                       
+                        'model' => $model,                     
+            ]);
+        } else {
+           echo "salio"; die();
+            return $this->render('objetos', [
+                        'model' => $model,
+                        'modelclipro' => $modelclipro,
+                        //'vendorsForCombo' => $vendorsForCombo,
+            ]);
+        }
+
+        
+    }
+    
+    
 }

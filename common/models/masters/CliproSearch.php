@@ -17,7 +17,7 @@ class CliproSearch extends Clipro
     public function rules()
     {
         return [
-            [['codpro', 'despro', 'rucpro', 'telpro', 'web', 'deslarga'], 'safe'],
+            [['codpro', 'despro', 'rucpro', 'telpro', 'web', 'deslarga','alias'], 'safe'],
         ];
     }
 
@@ -58,6 +58,7 @@ class CliproSearch extends Clipro
         // grid filtering conditions
         $query->andFilterWhere(['like', 'codpro', $this->codpro])
             ->andFilterWhere(['like', 'despro', $this->despro])
+                 ->andFilterWhere(['like', 'alias', $this->alias])
             ->andFilterWhere(['like', 'rucpro', $this->rucpro])
             ->andFilterWhere(['like', 'telpro', $this->telpro])
             ->andFilterWhere(['like', 'web', $this->web])

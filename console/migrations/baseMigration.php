@@ -171,6 +171,10 @@ class baseMigration extends Migration
     public function getPrefix(){
      return $this->getDb()->tablePrefix;   
     }
+    
+    public function dropView($nameView){
+        $this->db->createCommand()->dropView($nameView)->execute();
+    }
             
 }
 /* 
