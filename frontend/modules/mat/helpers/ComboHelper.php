@@ -24,6 +24,7 @@ class ComboHelper extends Combito
              '901'=>'REINGRESO',
             ];
         
+        
     }
     
     public static function getCboColectores(){

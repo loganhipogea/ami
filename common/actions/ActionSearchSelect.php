@@ -28,7 +28,7 @@ class ActionSearchSelect extends \yii\base\Action
          if(is_null($filter) or empty($filter) or trim($filter)=="") 
               $resultados=[];
            else{
-               $query=$modelo::find()->where(['like',$secondField,$filter]);
+               $query=$modelo::find()->where(['like',$secondField,explode('%',$filter)]);
                
                       
                //ECHO $query->createCommand()->rawSql;die();
@@ -41,14 +41,14 @@ class ActionSearchSelect extends \yii\base\Action
                   
                   foreach($adicionales as $clave=>$valor){   
                       $camposegundo.=",'-',".$valor;
-                      $query=$query->orFilterWhere(['like',$valor,$filter]);
+                      $query=$query->orFilterWhere(['like',$valor,explode('%',$filter)]);
                   }
                   //$camposegundo=$firstField.$camposegundo;
                   $camposegundo=substr($camposegundo,5);
                   $expresion=new \yii\db\Expression('CONCAT('.$camposegundo.')');
                   $query=$query->select([$firstField." as id",$expresion.' as text']);
               }else{
-                  $query=$query->select([$firstField." as id",$secondField.' as text'])->where(['like',$secondField,$filter]);
+                  $query=$query->select([$firstField." as id",$secondField.' as text'])->where(['like',$secondField,explode('%',$filter)]);
               }
               
               IF(count($filterWhere)>0){
