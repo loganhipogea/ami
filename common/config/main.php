@@ -43,6 +43,15 @@ return [
     
     
     'modules' => [
+       'modules' => [
+        'op' => [
+                    'class' => 'frontend\modules\op\OpModule',
+                ],
+             ],
+        'mat' => [
+            'class' => 'frontend\modules\mat\MatModule',
+        ], 
+        
         'message' => [
         'class' => 'frontend\modules\message\Module',
         'userModelClass' => '\common\models\User', // your User model. Needs to be ActiveRecord.
