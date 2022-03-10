@@ -17,7 +17,18 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     
     'modules' => [
-         
+       
+           'mm' => [
+            'class' => 'frontend\modules\mm\Module',
+                  ],
+           'op' => [
+                    'class' => 'frontend\modules\op\OpModule',
+                ],
+             
+        'mat' => [
+            'class' => 'frontend\modules\mat\Module',
+        ], 
+        
 	/* 'telegram' => [
         'class' => 'onmotion\telegram\Module',
         'API_KEY' => '1989528761:AAFAosVxQS447NVDEXHit3Xr9ACUsk1oaoI',
@@ -41,7 +52,7 @@ return [
 	],
         
 	
-],
+   ],
     
         
     

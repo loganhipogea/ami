@@ -32,6 +32,22 @@ implements ReqInterface
         return '{{%mat_detreq}}';
     }
    
+    
+     public function behaviors()
+         {
+                return [
+		
+		'fileBehavior' => [
+			'class' => '\common\behaviors\FileBehavior' 
+                               ],
+                    'auditoriaBehavior' => [
+			'class' => '\common\behaviors\AuditBehavior' ,
+                               ],
+		
+                    ];
+        }
+    
+    
     /**
      * {@inheritdoc}
      */
@@ -59,11 +75,11 @@ implements ReqInterface
         return [
             'id' => Yii::t('app', 'ID'),
             'req_id' => Yii::t('app', 'Req ID'),
-            'codart' => Yii::t('app', 'Codart'),
+            'codart' => Yii::t('app', 'Código'),
             'descripcion' => Yii::t('app', 'Descripcion'),
             'cant' => Yii::t('app', 'Cant'),
             'um' => Yii::t('app', 'Um'),
-            'imptacion' => Yii::t('app', 'Imptacion'),
+            'imptacion' => Yii::t('app', 'Imputación'),
             'tipim' => Yii::t('app', 'Tipim'),
             'texto' => Yii::t('app', 'Texto'),
         ];
@@ -83,10 +99,10 @@ implements ReqInterface
     }
 
     
-     public function getStock()
+    /* public function getStock()
     {
         return $this->hasOne(MatStock::className(), ['codart' => 'codart']);
-    }
+    }*/
     /**
      * {@inheritdoc}
      * @return MatDetreqQuery the active query used by this AR class.
@@ -128,6 +144,8 @@ implements ReqInterface
        }
   }
   
-  
+  public function isActive(){
+      return $this->activo;
+  }
     
 }

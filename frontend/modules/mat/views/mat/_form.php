@@ -5,7 +5,10 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 use yii\widgets\Pjax;
+use common\helpers\h;
 use yii\grid\GridView;
+ use kartik\date\DatePicker;
+ use common\widgets\selectwidget\selectWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\mat\models\MatReq */
 /* @var $form yii\widgets\ActiveForm */
@@ -14,53 +17,85 @@ use yii\grid\GridView;
 <div class="mat-req-form">
     <br>
     <?php $form = ActiveForm::begin([
-    'fieldClass'=>'\common\components\MyActiveField'
+   // 'fieldClass'=>'\common\components\MyActiveField'
     ]); ?>
       <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
                 
-        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-            
+        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Grabar'), ['class' => 'btn btn-success']) ?>
+          <?=(!$model->isNewRecord)?common\widgets\auditwidget\auditWidget::widget(['model'=>$model]):''?>  
 
             </div>
         </div>
     </div>
       <div class="box-body">
     
- <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-  </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'numero')->textInput(['maxlength' => true]) ?>
+
+  <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'numero')->textInput(['maxlength' => true,'disabled'=>true]) ?>
 
  </div>
+   <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+      <?php 
+      
+        echo $form->field($model, 'fechasol')->widget(
+        DatePicker::classname(), [
+         'name' => 'fechasol',
+            'language' => h::app()->language,
+            'options' => ['placeholder' =>yii::t('sta.labels', '--Seleccione un valor--')],
+    //'convertFormat' => true,
+                'pluginOptions' => [
+                'format' => h::getFormatShowDate(),
+                //'startDate' => '01-Mar-2014 12:00 AM',
+                'todayHighlight' => true
+                                ]
+                    ]);
+                ?>
+  </div> 
+   <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+      <?php 
+      
+        echo $form->field($model, 'fechaprog')->widget(
+        DatePicker::classname(), [
+         'name' => 'fechaprog',
+            'language' => h::app()->language,
+            'options' => ['placeholder' =>yii::t('sta.labels', '--Seleccione un valor--')],
+    //'convertFormat' => true,
+                'pluginOptions' => [
+                'format' => h::getFormatShowDate(),
+                //'startDate' => '01-Mar-2014 12:00 AM',
+                'todayHighlight' => true
+                                ]
+                    ]);
+                ?>
+  </div> 
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'fechaprog')->textInput(['maxlength' => true]) ?>
+     <?php 
+  // $necesi=new Parametros;
+    echo selectWidget::widget([
+           // 'id'=>'mipapa',
+            'model'=>$model,
+            'form'=>$form,
+            'campo'=>'codtra',
+         'ordenCampo'=>2,
+         'addCampos'=>[3,4],
+        ]);  ?>
 
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'fechasol')->textInput(['maxlength' => true]) ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'codtra')->textInput(['maxlength' => true]) ?>
 
  </div>
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
 
  </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
      <?= $form->field($model, 'texto')->textarea(['rows' => 6]) ?>
 
  </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'codest')->textInput(['maxlength' => true]) ?>
-
- </div>
+  
      
     <?php ActiveForm::end(); ?>
-
+  <?php if(!$model->isNewRecord){ ?>
     <?php Pjax::begin(['id'=>'grilla-materiales']); ?>
     
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
@@ -94,17 +129,44 @@ use yii\grid\GridView;
                               return \yii\helpers\Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', $url, ['data-pjax'=>'0','class'=>'botonAbre']);
                             },
                         'delete' => function ($url,$model) {
-			   $url = \yii\helpers\Url::to([$this->context->id.'/ajax-desactiva-item','id'=>$model->id]);
-                              return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
-                            }
+                              IF($model->activo){
+                                $url = \yii\helpers\Url::to([$this->context->id.'/ajax-desactiva-item','id'=>$model->id]);
+                              
+                                    return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
+                             
+                              }
+			    }
                         
                     ]
                 ],
+              
             'item',
              'um',
-              'cant',
+             ['attribute' => 'cant',
+                'format'=>'raw',
+                'value'=>function($model){
+                        
+                          if(!$model->activo){                            
+                           return '<span style="text-decoration:line-through;">'.$model->cant.'</span>';
+                          }else{
+                             return $model->cant; 
+                          }                         
+                             } 
+                
+                ], 
               'codart',              
-            'descripcion',
+            ['attribute' => 'descripcion',
+                'format'=>'raw',
+                'value'=>function($model){
+                        
+                          if(!$model->activo){                            
+                           return '<span style="text-decoration:line-through;">'.$model->descripcion.'</span>';
+                          }else{
+                             return $model->descripcion; 
+                          }                         
+                             } 
+                
+                ], 
              ['attribute' => 'imagen',
                 'format'=>'raw',
                 'value'=>function($model){
@@ -118,6 +180,8 @@ use yii\grid\GridView;
                               } 
                 
                 ], 
+              'imptacion',
+           ['class' => '\common\components\columnGridAudit',],
         ],
     ]); ?>
          <?php 
@@ -127,14 +191,19 @@ use yii\grid\GridView;
             'family'=>'holas',
           'type'=>'POST',
            'evento'=>'click',
+        'posicion'=>\yii\web\View::POS_END
+       
             //'foreignskeys'=>[1,2,3],
         ]); 
    ?>
          
     <?php Pjax::end(); ?>
    <?php
- $url= Url::to(['mod-agrega-mat','id'=>$model->id,'gridName'=>'grilla-materiales','idModal'=>'buscarvalor']);
+  
+      $url= Url::to(['mod-agrega-mat','id'=>$model->id,'gridName'=>'grilla-materiales','idModal'=>'buscarvalor']);
    echo  Html::button(yii::t('base.verbs','Agregar material'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Material'),'id'=>'btn_cuentas_edi', 'class' => 'botonAbre btn btn-success']); 
+  
+   }
 ?>     
           
           

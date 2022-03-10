@@ -9,7 +9,7 @@ use frontend\modules\mat\models\MatDetvale;
 /**
  * MatReqSearch represents the model behind the search form of `frontend\modules\mat\models\MatReq`.
  */
-class MatDetvaleSearch extends MatDetvale
+class MatVwReqSearch extends MatVwReq
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class MatDetvaleSearch extends MatDetvale
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['vale_id', 'codart', 'um', 'item'], 'safe'],
+           
+            [['id','ap', 'codart', 'um', 'item','am','fechaprog','fechasol','fechaprog1','fechasol1','descridetalle','numero'], 'safe'],
         ];
     }
 
@@ -38,9 +38,9 @@ class MatDetvaleSearch extends MatDetvale
      *
      * @return ActiveDataProvider
      */
-    public function search_by_vale($idvale)
+    public function search($params)
     {
-        $query = MatDetvale::find();
+        $query = MatVwReq::find();
 
         // add conditions that should always apply here
 
@@ -48,7 +48,7 @@ class MatDetvaleSearch extends MatDetvale
             'query' => $query,
         ]);
 
-       
+        $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -56,24 +56,33 @@ class MatDetvaleSearch extends MatDetvale
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-           
-        ]);
-        $query->andWhere([
-            'vale_id' => $idvale,
-           
-        ]);
+        
+       
         $query->andFilterWhere(['like', 'codart', $this->codart])
+        ->andFilterWhere(['like', 'descridetalle', explode('%',$this->descridetalle)])
             //->andFilterWhere(['like', 'fechaprog', $this->fechaprog])
            // ->andFilterWhere(['like', 'fechasol', $this->fechasol])
-            //->andFilterWhere(['like', 'descripcion', explode('%',$this->descripcion)])
-                
+            //->andFilterWhere(['like', 'descripcion', explode('%',$this->descripcion)])                  
                 ;
-        if(!empty($this->descripcion))
-        $query->andFilterWhere(['like', 'descripcion', explode('%',$this->descripcion)]);
-//echo $query->createCommand()->rawSql;
+        
+         if(!empty($this->fechasol) && !empty($this->fechasol1)){
+         $query->andFilterWhere([
+             'between',
+             'fechasol',
+             $this->openBorder('fechasol',false),
+             $this->openBorder('fechasol1',true)
+                        ]);   
+        }
+        
+         if(!empty($this->fechaprog) && !empty($this->fechaprog1)){
+         $query->andFilterWhere([
+             'between',
+             'fechaprog',
+             $this->openBorder('fechaprog',false),
+             $this->openBorder('fechaprog1',true)
+                        ]);   
+        }
+        //echo  $query->createCommand()->rawSql;DIE();
         return $dataProvider;
     }
 }

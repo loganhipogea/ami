@@ -49,7 +49,7 @@ use yii\grid\GridView;
                           
                             //'dateFormat' => h::getFormatShowDate(),
                             'options'=>['class'=>'form-control',
-                               'disabled'=>(!$aprobado)?false:true  
+                               //'disabled'=>(!$aprobado)?false:true  
                                 ]
                             ]) ?>
  </div>

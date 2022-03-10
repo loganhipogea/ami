@@ -10,12 +10,12 @@ ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\mat\models\MatReq */
 
-$this->title = Yii::t('app', 'Update Mat Req: {name}', [
-    'name' => $model->id,
+$this->title = Yii::t('app', 'Editar requerimiento: {name}', [
+    'name' => $model->numero,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Mat Reqs'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Listado requerimientos'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->numero, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Editar');
 ?>
 <div class="mat-req-update">
 <h4><i class="fa fa-edit"></i><?= Html::encode($this->title) ?></h4>
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
              'options' => ['id' => 'myveryownID3'],
         ],
         [
-          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Tutores'), //$this->context->countDetail() obtiene el contador del detalle
+          'label'=>'<i class="fa fa-cube"></i> '.yii::t('sta.labels','Detalles'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_segunda',[ 'model' => $model]),
             'active' => false,
              'options' => ['id' => 'myveryownID4'],

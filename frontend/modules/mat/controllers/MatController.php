@@ -42,7 +42,7 @@ class MatController extends baseController
      */
     public function actionIndex()
     {
-        $searchModel = new MatReqSearch();
+        $searchModel = new \frontend\modules\mat\models\MatVwReqSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -151,7 +151,7 @@ class MatController extends baseController
       $modeldet=New \frontend\modules\mat\models\MatDetreq();
        
        $modeldet->req_id=$id;
-           
+           $modeldet->activo=true;
        $datos=[];
         if(h::request()->isPost){
             
@@ -192,7 +192,7 @@ class MatController extends baseController
             }else{
                 $modeldet->save(); 
                 //$model->assignStudentsByRandom();
-                  return ['success'=>1,'id'=>$model->id];
+                  return ['success'=>1,'id'=>$modeldet->id];
             }
         }else{
            return $this->renderAjax('_modal_crea_item_req', [
@@ -348,6 +348,6 @@ public function actionAjaxDesactivaItem($id){
         ]);
     }
     
-    
+   
     
 }

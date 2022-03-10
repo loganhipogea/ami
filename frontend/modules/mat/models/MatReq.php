@@ -13,15 +13,31 @@ class MatReq extends \common\models\base\modelBase
     /**
      * {@inheritdoc}
      */
-     public $dateorTimeFields = [
-        'fechaprog' => self::_FDATE,
-        'fechasol' => self::_FDATE,
-        //'ftermino' => self::_FDATETIME
-    ];
+     public $dateorTimeFields=[
+     'fechaprog'=>self::_FDATE,
+     'fechasol'=>self::_FDATE,
+         
+         ];
     public static function tableName()
     {
         return '{{%mat_req}}';
     }
+    
+    
+     public function behaviors()
+         {
+                return [
+		
+		'fileBehavior' => [
+			'class' => '\common\behaviors\FileBehavior' 
+                               ],
+                    'auditoriaBehavior' => [
+			'class' => '\common\behaviors\AuditBehavior' ,
+                               ],
+		
+                    ];
+        }
+    
    
     public function rules()
     {
@@ -44,12 +60,12 @@ class MatReq extends \common\models\base\modelBase
         return [
             'id' => Yii::t('app', 'ID'),
             'numero' => Yii::t('app', 'Numero'),
-            'fechaprog' => Yii::t('app', 'Fechaprog'),
-            'fechasol' => Yii::t('app', 'Fechasol'),
-            'codtra' => Yii::t('app', 'Codtra'),
+            'fechaprog' => Yii::t('app', 'F. programada'),
+            'fechasol' => Yii::t('app', 'F. solicitada'),
+            'codtra' => Yii::t('app', 'Solicitante'),
             'descripcion' => Yii::t('app', 'Descripcion'),
             'texto' => Yii::t('app', 'Texto'),
-            'codest' => Yii::t('app', 'Codest'),
+            'codest' => Yii::t('app', 'Estado'),
         ];
     }
 

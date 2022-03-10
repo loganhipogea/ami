@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
-use common\helpers\ComboHelper;
+use frontend\modules\mat\helpers\ComboHelper;
 use common\widgets\selectwidget\selectWidget;
 
 
@@ -25,10 +25,10 @@ use common\widgets\selectwidget\selectWidget;
            <?PHP 
            $operacion=($model->isNewRecord)?'mod-agrega-mat':'mod-edit-mat';
              IF($model->isNewRecord){
-               $url=\yii\helpers\Url::to(['/mat/mat/mod-agrega-mat'.$operacion,'id'=>$id]);  
+               $url=\yii\helpers\Url::to(['/mat/mat/'.$operacion,'id'=>$id]);  
                  
              }else{
-                $url=\yii\helpers\Url::to(['/mat/mat/mod-edit-mat'.$operacion,'id'=>$id]);  
+                $url=\yii\helpers\Url::to(['/mat/mat/'.$operacion,'id'=>$id]);  
              }
            ?>
            <?= \common\widgets\buttonsubmitwidget\buttonSubmitWidget::widget(
@@ -43,7 +43,7 @@ use common\widgets\selectwidget\selectWidget;
     </div>
       <div class="box-body">
      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <?= $form->field($model, 'cant')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'cant')->textInput(['maxlength' => true,'disabled'=>!$model->activo,]) ?>
 
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -52,7 +52,7 @@ use common\widgets\selectwidget\selectWidget;
             dropDownList(ComboHelper::getCboUms(),
                     ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
                     // 'class'=>'probandoSelect2',
-                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                      'disabled'=>!$model->activo,
                         ]
                     )  ?>
      </div>
@@ -66,20 +66,28 @@ use common\widgets\selectwidget\selectWidget;
             'campo'=>'codart',
          'ordenCampo'=>2,
          'addCampos'=>[2,],
+        'options'=>['disabled'=>!$model->activo]
         ]);  ?>
 
  </div> 
  
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true,'disabled'=>!$model->activo,]) ?>
 
  </div>
-<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'imptacion')->textInput(['maxlength' => true]) ?>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <?= 
+            $form->field($model, 'imptacion')->
+            dropDownList(comboHelper::getCboColectores() ,
+                    ['prompt'=>'--'.yii::t('base.verbs','Seleccione un valor')."--",
+                    // 'class'=>'probandoSelect2',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]
+                    )  ?>
 
  </div>
-  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-     <?= $form->field($model, 'texto')->textArea(['maxlength' => true]) ?>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+     <?= $form->field($model, 'texto')->textArea(['maxlength' => true,'disabled'=>!$model->activo,]) ?>
  </div>        
           
   
