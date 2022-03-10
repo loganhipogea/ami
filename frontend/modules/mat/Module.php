@@ -5,7 +5,7 @@ namespace frontend\modules\mat;
 /**
  * mat module definition class
  */
-class MatModule extends \yii\base\Module
+class Module extends \yii\base\Module
 {
     /**
      * {@inheritdoc}

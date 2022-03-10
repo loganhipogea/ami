@@ -49,7 +49,7 @@ return [
                 ],
              ],
         'mat' => [
-            'class' => 'frontend\modules\mat\MatModule',
+            'class' => 'frontend\modules\mat\Module',
         ], 
         
         'message' => [
