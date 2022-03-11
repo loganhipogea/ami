@@ -21,23 +21,23 @@ use common\models\masters\Direcciones;
    <?php 
    $gridColumns=[
        [
-            'class' => 'kartik\grid\EditableColumn',
+            //'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'nombres',
-            'pageSummary' => 'Total',
-            'editableOptions'=>[
+            //'pageSummary' => 'Total',
+           /* 'editableOptions'=>[
                 //'ajaxSettings'=>['data'=>['karina'=>'toledo']],
-            ],
-            'vAlign' => 'middle',
-            'width' => '210px',
+            ],*/
+            /*'vAlign' => 'middle',
+            'width' => '210px',*/
            //'data'=>['modelo'=>'mimodelo']
             
          ],
        [
-            'class' => 'kartik\grid\EditableColumn',
+            //'class' => 'kartik\grid\EditableColumn',
             'attribute' => 'moviles',
-            'pageSummary' => 'Total',
+           /* 'pageSummary' => 'Total',
             'vAlign' => 'middle',
-            'width' => '210px',
+            'width' => '210px',*/
             
          ],
    ];

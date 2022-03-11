@@ -86,10 +86,10 @@ implements ReqInterface {
         return $this->hasOne(MatVale::className(), ['id' => 'vale_id']);
     }
 
-     public function getStock()
+     /*public function getStock()
     {
         return $this->hasOne(MatStock::className(), ['codart' => 'codart']);
-    }
+    }*/
 
     
     /**
