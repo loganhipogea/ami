@@ -29,7 +29,7 @@ $fieldOptions2 = [
             <div class="column is-offset-1 is-4-widescreen is-5-desktop  is-6-tablet is-offset-0-mobile is-12-mobile">
                 <div class="box py-6 px-6">
                     <div class="logo pb-4 pt-2">
-                        <?=Html::img('@web/img/logo.png',['width'=>"80%"])?>
+                        <?=Html::img('@web/img/logo_bov.svg',['width'=>80,'width'=>80])?>
                      </div>  
        <?php //Html::img('@web/img/media_providers.png',['height'=>100,'width'=>100])?>
                 
@@ -39,7 +39,7 @@ $fieldOptions2 = [
         <?= $form
             ->field($model, 'username', [])
             ->label(false)
-            ->textInput(['class'=>'input is-medium input-login is-size-6','placeholder' => 'Nombre usuario']) ?>
+            ->textInput(['class'=>'input is-medium input-login ','placeholder' => 'Nombre usuario']) ?>
          <p class="help-block help-block-error"></p>
           </div>
          </div>
@@ -48,7 +48,7 @@ $fieldOptions2 = [
         <?= $form
             ->field($model, 'password', [])
             ->label(false)
-            ->passwordInput(['class'=>'input is-medium input-login is-size-6','placeholder' => 'Contraseña']) ?>
+            ->passwordInput(['class'=>'input is-medium input-login ','placeholder' => 'Contraseña']) ?>
           <p class="help-block help-block-error"></p>
           </div>
          </div>

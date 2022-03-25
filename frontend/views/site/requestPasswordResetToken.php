@@ -37,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
          <?= Yii::$app->session->getFlash('error') ?>
     </div>
 <?php endif; ?>
-    <div class="row">
-        <div class="col-lg-5">
+   
+       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <?php $form = ActiveForm::begin(['id' => 'request-password-reset-form']); ?>
                   <?= Html::a(yii::t('base.verbs','Back to Home'), \yii\helpers\Url::to('index')) ?>
             <br>
@@ -53,4 +53,4 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 </div>
-    </div>
+   

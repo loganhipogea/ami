@@ -98,4 +98,10 @@ class MatStock extends \common\models\base\modelBase
         if(!$this->material->codum ==$this->um)
         $this->addError('um',yii::t('base.errors','Esta unidad de medida no es la base'));
     }
+    
+    public function actualiza(){
+        
+    }
+    
+    
 }

@@ -46,7 +46,7 @@ if ($accion=== 'login') {
         
         
         
-       <link rel="icon" type="image/ico" href="<?=\yii\helpers\Url::home()?>img/diar.ico" />  
+       <link rel="icon" type="image/ico" href="<?=\yii\helpers\Url::home()?>img/logo_bov.svg" />  
         
         
     </head>

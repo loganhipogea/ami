@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box box-success">
     <?= $this->render('_form', [
         'model' => $model,
-        'aprobado'=>$aprobado,
+       // 'aprobado'=>$aprobado,
     ]) ?>
 
 </div>

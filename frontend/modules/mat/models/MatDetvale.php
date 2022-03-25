@@ -86,10 +86,10 @@ implements ReqInterface {
         return $this->hasOne(MatVale::className(), ['id' => 'vale_id']);
     }
 
-     /*public function getStock()
+     public function stock()
     {
-        return $this->hasOne(MatStock::className(), ['codart' => 'codart']);
-    }*/
+        return MatStock::findOne(['codart'=>$this->codart]);
+    }
 
     
     /**
@@ -124,7 +124,7 @@ implements ReqInterface {
   }
   
   
-  public function createKardex(){
+  private function createKardex(){
       $kardex=MatKardex::instance();
       $vale=$this->vale;
       $kardex->setAttributes([
@@ -141,6 +141,22 @@ implements ReqInterface {
      return $karde->save();
   }
   
+  private function createStock(){
+      $stock= MatStock::instance();
+     // $vale=$this->vale;
+      $stock->setAttributes([
+          'codart'=>$this->codart,
+          'cant'=>$this->cant,
+          'cantres'=>0,
+          //'signo'=>$vale->signo(),
+          //'cant'=>$this->cant,
+          'um'=>$this->material->codum,
+          'valor'=>$this->valor,
+          
+      ]);
+     return $karde->save();
+  }
+  
   
   /*Verifica que haya registro de stock
    * si no bora error
@@ -149,5 +165,33 @@ implements ReqInterface {
   public function validate_stock(){
      if(is_null($this->stock))
      $this->addError ('codart',yii::t('base.errores','No existe registro de stock para este material'));
+  }
+  
+  /*
+   * Ejecuta todas las acciones cuando se 
+   * aprueba el item
+   */
+  public function aprobado(){
+      $vale=$this->vale;
+        if(is_null($stock=$this->stock())){
+            $stock=$this->createStock();
+        }else{
+            $stock->cant=$stock->cant+$this->cantreal->cant; 
+            $stock->valor=($stock->valor+($this->signo*$this->cantreal->cant)*($vale->valor))/
+               ($stock->cant+$this->cant); 
+        }
+         $this->createKardex();   
+       
+        
+        $detvale=$this->vale;
+        $vale=$detvale->vale;
+        /*ACTUALIZANDO LA CANTIDAD PRIMERO*/
+        $stock->cant=$this->cant+$this->cantreal->cant;
+        /*ACTUALIZANDO EL VALOR*/
+       $stock->valor=($stock->valor+($this->signo*$detvale->cantreal->cant)*($vale->valor))/
+               ($stock->cant+$this->cant);
+       return $stock->save();
+    
+    
   }
 }

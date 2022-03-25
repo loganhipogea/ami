@@ -77,21 +77,10 @@ class MatKardex extends \common\models\base\modelBase
     }
     
    public function afterSave($insert, $changedAttributes) {
-       $this->actualizaStock();
+       //$this->actualizaStock();
        return parent::afterSave($insert, $changedAttributes);
    }
     
-    private function actualizaStock(){
-        $stock=$this->stock;
-        $detvale=$this->vale;
-        $vale=$detvale->vale;
-        /*ACTUALIZANDO LA CANTIDAD PRIMERO*/
-        $stock->cant=$this->cant+$detvale->cantreal->cant;
-        /*ACTUALIZANDO EL VALOR*/
-       $stock->valor=($stock->valor+($this->signo*$detvale->cantreal->cant)*($vale->valor))/
-               ($stock->cant+$this->cant);
-       return $stock->save();
-    }
-    
+   
     
 }
