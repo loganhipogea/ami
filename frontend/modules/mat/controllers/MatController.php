@@ -8,6 +8,7 @@ use frontend\modules\mat\models\MatVale;
 use frontend\modules\mat\models\MatDetvale;
 use frontend\modules\mat\models\MatReqSearch;
 use frontend\controllers\base\baseController;
+use \frontend\modules\mat\models\MatDetreq;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 USE yii\db\Query;
@@ -346,6 +347,20 @@ public function actionAjaxDesactivaItem($id){
         return $this->render('view_vale', [
             'model' => MatVale::findOne($id),
         ]);
+    }
+    
+    public function  actionAjaxGuardaIdReqSesion($id){
+        if(!is_null($model=MatDetreq::findOne($id))){
+            $ses=new \common\components\SesionDoc();
+            $ses->inserta(MatDetreq::className(), $id);
+         }        
+    }
+    
+    public function  actionAjaxBorraIdReqSesion($id){
+        if(!is_null($model=MatDetreq::findOne($id))){
+            $ses=new \common\components\SesionDoc();
+            $ses->elimina(MatDetreq::className(), $id);
+         }        
     }
     
    

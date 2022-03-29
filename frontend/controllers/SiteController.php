@@ -419,6 +419,16 @@ Datos de caché de configuración se han actualizado');
     }
 public function actionRutas(){
     
+    $ses=New \common\components\SesionDoc();
+    $modelo=New \frontend\modules\mat\models\MatVale;
+    $ses->flush($modelo);
+    
+    print_r($ses->sesion[$ses::NOMBRE_SESION]);
+    die();
+    
+    
+    
+    
     //phpinfo();
     die();
    ECHO  \frontend\modules\sigi\models\SigiPropietarios::find()->

@@ -3,6 +3,7 @@
 namespace frontend\modules\mat\models;
 use common\models\masters\Maestrocompo;
 use frontend\modules\mat\models\MatKardex;
+use frontend\modules\mat\models\MatAtenciones;
 USE frontend\modules\mat\interfaces\ReqInterface;
 use Yii;
 
@@ -90,8 +91,16 @@ implements ReqInterface {
     {
         return MatStock::findOne(['codart'=>$this->codart]);
     }
-
+        public function getAtenciones()
+    {
+        return $this->hasMany(MatAtenciones::className(), ['detvale_id' => 'id']);
+    }
     
+    
+    
+    public function cant_atendida(){
+       return $this->atenciones()->sum('cantidad');
+    }
     /**
      * {@inheritdoc}
      * @return MatDetvaleQuery the active query used by this AR class.
@@ -115,6 +124,8 @@ implements ReqInterface {
         }
         return $this;       
     }
+    
+    
     
    
   public function verify_um() {
@@ -167,31 +178,48 @@ implements ReqInterface {
      $this->addError ('codart',yii::t('base.errores','No existe registro de stock para este material'));
   }
   
+  private function updateStock(MatStock $stock){
+      $stock->cant=$stock->cant+$this->cantreal->cant; 
+            $stock->valor=($stock->valor+($this->vale->signo()*$this->cantreal->cant)*($vale->valor))/
+               ($stock->cant+$this->cant); 
+             return $stock->save();
+  }
+ 
+/*Establece la trazabilidad de 
+ * de la compra
+ */
+  private function trazabilidad(){
+     if($this->detreq_id>0){
+          $atenciones= (MatAtenciones::instance());
+        $atenciones->setAttributes([
+          'detreq_id'=>$this->detreq_id,
+          'detvale_id'=>$this->id,
+            'cant'=>$this->cant,
+      ]);
+        return $atenciones->save();
+     }else{
+         return false;
+     }
+     
+  }
+  
+  
   /*
    * Ejecuta todas las acciones cuando se 
    * aprueba el item
    */
   public function aprobado(){
       $vale=$this->vale;
+      $transaccion=$this->getDb()->beginTransaction(\yii\db\Transaction::SERIALIZABLE);
         if(is_null($stock=$this->stock())){
-            $stock=$this->createStock();
+            $this->createStock();
         }else{
-            $stock->cant=$stock->cant+$this->cantreal->cant; 
-            $stock->valor=($stock->valor+($this->signo*$this->cantreal->cant)*($vale->valor))/
-               ($stock->cant+$this->cant); 
+            $this->updateStock($stock);
         }
          $this->createKardex();   
-       
-        
-        $detvale=$this->vale;
-        $vale=$detvale->vale;
-        /*ACTUALIZANDO LA CANTIDAD PRIMERO*/
-        $stock->cant=$this->cant+$this->cantreal->cant;
-        /*ACTUALIZANDO EL VALOR*/
-       $stock->valor=($stock->valor+($this->signo*$detvale->cantreal->cant)*($vale->valor))/
-               ($stock->cant+$this->cant);
-       return $stock->save();
-    
-    
-  }
+         $this->trazabilidad();         
+      $transaccion->commit();
+   }
+     
+     
 }
