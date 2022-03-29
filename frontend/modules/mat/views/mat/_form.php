@@ -104,7 +104,16 @@ use yii\grid\GridView;
          //'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'columns' => [
+             [
+        'class' => 'yii\grid\CheckboxColumn',
+                 'checkboxOptions' => function ($model, $key, $index, $column) {
+                         $url = \yii\helpers\Url::to([$this->context->id.'/ajax-desactiva-item','id'=> \yii\helpers\Json::encode([$model->id])]);                              
+                        return ['value' => $model->id,'family'=>'pigmalion', 'title'=>$url,'id'=>$model->id];
+                            }
+        // you may configure additional properties here
+                    ],
                  [
+                    
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
             'template' => '{edit}{delete}',
@@ -191,6 +200,19 @@ use yii\grid\GridView;
             'family'=>'holas',
           'type'=>'POST',
            'evento'=>'click',
+        'posicion'=>\yii\web\View::POS_END
+       
+            //'foreignskeys'=>[1,2,3],
+        ]); 
+   ?>
+          
+          <?php 
+   echo linkAjaxGridWidget::widget([
+           'id'=>'widgetgruidBancosss',
+            'idGrilla'=>'grilla-materiales',
+            'family'=>'pigmalion',
+          'type'=>'POST',
+           'evento'=>'change',
         'posicion'=>\yii\web\View::POS_END
        
             //'foreignskeys'=>[1,2,3],

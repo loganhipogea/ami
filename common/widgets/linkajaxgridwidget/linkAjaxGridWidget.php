@@ -33,7 +33,7 @@ class linkAjaxGridWidget extends Widget
          
         if($this->idGrilla===NULL)
         throw new InvalidConfigException('The "idGrilla" property is Null.');
-        if($this->evento===NULL or !in_array($this->evento,['click','change']))
+        if($this->evento===NULL or !in_array($this->evento,['click','change','onChange']))
         throw new InvalidConfigException('The "evento" property is Null or not Valid');
   
         parent::init();
@@ -80,7 +80,7 @@ class linkAjaxGridWidget extends Widget
      // $mesage=yii::t('base.verbs','Are you Sure to Delete this Record ?');
      $cadUx=(count($this->otherContainers)>0)?"  $.pjax.reload({container: '#".$this->otherContainers[0]."', async: false});  ":"";
    $cadenaJs="$('div[id=\"".$this->idGrilla."\"] [family=\"".$this->family."\"]').on( '".$this->evento."', function() { 
-       // alert(this.id);
+        alert(this.checked);
      var yapaso=false;
      var refrescar=".(($this->refrescar)?"true;":"false;")." 
     if(!yapaso){  
