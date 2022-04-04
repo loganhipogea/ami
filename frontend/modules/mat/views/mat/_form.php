@@ -107,7 +107,7 @@ use yii\grid\GridView;
              [
         'class' => 'yii\grid\CheckboxColumn',
                  'checkboxOptions' => function ($model, $key, $index, $column) {
-                         $url = \yii\helpers\Url::to([$this->context->id.'/ajax-desactiva-item','id'=> \yii\helpers\Json::encode([$model->id])]);                              
+                         $url = \yii\helpers\Url::to([$this->context->id.'/ajax-guarda-id-req-sesion','id'=> $model->id]);                              
                         return ['value' => $model->id,'family'=>'pigmalion', 'title'=>$url,'id'=>$model->id];
                             }
         // you may configure additional properties here
@@ -121,7 +121,7 @@ use yii\grid\GridView;
                     'attach' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,'idModal'=>'imagemodal','modelid'=>$model->id,'nombreclase'=> str_replace('\\','_',get_class($model))]);
                         $options = [
-                            'title' => Yii::t('sta.labels', 'Subir Archivo'),
+                            'title' => Yii::t('sta.labels', 'Colocar en el maletín'),
                             //'aria-label' => Yii::t('rbac-admin', 'Activate'),
                             //'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
                             'data-method' => 'get',
@@ -213,6 +213,7 @@ use yii\grid\GridView;
             'family'=>'pigmalion',
           'type'=>'POST',
            'evento'=>'change',
+           'refrescar'=>false,
         'posicion'=>\yii\web\View::POS_END
        
             //'foreignskeys'=>[1,2,3],

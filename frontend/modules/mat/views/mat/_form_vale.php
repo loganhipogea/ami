@@ -9,6 +9,7 @@ use  common\widgets\selectwidget\selectWidget;
 use frontend\modules\mat\helpers\ComboHelper;
 use yii\widgets\Pjax;
 use yii\grid\GridView;
+use common\widgets\inputajaxwidget\inputAjaxWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\mat\models\MatReq */
 /* @var $form yii\widgets\ActiveForm */
@@ -79,7 +80,13 @@ use yii\grid\GridView;
                         ]
                     ) ?>
  </div>  
-  
+   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">    
+         <?=Html::button(
+                                    '<span class="fa fa-users"></span>   '.Yii::t('sta.labels', 'Generar Usuarios'),
+                                     ['class' => 'btn btn-success','href' => '#','id'=>'btn-add-material']
+                 );
+          ?>
+   </div>  
      
     <?php ActiveForm::end(); ?>
 
@@ -158,7 +165,17 @@ use yii\grid\GridView;
             //'foreignskeys'=>[1,2,3],
         ]); 
    ?>
-         
+      <?php 
+   echo inputAjaxWidget::widget([
+           //'id'=>'widgetgruixxdBancos',
+            'idGrilla'=>'grilla-materiales',
+            'id'=>'btn-add-material',
+          'tipo'=>'POST',
+           'evento'=>'click',
+         'ruta'=> Url::to([$this->context->id.'/ajax-rellena-ids-from-req','id'=>$model->id]),
+            //'foreignskeys'=>[1,2,3],
+        ]); 
+   ?>
     <?php Pjax::end(); ?>
    <?php
  $url= Url::to(['mod-agrega-mat-vale','id'=>$model->id,'gridName'=>'grilla-materiales','idModal'=>'buscarvalor']);

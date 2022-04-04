@@ -173,10 +173,10 @@ implements ReqInterface {
    * si no bora error
    * 
    */
-  public function validate_stock(){
+  /*public function validate_stock(){
      if(is_null($this->stock))
      $this->addError ('codart',yii::t('base.errores','No existe registro de stock para este material'));
-  }
+  }*/
   
   private function updateStock(MatStock $stock){
       $stock->cant=$stock->cant+$this->cantreal->cant; 

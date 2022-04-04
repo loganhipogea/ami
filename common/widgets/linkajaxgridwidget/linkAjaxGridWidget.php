@@ -130,12 +130,7 @@ $.ajax({
   // echo  \yii\helpers\Html::script($stringJs);
    $this->getView()->registerJs($cadenaJs,$this->posicion);
    // $this->getView()->registerJs($stringJs2);
-                        }     
-        
-        
-   
-   
-   
+                        }
    
 }
 

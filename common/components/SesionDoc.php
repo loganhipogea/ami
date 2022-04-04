@@ -26,7 +26,7 @@ class SesionDoc extends \yii\base\Component
   
   private function resolveParam($claseModel){
       if($claseModel instanceof \yii\db\ActiveRecord){
-         return  $claseModel::className();
+         return $claseModel::className();
       }else{
           return $claseModel;
       }
@@ -37,21 +37,26 @@ class SesionDoc extends \yii\base\Component
      $claseModel= $this->resolveParam($claseModel);
      //var_dump($claseModel);die();
       $array=$this->sesion[self::NOMBRE_SESION];
-      if(!in_array($id, array_values($array[$claseModel])))
-      $array[$claseModel][]=$id;
-      $this->sesion[self::NOMBRE_SESION]=$array;    
-      
+      if(array_key_exists($claseModel, $array)){
+         if(!in_array($id, array_values($array[$claseModel])))
+                $array[$claseModel][]=$id; 
+      }else{
+            $array[$claseModel]=[];  
+           $array[$claseModel][]=$id; 
+      }      
+      $this->sesion[self::NOMBRE_SESION]=$array;
    }
   
    public function elimina($claseModel,$id){
        $claseModel= $this->resolveParam($claseModel);
       $array=$this->sesion[self::NOMBRE_SESION];
-       $invertido=array_flip($array[$claseModel]);
+      if(array_key_exists($claseModel, $array)){
+         $invertido=array_flip($array[$claseModel]);
        unset($invertido[$id]);
        $valores=array_values(array_flip($invertido));
       $array[$claseModel]=$valores;      
-      $this->sesion[self::NOMBRE_SESION]=$array;    
-      
+      $this->sesion[self::NOMBRE_SESION]=$array; 
+      }
    }
     
    public function flush($claseModel){
@@ -60,6 +65,15 @@ class SesionDoc extends \yii\base\Component
      $array[$claseModel]=[];
       $this->sesion[self::NOMBRE_SESION]=$array;   
       }
-   
+   public function valores($claseModel){
+       $claseModel= $this->resolveParam($claseModel);
+       if(array_key_exists($claseModel, $this->sesion[self::NOMBRE_SESION])){
+           //var_dump($claseModel);
+           //return $this->sesion[self::NOMBRE_SESION];
+           return $this->sesion[self::NOMBRE_SESION][$claseModel];
+       }else{
+           return [];
+       }
+   }
    
 }

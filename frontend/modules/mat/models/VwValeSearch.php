@@ -17,7 +17,7 @@ class VwValeSearch extends VwVale
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            
             [['descripcion', 'codart', 'numero', 'fecha'], 'safe'],
         ];
     }
@@ -74,4 +74,38 @@ class VwValeSearch extends VwVale
 //echo $query->createCommand()->rawSql;
         return $dataProvider;
     }
+    
+     public function search($params)
+    {
+        $query = VwVale::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        
+
+        $query->andFilterWhere(['like', 'numero', $this->numero])
+            ->andFilterWhere(['like', 'fecha', $this->fecha])
+            ->andFilterWhere(['like', 'item', $this->item])
+            ->andFilterWhere(['like', 'codart', $this->codart])
+            ->andFilterWhere(['like', 'um', $this->um])
+            //->andFilterWhere(['like', 'cant', $this->texto])
+            ->andFilterWhere(['like', 'cant', $this->cant]);
+
+        return $dataProvider;
+    }
+    
+    
 }

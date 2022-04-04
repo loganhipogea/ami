@@ -3,12 +3,14 @@
 namespace frontend\modules\mat\controllers;
 
 use Yii;
+use common\components\SesionDoc;
 use frontend\modules\mat\models\MatReq;
 use frontend\modules\mat\models\MatVale;
 use frontend\modules\mat\models\MatDetvale;
 use frontend\modules\mat\models\MatReqSearch;
 use frontend\controllers\base\baseController;
 use \frontend\modules\mat\models\MatDetreq;
+use \frontend\modules\mat\models\VwValeSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 USE yii\db\Query;
@@ -350,11 +352,18 @@ public function actionAjaxDesactivaItem($id){
     }
     
     public function  actionAjaxGuardaIdReqSesion($id){
-        if(!is_null($model=MatDetreq::findOne($id))){
-            $ses=new \common\components\SesionDoc();
-            $ses->inserta(MatDetreq::className(), $id);
-         }        
-    }
+          if(h::request()->isAjax){
+                h::response()->format = \yii\web\Response::FORMAT_JSON;
+                if(!is_null($model=MatDetreq::findOne($id))){
+                    if($model->activo){
+                         $ses=new \common\components\SesionDoc();
+                         $ses->inserta(MatDetreq::instance(), $id);
+                    }                   
+                  }   
+                return ['success'=>yii::t('sta.errors','Se agrego el material')];
+            }         
+         
+       }
     
     public function  actionAjaxBorraIdReqSesion($id){
         if(!is_null($model=MatDetreq::findOne($id))){
@@ -363,6 +372,28 @@ public function actionAjaxDesactivaItem($id){
          }        
     }
     
-   
+    /*
+     * Esta ation rellena el vale de entrada 
+     * o salida con items del detalle requisicion
+     */
+   public function actionAjaxRellenaIdsFromReq($id){
+       $ses=SesionDoc::instance();
+       
+       foreach($ses->valores(MatDetreq::instance()) as $key=>$iddet){
+           if(!is_null($detreq=MatDetreq::findOne($iddet)) && //Si existe el id del detalle de la req
+                !MatDetvale::find()->andWhere(['vale_id'=>$id,'detreq_id'=>$iddet])->exists() //Si NO existe en este vale
+               ){
+                    $model= MatDetvale::instance();
+                    $model->setAttributes([
+                    'vale_id'=>$id,
+                        'item'=>$detreq->item,
+                         'cant'=>$detreq->cant,
+                        'um'=>$detreq->um,
+                         'codart'=>$detreq->codart,
+                        ]);
+           }
+           
+       }
+   }
     
 }

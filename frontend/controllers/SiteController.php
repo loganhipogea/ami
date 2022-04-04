@@ -347,12 +347,8 @@ class SiteController extends \frontend\controllers\base\baseController
               //\console\components\Command::execute('cache/flush-all', ['interactive' => false]);
               //\console\components\Command::execute('cache/flush-schema', ['interactive' => false]);
            $datos['success']=yii::t('base.actions','
-Datos de caché de configuración se han actualizado');
-           
-           h::response()->format = \yii\web\Response::FORMAT_JSON;
-           
-           
-           
+Datos de caché de configuración se han actualizado');           
+           h::response()->format = \yii\web\Response::FORMAT_JSON;  
            return $datos;
         }
     }
@@ -372,10 +368,7 @@ Datos de caché de configuración se han actualizado');
                 //echo "intenado"; die();
                 Yii::$app->getSession()->setFlash('error',yii::t('base.errors', 'Sorry, we are unable to reset password for email provided.'.$Ste->getMessage()));
            }
-            
-           
         }
-
         return $this->render('requestPasswordResetToken', [
                 'model' => $model,
         ]);
@@ -420,10 +413,10 @@ Datos de caché de configuración se han actualizado');
 public function actionRutas(){
     
     $ses=New \common\components\SesionDoc();
-    $modelo=New \frontend\modules\mat\models\MatVale;
-    $ses->flush($modelo);
+    $modelo=New \frontend\modules\mat\models\MatDetreq;
+    //$ses->flush($modelo);
     
-    print_r($ses->sesion[$ses::NOMBRE_SESION]);
+    print_r($ses->valores($modelo));
     die();
     
     
@@ -1088,6 +1081,12 @@ public function actionCookies(){
               echo "Acceso inválido";
           }
      }
+     
+     public function actionRellenaItemsReq(){
+         
+     }
+     
+     
   }
    
 
