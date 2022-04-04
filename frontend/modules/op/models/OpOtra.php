@@ -74,7 +74,7 @@ class OpOtra extends \common\models\base\modelBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTrabajador()
+    public function getCodtra0()
     {
         return $this->hasOne(Trabajadores::className(), ['codigotra' => 'codtra']);
     }

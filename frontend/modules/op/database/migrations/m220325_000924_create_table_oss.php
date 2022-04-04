@@ -36,7 +36,7 @@ class m220325_000924_create_table_oss extends baseMigration
             ],
            $this->collateTable());
         $this->addForeignKey($this->generateNameFk($table),
-                    $table,'codtra', static::TABLE_CLIPRO,'codigotra');
+                    $table,'codpro', static::TABLE_CLIPRO,'codpro');
        $this->addForeignKey($this->generateNameFk($table),
                     $table,'proc_id', static::TABLE_PROCESOS,'id');
        /*$this->addForeignKey($this->generateNameFk($table),
