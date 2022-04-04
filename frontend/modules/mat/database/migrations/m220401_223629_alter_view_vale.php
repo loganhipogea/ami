@@ -12,10 +12,10 @@ class m220401_223629_alter_view_vale extends baseMigration
     {
            $vista=static::NAME_VIEW;
         if($this->existsTable($vista)) {
-         $this->db->createCommand()->dropView($vista);
+         
         
         $comando= $this->db->createCommand(); 
-       
+       $this->dropView($vista);
         $comando->createView($vista,
                 (new \yii\db\Query())
     ->select(['a.id',
