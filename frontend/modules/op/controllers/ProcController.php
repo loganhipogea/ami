@@ -187,4 +187,196 @@ class ProcController extends baseController
             ]);  
         } 
       }
+      
+      
+      public function actionEditaOs($id){
+           $model = OpOs::findOne($id);
+           if(is_null($model))
+           throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+           $searchModel = new \frontend\modules\mat\models\MatVwReqSearch();
+        $dataProviderMateriales = $searchModel->search_by_os($model->id,Yii::$app->request->queryParams);
+          
+           
+           
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view-os', 'id' => $model->id]);
+        }
+
+        return $this->render('update_os', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProviderMateriales' =>$dataProviderMateriales,
+           // 'dataProviderOs'=>$dataProviderOs
+        ]);
+      }
+    
+       public function actionModAgregaDetOs($id){
+    $this->layout = "install";
+      $model= OpOs::findOne($id);
+      $modeldet=New \frontend\modules\op\models\OpOsdet();
+       
+       $modeldet->proc_id=$model->proc_id;
+          $modeldet->os_id=$id;  
+       $datos=[];
+        if(h::request()->isPost){
+            
+            $modeldet->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($modeldet);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $modeldet->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_osdet', [
+                        'model' => $modeldet,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+      }
+      
+       public function actionModEditOsdet($id){
+    $this->layout = "install";
+      $model= \frontend\modules\op\models\OpOsdet::findOne($id);
+      
+       $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_osdet', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+      }
+      
+      
+      
+      public function actionModalAgregaDetReq($id){
+          $this->layout = "install";
+          $modelPadre= \frontend\modules\op\models\OpOsdet::findOne($id);
+          $model= \frontend\modules\mat\models\MatDetreq::instance();
+          $model->setAttributes([
+              'req_id'=>$model->detectaIdReq(),
+              'os_id'=>$modelPadre->os_id,
+              'detos_id'=>$modelPadre->id,              
+          ]);
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_detreq_os', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+          
+      }
+      
+      
+       public function actionModalEditaDetReq($id){
+          $this->layout = "install";
+          $model= \frontend\modules\mat\models\MatDetreq::findOne($id);
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_detreq_os', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+     }
+        
+        public function actionModalAgregaDetReqLibre($id){
+          $this->layout = "install";
+          $modelPadre= \frontend\modules\op\models\OpOs::findOne($id);
+          $model= \frontend\modules\mat\models\MatDetreq::instance();
+         // var_dump($model->detectaIdReq());die();
+          $model->setAttributes([
+              'req_id'=>$model->detectaIdReq(),
+              'os_id'=>$modelPadre->id,
+              //'detos_id'=>$modelPadre->id,              
+          ]);
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_detreq_os_libre', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+          
+      }
+      
+      
 }

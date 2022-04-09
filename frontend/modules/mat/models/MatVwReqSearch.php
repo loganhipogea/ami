@@ -18,7 +18,8 @@ class MatVwReqSearch extends MatVwReq
     {
         return [
            
-            [['id','ap', 'codart', 'um', 'item','am','fechaprog','fechasol','fechaprog1','fechasol1','descridetalle','numero'], 'safe'],
+            [['id','ap', 'codart', 'um', 'item','am','fechaprog','fechasol','fechaprog1',
+                'fechasol1','descridetalle','numero','os_id','detos_id'], 'safe'],
         ];
     }
 
@@ -85,4 +86,34 @@ class MatVwReqSearch extends MatVwReq
         //echo  $query->createCommand()->rawSql;DIE();
         return $dataProvider;
     }
+    
+    public function search_by_os($id_os,$params){
+         $query = MatVwReq::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+        $query->andWhere(['os_id'=>$id_os]);
+        $query->andFilterWhere(['like', 'codart', $this->codart])
+        ->andFilterWhere(['detos_id'=> $this->detos_id])
+        ->andFilterWhere(['like', 'descridetalle', explode('%',$this->descridetalle)])
+            //->andFilterWhere(['like', 'fechaprog', $this->fechaprog])
+           // ->andFilterWhere(['like', 'fechasol', $this->fechasol])
+            //->andFilterWhere(['like', 'descripcion', explode('%',$this->descripcion)])                  
+                ;
+        
+        //echo  $query->createCommand()->rawSql;DIE();
+        return $dataProvider;
+    }
+    
 }

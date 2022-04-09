@@ -1,5 +1,5 @@
 <?php
-
+namespace frontend\modules\mat\database\migrations;
 use yii\db\Migration;
 
 /**

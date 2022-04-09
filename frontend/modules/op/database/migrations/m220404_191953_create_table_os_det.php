@@ -1,6 +1,5 @@
 <?php
 namespace frontend\modules\op\database\migrations;
-use yii\db\Migration;
 use console\migrations\baseMigration;
 class m220404_191953_create_table_os_det extends baseMigration
 {
@@ -19,9 +18,21 @@ class m220404_191953_create_table_os_det extends baseMigration
    if(!$this->existsTable($table)) {
        $this->createTable($table, [
             'id'=>$this->primaryKey(),
-            'proc_id'=>$this->integer(11)->notNull(),
+            'proc_id'=>$this->integer(11),
+            'os_id'=>$this->integer(11),
+            'finicio'=>$this->char(19)->append($this->collateColumn()),
+           'termino'=>$this->char(19)->append($this->collateColumn()),
+            'descripcion' =>  $this->string(40)->append($this->collateColumn()),
+           'item'=>$this->char(3)->append($this->collateColumn()),
+            'emplazamiento'=>$this->char(1)->append($this->collateColumn()),
+           'codtra'=>$this->char(6)->append($this->collateColumn()),
+            'tipo'=>$this->char(1)->append($this->collateColumn()),
+           'tarifa'=>$this->char(1)->append($this->collateColumn()),
+            'detalle' =>  $this->text()->append($this->collateColumn()),
+            'valor' =>  $this->decimal(12,3),
             'numero' => $this->string(9)->notNull(),
-            'fechaprog' =>  $this->char(10)->append($this->collateColumn()),
+           'interna'=>$this->char(1)->append($this->collateColumn()),
+            /*'fechaprog' =>  $this->char(10)->append($this->collateColumn()),
            'fechaini' =>  $this->char(10)->append($this->collateColumn()),
             'codtra' =>  $this->char(6)->append($this->collateColumn()),         
             //'numoc' =>  $this->string(14)->append($this->collateColumn()),
@@ -32,12 +43,12 @@ class m220404_191953_create_table_os_det extends baseMigration
             'textocomercial' =>  $this->text()->append($this->collateColumn()),
             'textointerno' =>  $this->text()->append($this->collateColumn()),
             'textotecnico' =>  $this->text()->append($this->collateColumn()),
-            'codtra' =>  $this->char(6)->append($this->collateColumn()),
+            'codtra' =>  $this->char(6)->append($this->collateColumn()),*/
             
             ],
            $this->collateTable());
         $this->addForeignKey($this->generateNameFk($table),
-                    $table,'codpro', static::TABLE_CLIPRO,'codpro');
+                    $table,'os_id', static::TABLE_OS,'id');
        $this->addForeignKey($this->generateNameFk($table),
                     $table,'proc_id', static::TABLE_PROCESOS,'id');
        /*$this->addForeignKey($this->generateNameFk($table),

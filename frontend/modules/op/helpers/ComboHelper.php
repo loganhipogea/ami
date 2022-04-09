@@ -1,0 +1,28 @@
+<?php
+/*
+ * Esta clase extiende la clase original
+ * pero adicionalmetne devuelve los data
+ * para los combos  
+ * FACULTADES
+ * CARRERAS
+ * CARRERAS POR FACULTAD
+ */
+namespace frontend\modules\op\helpers;
+use yii\helpers\ArrayHelper;
+use frontend\modules\mat\helpers\ComboHelper as Combito;
+use common\helpers\h;
+use yii;
+class ComboHelper extends Combito
+{
+    
+    public static function actividadesOs($idOs){ 
+                return ArrayHelper::map(
+                                \frontend\modules\op\models\OpOsdet::find()
+                ->where(['os_id'=>$idOs])->all(),
+                'id','descripcion');
+    }
+    
+    
+}
+
+

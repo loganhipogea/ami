@@ -16,7 +16,12 @@ class m220404_225250_alter_table_detreq extends baseMigration
         if(!$this->existsColumn($table,'os_id')){         
            $this->addColumn($table, 'os_id', $this->integer(11));
         }
-        
+        if(!$this->existsColumn($table,'detos_id')){         
+           $this->addColumn($table, 'detos_id', $this->integer(11));
+        }
+         if(!$this->existsColumn($table,'ultimo')){         
+           $this->addColumn($table, 'ultimo', $this->integer(11));
+        }
     }
 
     /**
@@ -30,6 +35,12 @@ class m220404_225250_alter_table_detreq extends baseMigration
         }
        if($this->existsColumn($table,'os_id')){         
            $this->dropColumn($table, 'os_id');
+        }
+        if($this->existsColumn($table,'detos_id')){         
+           $this->dropColumn($table, 'detos_id');
+        }
+        if($this->existsColumn($table,'ultimo')){         
+           $this->dropColumn($table, 'ultimo');
         }
     }
     /*

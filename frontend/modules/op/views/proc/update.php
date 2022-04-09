@@ -17,11 +17,12 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Procesos'), 'url' =>
 $this->params['breadcrumbs'][] = ['label' => $model->numero, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Editar');
 ?>
+ 
 <div class="op-procesos-update">
 <h4><i class="fa fa-edit"></i><?= Html::encode($this->title) ?></h4>
    
     <div class="box box-success">
-     <?php
+    <?php
     $aprobado=false;
     $form = ActiveForm::begin([
     'fieldClass'=>'\common\components\MyActiveField'
@@ -36,7 +37,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Editar');
           'label'=>'<i class="fa fa-home"></i> '.yii::t('sta.labels','Principal'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_form',[
                 'model' => $model,
-                'form'=>$form,
+               'form'=>$form,
                 'aprobado'=>$aprobado
                     ]),
             'active' => true,
@@ -77,5 +78,5 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Editar');
     ],
 ]);  
 ?>
-        
+  <?php ActiveForm::end(); ?>      
 </div>
