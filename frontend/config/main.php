@@ -17,7 +17,9 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     
     'modules' => [
-       
+       'cc' => [
+            'class' => 'frontend\modules\cc\Module',
+        ],
            'mm' => [
             'class' => 'frontend\modules\mm\Module',
                   ],

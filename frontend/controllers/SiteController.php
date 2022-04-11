@@ -144,8 +144,8 @@ class SiteController extends \frontend\controllers\base\baseController
             //echo Url::to(Yii::$app->user->resolveUrlAfterLogin());die();
             //
             //echo Yii::$app->user->resolveUrlAfterLogin(); die();
-            $this->redirect(Url::toRoute([Yii::$app->user->resolveUrlAfterLogin()]));
-                 //$this->redirect(['index']); 
+            //$this->redirect(Url::toRoute([Yii::$app->user->resolveUrlAfterLogin()]));
+             $this->redirect(['index']); 
             //var_dump(Yii::$app->request->referrer);die();
               //return $this->redirect(is_null(Url::previous('intentona'))?Yii::$app->homeUrl:Url::previous('intentona'));
 	// $this->redirect(['sta/default/view-profile','iduser'=>h::userId()]);           // return $this->goBack();

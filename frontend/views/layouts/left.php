@@ -11,7 +11,7 @@
         <div class="form-group field-clipro-codpro">
              <?= \yii\helpers\Html::dropDownList(
                     'cboFavorites',null,\common\helpers\h::getCboFavorites(),
-                    ['prompt'=>'--'.yii::t('base.forms','Escoja dirección').'--','id'=>'cboFavorites','class'=>'form-control btn btn-success ']) ?>
+                    ['prompt'=>'--'.yii::t('base.forms','Escoja dirección').'--','id'=>'cboFavorites','class'=>'form-control btn btn-info ']) ?>
         </div>
        
     
