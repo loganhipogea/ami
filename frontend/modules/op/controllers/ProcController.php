@@ -205,6 +205,8 @@ class ProcController extends baseController
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view-os', 'id' => $model->id]);
+        }ELSE{
+            //PRINT_R($model->getErrors());DIE();
         }
 
         return $this->render('update_os', [
@@ -378,5 +380,90 @@ class ProcController extends baseController
           
       }
       
+       public function actionModalEditaDoc($id){
+          $this->layout = "install";
+          //$modelPadre= \frontend\modules\op\models\OpOsDet::findOne($id);
+          $model= \frontend\modules\op\models\OpDocumentos::instance();
+         // var_dump($model->detectaIdReq());die();
+          
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_documento', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+          
+      }
+       public function actionModalAgregaDoc($id){
+          $this->layout = "install";
+          $modelPadre= \frontend\modules\op\models\OpOsDet::findOne($id);
+          //var_dump($modelPadre);die();
+          $model= \frontend\modules\op\models\OpDocumentos::instance();
+         // var_dump($model->detectaIdReq());die();
+          $model->setAttributes([
+              'proc_id'=>$modelPadre->proc_id,
+              'os_id'=>$modelPadre->os_id,
+              'detos_id'=>$id,              
+          ]);
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_documento', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+          
+      }
       
+      public function actionAjaxExpandOpera(){
+      if(h::request()->isAjax){
+        $id=h::request()->post('expandRowKey');
+        $dataprovider= New \yii\data\ActiveDataProvider([
+            'query'=>\frontend\modules\op\models\OpDocumentos::find()->andWhere(['detos_id'=>$id]),
+        ]);
+        $model= \frontend\modules\op\models\OpOsdet::findOne($id);
+       // var_dump($id);die();
+         //h::response()->format = \yii\web\Response::FORMAT_JSON;
+        return $this->renderAjax("_expand_operacion",
+                [
+                    'id'=>$id,
+                    'dataprovider'=>$dataprovider,
+                    'model'=>$model
+                ]);
+       
+            }
+      }
 }

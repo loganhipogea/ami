@@ -1,36 +1,40 @@
 <?php
-
 use yii\helpers\Html;
-
-
 use common\helpers\h;
  use yii\helpers\Url;
-use kartik\grid\GridView;
  use yii\widgets\Pjax;
-
-
-/* @var $this yii\web\View */
-/* @var $model frontend\modules\op\models\OpProcesos */
-/* @var $form yii\widgets\ActiveForm */
+use yii\grid\GridView;
+use frontend\modules\op\helpers\ComboHelper;
 ?>
-
 <div class="box-body">
     <br>
    
  
         
-    <?php Pjax::begin(['id'=>'pjax-det','timeout'=>false]); ?>
+    <?php Pjax::begin(['id'=>'pjax-expand','timeout'=>false]); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+    </div>
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <?php $form = \yii\widgets\ActiveForm::begin([
+        'id'=>'myformulario',
+    'fieldClass'=>'\common\components\MyActiveField'
+    ]); ?>
+        <?= $form->field($model, 'detalle')->textArea(['disabled'=>true,]) ?> 
+        
+        <?php \yii\widgets\ActiveForm::end();
+     ?> 
+        
+    </div>
+<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+    <p class="text-fuchsia"><i style="font-size:1.5em; font-weight:600"><span class="fa fa-list-ol" ></span><?=Yii::t('sta.labels', 'Documentos anexados')?></p></i>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
     <div style='overflow:auto;'>
     <?= GridView::widget([
-        'id'=>'grilla-os',
-                'dataProvider' =>new \yii\data\ActiveDataProvider([
-                                    'query'=> frontend\modules\op\models\OpOsdet::find()->select(['id',
-                                        'item','descripcion','emplazamiento','finicio','termino','codtra',
-                                    ])->andWhere(['os_id'=>$model->id])
-                                ]),
+        'id'=>'grilla-documentos',
+                'dataProvider' =>$dataprovider,
+         //'filterModel' => $searchModel,
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         //'filterModel' => New \frontend\modules\op\models\OpOsSearch(),
@@ -40,7 +44,7 @@ use kartik\grid\GridView;
                     
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{edit}{delete}{attach}',
+            'template' => '{attach}{edit}{delete}',
                'buttons' => [
                     'attach' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,'idModal'=>'imagemodal','modelid'=>$model->id,'nombreclase'=> str_replace('\\','_',get_class($model))]);
@@ -58,7 +62,7 @@ use kartik\grid\GridView;
                         },
                                 
                                 'edit' => function ($url,$model) {
-			    $url= Url::to(['/op/proc/mod-edit-osdet','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
+			    $url= Url::to(['/op/proc/mod-edit-osdet','id'=>$model->id,'gridName'=>'pjax-detmat','idModal'=>'buscarvalor']);
                               return \yii\helpers\Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', $url, ['data-pjax'=>'0','class'=>'botonAbre']);
                             },
                         'delete' => function ($url,$model) {
@@ -67,70 +71,41 @@ use kartik\grid\GridView;
                                     return \yii\helpers\Html::a('<span class="btn btn-primary glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                              
                               
-			    },
-                        'attach' => function($url, $model) {  
-                          $url=\yii\helpers\Url::toRoute(['/op/proc/modal-agrega-doc','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
-                        $options = [
-                            'title' => Yii::t('sta.labels', 'Subir Archivo'),
-                            //'aria-label' => Yii::t('rbac-admin', 'Activate'),
-                            //'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            'data-method' => 'get',
-                            //'data-pjax' => '0',
-                        ];
-                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => 'botonAbre btn btn-success']);
-                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
-                     
+			    }
                         
-                        },
                     ]
                 ],
-        [
-                'class' => 'kartik\grid\ExpandRowColumn',
-                'width' => '50px',
-                'value' => function ($model, $key, $index, $column) {
-                            return GridView::ROW_COLLAPSED;
-                                },
-                     'detailUrl' =>Url::toRoute(['/op/proc/ajax-expand-opera']),
-                    //'headerOptions' => ['class' => 'kartik-sheet-style'], 
-                    'expandOneOnly' => true
-                ], 
-         ['attribute' => 'item',
-                'format'=>'raw',
-                'value'=>function($model){
-                        return $model->item;                        
-                             } 
-                
-                ],
-         
-             ['attribute' => 'descripcion',
+                            
+                           
+        
+         ['attribute' => 'descripcion',
                 'format'=>'raw',
                 'value'=>function($model){
                         return $model->descripcion;                        
                              } 
                 
                 ],
-                ['attribute' => 'codtra',
+         
+           
+             ['attribute' => 'codocu',
                 'format'=>'raw',
                 'value'=>function($model){
-                    
-                        //return 'hola';
-                        return (is_null($model->codtra))?'':$model->trabajador->fullName();                        
+                        return $model->documento->desdocu;                        
                              } 
                 
                 ],
-                'emplazamiento',
-            'finicio',
-            'termino',
+                
+                
           
         ],
     ]); ?>
     <?php
-      $url= Url::to(['mod-agrega-det-os','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
+     /* $url= Url::to(['modal-agrega-det-req-libre','id'=>$model->id,'gridName'=>'pjax-detmat','idModal'=>'buscarvalor']);
    echo  Html::button(yii::t('base.verbs','Agregar operación'), 
            ['href' => $url, 'title' => yii::t('sta.labels','Agregar Op'),
                'id'=>'btn_cuentas_edi',
                'class' => 'botonAbre btn btn-primary'
-               ]); 
+               ]); */
     ?>
    
     
@@ -141,4 +116,9 @@ use kartik\grid\GridView;
     <?php Pjax::end(); ?>
 
 </div>
-    
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        
+        
+    </div>   
+</div>
+

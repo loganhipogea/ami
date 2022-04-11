@@ -53,7 +53,7 @@ class OpOs extends \common\models\base\modelBase
              [['item'], 'safe'],
             [['proc_id'], 'integer'],
             [['textocomercial', 'textointerno', 'textotecnico'], 'string'],
-            [['numero'], 'string', 'max' => 9],
+            [['numero'], 'string', 'max' => 10],
             [['fechaprog', 'fechaini'], 'string', 'max' => 10],
             [['codtra', 'codpro'], 'string', 'max' => 6],
             [['descripcion'], 'string', 'max' => 40],

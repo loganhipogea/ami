@@ -38,7 +38,19 @@ class OpOsdet extends \common\models\base\modelBase
      'termino'=>self::_FDATETIME,
          
          ];
-    
+    public function behaviors()
+         {
+                return [
+		
+		'fileBehavior' => [
+			'class' => '\common\behaviors\FileBehavior' 
+                               ],
+                    'auditoriaBehavior' => [
+			'class' => '\common\behaviors\AuditBehavior' ,
+                               ],
+		
+                    ];
+        }
     
     /**
      * {@inheritdoc}
