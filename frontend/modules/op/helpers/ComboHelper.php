@@ -21,7 +21,19 @@ class ComboHelper extends Combito
                 ->where(['os_id'=>$idOs])->all(),
                 'id','descripcion');
     }
+     public static function procesos(){ 
+                return ArrayHelper::map(
+                                \frontend\modules\op\models\OpProcesos::find()->all()
+               ,
+                'id','descripcion');
+    }
     
+    public static function os(){ 
+                return ArrayHelper::map(
+                                \frontend\modules\op\models\OpOs::find()->all()
+               ,
+                'id','descripcion');
+    }
     
 }
 

@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\modules\op\models;
-
+use common\helpers\h;
 use Yii;
 
 /**
@@ -33,7 +33,8 @@ class OpLibro extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['proc_id', 'user_id', 'os_id', 'detos_id'], 'required'],
+            [['proc_id', 'os_id', 'detos_id'], 'required'],
+            [['tareo_id'], 'safe'],
             [['proc_id', 'user_id', 'os_id', 'detos_id'], 'integer'],
             [['detalle'], 'string'],
             [['hinicio', 'hfin'], 'string', 'max' => 5],
@@ -66,5 +67,11 @@ class OpLibro extends \common\models\base\modelBase
     public static function find()
     {
         return new OpLibroQuery(get_called_class());
+    }
+    
+    public function beforeSave($insert) {
+        if($insert)
+        $this->user_id=h::userId();
+        return parent::beforeSave($insert);
     }
 }

@@ -129,4 +129,29 @@ class OpTareo extends \common\models\base\modelBase
     {
         return new OpTareoQuery(get_called_class());
     }
+    
+    
+    
+    public function creaHijo(){
+        $model=OpLibro::instance(); 
+        $model->setAttributes([
+            'tareo_id'=>$this->id,
+            'hinicio'=>$this->hinicio,
+            'proc_id'=>$this->proc_id,
+            'os_id'=>$this->os_id,
+            'detos_id'=>$this->detos_id,
+            'descripcion'=>'Inicio de actividades',
+            
+        ]);
+        //print_r($model->attributes); die();
+    return $model->save();
+    }
+    
+    public function afterSave($insert, $changedAttributes) {
+        $this->refresh();
+       // print_r($this->attributes); die();
+        if($insert)
+        $this->creaHijo();
+        return parent::afterSave($insert, $changedAttributes);
+    }
 }

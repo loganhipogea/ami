@@ -6,6 +6,7 @@ use yii\helpers\Html;
   use kartik\time\TimePicker;
  use yii\widgets\ActiveForm;
 use common\helpers\h;
+use frontend\modules\op\helpers\ComboHelper;
 
  use common\widgets\selectwidget\selectWidget;
   use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
@@ -77,19 +78,58 @@ use common\helpers\h;
          'addCampos'=>[2],
         ]);  ?>
 
+ </div> 
+             
+              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+    <?= ComboDep::widget([
+               'model'=>$model,               
+               'form'=>$form,
+               'data'=> ComboHelper::procesos(),
+               'campo'=>'proc_id',
+               'idcombodep'=>'optareo-os_id',
+              
+                   'source'=>[\frontend\modules\op\models\OpOs::className()=>
+                                [
+                                  'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
+                                        'camporef'=>'descripcion',//columna a mostrar 
+                                        'campofiltro'=>'proc_id'  
+                                ]
+                                ],
+                            ]
+               
+               
+        )  ?>
  </div>       
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'proc_id')->textInput() ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'os_id')->textInput() ?>
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'detos_id')->textInput() ?>
-
- </div>
+          
+          
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+    <?= ComboDep::widget([
+               'model'=>$model,               
+               'form'=>$form,
+               'data'=> ($model->isNewRecord)?[]:ComboHelper::Os($model->proc_id),
+               'campo'=>'os_id',
+               'idcombodep'=>'optareo-detos_id',              
+                   'source'=>[\frontend\modules\op\models\OpOsdet::className()=>
+                                [
+                                  'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
+                                        'camporef'=>'descripcion',//columna a mostrar 
+                                        'campofiltro'=>'os_id'  
+                                ]
+                                ],
+                            ]
+               
+               
+        )  ?>
+ </div> 
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">    
+ <?= $form->field($model, 'detos_id')->
+            dropDownList(($model->isNewRecord)?[]:ComboHelper::actividadesOs($model->os_id),
+                  ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
+                    // 'class'=>'probandoSelect2',
+                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
+                        ]
+                    ) ?>
+ </div> 
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'detalle')->textarea(['rows' => 6]) ?>
 
