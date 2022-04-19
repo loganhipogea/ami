@@ -1086,7 +1086,35 @@ public function actionCookies(){
          
      }
      
-     
+     public function actionCalifica(){
+         
+           $this->layout = "install";
+           $model=New \common\models\SesionCali();
+           $model=
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->proc_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_califica_sesion', [
+                        'model' => $model,
+                       // 'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+     }
   }
    
 
