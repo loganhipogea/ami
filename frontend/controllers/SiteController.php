@@ -412,6 +412,10 @@ Datos de caché de configuración se han actualizado');
     }
 public function actionRutas(){
     
+    $model=\frontend\modules\mat\models\MatDetvale::findOne(4);
+    $model->aprobado();
+    die();
+    
     $ses=New \common\components\SesionDoc();
     $modelo=New \frontend\modules\mat\models\MatDetreq;
     //$ses->flush($modelo);

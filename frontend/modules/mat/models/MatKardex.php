@@ -33,8 +33,9 @@ class MatKardex extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['detereq_id'], 'required'],
-            [['detereq_id'], 'integer'],
+            //[['detreq_id'], 'required'],
+            [['detreq_id'], 'integer'],
+             [['detvale_id'], 'safe'],
             [['cant'], 'number'],
             [['fecha'], 'string', 'max' => 10],
         ];
@@ -47,7 +48,7 @@ class MatKardex extends \common\models\base\modelBase
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'detereq_id' => Yii::t('app', 'Detereq ID'),
+            'detreq_id' => Yii::t('app', 'Detereq ID'),
             'fecha' => Yii::t('app', 'Fecha'),
             'cant' => Yii::t('app', 'Cant'),
         ];

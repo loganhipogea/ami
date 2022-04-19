@@ -395,5 +395,21 @@ public function actionAjaxDesactivaItem($id){
            
        }
    }
-    
+  public function actionAjaxAprobarVale($id){
+       if(h::request()->isAjax){
+                h::response()->format = \yii\web\Response::FORMAT_JSON;
+                if(!is_null($model= MatVale::findOne($id))){
+                    if($model->isCreado()){
+                        $model->Aprobar();
+                    }else{
+                        return ['error'=>yii::t('sta.errors','No tiene el status adecuado')];
+                    }                   
+                  }   
+                return ['success'=>yii::t('sta.errors','Se aprobó el vale')];
+            }    
+  }
+  
+  public function actionAjaxAnularVale($id){
+      
+  }
 }

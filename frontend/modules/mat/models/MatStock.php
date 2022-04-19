@@ -2,7 +2,7 @@
 
 namespace frontend\modules\mat\models;
 use frontend\modules\mat\models\MatDetreq;
-
+use common\models\masters\Maestrocompo;
 use Yii;
 
 /**
@@ -40,6 +40,7 @@ class MatStock extends \common\models\base\modelBase
             [['cant', 'cantres', 'valor'], 'number'],
             [['codart', 'ubicacion'], 'string', 'max' => 14],
              [['um'], 'valida_um_base'],
+             [['valor_unit'], 'safe'],
             [['um', 'codal'], 'string', 'max' => 4],
             [['lastmov'], 'string', 'max' => 10],
             [['codart'], 'unique'],

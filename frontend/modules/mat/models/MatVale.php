@@ -18,11 +18,14 @@ use Yii;
  *
  * @property Clipro $codpro0
  */
-class MatVale extends \common\models\base\modelBase
+class MatVale extends \common\models\base\modelBase implements \frontend\modules\mat\interfaces\EstadoInterface
 {
     /**
      * {@inheritdoc}
      */
+    const ESTADO_CREADO='10';
+     const ESTADO_APROBADO='20';
+      const ESTADO_ANULADO='99';
     public $prefijo='67';
      public $dateorTimeFields = [
         'fecha' => self::_FDATE,       
@@ -31,6 +34,7 @@ class MatVale extends \common\models\base\modelBase
         return [    
             '100'=>['SALIDA PARA CONSUMO',-1],
             '101'=>['DEVOLUCION',-1],
+            '103'=>['ANULACION VALE',-1],
             '900'=>['INGRESO POR COMPRA',1],
              '901'=>['REINGRESO',1],
             ];
@@ -102,7 +106,35 @@ class MatVale extends \common\models\base\modelBase
     }
     
     public function beforeSave($insert) {
-        $this->numero=$this->correlativo('numero',10);
+        IF($insert){
+            $this->numero=$this->correlativo('numero',10);
+            $this->codest=self::ESTADO_CREADO;
+        } 
+        
         RETURN parent::beforeSave($insert);
+    }
+    
+    public function Aprobar(){
+        $transaccion=$this->getDb()->beginTransaction(\yii\db\Transaction::SERIALIZABLE);
+      foreach($this->detalles as $detvale){
+          $detvale->aprobado();
+      }
+            $this->codest=self::ESTADO_APROBADO;
+            $this->save();
+           $transaccion->commit();
+    }
+    
+    public function isCreado(){
+        return ($this->codest==self::ESTADO_CREADO)?true:false;
+    }
+     public function isAprobado(){
+       return ($this->codest==self::ESTADO_APROBADO)?true:false; 
+    }
+     public function isAnulado(){
+       return ($this->codest==self::ESTADO_ANULADO)?true:false; 
+    }
+    
+    public function isBloqueado(){
+       return $this->isAnulado()|| $this->isAprobado();
     }
 }
