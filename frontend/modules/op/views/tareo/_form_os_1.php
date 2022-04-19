@@ -1,150 +1,25 @@
 <?php
 
+use yii\helpers\Html;
 
 
 use common\helpers\h;
  use yii\helpers\Url;
 use kartik\grid\GridView;
  use yii\widgets\Pjax;
-use yii\helpers\Html;
 
- use kartik\date\DatePicker;
-  use kartik\time\TimePicker;
- use yii\widgets\ActiveForm;
 
-use frontend\modules\op\helpers\ComboHelper;
-
- use common\widgets\selectwidget\selectWidget;
-  use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
-  
 /* @var $this yii\web\View */
-/* @var $model frontend\modules\op\models\OpTareo */
+/* @var $model frontend\modules\op\models\OpProcesos */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="op-tareo-form">
+<div class="box-body">
     <br>
-    <?php $form = ActiveForm::begin([
-    'fieldClass'=>'\common\components\MyActiveField'
-    ]); ?>
-      <div class="box-header">
-        <div class="col-md-12">
-            <div class="form-group no-margin">
-                
-        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-            
-
-            </div>
-        </div>
-    </div>
-      <div class="box-body">
-    
- <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-  </div>
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <?php  //h::settings()->invalidateCache();  ?>
-                       <?= $form->field($model, 'fecha')->widget(DatePicker::class, [
-                             'language' => h::app()->language,
-                           // 'readonly'=>true,
-                          // 'inline'=>true,
-                           'pluginOptions'=>[
-                                     'format' => h::gsetting('timeUser', 'date')  , 
-                                  'changeMonth'=>true,
-                                  'changeYear'=>true,
-                                 'yearRange'=>"-99:+0",
-                               ],
-                           
-                            //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control','disabled'=>$model->hasChilds()]
-                            ]) ?>
-</div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'hinicio')->widget(TimePicker::className(), ['pluginOptions' => ['showMeridian' => false]]);?>
-     
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'hfin')->widget(TimePicker::className(), ['pluginOptions' => ['showMeridian' => false]]);?>
-     
-
- </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
-
- </div>
-   <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12"> 
-     <?php 
-  // $necesi=new Parametros;
-    echo selectWidget::widget([
-           // 'id'=>'mipapa',
-            'model'=>$model,
-            'form'=>$form,
-            'campo'=>'direcc_id',
-         'ordenCampo'=>1,
-         'addCampos'=>[2],
-        ]);  ?>
-
- </div> 
-             
-              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-    <?= ComboDep::widget([
-               'model'=>$model,               
-               'form'=>$form,
-               'data'=> ComboHelper::procesos(),
-               'campo'=>'proc_id',
-               'idcombodep'=>'optareo-os_id',
-              
-                   'source'=>[\frontend\modules\op\models\OpOs::className()=>
-                                [
-                                  'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
-                                        'camporef'=>'descripcion',//columna a mostrar 
-                                        'campofiltro'=>'proc_id'  
-                                ]
-                                ],
-                            ]
-               
-               
-        )  ?>
- </div>       
-          
-          
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-    <?= ComboDep::widget([
-               'model'=>$model,               
-               'form'=>$form,
-               'data'=> ($model->isNewRecord)?[]:ComboHelper::Os($model->proc_id),
-               'campo'=>'os_id',
-               'idcombodep'=>'optareo-detos_id',              
-                   'source'=>[\frontend\modules\op\models\OpOsdet::className()=>
-                                [
-                                  'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
-                                        'camporef'=>'descripcion',//columna a mostrar 
-                                        'campofiltro'=>'os_id'  
-                                ]
-                                ],
-                            ]
-               
-               
-        )  ?>
- </div> 
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">    
- <?= $form->field($model, 'detos_id')->
-            dropDownList(($model->isNewRecord)?[]:ComboHelper::actividadesOs($model->os_id),
-                  ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
-                    // 'class'=>'probandoSelect2',
-                      //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
-                        ]
-                    ) ?>
- </div> 
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'detalle')->textarea(['rows' => 6]) ?>
-
- </div>
-     
-    <?php ActiveForm::end(); ?>
-
-           
-    <?php Pjax::begin(['id'=>'pjax-tareo','timeout'=>false]); ?>
+   
+ 
+        
+    <?php Pjax::begin(['id'=>'pjax-det','timeout'=>false]); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
@@ -152,16 +27,17 @@ use frontend\modules\op\helpers\ComboHelper;
     <?= GridView::widget([
         'id'=>'grilla-os',
                 'dataProvider' =>new \yii\data\ActiveDataProvider([
-                                    'query'=> frontend\modules\op\models\OpLibro::find()->select(['id',
-                                        'hinicio','descripcion','tipo',
-                                    ])->andWhere(['tareo_id'=>$model->id])
+                                    'query'=> frontend\modules\op\models\OpOsdet::find()->select(['id',
+                                        'item','descripcion','emplazamiento','finicio','termino','codtra',
+                                    ])->andWhere(['os_id'=>$model->id])
                                 ]),
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         //'filterModel' => New \frontend\modules\op\models\OpOsSearch(),
         'columns' => [
             
-          [                    
+          [
+                    
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
             'template' => '{edit}{delete}{attach}',
@@ -218,10 +94,10 @@ use frontend\modules\op\helpers\ComboHelper;
                     //'headerOptions' => ['class' => 'kartik-sheet-style'], 
                     'expandOneOnly' => true
                 ], 
-         ['attribute' => 'hinicio',
+         ['attribute' => 'item',
                 'format'=>'raw',
                 'value'=>function($model){
-                        return $model->hinicio;                        
+                        return $model->item;                        
                              } 
                 
                 ],
@@ -232,8 +108,20 @@ use frontend\modules\op\helpers\ComboHelper;
                         return $model->descripcion;                        
                              } 
                 
-                ],                
-            'tipo',
+                ],
+                ['attribute' => 'codtra',
+                'format'=>'raw',
+                'value'=>function($model){
+                    
+                        //return 'hola';
+                        return (is_null($model->codtra))?'':$model->trabajador->fullName();                        
+                             } 
+                
+                ],
+                'emplazamiento',
+            'finicio',
+            'termino',
+          
         ],
     ]); ?>
     <?php
@@ -251,9 +139,6 @@ use frontend\modules\op\helpers\ComboHelper;
   </div>        
      
     <?php Pjax::end(); ?>
-     
-          
-          
-          
+
 </div>
-    </div>
+    

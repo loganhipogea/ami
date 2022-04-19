@@ -22,6 +22,10 @@ use common\helpers\h;
         <div class="navbar-custom-menu">
 
             <ul class="nav navbar-nav">
+                <?php 
+               //if(!h::UserIsGuest())
+               require('calificacion.php');
+               ?> 
                <?php 
                //if(!h::UserIsGuest())
                require('mailbox.php');

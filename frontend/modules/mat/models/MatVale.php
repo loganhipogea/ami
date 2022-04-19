@@ -137,4 +137,6 @@ class MatVale extends \common\models\base\modelBase implements \frontend\modules
     public function isBloqueado(){
        return $this->isAnulado()|| $this->isAprobado();
     }
+    
+   
 }

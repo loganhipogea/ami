@@ -412,16 +412,21 @@ Datos de caché de configuración se han actualizado');
     }
 public function actionRutas(){
     
+
     $model=\frontend\modules\mat\models\MatDetvale::findOne(4);
     $model->aprobado();
     die();
     
     $ses=New \common\components\SesionDoc();
     $modelo=New \frontend\modules\mat\models\MatDetreq;
+    $ses=New \common\components\SesionCali();
+    //$modelo=New \frontend\modules\mat\models\MatDetreq;
+
     //$ses->flush($modelo);
-    
-    print_r($ses->valores($modelo));
+    //$ses->inserta(56, 87,23);
+    print_r($ses->sesion[$ses::NOMBRE_SESION]);
     die();
+    
     
     
     
@@ -1090,7 +1095,40 @@ public function actionCookies(){
          
      }
      
-     
+     public function actionCalifica(){
+         
+           $this->layout = "install";
+           $model=New \common\models\SesionCali();
+           
+           $datos=[];
+        if(h::request()->isPost){
+           // VAR_DUMP(h::request()->post());die();
+            $postito=h::request()->post();
+            //$model->load(h::request()->post());
+            $model->proc_id=$postito["SesionCali"]['proc_id'];
+            $model->os_id=$postito["SesionCali"]['os_id'];
+            $model->detos_id=$postito["SesionCali"]['detos_id'];
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                //VAR_DUMP($model->proc_id,$model->os_id,$model->detos_id);die();
+                $model->graba();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->proc_id];
+            }
+        }else{
+           return $this->renderAjax('_modal_califica_sesion', [
+                        'model' => $model,
+                       // 'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+     }
   }
    
 
