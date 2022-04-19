@@ -412,11 +412,11 @@ Datos de caché de configuración se han actualizado');
     }
 public function actionRutas(){
     
-    $ses=New \common\components\SesionDoc();
-    $modelo=New \frontend\modules\mat\models\MatDetreq;
+    $ses=New \common\components\SesionCali();
+    //$modelo=New \frontend\modules\mat\models\MatDetreq;
     //$ses->flush($modelo);
-    
-    print_r($ses->valores($modelo));
+    //$ses->inserta(56, 87,23);
+    print_r($ses->sesion[$ses::NOMBRE_SESION]);
     die();
     
     
@@ -1090,17 +1090,22 @@ public function actionCookies(){
          
            $this->layout = "install";
            $model=New \common\models\SesionCali();
-           $model=
+           
            $datos=[];
         if(h::request()->isPost){
-            
-            $model->load(h::request()->post());
+           // VAR_DUMP(h::request()->post());die();
+            $postito=h::request()->post();
+            //$model->load(h::request()->post());
+            $model->proc_id=$postito["SesionCali"]['proc_id'];
+            $model->os_id=$postito["SesionCali"]['os_id'];
+            $model->detos_id=$postito["SesionCali"]['detos_id'];
              h::response()->format = \yii\web\Response::FORMAT_JSON;
             $datos=\yii\widgets\ActiveForm::validate($model);
             if(count($datos)>0){
                return ['success'=>2,'msg'=>$datos];  
             }else{
-                $model->save();
+                //VAR_DUMP($model->proc_id,$model->os_id,$model->detos_id);die();
+                $model->graba();
                 //$model->assignStudentsByRandom();
                   return ['success'=>1,'id'=>$model->proc_id];
             }

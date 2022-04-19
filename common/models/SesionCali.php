@@ -1,13 +1,13 @@
 <?php
 namespace common\models;
-
+use common\models\base\modelBase;
 use Yii;
 use yii\base\Model;
 
 /**
  * Login form
  */
-class SesionCali extends Model
+class SesionCali extends modelBase
 {
     public $proc_id;
     public $os_id;
@@ -24,7 +24,7 @@ class SesionCali extends Model
     
     public function rules()
     {
-        
+      return [];  
     }
       public function attributeLabels()
     {
@@ -36,8 +36,16 @@ class SesionCali extends Model
         ];
     }
     
-    public function save(){
-        $this->sesionCali->sesion->inserta(
+    public function restoreAttributes(){
+        $this->proc_id=$this->getSesionCali()->idProceso;
+        $this->os_id=$this->getSesionCali()->idOs;
+         $this->detos_id=$this->getSesionCali()->idDetOs;
+    }
+   
+    
+    public function graba(){
+        
+        $this->getSesionCali()->inserta(
                 $this->proc_id, $this->os_id, $this->detos_id,
                 );
     }

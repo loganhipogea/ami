@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
+use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 //use frontend\modules\mat\helpers\ComboHelper;
 use frontend\modules\op\helpers\ComboHelper;
  //use kartik\date\DatePicker;
@@ -19,7 +19,15 @@ use common\helpers\h;
 <div class="edificios-form">
     <br>
  <div class="box-body">
-    <?php $form = ActiveForm::begin([
+    <?php
+    //echo get_class($model);die();
+    //$sesionCompo=$model->getSesionCali();
+    //var_dump($sesionCompo->sesion[$sesionCompo::NOMBRE_SESION]);die();
+    $model->restoreAttributes();
+    /*echo $model->proc_id.'<br>';
+    echo $model->os_id.'<br>';
+    echo $model->detos_id.'<br>';*/
+    $form = ActiveForm::begin([
         'id'=>'myformulario',
     'fieldClass'=>'\common\components\MyActiveField'
     ]); ?>
@@ -50,7 +58,7 @@ use common\helpers\h;
                'form'=>$form,
                'data'=> ComboHelper::procesos(),
                'campo'=>'proc_id',
-               'idcombodep'=>'optareo-os_id',
+               'idcombodep'=>'sesioncali-os_id',
               
                    'source'=>[\frontend\modules\op\models\OpOs::className()=>
                                 [
@@ -70,9 +78,9 @@ use common\helpers\h;
     <?= ComboDep::widget([
                'model'=>$model,               
                'form'=>$form,
-               'data'=> ($model->isNewRecord)?[]:ComboHelper::Os($model->proc_id),
+               'data'=> ComboHelper::Os($model->proc_id),
                'campo'=>'os_id',
-               'idcombodep'=>'optareo-detos_id',              
+               'idcombodep'=>'sesioncali-detos_id',              
                    'source'=>[\frontend\modules\op\models\OpOsdet::className()=>
                                 [
                                   'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
@@ -87,7 +95,7 @@ use common\helpers\h;
  </div> 
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">    
  <?= $form->field($model, 'detos_id')->
-            dropDownList(($model->isNewRecord)?[]:ComboHelper::actividadesOs($model->os_id),
+            dropDownList(ComboHelper::actividadesOs($model->os_id),
                   ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,

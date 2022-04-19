@@ -22,8 +22,11 @@ class SesionCali extends \yii\base\Component
   }
   
   public function getSesion(){
-      if(is_null($this->_sesion))
-         return h::session ();
+      if(is_null($this->_sesion)){
+          $this->_sesion= h::session ();
+      }else{
+          
+      }
       return $this->_sesion;
   }
   
@@ -44,6 +47,7 @@ class SesionCali extends \yii\base\Component
       
       
       $this->sesion[self::NOMBRE_SESION]=$array;
+      
    }
   
    
@@ -56,31 +60,34 @@ class SesionCali extends \yii\base\Component
       }
    
   public function getIdProceso(){
-      $array=$this->sesion;
+      $array=$this->sesion[self::NOMBRE_SESION];
       if(array_key_exists(self::KEY_PROCESO, $array))
       return $this->sesion[self::NOMBRE_SESION][self::KEY_PROCESO];
       return null;
   }
   
   public function getIdOs(){
-      $array=$this->sesion;
+     $array=$this->sesion[self::NOMBRE_SESION];
       if(array_key_exists(self::KEY_OS, $array))
       return $this->sesion[self::NOMBRE_SESION][self::KEY_OS];
       return null;
   }
   
   public function getIdDetos(){
-      $array=$this->sesion;
+      $array=$this->sesion[self::NOMBRE_SESION];
       if(array_key_exists(self::KEY_DETOS, $array))
       return $this->sesion[self::NOMBRE_SESION][self::KEY_DETOS];
       return null;
   }
   
-  public static function hasSesionConValores(){
+  public static function isFill(){
       $sesion=h::session();
-      if($sesion->has(self::NOMBRE_SESION)){
-          if($sesion[self::NOMBRE_SESION])
-      }
+      if($sesion->has(self::NOMBRE_SESION))
+        if(array_key_exists(self::KEY_DETOS, $sesion[self::NOMBRE_SESION]))
+         if(!empty($sesion[self::NOMBRE_SESION][self::KEY_DETOS]))
+           return true;
+      return false;
+     
   }
    
 }
