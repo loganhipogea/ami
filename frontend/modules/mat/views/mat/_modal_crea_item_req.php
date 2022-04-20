@@ -150,7 +150,7 @@ use common\widgets\selectwidget\selectWidget;
                                          *
                         
                          ]*/
-                    'source'=>[\frontend\modules\op\models\OpOsDet::className()=>
+                    'source'=>[\frontend\modules\op\models\OpOsdet::className()=> 
                                 [
                                   'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
                                         'camporef'=>'descripcion',//columna a mostrar 
@@ -158,11 +158,13 @@ use common\widgets\selectwidget\selectWidget;
                                 ]
                                 ],
                             ]
-               
+                
                
         )  ?>
  </div> 
- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
+ <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+     
+     
  <?= $form->field($model, 'detos_id')->
             dropDownList(($model->isNewRecord)?[]:ComboHelper::actividadesOs($model->os_id),
                   ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
