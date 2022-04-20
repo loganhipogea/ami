@@ -23,6 +23,8 @@ use Yii;
 class MatDetreq extends \common\models\base\modelBase 
 implements ReqInterface
 {
+    const SCE_IMPUTADO='sce_imputado';
+    //const SC='sce_imputado';
    public $boolean_fields=['activo'];
    private $_cantreal=null;
     /**
@@ -55,9 +57,11 @@ implements ReqInterface
     public function rules()
     {
         return [
+             [['um','cant'] ,'required'],
              [['cant','req_id','cant','item',
                  'um','activo','descripcion','texto','os_id','detos_id','proc_id'], 'safe'],
-            [['req_id'], 'integer'],
+            [['detos_id','proc_id','os_id'] ,'required', 'on'=>self::SCE_IMPUTADO],
+             [['req_id'], 'integer'],
             [['cant'], 'number'],
             [['texto'], 'string'],
             [['codart', 'imptacion'], 'string', 'max' => 14],
@@ -68,9 +72,6 @@ implements ReqInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -86,6 +87,18 @@ implements ReqInterface
         ];
     }
 
+    public function scenarios() {
+            $scenarios = parent::scenarios();
+            $scenarios[self::SCE_IMPUTADO] = [ 
+                'req_id',  'cant', 'valor', 'item', 'um','descripcion',
+                'tipim','texto',
+                'os_id','detos_id','proc_id'
+                ];
+            //$scenarios[self::MOV_INGRESO] = [ 'vale_id', 'codart', 'cant', 'valor', 'item', 'um','descripcion','detreq_id'];
+        
+            return $scenarios;
+    }
+    
     /**
      * @return \yii\db\ActiveQuery
      */

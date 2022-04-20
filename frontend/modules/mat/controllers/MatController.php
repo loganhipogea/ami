@@ -152,6 +152,7 @@ class MatController extends baseController
     $this->layout = "install";
       $model=$this->findModel($id);
       $modeldet=New \frontend\modules\mat\models\MatDetreq();
+      $modeldet->setScenario($modeldet::SCE_IMPUTADO);
        
        $modeldet->req_id=$id;
            $modeldet->activo=true;
@@ -183,7 +184,7 @@ class MatController extends baseController
      public function actionModEditMat($id){
     $this->layout = "install";
       $modeldet= \frontend\modules\mat\models\MatDetreq::findOne($id);
-                 
+        $modeldet->setScenario($modeldet::SCE_IMPUTADO);         
        $datos=[];
         if(h::request()->isPost){
             
