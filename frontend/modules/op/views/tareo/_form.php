@@ -87,7 +87,7 @@ use frontend\modules\op\helpers\ComboHelper;
  </div> 
              
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-    <?= ComboDep::widget([
+    <?php /*echo ComboDep::widget([
                'model'=>$model,               
                'form'=>$form,
                'data'=> ComboHelper::procesos(),
@@ -104,12 +104,12 @@ use frontend\modules\op\helpers\ComboHelper;
                             ]
                
                
-        )  ?>
+        ) */ ?>
  </div>       
           
           
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-    <?= ComboDep::widget([
+    <?php /*echo ComboDep::widget([
                'model'=>$model,               
                'form'=>$form,
                'data'=> ($model->isNewRecord)?[]:ComboHelper::Os($model->proc_id),
@@ -125,16 +125,16 @@ use frontend\modules\op\helpers\ComboHelper;
                             ]
                
                
-        )  ?>
+        ) */ ?>
  </div> 
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">    
- <?= $form->field($model, 'detos_id')->
+ <?php /*echo  $form->field($model, 'detos_id')->
             dropDownList(($model->isNewRecord)?[]:ComboHelper::actividadesOs($model->os_id),
                   ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
                         ]
-                    ) ?>
+                    ) */ ?>
  </div> 
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'detalle')->textarea(['rows' => 6]) ?>

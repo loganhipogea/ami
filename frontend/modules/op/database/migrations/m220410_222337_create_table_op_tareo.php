@@ -34,12 +34,12 @@ class m220410_222337_create_table_op_tareo extends baseMigration
              $this->addForeignKey($this->generateNameFk($table),
                     $table,'direcc_id', static::TABLE_DIRECCIONES,'id');
                     }
-                 $this->addForeignKey($this->generateNameFk($table),
+                /* $this->addForeignKey($this->generateNameFk($table),
                     $table,'os_id', static::TABLE_OS,'id');
                   $this->addForeignKey($this->generateNameFk($table),
                     $table,'detos_id', static::TABLE_OSDET,'id');
                $this->addForeignKey($this->generateNameFk($table),
-                    $table,'proc_id', static::TABLE_PROCESOS,'id');
+                    $table,'proc_id', static::TABLE_PROCESOS,'id')*/;
     }
 
     /**

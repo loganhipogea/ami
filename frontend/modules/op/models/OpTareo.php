@@ -41,7 +41,7 @@ class OpTareo extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['direcc_id', 'proc_id', 'os_id', 'detos_id'], 'required'],
+            [['direcc_id', /*'proc_id', 'os_id', 'detos_id'*/], 'required'],
             [['direcc_id', 'proc_id', 'os_id', 'detos_id'], 'integer'],
             [['detalle'], 'string'],
             [['fecha'], 'string', 'max' => 10],

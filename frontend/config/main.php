@@ -102,7 +102,7 @@ return [
 
         	// !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
 
-        	'cookieValidationKey' => 'HOLIS',
+        	//'cookieValidationKey' => 'HOLIS',
             'csrfParam' => '_csrf-frontend',
         	//'enableCsrfValidation' => false,
 

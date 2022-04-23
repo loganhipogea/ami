@@ -143,6 +143,7 @@ class SiteController extends \frontend\controllers\base\baseController
             //$this->redirect(['/sta/programas']);
             //echo Url::to(Yii::$app->user->resolveUrlAfterLogin());die();
             //
+           Yii::$app->request->enableCsrfValidation =false;
             //echo Yii::$app->user->resolveUrlAfterLogin(); die();
             //$this->redirect(Url::toRoute([Yii::$app->user->resolveUrlAfterLogin()]));
              $this->redirect(['index']); 
