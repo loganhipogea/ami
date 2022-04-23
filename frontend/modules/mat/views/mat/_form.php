@@ -33,7 +33,9 @@ use yii\grid\GridView;
     
 
   <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'numero')->textInput(['maxlength' => true,'disabled'=>true]) ?>
+     <?= $form->field($model, 'numero')->textInput(['maxlength' => true,
+         'style'=>"font-weight:600;color:#740fd6;",
+         'disabled'=>true]) ?>
 
  </div>
    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">

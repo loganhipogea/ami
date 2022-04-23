@@ -20,8 +20,10 @@ class ComboHelper extends Combito
         return [
             '100'=>'SALIDA PARA CONSUMO',
             '101'=>'DEVOLUCION',
+            '103'=>'ANULACION VALE',
             '900'=>'INGRESO POR COMPRA',
              '901'=>'REINGRESO',
+            
             ];
         
         

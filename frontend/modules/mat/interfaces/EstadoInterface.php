@@ -1,20 +1,20 @@
 <?php
+
 namespace frontend\modules\mat\interfaces;
 
 /*Esta interfaz es base
  * para los colecrtores como claulan las particiapciones en
  * la facturacion
  */
-interface  ReqInterface { 
+interface  EstadoInterface { 
     /*  
      */
     //public function factorProRateo();
     
-   public function getCantReal();
-   public function verify_um();
+   public function isCreado();
+   public function isAprobado();
+   public function isAnulado();
+   public function isBloqueado();
    
     
 }
-
-
-

@@ -19,40 +19,36 @@ use common\widgets\inputajaxwidget\inputAjaxWidget;
     <br>
     <?php $form = ActiveForm::begin([
     'fieldClass'=>'\common\components\MyActiveField'
-    ]); ?>
+    ]); 
+    $bloqueado=$model->isBloqueado();
+   
+    ?>
       <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
                 
-        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-            
+        <?= Html::submitButton('<span class="fa fa-save"></span>   '.Yii::t('app', 'Grabar'), ['class' => 'btn btn-success']) ?>
+           <?php 
+            if($model->isCreado())
+           echo Html::button(
+                                    '<span class="fa fa-chek"></span>   '.Yii::t('sta.labels', 'Aprobar'),
+                                     ['class' => 'btn btn-success','href' => '#','id'=>'btn-aprobar']
+                 );
+          ?> 
 
             </div>
         </div>
     </div>
       <div class="box-body">
     
- <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-  </div>
-  <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'numero')->textInput(['maxlength' => true]) ?>
+
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'numero')->textInput(['maxlength' => true,'disabled'=>true]) ?>
 
  </div>
- <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-      <?= $form->field($model, 'fecha')->widget(DatePicker::class, [
-                            'language' => h::app()->language,
-                           'pluginOptions'=>[
-                                     'format' => h::gsetting('timeUser', 'date')  , 
-                                   'changeMonth'=>true,
-                                  'changeYear'=>true,
-                                 'yearRange'=>'2014:'.date('Y'),
-                               ],
-                          
-                            //'dateFormat' => h::getFormatShowDate(),
-                            'options'=>['class'=>'form-control',
-                               //'disabled'=>(!$aprobado)?false:true  
-                                ]
-                            ]) ?>
+ <div class="col-lg-9 col-md-8 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true,'disabled'=>(!$bloqueado)?false:true  ]) ?>
+     
  </div>
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
      <?php 
@@ -68,30 +64,38 @@ use common\widgets\inputajaxwidget\inputAjaxWidget;
 
  </div> 
   <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
-
+     
+ <?= $form->field($model, 'fecha')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                     'format' => h::gsetting('timeUser', 'date')  , 
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'2014:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control',
+                               'disabled'=>(!$bloqueado)?false:true  
+                                ]
+                            ]) ?>
  </div>
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">    
  <?= $form->field($model, 'codmov')->
             dropDownList(ComboHelper::getCboMovAlmacen(),
                   ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
+                      'disabled'=>(!$bloqueado)?false:true  
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
                         ]
                     ) ?>
  </div>  
-   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">    
-         <?=Html::button(
-                                    '<span class="fa fa-users"></span>   '.Yii::t('sta.labels', 'Generar Usuarios'),
-                                     ['class' => 'btn btn-success','href' => '#','id'=>'btn-add-material']
-                 );
-          ?>
-   </div>  
+    
      
     <?php ActiveForm::end(); ?>
 
     <?php Pjax::begin(['id'=>'grilla-materiales']); ?>
-    
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
    <?php //var_dump((new SigiApoderadosSearch())->searchByEdificio($model->id)); die(); ?>
     <?= GridView::widget([
         'dataProvider' =>(new \frontend\modules\mat\models\MatDetvaleSearch())->search_by_vale($model->id),
@@ -103,26 +107,15 @@ use common\widgets\inputajaxwidget\inputAjaxWidget;
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
             'template' => '{edit}{delete}',
                'buttons' => [
-                    'attach' => function($url, $model) {  
-                         $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,'idModal'=>'imagemodal','modelid'=>$model->id,'nombreclase'=> str_replace('\\','_',get_class($model))]);
-                        $options = [
-                            'title' => Yii::t('sta.labels', 'Subir Archivo'),
-                            //'aria-label' => Yii::t('rbac-admin', 'Activate'),
-                            //'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            'data-method' => 'get',
-                            //'data-pjax' => '0',
-                        ];
-                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => 'botonAbre btn btn-success']);
-                        //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
-                     
-                        
-                        },
+                    
                                 
-                                'edit' => function ($url,$model) {
+                                'edit' => function ($url,$model) use($bloqueado)  {
 			    $url= Url::to(['/mat/mat/mod-edit-mat-vale','id'=>$model->id,'gridName'=>'grilla-materiales','idModal'=>'buscarvalor']);
-                              return \yii\helpers\Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', $url, ['data-pjax'=>'0','class'=>'botonAbre']);
+                              if($bloqueado)return '';
+                            return \yii\helpers\Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', $url, ['data-pjax'=>'0','class'=>'botonAbre']);
                             },
-                        'delete' => function ($url,$model) {
+                        'delete' => function ($url,$model) use($bloqueado){
+                                 if($bloqueado)return '';
 			   $url = \yii\helpers\Url::to([$this->context->id.'/ajax-desactiva-item','id'=>$model->id]);
                               return \yii\helpers\Html::a('<span class="btn btn-danger glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=>\yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
                             }
@@ -137,6 +130,20 @@ use common\widgets\inputajaxwidget\inputAjaxWidget;
                 'format'=>'raw',
                 'value'=>function($model){
                         return $model->material->descripcion;
+                              } 
+                
+                ], 
+                        ['attribute' => 'valor',
+                'format'=>'raw',
+                'value'=>function($model){
+                        return h::formato()->asDecimal($model->valor,2);
+                              } 
+                
+                ], 
+                        ['attribute' => 'V. Unit',
+                'format'=>'raw',
+                'value'=>function($model){
+                        return h::formato()->asDecimal($model->valor/$model->cant,2);
                               } 
                 
                 ], 
@@ -176,12 +183,55 @@ use common\widgets\inputajaxwidget\inputAjaxWidget;
             //'foreignskeys'=>[1,2,3],
         ]); 
    ?>
-    <?php Pjax::end(); ?>
-   <?php
+      
+      <?php
  $url= Url::to(['mod-agrega-mat-vale','id'=>$model->id,'gridName'=>'grilla-materiales','idModal'=>'buscarvalor']);
+  if(!$bloqueado)
    echo  Html::button(yii::t('base.verbs','Agregar material'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Material'),'id'=>'btn_cuentas_edi', 'class' => 'botonAbre btn btn-success']); 
-?>     
+       ?>   
+  </div>
+    <?php Pjax::end(); ?>
+     
           
-          
+ <?php 
+ if(!$model->isNewRecord){
+  $string="$('#btn-aprobar').on( 'click', function(){ 
+     
+       $.ajax({
+              url: '".Url::to(['/mat/mat/ajax-aprobar-vale','id'=>$model->id])."', 
+              type: 'get',
+              data:{id:".$model->id."  },
+              dataType: 'json', 
+              error:  function(xhr, textStatus, error){               
+                            var n = Noty('id');                      
+                              $.noty.setText(n.options.id, error);
+                              $.noty.setType(n.options.id, 'error');       
+                                }, 
+              success: function(json) {
+              var n = Noty('id');
+                      
+                       if ( !(typeof json['error']==='undefined') ) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
+                              $.noty.setType(n.options.id, 'error');  
+                          }    
+
+                             if ( !(typeof json['warning']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['warning']);
+                              $.noty.setType(n.options.id, 'warning');  
+                             } 
+                          if ( !(typeof json['success']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['success']);
+                              $.noty.setType(n.options.id, 'success');  
+                             }      
+                   
+                        }
+                        });
+
+
+             })";
+  
+   $this->registerJs($string, \yii\web\View::POS_END);
+ }
+  ?>          
 </div>
     </div>
