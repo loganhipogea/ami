@@ -548,6 +548,56 @@ class CliproController extends baseController {
 
         
     }
+  
+ public function actionCreaFromApi(){
+     
+     if(h::request()->isAjax){
+         // h::response()->format = \yii\web\Response::FORMAT_JSON;
+         $ruc=h::request()->post('valorInput');
+         yii::error('El ruc es ');
+         yii::error($ruc);
+          yii::error(h::request()->post());
+     $compo=New \common\components\MyClientGeneral();
+     $validator=new \yii\validators\RegularExpressionValidator([
+         'pattern'=>h::gsetting('general', 'formatoRUC'),
+     ]);
+    if($validator->validate($ruc)){
+        if(is_null($model=Clipro::findOne(['rucpro'=>$ruc]))){
+            $respuesta=$compo->apiRuc($ruc); 
+                if($respuesta ){
+                        if($respuesta['success']){
+                            $nuevoClipro=New Clipro();
+                            $nuevoClipro->setAttributes([
+                                'rucpro'=>$ruc,
+                                'despro'=>$respuesta['data']["nombre_o_razon_social"],
+                             ]);
+                            $nuevoClipro->save();
+                            $nuevoClipro->refresh();
+                            $nuevaDireccion=New Direcciones();
+                            $nuevaDireccion->setAttributes([
+                                'codpro'=>$nuevoClipro->codpro,
+                                'direc'=>$respuesta['data']["direccion_completa"],
+                                'coddepa'=>'1'.$respuesta['data']["ubigeo"][0],
+                                'codprov'=>'1'.$respuesta['data']["ubigeo"][0].'1'.$respuesta['data']["ubigeo"][1],
+                                'coddist'=>'1'.$respuesta['data']["ubigeo"][0].'1'.$respuesta['data']["ubigeo"][1].'1'.$respuesta['data']["ubigeo"][2],
+                             ]);
+                            $nuevaDireccion->save();
+                            return $nuevoClipro->despro;
+                        }else{
+                            return /*['error'=>*/$respuesta['message']/*]*/;
+                         }
+            }else{
+               return 'Error en la petición API';
+            }
+        }else{
+            return $model->despro;
+        }
+    }else{
+       return 'El RUC NO ES VALIDO  '; 
+    }
+     
+   }
+ }
     
     
 }

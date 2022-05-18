@@ -5,6 +5,7 @@ namespace frontend\modules\mat\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\modules\mat\models\MatDetvale;
+use frontend\modules\mat\models\MatDetreq;
 
 /**
  * MatReqSearch represents the model behind the search form of `frontend\modules\mat\models\MatReq`.
@@ -104,6 +105,7 @@ class MatVwReqSearch extends MatVwReq
             return $dataProvider;
         }
         $query->andWhere(['os_id'=>$id_os]);
+        $query->andWhere(['tipo'=> MatDetreq::TIPO_MATERIALE]);
         $query->andFilterWhere(['like', 'codart', $this->codart])
         ->andFilterWhere(['detos_id'=> $this->detos_id])
         ->andFilterWhere(['like', 'descridetalle', explode('%',$this->descridetalle)])

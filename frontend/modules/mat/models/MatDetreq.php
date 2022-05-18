@@ -24,6 +24,9 @@ class MatDetreq extends \common\models\base\modelBase
 implements ReqInterface
 {
     const SCE_IMPUTADO='sce_imputado';
+    const SCE_SERVICIO='sce_servicio';
+    const TIPO_MATERIALE='MAT';
+    const TIPO_SERVICIO='SERV';
     //const SC='sce_imputado';
    public $boolean_fields=['activo'];
    private $_cantreal=null;
@@ -57,8 +60,9 @@ implements ReqInterface
     public function rules()
     {
         return [
-             [['um','cant'] ,'required'],
-             [['cant','req_id','cant','item',
+             [['cant'] ,'required'],
+            [['codart'] ,'safe'],
+             [['cant','req_id','cant','item','tipo',
                  'um','activo','descripcion','texto','os_id','detos_id','proc_id'], 'safe'],
             [['detos_id','proc_id','os_id'] ,'required', 'on'=>self::SCE_IMPUTADO],
              [['req_id'], 'integer'],
@@ -91,7 +95,12 @@ implements ReqInterface
             $scenarios = parent::scenarios();
             $scenarios[self::SCE_IMPUTADO] = [ 
                 'req_id',  'cant', 'valor', 'item', 'um','descripcion',
-                'tipim','texto',
+                'tipim','texto','codart',
+                'os_id','detos_id','proc_id'
+                ];
+            $scenarios[self::SCE_SERVICIO] = [ 
+                'req_id',  'cant', 'valor', 'item', 'descripcion',
+               'texto',
                 'os_id','detos_id','proc_id'
                 ];
             //$scenarios[self::MOV_INGRESO] = [ 'vale_id', 'codart', 'cant', 'valor', 'item', 'um','descripcion','detreq_id'];

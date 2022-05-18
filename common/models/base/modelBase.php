@@ -1660,5 +1660,9 @@ public function firstMessage($category=null){
                      $formato,
                       $valor);
  }
+ public function isScenario($scenario){
+    return trim(strtolower($this->getScenario()))== trim(strtolower($scenario));
+ }
+ 
 }   
 

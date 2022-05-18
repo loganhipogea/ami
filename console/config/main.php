@@ -100,6 +100,7 @@ return [
         'migrate-modules' => [
            'class' => 'yii\console\controllers\MigrateController',
             'migrationNamespaces' => [
+                 'frontend\modules\clasi\database\migrations',
                 'frontend\modules\sigi\database\migrations',
                 'frontend\modules\cc\database\migrations',
                 'frontend\modules\import\database\migrations',

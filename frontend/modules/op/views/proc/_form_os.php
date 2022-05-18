@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
+use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 
 use common\helpers\h;
  use yii\helpers\Url;
@@ -19,7 +19,7 @@ use kartik\grid\GridView;
    
  
         
-    <?php Pjax::begin(['id'=>'pjax-det','timeout'=>false]); ?>
+    <?php Pjax::begin(['id'=>'pjax-detserv','timeout'=>false]); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
@@ -40,7 +40,7 @@ use kartik\grid\GridView;
                     
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{edit}{delete}{attach}',
+            'template' => '{edit}{delete}{attach}{change}',
                'buttons' => [
                     'attach' => function($url, $model) {  
                          $url=\yii\helpers\Url::toRoute(['/finder/selectimage','isImage'=>false,'idModal'=>'imagemodal','modelid'=>$model->id,'nombreclase'=> str_replace('\\','_',get_class($model))]);
@@ -58,7 +58,7 @@ use kartik\grid\GridView;
                         },
                                 
                                 'edit' => function ($url,$model) {
-			    $url= Url::to(['/op/proc/mod-edit-osdet','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
+			    $url= Url::to(['/op/proc/mod-edit-osdet','id'=>$model->id,'gridName'=>'pjax-detserv','idModal'=>'buscarvalor']);
                               return \yii\helpers\Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', $url, ['data-pjax'=>'0','class'=>'botonAbre']);
                             },
                         'delete' => function ($url,$model) {
@@ -69,7 +69,7 @@ use kartik\grid\GridView;
                               
 			    },
                         'attach' => function($url, $model) {  
-                          $url=\yii\helpers\Url::toRoute(['/op/proc/modal-agrega-doc','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
+                          $url=\yii\helpers\Url::toRoute(['/op/proc/modal-agrega-doc','id'=>$model->id,'gridName'=>'pjax-detserv','idModal'=>'buscarvalor']);
                         $options = [
                             'title' => Yii::t('sta.labels', 'Subir Archivo'),
                             //'aria-label' => Yii::t('rbac-admin', 'Activate'),
@@ -80,6 +80,12 @@ use kartik\grid\GridView;
                         return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => 'botonAbre btn btn-success']);
                         //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
                      
+                        
+                        },
+                       'change' => function($url, $model) {  
+                         $url=\yii\helpers\Url::toRoute(['/op/proc/ajax-compra-det-os','id'=>$model->id]);
+                        
+                                   return \yii\helpers\Html::a('<span class="btn btn-primary fa fa-money"></span>', '#', ['title'=>$url,'id'=>$model->id,'family'=>'pigmalion',]);
                         
                         },
                     ]
@@ -125,7 +131,7 @@ use kartik\grid\GridView;
         ],
     ]); ?>
     <?php
-      $url= Url::to(['mod-agrega-det-os','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
+      $url= Url::to(['mod-agrega-det-os','id'=>$model->id,'gridName'=>'pjax-detserv','idModal'=>'buscarvalor']);
    echo  Html::button(yii::t('base.verbs','Agregar operación'), 
            ['href' => $url, 'title' => yii::t('sta.labels','Agregar Op'),
                'id'=>'btn_cuentas_edi',
@@ -137,7 +143,19 @@ use kartik\grid\GridView;
 </div>
     
   </div>        
-     
+     <?php 
+   echo linkAjaxGridWidget::widget([
+           'id'=>'widgetgruidBancosss',
+            'idGrilla'=>'pjax-detserv',
+            'family'=>'pigmalion',
+          'type'=>'POST',
+           'evento'=>'click',
+           //'refrescar'=>false,
+        'posicion'=>\yii\web\View::POS_END
+       
+            //'foreignskeys'=>[1,2,3],
+        ]); 
+   ?>
     <?php Pjax::end(); ?>
 
 </div>

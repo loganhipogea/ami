@@ -76,11 +76,21 @@ class linkAjaxGridWidget extends Widget
       $cad=" beforeSend: function() {  
              return confirm('".$this->question."');
                         },";
+      $cadUx="";
       $confirm=($this->confirm)?$cad:'';
      // $mesage=yii::t('base.verbs','Are you Sure to Delete this Record ?');
-     $cadUx=(count($this->otherContainers)>0)?"  $.pjax.reload({container: '#".$this->otherContainers[0]."', async: false});  ":"";
-   $cadenaJs="$('div[id=\"".$this->idGrilla."\"] [family=\"".$this->family."\"]').on( '".$this->evento."', function() { 
-        alert(this.checked);
+     //$cadUx=(count($this->otherContainers)>0)?"  $.pjax.reload({container: '#".$this->otherContainers[0]."', async: false});  ":"";
+         if(count($this->otherContainers)>0){
+            foreach($this->otherContainers as $container){
+              $cadUx.="  $.pjax.reload({container: '#".$container."', async: false});  ";   
+            }
+             
+         }else{
+           $cadUx="";  
+         }
+     
+     $cadenaJs="$('div[id=\"".$this->idGrilla."\"] [family=\"".$this->family."\"]').on( '".$this->evento."', function() { 
+        
      var yapaso=false;
      var refrescar=".(($this->refrescar)?"true;":"false;")." 
     if(!yapaso){  

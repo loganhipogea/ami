@@ -413,7 +413,15 @@ Datos de caché de configuración se han actualizado');
     }
 public function actionRutas(){
     
-
+         $api=New \common\components\MyClientGeneral([
+                 'apiBaseUrl'=>"https://apiperu.dev/api"
+                    ]
+                 );
+        var_dump($api->apiDni('10115533'));
+        die();
+    
+    
+    
     $model=\frontend\modules\mat\models\MatDetvale::findOne(4);
     $model->aprobado();
     die();

@@ -17,6 +17,9 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     
     'modules' => [
+        'clasi' => [
+            'class' => 'frontend\modules\clasi\clasificacionModule',
+        ],
        'cc' => [
             'class' => 'frontend\modules\cc\Module',
         ],

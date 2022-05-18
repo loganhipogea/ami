@@ -25,6 +25,12 @@ use yii\widgets\ActiveForm;
         <div class="col-md-12">
             <div class="form-group no-margin">
                 <?= Html::submitButton(Yii::t('base.verbs', 'Grabar'), ['class' => 'btn btn-success']) ?>
+                  <?php  if($idt=$model->tarifaId()>0){  ?>
+                  <?= Html::a(Yii::t('base.verbs', 'Editar tarifa'),Url::to(['/op/conf/edita-tarifa-hombre','id'=>$idt]) ,['class' => 'btn btn-danger']) ?>
+                  <?php  }else{  ?>
+                    <?= Html::a(Yii::t('base.verbs', 'Crear tarifa'),Url::to(['/op/conf/crea-tarifa-hombre']) ,['class' => 'btn btn-danger']) ?>
+                 
+                   <?php  } ?>
             </div>
         </div>
     </div>

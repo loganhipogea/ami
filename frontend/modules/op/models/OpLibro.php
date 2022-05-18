@@ -17,8 +17,26 @@ use Yii;
  * @property string $descripcion
  * @property string $detalle
  */
-class OpLibro extends \common\models\base\modelBase
+class OpLibro extends \common\models\ModelCali
 {
+   
+     public function behaviors() {
+        return [
+           /* 'AccessDownloadBehavior' => [
+                'class' => AccessDownloadBehavior::className()
+            ],*/
+            /*'fileBehavior' => [
+                'class' => FileBehavior::className()
+            ],*/
+            'auditoriaBehavior' => [
+                'class' => '\common\behaviors\AuditBehavior',
+            ],
+            'caliBehavior' => [
+                'class' => '\common\behaviors\CaliBehavior',
+            ],
+        ];
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -34,7 +52,7 @@ class OpLibro extends \common\models\base\modelBase
     {
         return [
             [['proc_id', 'os_id', 'detos_id'], 'required'],
-            [['tareo_id'], 'safe'],
+            [['tareo_id','tipo'], 'safe'],
             [['proc_id', 'user_id', 'os_id', 'detos_id'], 'integer'],
             [['detalle'], 'string'],
             [['hinicio', 'hfin'], 'string', 'max' => 5],
@@ -74,4 +92,6 @@ class OpLibro extends \common\models\base\modelBase
         $this->user_id=h::userId();
         return parent::beforeSave($insert);
     }
+    
+    
 }

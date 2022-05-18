@@ -9,23 +9,25 @@ use Carbon\Carbon;
 use common\helpers\RangeDates;
 trait timeTrait
 {
-    private $_holyDays=[       
-        '2020-11-01',
-        '2020-12-25',
-        '2020-01-01',
-        '2020-10-08',
-        '2020-05-01',
-        '2020-06-29',
-        '2020-07-28',
-        '2020-07-29',
-        '2020-08-30',
-        '2021-11-01',
-        '2020-12-25',
-        '2020-04-10',
-             ];
+    
+   
 
     private function holyDays(){
-        return $this->_holyDays;
+        $anio=date('Y');
+        return [       
+        $anio.'-11-01',
+        $anio.'-12-25',
+        $anio.'-01-01',
+        $anio.'-10-08',
+        $anio.'-05-01',
+       $anio.'-06-29',
+        $anio.'-07-28',
+        $anio.'-07-29',
+        $anio.'-08-30',
+        $anio.'-11-01',
+       $anio.'-12-25',
+       // $anio.'-04-10',
+             ];
     }
     
     public function isHolyDay(Carbon $fecha){
@@ -185,5 +187,6 @@ private function intoSecondCondition(RangeDates $rangeCompare,
       }
       return $retorno;
   }
+ 
   
 }

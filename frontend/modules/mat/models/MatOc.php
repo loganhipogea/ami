@@ -46,7 +46,7 @@ class MatOc extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['numero'], 'required'],
+           // [['numero'], 'required'],
             [['textointerno', 'texto'], 'string'],
             [['user_id'], 'integer'],
             [['numero', 'fecha'], 'string', 'max' => 10],
@@ -85,7 +85,7 @@ class MatOc extends \common\models\base\modelBase
      */
     public function getFiSolpagos()
     {
-        return $this->hasMany(FiSolpago::className(), ['oc_id' => 'id']);
+       // return $this->hasMany(FiSolpago::className(), ['oc_id' => 'id']);
     }
 
     /**
@@ -123,7 +123,7 @@ class MatOc extends \common\models\base\modelBase
     
     public function beforeSave($insert) {
         if($insert){
-            $this->numero=$this->correlativo('numero',12);
+            $this->numero=$this->correlativo('numero',10);
         }
         return parent::beforeSave($insert);
     }

@@ -12,7 +12,8 @@ class migrationMenu extends baseMigration
     const TABLE_MENU='{{%menu}}' ;
     const TABLE_ROUTE='{{%auth_item}}' ;
     
-    public static function insertOption($option,$route,$optionParent=null){       
+    public static function insertOption($option,$route,$optionParent=null){   
+             if(!is_null($route))
              self::insertRoute($route);
              $resul=self::existsOptionParent($optionParent);
             if(!self::existsMenu($option, $route, $optionParent))

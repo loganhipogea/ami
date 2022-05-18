@@ -10,9 +10,10 @@ use yii\widgets\Pjax;
 $this->title = Yii::t('app', 'Op Procesos');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<h4><?= Html::encode($this->title) ?></h4>
 <div class="op-procesos-index">
 
-    <h4><?= Html::encode($this->title) ?></h4>
+    
     <div class="box box-success">
      <div class="box-body">
     <?php Pjax::begin(); ?>
@@ -21,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('app', 'Create Op Procesos'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    
     <div style='overflow:auto;'>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

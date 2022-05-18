@@ -35,6 +35,13 @@ class ComboHelper extends Combito
                 'id','descripcion');
     }
     
+    public static function planes(){ 
+                return ArrayHelper::map(
+                                \frontend\modules\op\models\OpPlanestarifa::find()->all()
+               ,
+                'id','codigo');
+    }
+    
 }
 
 

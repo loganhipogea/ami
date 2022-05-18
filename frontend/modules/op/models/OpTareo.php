@@ -144,14 +144,14 @@ class OpTareo extends \common\models\base\modelBase
             
         ]);
         //print_r($model->attributes); die();
-    return $model->save();
+            return $model->save();
     }
     
     public function afterSave($insert, $changedAttributes) {
         $this->refresh();
        // print_r($this->attributes); die();
         if($insert)
-        $this->creaHijo();
+        //$this->creaHijo();
         return parent::afterSave($insert, $changedAttributes);
     }
 }

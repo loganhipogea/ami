@@ -144,7 +144,7 @@ use frontend\modules\op\helpers\ComboHelper;
     <?php ActiveForm::end(); ?>
 
            
-    <?php Pjax::begin(['id'=>'pjax-tareo','timeout'=>false]); ?>
+    <?php Pjax::begin(['id'=>'pjax-det','timeout'=>false]); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
@@ -182,7 +182,7 @@ use frontend\modules\op\helpers\ComboHelper;
                         },
                                 
                                 'edit' => function ($url,$model) {
-			    $url= Url::to(['/op/proc/mod-edit-osdet','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
+			    $url= Url::to(['/op/tareo/modal-edita-libro','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
                               return \yii\helpers\Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', $url, ['data-pjax'=>'0','class'=>'botonAbre']);
                             },
                         'delete' => function ($url,$model) {
@@ -232,12 +232,19 @@ use frontend\modules\op\helpers\ComboHelper;
                         return $model->descripcion;                        
                              } 
                 
-                ],                
-            'tipo',
+                ],   
+                 ['attribute' => 'tipo',
+                'format'=>'raw',
+                'value'=>function($model){
+                        return $model->comboValueField('tipo');                        
+                             } 
+                
+                ],          
+           
         ],
     ]); ?>
     <?php
-      $url= Url::to(['mod-agrega-det-os','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
+      $url= Url::to(['modal-agrega-libro','id'=>$model->id,'gridName'=>'pjax-det','idModal'=>'buscarvalor']);
    echo  Html::button(yii::t('base.verbs','Agregar operación'), 
            ['href' => $url, 'title' => yii::t('sta.labels','Agregar Op'),
                'id'=>'btn_cuentas_edi',

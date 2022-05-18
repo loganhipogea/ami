@@ -10,12 +10,12 @@ ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\op\models\OpTareo */
 
-$this->title = Yii::t('app', 'Update Op Tareo: {name}', [
-    'name' => $model->id,
+$this->title = Yii::t('app', 'Editar hoja de control: {fecha}', [
+    'fecha' => $model->fecha,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Op Tareos'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Hojas'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app', 'Editar');
 ?>
 <div class="op-tareo-update">
 <h4><i class="fa fa-edit"></i><?= Html::encode($this->title) ?></h4>
@@ -35,8 +35,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
              'options' => ['id' => 'myveryownID3'],
         ],
         [
-          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Tutores'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_segunda',[ 'model' => $model]),
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Cuadrilla'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_cuadrilla',[ 
+                'model' => $model,
+                'dataProviderCuadrilla' =>$dataProviderCuadrilla,
+                    ]),
             'active' => false,
              'options' => ['id' => 'myveryownID4'],
         ],

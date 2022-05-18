@@ -5,6 +5,8 @@ use yii\widgets\ActiveForm;
 use common\helpers\h;
 use frontend\modules\sigi\helpers\comboHelper;
 use common\widgets\selectwidget\selectWidget;
+use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
+
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sigi\models\SigiUnidades */
 /* @var $form yii\widgets\ActiveForm */

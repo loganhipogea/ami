@@ -200,5 +200,19 @@ class Trabajadores extends modelBase implements \common\interfaces\PersonInterfa
     {
         return new TrabajadoresQuery(get_called_class());
     } 
+    
+    
+     public function getTarifas()
+    {
+        return $this->hasMany(\frontend\modules\op\models\OpTarifaHombre::className(), ['codtra' => 'codigotra']);
+    }
+    
+    /*public function hasTarifa(){
+        return ($this->getTarifas()->exists())?true:false;
+    }*/
+     public function tarifaId(){
+         
+        return $this->getTarifas()->select(['id'])->andWhere(['activo'=>'1'])->scalar();
+    }
      
 }

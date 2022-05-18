@@ -287,7 +287,8 @@ class ProcController extends baseController
           $model->setAttributes([
               'req_id'=>$model->detectaIdReq(),
               'os_id'=>$modelPadre->os_id,
-              'detos_id'=>$modelPadre->id,              
+              'detos_id'=>$modelPadre->id,  
+              'tipo'=>$model::TIPO_MATERIALE,
           ]);
            $datos=[];
         if(h::request()->isPost){
@@ -466,4 +467,17 @@ class ProcController extends baseController
        
             }
       }
+      
+   public function actionAjaxCompraDetOs($id){
+       if(h::request()->isAjax){
+                h::response()->format = \yii\web\Response::FORMAT_JSON;
+                if(!is_null($model= \frontend\modules\op\models\OpOsdet::findOne($id))){
+                     yii::error('Encontro');
+                     $model->comprar();                                     
+                  } else{
+                      yii::error('NO encontro');
+                  }  
+                return ['success'=>yii::t('sta.errors','Se creó una solicitud de compra')];
+            }   
+   }
 }

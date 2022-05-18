@@ -136,11 +136,38 @@ class OpOsdet extends \common\models\base\modelBase
     }
     
     public function beforeSave($insert) {
-         
-        $this->item='1'.str_pad($this->os->getDetalles()->count()+1,2,'0',STR_PAD_LEFT);
+        if($insert){
+          $this->item='1'.str_pad($this->os->getDetalles()->count()+1,2,'0',STR_PAD_LEFT);
+          $this->interna=true;  
+        }
         return parent::beforeSave($insert);
     }
     
-    
+    public function comprar(){
+        $this->interna=false;
+       $this->save();
+        $model=New \frontend\modules\mat\models\MatDetreq();
+        $model->setScenario($model::SCE_IMPUTADO);
+        $model->setAttributes([
+                            'req_id'=>$model->detectaIdReq(),
+                             'cant'=>1,
+                            // 'um'=>'PZA',
+                        'descripcion'=>$this->descripcion,
+                             'os_id'=>$this->os_id,
+                            'detos_id'=>$this->id,
+                                'proc_id'=>$this->proc_id
+                    ]);
+       // yii::error('atributos');
+        //yii::error($model->attributes);
+        
+       $model->save();
+        
+    }
+    /*
+     * Verifica si tiene uan solicitud de compra activa
+     */
+    private function hasReqActive(){
+       
+    }
     
 }

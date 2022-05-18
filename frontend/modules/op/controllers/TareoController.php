@@ -106,9 +106,11 @@ class TareoController extends baseController
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
+        $searchModel = new \frontend\modules\op\models\OpTareodetSearch();
+        $dataProviderCuadrilla = $searchModel->search($model->id,Yii::$app->request->queryParams);
         return $this->render('update', [
             'model' => $model,
+            'dataProviderCuadrilla' =>$dataProviderCuadrilla,
         ]);
     }
 
@@ -141,4 +143,153 @@ class TareoController extends baseController
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+    
+    
+      public function actionModalAgregaLibro($id){
+          $this->layout = "install";
+          $modelPadre= \frontend\modules\op\models\OpTareo::findOne($id);
+          //var_dump($modelPadre);die();
+          $model= new \frontend\modules\op\models\OpLibro();
+         // var_dump($model->detectaIdReq());die();
+          $model->setAttributes([
+              'tareo_id'=>$modelPadre->id,                           
+          ]);
+          $model->califica();
+         // print_r($model->attributes);die();
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_libro', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        } 
+          
+      }
+      
+      public function actionModalEditaLibro($id){
+          $this->layout = "install";
+          //$modelPadre= \frontend\modules\op\models\OpTareo::findOne($id);
+          //var_dump($modelPadre);die();
+          $model= \frontend\modules\op\models\OpLibro::findOne($id);
+         // var_dump($model->detectaIdReq());die();
+        
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_crea_libro', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }
+        
+        
+       
+          
+      }
+        
+       public function actionModalAgregaPersona($id){
+          $this->layout = "install";
+          $modelPadre= \frontend\modules\op\models\OpTareo::findOne($id);
+          //var_dump($modelPadre);die();
+          $model= new \frontend\modules\op\models\OpTareodet();
+         // var_dump($model->detectaIdReq());die();
+          $model->setAttributes([
+              'tareo_id'=>$modelPadre->id,                           
+          ]);
+          $model->califica();
+          
+         // print_r($model->attributes);die();
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_agrega_persona', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }     
+      }
+      
+       public function actionModalEditaPersona($id){
+          $this->layout = "install";
+          //$modelPadre= \frontend\modules\op\models\OpTareo::findOne($id);
+          //var_dump($modelPadre);die();
+          $model= \frontend\modules\op\models\OpTareodet::findOne($id);
+         // var_dump($model->detectaIdReq());die();
+        
+           $datos=[];
+        if(h::request()->isPost){
+            
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save(); 
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->id];
+            }
+        }else{
+           return $this->renderAjax('_modal_agrega_persona', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }
+        
+        
+       
+          
+      }
+      
 }
+

@@ -18,6 +18,7 @@ class ActionSearchSelect extends \yii\base\Action
            //h::response()->format = \yii\web\Response::FORMAT_JSON;
          $filter= h::request()->post('searchTerm');
          $filterWhere= h::request()->post('mifilter',[]);
+        // VAR_DUMP($filterWhere);die();
          $modelo= h::request()->post('model');
          // VAR_DUMP($modelo);
          $firstField=h::request()->post('firstField');
@@ -25,10 +26,11 @@ class ActionSearchSelect extends \yii\base\Action
          $adicionales=h::request()->post('thirdField');
          //var_dump($filterWhere);die();
          $modelo=str_replace('_','\\',$modelo);
+         //yii::error($modelo);die();
          if(is_null($filter) or empty($filter) or trim($filter)=="") 
               $resultados=[];
            else{
-               $query=$modelo::find()->where(['like',$secondField,explode('%',$filter)]);
+               $query=$modelo::find()->andWhere(['like',$secondField,explode('%',$filter)]);
                
                       
                //ECHO $query->createCommand()->rawSql;die();
@@ -60,7 +62,8 @@ class ActionSearchSelect extends \yii\base\Action
               }
                   
               yii::error($query->createCommand()->getRawSql());
-             $resultados= $query->asArray()->all();            
+             $resultados= $query->asArray()->all();
+             $resultados[]=['id'=>'','text'=>'--'];
          }         
            return  \yii\helpers\Json::encode($resultados);
            //ECHO \yii\helpers\Json::encode([['id'=>'001','text'=>'PRIMERO'],['id'=>'002','text'=>'SEGUNDO']]);

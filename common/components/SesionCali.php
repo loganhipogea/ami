@@ -1,12 +1,7 @@
 <?php
-
-
 namespace common\components;
-
-
 use common\helpers\h;
-
-class SesionCali extends \yii\base\Component
+class SesionCali extends \yii\base\Component 
 {
   private $_sesion=null;
   const NOMBRE_SESION='calificacion37438573';
